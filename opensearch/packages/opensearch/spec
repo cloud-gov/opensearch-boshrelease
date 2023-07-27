@@ -1,0 +1,8 @@
+---
+name: opensearch
+
+dependencies: []
+
+files:
+    - OpenSearch-2.9.0.tar.gz
+

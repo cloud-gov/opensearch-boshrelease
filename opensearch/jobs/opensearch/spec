@@ -1,0 +1,33 @@
+---
+name: opensearch
+
+description: This job runs opensearch node (master or data)
+
+packages:
+  - opensearch
+  - openjdk-17
+
+templates:
+  bin/pre-start: bin/pre-start
+  bin/opensearch: bin/opensearch.sh
+  config/bpm.yml.erb: config/bpm.yml
+  config/config.yml.erb: config/opensearch.yml
+  config/ca.erb: config/ssl/opensearch.ca
+  config/node-crt.erb: config/ssl/opensearch-node.crt
+  config/node-pem.erb: config/ssl/opensearch-node.pem
+  config/admin-crt.erb: config/ssl/opensearch-admin.crt
+  config/admin-pem.erb: config/ssl/opensearch-admin.pem
+  config/jvm.options.erb: config/jvm.options.d/custom
+  config/log4j2.properties.erb: config/log4j2.properties
+
+provides:
+- name: opensearch
+  type: opensearch
+  properties:
+  - opensearch.port
+  - opensearch.cluster_name
+
+consumes:
+- name: opensearch
+  type: opensearch
+  optional: true

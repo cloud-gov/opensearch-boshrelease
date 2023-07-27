@@ -1,0 +1,76 @@
+bootstrap:
+  memory_lock: true
+
+path:
+  logs: "/var/vcap/sys/log/opensearch"
+  data: "/var/vcap/store/opensearch"
+<% if p('opensearch.path_repo') != '' %>
+  repo: ["<%= p('opensearch.path_repo') %>"]
+<% end %>
+
+<% if_p('opensearch.node.ssl.certificate') do %>
+opendistro_security:
+  <% if_p('opensearch.admin.dn') do %>
+  authcz:
+    admin_dn:
+    - '<%= p("opensearch.admin.dn") %>'
+  <% end %>
+  nodes_dn:
+  - '<%= p("opensearch.node.ssl.dn") %>'
+  ssl:
+    transport:
+      enforce_hostname_verification: false
+      pemkey_filepath: ssl/opensearch-node.key
+      pemcert_filepath: ssl/opensearch-node.crt
+      pemtrustedcas_filepath: ssl/opensearch.ca
+<% end %>
+
+<%
+  cluster_name = nil
+  if_link("opensearch") { |opensearch_link| cluster_name = opensearch_link.p("opensearch.cluster_name") }
+  unless cluster_name
+    cluster_name = p("opensearch.cluster_name")
+  end
+  master_hosts = nil
+  if_link("opensearch") { |opensearch_link| master_hosts = opensearch_link.instances.map {|e| e.address }.join(',') }
+  unless master_hosts
+    master_hosts = p("opensearch.master_hosts").join(',')
+  end
+%>
+cluster:
+  name: "<%= cluster_name %>"
+  initial_master_nodes: "<%= master_hosts %>"
+
+# For backward compatibility with v6 clustes
+# Shoud be removed in v8
+discovery.zen.ping.unicast.hosts: "<%= master_hosts %>"
+
+node:
+  name: "<%= name %>/<%= index %>"
+  master: <%= p("opensearch.node.allow_master") %>
+  data: <%= p("opensearch.node.allow_data") %>
+  ingest: <%= p("opensearch.node.allow_ingest") %>
+<% p("opensearch.node.tags", {}).each do | k, v | %>
+  attr.<%= k %>: "<%= v %>"
+<% end %>
+
+network:
+  host: "0.0.0.0"
+http:
+  host: <%= p("opensearch.http_host") %>
+
+
+
+<% if_p('opensearch.cloud.aws.access_key', 'opensearch.cloud.aws.secret_key') do %>
+cloud:
+  aws:
+    protocol: <%= p('opensearch.cloud.aws.protocol') %>
+    read_timeout: <%= p('opensearch.cloud.aws.read_timeout') %>
+    access_key: <%= p('opensearch.cloud.aws.access_key') %>
+    secret_key: <%= p('opensearch.cloud.aws.secret_key') %>
+    <% if_p('opensearch.cloud.aws.region') do |region| %>region: <%= region %><% end %>
+<% end %>
+
+<% if_p('opensearch.config_options') do p("opensearch.config_options", {}).each do | k, v | %>
+<%= k %>: <%= v %><% end %>
+<% end %>

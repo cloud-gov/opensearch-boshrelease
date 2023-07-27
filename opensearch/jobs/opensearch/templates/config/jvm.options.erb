@@ -1,0 +1,53 @@
+## JVM configuration
+
+################################################################
+## IMPORTANT: JVM heap size
+################################################################
+##
+## You should always set the min and max JVM heap
+## size to the same value. For example, to set
+## the heap to 4 GB, set:
+##
+## -Xms4g
+## -Xmx4g
+##
+## See https://www.open.co/guide/en/opensearch/reference/current/heap-size.html
+## for more information
+##
+################################################################
+
+# Xms represents the initial size of total heap space
+# Xmx represents the maximum size of total heap space
+
+#-Xms2g
+#-Xmx2g
+
+-XX:+DisableExplicitGC
+
+################################################################
+## Expert settings
+################################################################
+##
+## All settings below this section are considered
+## expert settings. Don't tamper with them unless
+## you understand what you are doing
+##
+################################################################
+
+
+## optimizations
+
+# ensure UTF-8 encoding by default (e.g. filenames)
+-Dfile.encoding=UTF-8
+
+# use our provided JNA always versus the system one
+-Djna.nosys=true
+
+# log4j 2
+-Dlog4j.shutdownHookEnabled=false
+-Dlog4j2.disable.jmx=true
+-Dlog4j.skipJansi=true
+
+<% p('opensearch.jvm_options').each do |opt| %>
+<%= opt %>
+<% end %>
