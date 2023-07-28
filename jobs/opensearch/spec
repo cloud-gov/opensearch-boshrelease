@@ -5,7 +5,6 @@ description: This job runs opensearch node (master or data)
 
 packages:
   - opensearch
-  - openjdk-17
 
 templates:
   bin/pre-start: bin/pre-start
