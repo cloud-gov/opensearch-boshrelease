@@ -16,8 +16,8 @@ templates:
   config/node-pem.erb: config/ssl/opensearch-node.pem
   config/admin-crt.erb: config/ssl/opensearch-admin.crt
   config/admin-pem.erb: config/ssl/opensearch-admin.pem
-  config/jvm.options.erb: config/jvm.options/custom
-  config/log4j2.properties.erb: config/log4j2.properties
+  #config/jvm.options.erb: config/jvm.options/custom
+  #config/log4j2.properties.erb: config/log4j2.properties
 
 provides:
 - name: opensearch
