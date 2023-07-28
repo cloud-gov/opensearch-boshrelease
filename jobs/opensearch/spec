@@ -30,3 +30,117 @@ consumes:
 - name: opensearch
   type: opensearch
   optional: true
+
+properties:
+  opensearch.port:
+    description: Port address of opensearch host to proxy requests for
+    default: 9200
+  opensearch.cluster_name:
+    description: The name of the open search cluster
+    default: "opensearch"
+  opensearch.log_level:
+    description: The default logging level (e.g. WARN, DEBUG, INFO)
+    default: INFO
+  opensearch.jvm_options:
+    description: Additional Java Virtual Machine options
+    default: []
+  opensearch.heap_size:
+    description: sets jvm heap sized
+  opensearch.heap_percentage:
+    description: The percentage value used in the calculation to set the heap size.
+    default: 46
+  opensearch.path_repo:
+    description: |
+      Shared file system to store snapshots.
+      In order to register the shared file system repository it is
+      necessary to mount the same shared filesystem to the same location
+      on all master and data nodes.
+    default: ''
+  opensearch.node.allow_master:
+    description: Allow node to become master? (true / false)
+    default: false
+  opensearch.node.allow_data:
+    description: Allow node to store data? (true / false)
+    default: false
+  opensearch.node.allow_ingest:
+    description: Allow node to become ingest node? (true / false)
+    default: false
+  opensearch.node.ssl.ca:
+    description: CA certificate for SSL plugin
+  opensearch.node.ssl.certificate:
+    description: Node certificate
+  opensearch.node.ssl.private_key:
+    description: Private key for node certificate
+  opensearch.node.ssl.dn:
+    description: Nodes DN pattern
+  opensearch.admin.certificate:
+    description: Admin certificate to operate SSL plugin
+  opensearch.admin.private_key:
+    description: Private key for admin certificate
+  opensearch.admin.dn:
+    description: Admin DN to operate SSL plugin
+  opensearch.health.timeout:
+    description: Post-start timeout for node to join cluster (seconds)
+    default: 300
+  opensearch.health.interval:
+    description: Post-start interval for node to join cluster (seconds)
+    default: 15
+  opensearch.health.connect_timeout:
+    description: Post-start timeout for node to become available (seconds)
+    default: 60
+  opensearch.health.connect_interval:
+    description: Post-start interval for node to become available (seconds)
+    default: 5
+  opensearch.node.tags:
+    description: A hash of additional tags for the node
+  opensearch.exec.environment:
+    description: A hash of additional environment variables for the process
+  opensearch.exec.options:
+    description: An array of additional options to pass when starting opensearch
+    default: []
+  opensearch.limits.fd:
+    description: Maximum file descriptors
+    default: 65536
+  opensearch.recovery.delay_allocation:
+    description: Delay allocation interval
+    default: "1m"
+  opensearch.recovery.delay_allocation_restart:
+    description: Delay allocation interval during restart
+    default: "5m"
+  opensearch.discovery.minimum_master_nodes:
+    description: The minimum number of master eligible nodes a node should "see" in order to operate within the cluster. Recommended to set it to a higher value than 1 when running more than 2 nodes in the cluster.
+    default: "auto"
+  opensearch.config_options:
+    description: "Additional options to append to opensearch's config.yml (YAML format)."
+    default: ~
+  opensearch.logging_options:
+    description: "Additional options to append to opensearch's logging.yml (YAML format)."
+    default: ~
+  opensearch.plugins:
+    description: "Plugins to run opensearch with (array[] = { plugin-name: install-source }; e.g. [ { kopf: 'lmenezes/opensearch-kopf' } ])"
+    default: []
+  opensearch.http_host:
+    description: "The host address to bind the opensearch HTTP service to and to publish for HTTP clients to connect to"
+    default: 0.0.0.0
+  opensearch.health.disable_post_start:
+    description: Allow node to run post-start script? (true / false)
+    default: false
+
+  opensearch.cloud.aws.access_key:
+    description: Access key ID for AWS account
+  opensearch.cloud.aws.secret_key:
+    description: Secret access key for AWS account
+  opensearch.cloud.aws.region:
+    description: Specify the AWS region to use
+  opensearch.cloud.aws.protocol:
+    description: Protocol to use for all API calls to AWS endpoints
+    default: "https"
+  opensearch.cloud.aws.read_timeout:
+    description: The amount of time to wait for data to be transferred over an established, open connection before the connection is timed out
+    default: 50s
+  opensearch.cloud.aws.bucket:
+    description: Bucket name on S3 where to keep snapshots
+    default: ''
+  opensearch.snapshots.repository:
+    description: Repository name for automatic snapshots
+    default: ''
