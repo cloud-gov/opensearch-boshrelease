@@ -8,15 +8,15 @@ fi
 # install plugins
 rm -rf /var/vcap/packages/opensearch/plugins/*
 <% if_p('opensearch.cloud.aws.access_key', 'opensearch.cloud.aws.secret_key') do %>
-  /var/vcap/packages/opensearch/bin/opensearch-plugin install -b repository-s3
+  /var/vcap/packages/opensearch/opensearch-2.9.0/bin/opensearch-plugin install -b repository-s3
 <% end %>
 <% p("opensearch.plugins").each do |plugin| name, path = plugin.first %>
   <% if path.start_with? '/var/vcap' %>
-    /var/vcap/packages/opensearch/bin/opensearch-plugin install -b "file://<%= path %>"
+    /var/vcap/packages/opensearch/opensearch-2.9.0/bin/opensearch-plugin install -b "file://<%= path %>"
   <% elsif path.start_with? 'http' %>
-    /var/vcap/packages/opensearch/bin/opensearch-plugin install -b "<%= path %>"
+    /var/vcap/packages/opensearch/opensearch-2.9.0/bin/opensearch-plugin install -b "<%= path %>"
   <% else %>
-    /var/vcap/packages/opensearch/bin/opensearch-plugin install -b "<%= path %>"
+    /var/vcap/packages/opensearch/opensearch-2.9.0/bin/opensearch-plugin install -b "<%= path %>"
   <% end %>
 <% end %>
 
