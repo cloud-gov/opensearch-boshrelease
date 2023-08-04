@@ -5,5 +5,5 @@ dependencies:
     - openjdk-17
 
 files:
-    - OpenSearch-2.9.0.tar.gz
+    - opensearch-2.9.0-linux-x64.tar.gz
 

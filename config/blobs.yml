@@ -1,4 +1,4 @@
-OpenSearch-2.9.0.tar.gz:
-  size: 21246757
-  object_id: 90473578-b852-477d-7e60-bb8f10c5f1f2
-  sha: sha256:c8883ee8859ec3351dc49969c135cd05aa3a9b7dd7fd051ecd401cd00975dbdd
+opensearch-2.9.0-linux-x64.tar.gz:
+  size: 805162121
+  object_id: a0062097-fe9f-4720-666f-8fb84933550d
+  sha: sha256:03d623c2d99a7100c2f0faddc8ffda8ba27eae8aa63ff6f3f7dad2337be8b68c
