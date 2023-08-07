@@ -26,7 +26,8 @@ chown root:vcap /var/vcap/jobs/opensearch/config/jvm.options
 log_dir=/var/vcap/packages/opensearch/logs
 
 if [[ -d ${log_dir} ]]; then
-  rmdir ${log_dir}
+  # rmdir fails on a symlink
+  rmdir ${log_dir} || rm ${log_dir}
 fi
 
 if [[ ! -a ${log_dir} ]]; then
