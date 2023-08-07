@@ -20,15 +20,15 @@ rm -rf /var/vcap/packages/opensearch/plugins/*
   <% end %>
 <% end %>
 
-#cp -p /var/vcap/packages/opensearch/config/jvm.options /var/vcap/jobs/opensearch/config/jvm.options
-#chown root:vcap /var/vcap/jobs/opensearch/config/jvm.options
+cp -p /var/vcap/packages/opensearch/config/jvm.options /var/vcap/jobs/opensearch/config/jvm.options
+chown root:vcap /var/vcap/jobs/opensearch/config/jvm.options
 
-#log_dir=/var/vcap/packages/opensearch/logs
+log_dir=/var/vcap/packages/opensearch/logs
 
-# if [[ -d ${log_dir} ]]; then
-#   rmdir ${log_dir}
-# fi
+if [[ -d ${log_dir} ]]; then
+  rmdir ${log_dir}
+fi
 
-# if [[ ! -a ${log_dir} ]]; then
-#   ln -s /var/vcap/sys/log/opensearch ${log_dir}
-# fi
+if [[ ! -a ${log_dir} ]]; then
+  ln -s /var/vcap/sys/log/opensearch ${log_dir}
+fi
