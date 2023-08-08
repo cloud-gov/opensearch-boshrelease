@@ -5,7 +5,6 @@ if [ -d /var/vcap/jobs/opensearch/config/ssl ]; then
 	chown vcap /var/vcap/jobs/opensearch/config/ssl
 fi
 
-# TODO: look into these chown statements
 cd /var/vcap/packages/opensearch/opensearch-2.9.0
 chown -R vcap:vcap config plugins
 

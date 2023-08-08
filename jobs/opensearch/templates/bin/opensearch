@@ -9,6 +9,7 @@ export LANG=en_US.UTF-8
 export TMP_DIR=/var/vcap/sys/tmp/$JOB_NAME
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 export LOG_DIR=/var/vcap/sys/log/$JOB_NAME
+
 source /var/vcap/packages/openjdk-17/bosh/runtime.env
 
 <% p("opensearch.exec.environment", {}).each do |k, v| %>
@@ -37,7 +38,8 @@ if [ -n "$MAX_LOCKED_MEMORY" ]; then
   ulimit -l $MAX_LOCKED_MEMORY
 fi
 
-# Need to convert private keys: https://github.com/opendistro-for-opensearch/security/issues/52
+# PKCS8 keys are required for Opensearch transport TLS
+# https://opensearch.org/docs/latest/security/configuration/tls/
 <% if_p('opensearch.admin.private_key') do %>
   openssl pkcs8 -v1 "PBE-SHA1-3DES" \
   -in "${JOB_DIR}/config/ssl/opensearch-admin.pem" -topk8 \

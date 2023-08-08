@@ -23,7 +23,7 @@ plugins:
     ssl:
       transport:
         enforce_hostname_verification: false
-        pemkey_filepath: ssl/opensearch-node.pem
+        pemkey_filepath: ssl/opensearch-node.key
         pemcert_filepath: ssl/opensearch-node.crt
         pemtrustedcas_filepath: ssl/opensearch.ca
 <% end %>
@@ -61,8 +61,6 @@ network:
   host: "0.0.0.0"
 http:
   host: <%= p("opensearch.http_host") %>
-
-
 
 <% if_p('opensearch.cloud.aws.access_key', 'opensearch.cloud.aws.secret_key') do %>
 cloud:
