@@ -9,20 +9,21 @@ path:
 <% end %>
 
 <% if_p('opensearch.node.ssl.certificate') do %>
-opensearch_security:
-  <% if_p('opensearch.admin.dn') do %>
-  authcz:
-    admin_dn:
-    - '<%= p("opensearch.admin.dn") %>'
-  <% end %>
-  nodes_dn:
-  - '<%= p("opensearch.node.ssl.dn") %>'
-  ssl:
-    transport:
-      enforce_hostname_verification: false
-      pemkey_filepath: ssl/opensearch-node.key
-      pemcert_filepath: ssl/opensearch-node.crt
-      pemtrustedcas_filepath: ssl/opensearch.ca
+plugins:
+  security:
+    <% if_p('opensearch.admin.dn') do %>
+    authcz:
+      admin_dn:
+      - '<%= p("opensearch.admin.dn") %>'
+    <% end %>
+    nodes_dn:
+    - '<%= p("opensearch.node.ssl.dn") %>'
+    ssl:
+      transport:
+        enforce_hostname_verification: false
+        pemkey_filepath: ssl/opensearch-node.key
+        pemcert_filepath: ssl/opensearch-node.crt
+        pemtrustedcas_filepath: ssl/opensearch.ca
 <% end %>
 
 <%
