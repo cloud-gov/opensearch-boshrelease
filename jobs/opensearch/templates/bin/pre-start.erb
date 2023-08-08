@@ -2,7 +2,7 @@
 sysctl -q -w vm.max_map_count=262144
 mkdir -p /var/vcap/packages/opensearch/plugins
 if [ -d /var/vcap/jobs/opensearch/config/ssl ]; then
-	chown vcap  /var/vcap/jobs/opensearch/config/ssl
+	chown vcap /var/vcap/jobs/opensearch/config/ssl
 fi
 
 # TODO: look into these chown statements

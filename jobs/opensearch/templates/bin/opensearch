@@ -20,9 +20,9 @@ export HEAP_SIZE=$((( $( cat /proc/meminfo | grep MemTotal | awk '{ print $2 }' 
   HEAP_SIZE=<%= heap_size %>
 <% end %>
 
-export ES_JAVA_OPTS="-Xms$HEAP_SIZE -Xmx$HEAP_SIZE"
+export OPENSEARCH_JAVA_OPTS="-Xms$HEAP_SIZE -Xmx$HEAP_SIZE"
 export ES_TMPDIR="$TMP_DIR"
-export ES_PATH_CONF=${JOB_DIR}/config
+export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
 
 export MAX_OPEN_FILES=<%= p("opensearch.limits.fd") %>
 export MAX_LOCKED_MEMORY=unlimited  # required to enable opensearch's mlockall setting
@@ -51,4 +51,4 @@ fi
 <% end %>
 
 /var/vcap/packages/opensearch/opensearch-2.9.0/bin/opensearch \
-     <%= p("opensearch.exec.options", []).join(' ') %>
+  <%= p("opensearch.exec.options", []).join(' ') %>
