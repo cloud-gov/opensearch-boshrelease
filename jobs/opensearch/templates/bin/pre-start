@@ -23,7 +23,7 @@ rm -rf /var/vcap/packages/opensearch/plugins/*
 cp -p /var/vcap/jobs/opensearch/config/jvm.options /var/vcap/packages/opensearch/opensearch-2.9.0/config/jvm.options
 chown root:vcap /var/vcap/jobs/opensearch/config/jvm.options
 
-log_dir=/var/vcap/packages/opensearch/logs/
+log_dir=/var/vcap/packages/opensearch/logs
 
 if [[ -d ${log_dir} ]]; then
   # rmdir fails on a symlink
