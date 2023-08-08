@@ -21,10 +21,13 @@ rm -rf /var/vcap/packages/opensearch/plugins/*
 <% end %>
 
 # TODO: look into these chown statements
+cd /var/vcap/packages/opensearch/opensearch-2.9.0
 cp -p /var/vcap/jobs/opensearch/config/jvm.options /var/vcap/packages/opensearch/opensearch-2.9.0/config/jvm.options
-chown root:vcap /var/vcap/jobs/opensearch/config/jvm.options
-chown root:vcap /var/vcap/packages/opensearch/opensearch-2.9.0/config/jvm.options.d
-chown root:vcap /var/vcap/packages/opensearch/opensearch-2.9.0/config/opensearch.yml
+chown -R vcap:vcap config plugins
+
+# chown root:vcap /var/vcap/jobs/opensearch/config/jvm.options
+# chown root:vcap /var/vcap/packages/opensearch/opensearch-2.9.0/config/jvm.options.d
+# chown root:vcap /var/vcap/packages/opensearch/opensearch-2.9.0/config/opensearch.yml
 
 log_dir=/var/vcap/packages/opensearch/logs
 

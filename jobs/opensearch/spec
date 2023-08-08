@@ -8,7 +8,7 @@ packages:
   - openjdk-17
 
 templates:
-  bin/pre-start: bin/pre-start
+  bin/pre-start.erb: bin/pre-start
   bin/opensearch: bin/opensearch.sh
   config/bpm.yml.erb: config/bpm.yml
   config/config.yml.erb: config/opensearch.yml
