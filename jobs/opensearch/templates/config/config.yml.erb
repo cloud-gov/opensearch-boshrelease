@@ -16,8 +16,10 @@ plugins:
       admin_dn:
       - '<%= p("opensearch.admin.dn") %>'
     <% end %>
+    <% if_p('opensearch.node.ssl.dn"') do %>
     nodes_dn:
     - '<%= p("opensearch.node.ssl.dn") %>'
+    <% end %>
     ssl:
       transport:
         enforce_hostname_verification: false
