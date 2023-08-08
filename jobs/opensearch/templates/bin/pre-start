@@ -22,6 +22,8 @@ rm -rf /var/vcap/packages/opensearch/plugins/*
 
 cp -p /var/vcap/jobs/opensearch/config/jvm.options /var/vcap/packages/opensearch/opensearch-2.9.0/config/jvm.options
 chown root:vcap /var/vcap/jobs/opensearch/config/jvm.options
+chown root:vcap /var/vcap/packages/opensearch/opensearch-2.9.0/config/jvm.options.d
+chown root:vcap /var/vcap/packages/opensearch/opensearch-2.9.0/config/opensearch.ym
 
 log_dir=/var/vcap/packages/opensearch/logs
 
