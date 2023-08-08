@@ -9,7 +9,9 @@ fi
 cd /var/vcap/packages/opensearch/opensearch-2.9.0
 cp -p /var/vcap/jobs/opensearch/config/jvm.options /var/vcap/packages/opensearch/opensearch-2.9.0/config/jvm.options
 chown -R vcap:vcap config plugins
-chmod g+s config
+
+# manually create keystore to avoid file system issues?
+/var/vcap/packages/opensearch/opensearch-2.9.0/bin/opensearch-keystore create
 
 # install plugins
 rm -rf /var/vcap/packages/opensearch/plugins/*
