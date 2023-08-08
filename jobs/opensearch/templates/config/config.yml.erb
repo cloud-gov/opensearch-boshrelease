@@ -9,7 +9,7 @@ path:
 <% end %>
 
 <% if_p('opensearch.node.ssl.certificate') do %>
-opendistro_security:
+opensearch_security:
   <% if_p('opensearch.admin.dn') do %>
   authcz:
     admin_dn:
