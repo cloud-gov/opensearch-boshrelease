@@ -57,15 +57,15 @@ discovery.seed_hosts: "<%= master_hosts %>"
 
 <%
   node_roles = []
-  if p("opensearch.node.allow_master") {
+  if p("opensearch.node.allow_master")
     node_roles.push("cluster_manager")
-  }
-  if p("opensearch.node.allow_data") {
+  end
+  if p("opensearch.node.allow_data")
     node_roles.push("data")
-  }
-  if p("opensearch.node.allow_ingest") {
+  end
+  if p("opensearch.node.allow_ingest")
     node_roles.push("ingest")
-  }
+  end
   node_roles = node_roles.join(',')
 %>
 node:
