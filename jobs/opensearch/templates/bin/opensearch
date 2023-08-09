@@ -39,7 +39,7 @@ if [ -n "$MAX_LOCKED_MEMORY" ]; then
   ulimit -l $MAX_LOCKED_MEMORY
 fi
 
-# PKCS8 keys are required for Opensearch transport TLS
+# PKCS8 keys are required for Opensearch TLS
 # https://opensearch.org/docs/latest/security/configuration/tls/
 <% if_p('opensearch.admin.private_key') do %>
   openssl pkcs8 -v1 "PBE-SHA1-3DES" \
@@ -50,6 +50,12 @@ fi
   openssl pkcs8 -v1 "PBE-SHA1-3DES" \
   -in "${JOB_DIR}/config/ssl/opensearch-node.pem" -topk8 \
   -out "${JOB_DIR}/config/ssl/opensearch-node.key" -nocrypt
+  chmod 600 ${JOB_DIR}/config/ssl/opensearch*.key
+<% end %>
+<% if_p('opensearch.http.ssl.private_key') do %>
+  openssl pkcs8 -v1 "PBE-SHA1-3DES" \
+  -in "${JOB_DIR}/config/ssl/opensearch-http.pem" -topk8 \
+  -out "${JOB_DIR}/config/ssl/opensearch-http.key" -nocrypt
   chmod 600 ${JOB_DIR}/config/ssl/opensearch*.key
 <% end %>
 

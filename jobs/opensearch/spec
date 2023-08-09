@@ -13,6 +13,8 @@ templates:
   config/bpm.yml.erb: config/bpm.yml
   config/config.yml.erb: config/opensearch.yml
   config/ca.erb: config/ssl/opensearch.ca
+  config/http-crt.erb: config/ssl/opensearch-http.crt
+  config/http-pem.erb: config/ssl/opensearch-http.pem
   config/node-crt.erb: config/ssl/opensearch-node.crt
   config/node-pem.erb: config/ssl/opensearch-node.pem
   config/admin-crt.erb: config/ssl/opensearch-admin.crt
@@ -68,6 +70,12 @@ properties:
   opensearch.node.allow_ingest:
     description: Allow node to become ingest node? (true / false)
     default: false
+  opensearch.http.ssl.ca:
+    description: CA certificate for SSL plugin
+  opensearch.http.ssl.certificate:
+    description: Node certificate
+  opensearch.http.ssl.private_key:
+    description: Private key for node certificate
   opensearch.node.ssl.ca:
     description: CA certificate for SSL plugin
   opensearch.node.ssl.certificate:

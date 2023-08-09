@@ -8,7 +8,6 @@ path:
   repo: ["<%= p('opensearch.path_repo') %>"]
 <% end %>
 
-<% if_p('opensearch.node.ssl.certificate') do %>
 plugins:
   security:
     <% if_p('opensearch.admin.dn') do %>
@@ -21,12 +20,20 @@ plugins:
     - '<%= p("opensearch.node.ssl.dn") %>'
     <% end %>
     ssl:
+      <% if_p('opensearch.node.ssl.certificate') do %>
       transport:
         enforce_hostname_verification: false
         pemkey_filepath: ssl/opensearch-node.key
         pemcert_filepath: ssl/opensearch-node.crt
         pemtrustedcas_filepath: ssl/opensearch.ca
-<% end %>
+      <% end %>
+      <% if_p('opensearch.http.ssl.certificate') do %>
+      http:
+        enabled: true
+        pemkey_filepath: ssl/opensearch-http.key
+        pemcert_filepath: ssl/opensearch-http.crt
+        pemtrustedcas_filepath: ssl/opensearch.ca
+      <% end %>
 
 <%
   cluster_name = nil
