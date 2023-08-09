@@ -5,11 +5,6 @@ _meta:
 
 config:
   dynamic:
-    http:
-      xff:
-        enabled: true
-        internalProxies: ".*"
-        remoteIpHeader: "x-forwarded-for"
     authc:
       basic_internal_auth_domain:
         description: "Authenticate via HTTP Basic against internal users database"
@@ -21,16 +16,3 @@ config:
           challenge: true
         authentication_backend:
           type: intern
-      proxy_auth_domain:
-        http_enabled: true
-        transport_enabled: true
-        order: 0
-        http_authenticator:
-          type: extended-proxy
-          challenge: false
-          config:
-            user_header: "x-proxy-user"
-            roles_header: "x-proxy-roles"
-            attr_header_prefix: "x-proxy-ext-"
-        authentication_backend:
-          type: noop
