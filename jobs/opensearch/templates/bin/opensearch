@@ -22,7 +22,7 @@ export HEAP_SIZE=$((( $( cat /proc/meminfo | grep MemTotal | awk '{ print $2 }' 
 <% end %>
 
 export OPENSEARCH_JAVA_OPTS="-Xms$HEAP_SIZE -Xmx$HEAP_SIZE"
-export OPENSEARCH_HOME=${JOB_DIR}
+export OPENSEARCH_HOME=/var/vcap/packages/opensearch/opensearch-2.9.0/
 export OPENSEARCH_TMPDIR="$TMP_DIR"
 export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
 
