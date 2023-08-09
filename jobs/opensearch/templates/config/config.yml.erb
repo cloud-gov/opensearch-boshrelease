@@ -35,7 +35,7 @@ plugins:
     cluster_name = p("opensearch.cluster_name")
   end
   master_hosts = nil
-  if_link("opensearch") { |opensearch_link| master_hosts = opensearch_link.instances.map {|e| e.address }.join(',') }
+  if_link("opensearch") { |opensearch_link| master_hosts = opensearch_link.instances.map {|e| e.ip }.join(',') }
   unless master_hosts
     master_hosts = p("opensearch.master_hosts").join(',')
   end
@@ -48,11 +48,22 @@ cluster:
 # Shoud be removed in v8
 discovery.zen.ping.unicast.hosts: "<%= master_hosts %>"
 
+<%
+  node_roles = []
+  if_p("opensearch.node.allow_master") {
+    node_roles.push("cluster_manager")
+  }
+  if_p("opensearch.node.allow_data") {
+    node_roles.push("data")
+  }
+  if_p("opensearch.node.allow_ingest") {
+    node_roles.push("ingest")
+  }
+  node_roles = node_roles.join(',')
+%>
 node:
   name: "<%= name %>/<%= index %>"
-  master: <%= p("opensearch.node.allow_master") %>
-  data: <%= p("opensearch.node.allow_data") %>
-  ingest: <%= p("opensearch.node.allow_ingest") %>
+  roles: [ <%= node_roles %> ]
 <% p("opensearch.node.tags", {}).each do | k, v | %>
   attr.<%= k %>: "<%= v %>"
 <% end %>
