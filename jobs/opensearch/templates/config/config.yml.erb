@@ -52,8 +52,12 @@ cluster:
   name: "<%= cluster_name %>"
   initial_cluster_manager_nodes: "<%= master_hosts %>"
 
-# https://opensearch.org/docs/latest/tuning-your-cluster/index/#step-4-configure-discovery-hosts-for-a-cluster
-discovery.seed_hosts: "<%= master_hosts %>"
+discovery:
+  # https://opensearch.org/docs/latest/tuning-your-cluster/index/#step-4-configure-discovery-hosts-for-a-cluster
+  seed_hosts: "<%= master_hosts %>"
+  <% if p("opensearch.discovery.single_node") %>
+  type: "single-node"
+  <% end %>
 
 <%
   node_roles = []

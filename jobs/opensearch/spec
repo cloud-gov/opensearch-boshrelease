@@ -156,3 +156,6 @@ properties:
   opensearch.snapshots.repository:
     description: Repository name for automatic snapshots
     default: ''
+  opensearch.discovery.single_node:
+    description: True to run cluster as a single node
+    default: false
