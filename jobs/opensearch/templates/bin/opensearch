@@ -22,7 +22,7 @@ export HEAP_SIZE=$((( $( cat /proc/meminfo | grep MemTotal | awk '{ print $2 }' 
 <% end %>
 
 export OPENSEARCH_JAVA_OPTS="-Xms$HEAP_SIZE -Xmx$HEAP_SIZE"
-export ES_TMPDIR="$TMP_DIR"
+export OPENSEARCH_TMPDIR="$TMP_DIR"
 export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
 
 export MAX_OPEN_FILES=<%= p("opensearch.limits.fd") %>
