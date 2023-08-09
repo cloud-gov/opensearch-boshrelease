@@ -23,7 +23,7 @@ export HEAP_SIZE=$((( $( cat /proc/meminfo | grep MemTotal | awk '{ print $2 }' 
 
 export OPENSEARCH_JAVA_OPTS="-Xms$HEAP_SIZE -Xmx$HEAP_SIZE"
 export OPENSEARCH_HOME=/var/vcap/packages/opensearch/opensearch-2.9.0/
-export OPENSEARCH_TMPDIR="$TMP_DIR"
+# export OPENSEARCH_TMPDIR="$TMP_DIR"
 export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
 
 export MAX_OPEN_FILES=<%= p("opensearch.limits.fd") %>
@@ -54,4 +54,5 @@ fi
 <% end %>
 
 /var/vcap/packages/opensearch/opensearch-2.9.0/bin/opensearch \
+   -Djava.io.tmpdir="$TMP_DIR" \
   <%= p("opensearch.exec.options", []).join(' ') %>
