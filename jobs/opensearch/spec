@@ -23,6 +23,7 @@ templates:
   config/log4j2.properties.erb: config/log4j2.properties
   config/performance-analyzer.properties.erb: config/opensearch-performance-analyzer/performance-analyzer.properties
   config/plugin-stats-metadata: config/opensearch-performance-analyzer/plugin-stats-metadata
+  config/securtity-config.yml.erb: config/opensearch-security/config.yml
 
 provides:
 - name: opensearch
