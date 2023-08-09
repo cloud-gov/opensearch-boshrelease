@@ -42,7 +42,7 @@ plugins:
     cluster_name = p("opensearch.cluster_name")
   end
   master_hosts = nil
-  if_link("opensearch") { |opensearch_link| master_hosts = opensearch_link.instances.map {|e| e.ip }.join(',') }
+  if_link("opensearch") { |opensearch_link| master_hosts = opensearch_link.instances.map {|e| e.address }.join(',') }
   unless master_hosts
     master_hosts = p("opensearch.master_hosts").join(',')
   end
