@@ -10,6 +10,7 @@ path:
 
 plugins:
   security:
+    allow_default_init_securityindex: true
     <% if_p('opensearch.admin.dn') do %>
     authcz:
       admin_dn:
@@ -49,21 +50,20 @@ plugins:
 %>
 cluster:
   name: "<%= cluster_name %>"
-  initial_master_nodes: "<%= master_hosts %>"
+  initial_cluster_manager_nodes: "<%= master_hosts %>"
 
-# For backward compatibility with v6 clustes
-# Shoud be removed in v8
-discovery.zen.ping.unicast.hosts: "<%= master_hosts %>"
+# https://opensearch.org/docs/latest/tuning-your-cluster/index/#step-4-configure-discovery-hosts-for-a-cluster
+discovery.seed_hosts: "<%= master_hosts %>"
 
 <%
   node_roles = []
-  if_p("opensearch.node.allow_master") {
+  if p("opensearch.node.allow_master") {
     node_roles.push("cluster_manager")
   }
-  if_p("opensearch.node.allow_data") {
+  if p("opensearch.node.allow_data") {
     node_roles.push("data")
   }
-  if_p("opensearch.node.allow_ingest") {
+  if p("opensearch.node.allow_ingest") {
     node_roles.push("ingest")
   }
   node_roles = node_roles.join(',')
