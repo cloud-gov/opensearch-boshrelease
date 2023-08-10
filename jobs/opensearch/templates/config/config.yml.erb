@@ -50,7 +50,9 @@ plugins:
 %>
 cluster:
   name: "<%= cluster_name %>"
+  <% unless p("opensearch.discovery.single_node") %>
   initial_cluster_manager_nodes: "<%= master_hosts %>"
+  <% end %>
 
 discovery:
   # https://opensearch.org/docs/latest/tuning-your-cluster/index/#step-4-configure-discovery-hosts-for-a-cluster
