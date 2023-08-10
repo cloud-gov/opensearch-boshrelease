@@ -20,7 +20,7 @@ plugins:
     nodes_dn:
     - '<%= p("opensearch.node.ssl.dn") %>'
     <% end %>
-    <% if_p('opensearch.node.ssl.certificate') || if_p('opensearch.http.ssl.certificate') %>
+    <% if_p('opensearch.node.ssl.certificate') || if_p('opensearch.http.ssl.certificate') do %>
     ssl:
       <% if_p('opensearch.node.ssl.certificate') do %>
       transport:
