@@ -42,21 +42,21 @@ plugins:
   unless cluster_name
     cluster_name = p("opensearch.cluster_name")
   end
-  master_hosts = nil
-  if_link("opensearch") { |opensearch_link| master_hosts = opensearch_link.instances.map {|e| e.address }.join(',') }
-  unless master_hosts
-    master_hosts = p("opensearch.master_hosts").join(',')
+  manager_hosts = nil
+  if_link("opensearch") { |opensearch_link| manager_hosts = opensearch_link.instances.map {|e| e.address }.join(',') }
+  unless manager_hosts
+    manager_hosts = p("opensearch.manager_hosts").join(',')
   end
 %>
 cluster:
   name: "<%= cluster_name %>"
   <% unless p("opensearch.discovery.single_node") %>
-  initial_cluster_manager_nodes: "<%= master_hosts %>"
+  initial_cluster_manager_nodes: "<%= manager_hosts %>"
   <% end %>
 
 discovery:
   # https://opensearch.org/docs/latest/tuning-your-cluster/index/#step-4-configure-discovery-hosts-for-a-cluster
-  seed_hosts: "<%= master_hosts %>"
+  seed_hosts: "<%= manager_hosts %>"
   <% if p("opensearch.discovery.single_node") %>
   type: "single-node"
   <% end %>
