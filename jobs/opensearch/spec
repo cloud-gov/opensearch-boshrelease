@@ -62,7 +62,7 @@ properties:
       necessary to mount the same shared filesystem to the same location
       on all master and data nodes.
     default: ''
-  opensearch.node.allow_master:
+  opensearch.node.allow_cluster_manager:
     description: Allow node to become master? (true / false)
     default: false
   opensearch.node.allow_data:

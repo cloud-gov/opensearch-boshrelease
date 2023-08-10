@@ -25,7 +25,7 @@ wait_for_greenstate() {
   remaining=<%= p("opensearch.health.timeout") %>
   echo "=== Waiting for Green status from opensearch..."
   until [ "${remaining}" -le 0 ]; do
-    <% if p("opensearch.node.allow_data") and not p("opensearch.node.allow_master") %>
+    <% if p("opensearch.node.allow_data") and not p("opensearch.node.allow_cluster_manager") %>
     curl -sw '\n%{http_code}' localhost:9200/_cluster/health > ${out}
     <% else %>
     curl -sw '\n%{http_code}' localhost:9200/_cluster/health?local=true > ${out}
@@ -34,7 +34,7 @@ wait_for_greenstate() {
     status=$(cat ${out} | tail -n 1)
     # echo "body: ${body}"
     echo -n "[${status}] "
-    <% if p("opensearch.node.allow_data") and not p("opensearch.node.allow_master") %>
+    <% if p("opensearch.node.allow_data") and not p("opensearch.node.allow_cluster_manager") %>
     if [ ${status} = "200" ] && echo ${body} | grep '"status":"green"'; then
       echo "Done"
       break

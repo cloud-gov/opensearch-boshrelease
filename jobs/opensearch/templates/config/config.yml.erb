@@ -61,7 +61,7 @@ discovery:
 
 <%
   node_roles = []
-  if p("opensearch.node.allow_master")
+  if p("opensearch.node.allow_cluster_manager")
     node_roles.push("cluster_manager")
   end
   if p("opensearch.node.allow_data")
