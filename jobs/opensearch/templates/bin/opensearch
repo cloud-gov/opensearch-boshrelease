@@ -60,7 +60,7 @@ fi
 <% end %>
 
 # Copy default security config if it doesn't already exits
-cp -u ${OPENSEARCH_HOME}/config/opensearch-security/* ${JOB_DIR}/config
+cp -u ${OPENSEARCH_HOME}/config/opensearch-security/* ${JOB_DIR}/config/opensearch-security
 
 ${OPENSEARCH_HOME}/bin/opensearch \
   <%= p("opensearch.exec.options", []).join(' ') %>
