@@ -69,9 +69,9 @@ echo "Disable post start script property is set to <%= p("opensearch.health.disa
 <% if_p("opensearch.node.ssl.private_key") do %>
   <% if p("opensearch.node.allow_data") %>
   wait_for_listening
-  ES="/var/vcap/packages/opensearch"
-  export JAVA_HOME=${ES}/jdk/
-  ODS="${ES}/plugins/opensearch_security"
+  OS="/var/vcap/packages/opensearch"
+  source /var/vcap/packages/openjdk-17/bosh/runtime.env
+  ODS="${OS}/plugins/opensearch_security"
   CNF="/var/vcap/jobs/opensearch/config"
   echo "=== Applying SSL config:"
   chmod +x ${ODS}/tools/securityadmin.sh
