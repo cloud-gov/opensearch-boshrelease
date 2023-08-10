@@ -23,12 +23,7 @@ plugins:
     <% p("opensearch.node.ssl.dn").each do | dn | %>
     - '<%= dn %>'
     <% end %>
-<<<<<<< HEAD
-    <% end %>
     <% if p('opensearch.node.ssl.certificate', nil) || p('opensearch.http.ssl.certificate', nil) %>
-=======
-    <% if_p('opensearch.node.ssl.certificate') || if_p('opensearch.http.ssl.certificate') do %>
->>>>>>> 7bccd98 (fix config template conditions)
     ssl:
       <% if_p('opensearch.node.ssl.certificate') do %>
       transport:
