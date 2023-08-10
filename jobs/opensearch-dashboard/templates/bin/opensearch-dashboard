@@ -35,4 +35,4 @@ source <%= sf %>
   <% end %>
 <% end %>
 
-/var/vcap/packages/opensearch-dashboard/bin/opensearch-dashboard -c $JOB_DIR/config/opensearch-dashboard.conf
+/var/vcap/packages/opensearch-dashboard/bin/opensearch-dashboards -c $JOB_DIR/config/opensearch-dashboard.conf
