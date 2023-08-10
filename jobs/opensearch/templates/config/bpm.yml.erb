@@ -1,0 +1,15 @@
+processes:
+  - name: opensearch
+    hooks:
+      pre_start: /var/vcap/jobs/opensearch/bin/pre-start
+    executable: /var/vcap/jobs/opensearch/bin/opensearch.sh
+    persistent_disk: true
+    ephemeral_disk: true
+    additional_volumes:
+    - path: /var/vcap/sys/tmp/opensearch
+      writable: true
+      allow_executions: true
+    - path: /var/vcap/jobs/opensearch/config
+      writable: true
+    capabilities:
+    - SYS_RESOURCE

@@ -1,0 +1,102 @@
+bootstrap:
+  memory_lock: true
+
+path:
+  logs: "/var/vcap/sys/log/opensearch"
+  data: "/var/vcap/store/opensearch"
+<% if p('opensearch.path_repo') != '' %>
+  repo: ["<%= p('opensearch.path_repo') %>"]
+<% end %>
+
+plugins:
+  security:
+    allow_default_init_securityindex: true
+    <% if_p('opensearch.admin.dn') do %>
+    authcz:
+      admin_dn:
+      - '<%= p("opensearch.admin.dn") %>'
+    <% end %>
+    <% if_p('opensearch.node.ssl.dn"') do %>
+    nodes_dn:
+    - '<%= p("opensearch.node.ssl.dn") %>'
+    <% end %>
+    ssl:
+      <% if_p('opensearch.node.ssl.certificate') do %>
+      transport:
+        enforce_hostname_verification: false
+        pemkey_filepath: ssl/opensearch-node.key
+        pemcert_filepath: ssl/opensearch-node.crt
+        pemtrustedcas_filepath: ssl/opensearch.ca
+      <% end %>
+      <% if_p('opensearch.http.ssl.certificate') do %>
+      http:
+        enabled: true
+        pemkey_filepath: ssl/opensearch-http.key
+        pemcert_filepath: ssl/opensearch-http.crt
+        pemtrustedcas_filepath: ssl/opensearch.ca
+      <% end %>
+
+<%
+  cluster_name = nil
+  if_link("opensearch") { |opensearch_link| cluster_name = opensearch_link.p("opensearch.cluster_name") }
+  unless cluster_name
+    cluster_name = p("opensearch.cluster_name")
+  end
+  manager_hosts = nil
+  if_link("opensearch") { |opensearch_link| manager_hosts = opensearch_link.instances.map {|e| e.address }.join(',') }
+  unless manager_hosts
+    manager_hosts = p("opensearch.manager_hosts").join(',')
+  end
+%>
+cluster:
+  name: "<%= cluster_name %>"
+  <% unless p("opensearch.discovery.single_node") %>
+  initial_cluster_manager_nodes: "<%= manager_hosts %>"
+  <% end %>
+
+discovery:
+  # https://opensearch.org/docs/latest/tuning-your-cluster/index/#step-4-configure-discovery-hosts-for-a-cluster
+  seed_hosts: "<%= manager_hosts %>"
+  <% if p("opensearch.discovery.single_node") %>
+  type: "single-node"
+  <% end %>
+
+<%
+  node_roles = []
+  if p("opensearch.node.allow_cluster_manager")
+    node_roles.push("cluster_manager")
+  end
+  if p("opensearch.node.allow_data")
+    node_roles.push("data")
+  end
+  if p("opensearch.node.allow_ingest")
+    node_roles.push("ingest")
+  end
+  node_roles = node_roles.join(',')
+%>
+node:
+  name: "<%= name %>/<%= index %>"
+  roles: [ <%= node_roles %> ]
+<% p("opensearch.node.tags", {}).each do | k, v | %>
+  attr.<%= k %>: "<%= v %>"
+<% end %>
+
+network:
+  bind_host: "0.0.0.0"
+  publish_host: <%= spec.address %>
+http:
+  host: <%= p("opensearch.http_host") %>
+
+<% if_p('opensearch.cloud.aws.access_key', 'opensearch.cloud.aws.secret_key') do %>
+cloud:
+  aws:
+    protocol: <%= p('opensearch.cloud.aws.protocol') %>
+    read_timeout: <%= p('opensearch.cloud.aws.read_timeout') %>
+    access_key: <%= p('opensearch.cloud.aws.access_key') %>
+    secret_key: <%= p('opensearch.cloud.aws.secret_key') %>
+    <% if_p('opensearch.cloud.aws.region') do |region| %>region: <%= region %><% end %>
+<% end %>
+
+<% if_p('opensearch.config_options') do p("opensearch.config_options", {}).each do | k, v | %>
+<%= k %>: <%= v %><% end %>
+<% end %>

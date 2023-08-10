@@ -1,0 +1,9 @@
+---
+name: opensearch
+
+dependencies: 
+    - openjdk-17
+
+files:
+    - opensearch-2.9.0-linux-x64.tar.gz
+

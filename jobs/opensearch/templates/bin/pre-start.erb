@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+export JOB_NAME=opensearch
+export OPENSEARCH_HOME=/var/vcap/packages/opensearch
+export JOB_DIR=/var/vcap/jobs/$JOB_NAME
+export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
+
+sysctl -q -w vm.max_map_count=262144
+mkdir -p ${OPENSEARCH_HOME}/plugins
+if [ -d ${JOB_DIR}/config/ssl ]; then
+	chown vcap ${JOB_DIR}/config/ssl
+fi
+
+cd ${OPENSEARCH_HOME}
+chown -R vcap:vcap config plugins
+chown -R vcap:vcap ${OPENSEARCH_PATH_CONF}/opensearch-security
+
+# leaving all plugin files and plugins installed for now
+# can revisit https://opensearch.org/docs/latest/install-and-configure/plugins/ for how to
+# allow installing specific plugins
+#
+# rm -rf /var/vcap/packages/opensearch/plugins/*
+<% if_p('opensearch.cloud.aws.access_key', 'opensearch.cloud.aws.secret_key') do %>
+  ${OPENSEARCH_HOME}/bin/opensearch-plugin install -b repository-s3
+<% end %>
+<% p("opensearch.plugins").each do |plugin| name, path = plugin.first %>
+  <% if path.start_with? '/var/vcap' %>
+    ${OPENSEARCH_HOME}/bin/opensearch-plugin install -b "file://<%= path %>"
+  <% elsif path.start_with? 'http' %>
+    ${OPENSEARCH_HOME}/bin/opensearch-plugin install -b "<%= path %>"
+  <% else %>
+    ${OPENSEARCH_HOME}/bin/opensearch-plugin install -b "<%= path %>"
+  <% end %>
+<% end %>
+
+log_dir=${OPENSEARCH_HOME}/logs
+
+if [[ -d ${log_dir} ]]; then
+  # rmdir fails on a symlink
+  rmdir ${log_dir} || rm ${log_dir}
+fi
+
+if [[ ! -a ${log_dir} ]]; then
+  ln -s /var/vcap/sys/log/opensearch ${log_dir}
+fi

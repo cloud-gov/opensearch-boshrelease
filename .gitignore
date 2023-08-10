@@ -1,0 +1,7 @@
+config/private.yml
+.final_builds
+blobs
+dev_releases
+releases/**/*.tgz
+final-builds-dir-opensearch.tgz
+releases-dir-opensearch.tgz

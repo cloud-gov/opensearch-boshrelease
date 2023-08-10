@@ -1,0 +1,67 @@
+#!/bin/bash
+
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+export JOB_NAME=opensearch
+export PORT=${PORT:-5000}
+export LANG=en_US.UTF-8
+export TMP_DIR=/var/vcap/sys/tmp/$JOB_NAME
+export JOB_DIR=/var/vcap/jobs/$JOB_NAME
+export LOG_DIR=/var/vcap/sys/log/$JOB_NAME
+
+source /var/vcap/packages/openjdk-17/bosh/runtime.env
+
+<% p("opensearch.exec.environment", {}).each do |k, v| %>
+export <%= k %>=<%= v %>
+<% end %>
+
+export HEAP_SIZE=$((( $( cat /proc/meminfo | grep MemTotal | awk '{ print $2 }' ) * <%= p("opensearch.heap_percentage") %> ) / 100 ))K
+<% if_p('opensearch.heap_size') do |heap_size| %>
+  HEAP_SIZE=<%= heap_size %>
+<% end %>
+
+# Set heap size and TMP_DIR
+export OPENSEARCH_JAVA_OPTS="-Xms$HEAP_SIZE -Xmx$HEAP_SIZE -Djava.io.tmpdir=$TMP_DIR"
+export OPENSEARCH_HOME=/var/vcap/packages/opensearch
+export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
+
+export MAX_OPEN_FILES=<%= p("opensearch.limits.fd") %>
+export MAX_LOCKED_MEMORY=unlimited  # required to enable opensearch's mlockall setting
+
+ulimit -u 4096
+
+if [ -n "$MAX_OPEN_FILES" ]; then
+  ulimit -n $MAX_OPEN_FILES
+fi
+
+if [ -n "$MAX_LOCKED_MEMORY" ]; then
+  ulimit -l $MAX_LOCKED_MEMORY
+fi
+
+# PKCS8 keys are required for Opensearch TLS
+# https://opensearch.org/docs/latest/security/configuration/tls/
+<% if_p('opensearch.admin.private_key') do %>
+  openssl pkcs8 -v1 "PBE-SHA1-3DES" \
+  -in "${JOB_DIR}/config/ssl/opensearch-admin.pem" -topk8 \
+  -out "${JOB_DIR}/config/ssl/opensearch-admin.key" -nocrypt
+<% end %>
+<% if_p('opensearch.node.ssl.private_key') do %>
+  openssl pkcs8 -v1 "PBE-SHA1-3DES" \
+  -in "${JOB_DIR}/config/ssl/opensearch-node.pem" -topk8 \
+  -out "${JOB_DIR}/config/ssl/opensearch-node.key" -nocrypt
+  chmod 600 ${JOB_DIR}/config/ssl/opensearch*.key
+<% end %>
+<% if_p('opensearch.http.ssl.private_key') do %>
+  openssl pkcs8 -v1 "PBE-SHA1-3DES" \
+  -in "${JOB_DIR}/config/ssl/opensearch-http.pem" -topk8 \
+  -out "${JOB_DIR}/config/ssl/opensearch-http.key" -nocrypt
+  chmod 600 ${JOB_DIR}/config/ssl/opensearch*.key
+<% end %>
+
+# Copy default security config if it doesn't already exists
+# TODO: Should this be necessary?
+cp -u ${OPENSEARCH_HOME}/config/opensearch-security/*.yml ${OPENSEARCH_PATH_CONF}/opensearch-security
+
+${OPENSEARCH_HOME}/bin/opensearch \
+  <%= p("opensearch.exec.options", []).join(' ') %>
