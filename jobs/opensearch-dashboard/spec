@@ -14,8 +14,8 @@ templates:
   config/bpm.yml.erb: config/bpm.yml
 
 consumes:
-- name: opensearchsearch
-  type: opensearchsearch
+- name: opensearch
+  type: opensearch
   optional: true
 
 provides:
@@ -25,17 +25,17 @@ provides:
   - opensearch-dashboard.port
 
 properties:
-  opensearch-dashboard.opensearchsearch.host:
-    description: "IP address of opensearchsearch master to send opensearchsearch requests to"
+  opensearch-dashboard.opensearch.host:
+    description: "IP address of opensearch master to send opensearch requests to"
     default: "127.0.0.1"
-  opensearch-dashboard.opensearchsearch.port:
-    description: "Port of opensearchsearch master to send opensearchsearch requests to"
+  opensearch-dashboard.opensearch.port:
+    description: "Port of opensearch master to send opensearch requests to"
     default: "9200"
   opensearch-dashboard.default_app_id:
     description: "The default application to load."
     default: "discover"
   opensearch-dashboard.opensearch-dashboard_index:
-    description: "opensearch-dashboard uses an index in opensearchsearch to store saved searches, visualizations and dashboards"
+    description: "opensearch-dashboard uses an index in opensearch to store saved searches, visualizations and dashboards"
     default: ".opensearch-dashboard"
   opensearch-dashboard.port:
     description: "opensearch-dashboard is served by a back end server. This controls which port to use."
@@ -44,10 +44,10 @@ properties:
     description: "This setting specifies the IP address of the back end server."
     default: "0.0.0.0"
   opensearch-dashboard.request_timeout:
-    description: "Time in milliseconds to wait for responses from the back end or opensearchsearch.  This must be > 0"
+    description: "Time in milliseconds to wait for responses from the back end or opensearch.  This must be > 0"
     default: 300000
   opensearch-dashboard.shard_timeout:
-    description: "Time in milliseconds for opensearchsearch to wait for responses from shards. Set to 0 to disable"
+    description: "Time in milliseconds for opensearch to wait for responses from shards. Set to 0 to disable"
     default: 30000
   opensearch-dashboard.env:
     description: "a list of arbitrary key-value pairs to be passed on as process environment variables. eg: FOO: 123"
