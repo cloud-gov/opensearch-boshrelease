@@ -59,5 +59,8 @@ fi
   chmod 600 ${JOB_DIR}/config/ssl/opensearch*.key
 <% end %>
 
-/var/vcap/packages/opensearch/opensearch-2.9.0/bin/opensearch \
+# Copy default security config if it doesn't already exits
+cp -u ${OPENSEARCH_HOME}/config/opensearch-security/* ${JOB_DIR}/config
+
+${OPENSEARCH_HOME}/bin/opensearch \
   <%= p("opensearch.exec.options", []).join(' ') %>
