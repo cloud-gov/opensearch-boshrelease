@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if ! [[ $(ls -1 /var/vcap/packages/opensearch-dashboard/plugins | wc -l) == 0 ]]; then
+  rm -rf /var/vcap/packages/opensearch-dashboard/plugins/*
+fi
+
+cd /var/vcap/packages/opensearch-dashboard
+chown -R vcap:vcap optimize config data plugins
