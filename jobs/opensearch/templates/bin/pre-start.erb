@@ -18,15 +18,15 @@ chown -R vcap:vcap ${OPENSEARCH_PATH_CONF}/opensearch-security
 # install plugins
 rm -rf /var/vcap/packages/opensearch/plugins/*
 <% if_p('opensearch.cloud.aws.access_key', 'opensearch.cloud.aws.secret_key') do %>
-  ${OPENSEARCH_HOME}/opensearch-plugin install -b repository-s3
+  ${OPENSEARCH_HOME}/bin/opensearch-plugin install -b repository-s3
 <% end %>
 <% p("opensearch.plugins").each do |plugin| name, path = plugin.first %>
   <% if path.start_with? '/var/vcap' %>
-    ${OPENSEARCH_HOME}/opensearch-plugin install -b "file://<%= path %>"
+    ${OPENSEARCH_HOME}/bin/opensearch-plugin install -b "file://<%= path %>"
   <% elsif path.start_with? 'http' %>
-    ${OPENSEARCH_HOME}/opensearch-plugin install -b "<%= path %>"
+    ${OPENSEARCH_HOME}/bin/opensearch-plugin install -b "<%= path %>"
   <% else %>
-    ${OPENSEARCH_HOME}/opensearch-plugin install -b "<%= path %>"
+    ${OPENSEARCH_HOME}/bin/opensearch-plugin install -b "<%= path %>"
   <% end %>
 <% end %>
 
