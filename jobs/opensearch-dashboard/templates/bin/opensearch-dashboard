@@ -8,10 +8,10 @@ set -u # report the usage of uninitialized variables
 export JOB_NAME=opensearch-dashboard
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 <%
-  opensearchsearch_port = nil
-  if_link("opensearchsearch") { |opensearchsearch_link| opensearchsearch_port = opensearchsearch_link.p("opensearchsearch.port") }
-  unless opensearchsearch_port
-    opensearchsearch_port = p("opensearch-dashboard.opensearchsearch.port")
+  opensearch_port = nil
+  if_link("opensearch") { |opensearch_link| opensearch_port = opensearch_link.p("opensearch.port") }
+  unless opensearch_port
+    opensearch_port = p("opensearch-dashboard.opensearch.port")
   end
 %>
 
