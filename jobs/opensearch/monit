@@ -4,8 +4,8 @@ check process opensearch
   stop program "/var/vcap/jobs/bpm/bin/bpm stop opensearch"
   group vcap
 
-check device es-ephemeral_disk with path /var/vcap/data
+check device os-ephemeral_disk with path /var/vcap/data
   if SPACE usage > 80% then alert
 
-check device es-persistent_disk with path /var/vcap/store
+check device os-persistent_disk with path /var/vcap/store
   if SPACE usage > 80% then alert
