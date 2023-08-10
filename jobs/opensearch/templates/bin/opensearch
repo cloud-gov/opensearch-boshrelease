@@ -23,7 +23,7 @@ export HEAP_SIZE=$((( $( cat /proc/meminfo | grep MemTotal | awk '{ print $2 }' 
 
 # Set heap size and TMP_DIR
 export OPENSEARCH_JAVA_OPTS="-Xms$HEAP_SIZE -Xmx$HEAP_SIZE -Djava.io.tmpdir=$TMP_DIR"
-export OPENSEARCH_HOME=/var/vcap/packages/opensearch/opensearch-2.9.0/
+export OPENSEARCH_HOME=/var/vcap/packages/opensearch/opensearch-2.9.0
 export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
 
 export MAX_OPEN_FILES=<%= p("opensearch.limits.fd") %>
@@ -59,8 +59,8 @@ fi
   chmod 600 ${JOB_DIR}/config/ssl/opensearch*.key
 <% end %>
 
-# Copy default security config if it doesn't already exits
-cp -u ${OPENSEARCH_HOME}/config/opensearch-security/* ${JOB_DIR}/config/opensearch-security
+# Copy default security config if it doesn't already exists
+cp -u ${OPENSEARCH_HOME}/config/opensearch-security/*.yml ${OPENSEARCH_PATH_CONF}/opensearch-security
 
 ${OPENSEARCH_HOME}/bin/opensearch \
   <%= p("opensearch.exec.options", []).join(' ') %>
