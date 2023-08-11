@@ -1,8 +1,8 @@
 #!/bin/bash
 
-if ! [[ $(ls -1 /var/vcap/packages/opensearch-dashboard/plugins | wc -l) == 0 ]]; then
-  rm -rf /var/vcap/packages/opensearch-dashboard/plugins/*
+if ! [[ $(ls -1 /var/vcap/packages/opensearchDashboards/plugins | wc -l) == 0 ]]; then
+  rm -rf /var/vcap/packages/opensearchDashboards/plugins/*
 fi
 
-cd /var/vcap/packages/opensearch-dashboard
+cd /var/vcap/packages/opensearchDashboards
 chown -R vcap:vcap config data plugins

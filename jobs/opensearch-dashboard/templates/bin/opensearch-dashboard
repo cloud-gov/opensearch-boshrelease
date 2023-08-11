@@ -4,35 +4,35 @@ set -e # exit immediately if a simple command exits with a non-zero status
 set -u # report the usage of uninitialized variables
 
 # Setup env vars and folders for the webapp_ctl script
-#source /var/vcap/jobs/opensearch-dashboard/helpers/ctl_setup.sh 'opensearch-dashboard'
-export JOB_NAME=opensearch-dashboard
+#source /var/vcap/jobs/opensearchDashboards/helpers/ctl_setup.sh 'opensearchDashboards'
+export JOB_NAME=opensearchDashboards
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 <%
   opensearch_port = nil
   if_link("opensearch") { |opensearch_link| opensearch_port = opensearch_link.p("opensearch.port") }
   unless opensearch_port
-    opensearch_port = p("opensearch-dashboard.opensearch.port")
+    opensearch_port = p("opensearchDashboards.opensearch.port")
   end
 %>
 
-MEMORY_LIMIT=$(($(grep MemTotal /proc/meminfo | awk '{print $2}') * <%= p('opensearch-dashboard.memory_limit') %>/100 / 1024))
+MEMORY_LIMIT=$(($(grep MemTotal /proc/meminfo | awk '{print $2}') * <%= p('opensearchDashboards.memory_limit') %>/100 / 1024))
 export NODE_OPTIONS="--max-old-space-size=$MEMORY_LIMIT"
 
-<% p("opensearch-dashboard.env").each do |env| %>
+<% p("opensearchDashboards.env").each do |env| %>
 export <%= env.keys[0] %>="<%= env.values[0] %>"
 <% end %>
 
-<% p("opensearch-dashboard.source_files").each do |sf| %>
+<% p("opensearchDashboards.source_files").each do |sf| %>
 source <%= sf %>
 <% end %>
 
-<% p("opensearch-dashboard.plugins").each do |plugin| name, path = plugin.first %>
-    cd /var/vcap/packages/opensearch-dashboard/plugins/
+<% p("opensearchDashboards.plugins").each do |plugin| name, path = plugin.first %>
+    cd /var/vcap/packages/opensearchDashboards/plugins/
   <% if path.start_with? '/var/vcap' %>
-    /var/vcap/packages/opensearch-dashboard/bin/opensearch-dashboard-plugin install "file://<%= path %>"
+    /var/vcap/packages/opensearchDashboards/bin/opensearchDashboards-plugin install "file://<%= path %>"
   <% else %>
-    /var/vcap/packages/opensearch-dashboard/bin/opensearch-dashboard-plugin install "<%= path %>"
+    /var/vcap/packages/opensearchDashboards/bin/opensearchDashboards-plugin install "<%= path %>"
   <% end %>
 <% end %>
 
-/var/vcap/packages/opensearch-dashboard/bin/opensearch-dashboards -c $JOB_DIR/config/opensearch-dashboard.conf
+/var/vcap/packages/opensearchDashboards/bin/opensearchDashboardss -c $JOB_DIR/config/opensearchDashboards.conf
