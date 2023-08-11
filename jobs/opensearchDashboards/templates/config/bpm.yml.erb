@@ -1,13 +1,13 @@
 processes:
-  - name: opensearch-dashboard
+  - name: opensearchDashboards
     hooks:
-      pre_start: /var/vcap/jobs/opensearch-dashboard/bin/pre-start
-    executable: /var/vcap/jobs/opensearch-dashboard/bin/opensearch-dashboard.sh
+      pre_start: /var/vcap/jobs/opensearchDashboards/bin/pre-start
+    executable: /var/vcap/jobs/opensearchDashboards/bin/opensearchDashboards.sh
     ephemeral_disk: true
     additional_volumes:
-    <% p("opensearch-dashboard.source_files").each do |sf| %>
+    <% p("opensearchDashboards.source_files").each do |sf| %>
     - path:  <%= sf %>
     <% end %>
-    - path: /var/vcap/data/packages/opensearch-dashboard
+    - path: /var/vcap/data/packages/opensearchDashboards
       writable: true
       allow_executions: true
