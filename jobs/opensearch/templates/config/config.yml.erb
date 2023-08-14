@@ -16,10 +16,11 @@ plugins:
       admin_dn:
       - '<%= p("opensearch.admin.dn") %>'
     <% end %>
-    <% if_p('opensearch.node.ssl.dn"') do %>
+    <% if_p('opensearch.node.ssl.dn') do %>
     nodes_dn:
-    - '<%= p("opensearch.node.ssl.dn") %>'
+    - '<%= p('opensearch.node.ssl.dn') %>'
     <% end %>
+    <% if p('opensearch.node.ssl.certificate', nil) || p('opensearch.http.ssl.certificate', nil) %>
     ssl:
       <% if_p('opensearch.node.ssl.certificate') do %>
       transport:
@@ -35,6 +36,7 @@ plugins:
         pemcert_filepath: ssl/opensearch-http.crt
         pemtrustedcas_filepath: ssl/opensearch.ca
       <% end %>
+    <% end %>
 
 <%
   cluster_name = nil
@@ -51,12 +53,12 @@ plugins:
 cluster:
   name: "<%= cluster_name %>"
   <% unless p("opensearch.discovery.single_node") %>
-  initial_cluster_manager_nodes: "<%= manager_hosts %>"
+  initial_cluster_manager_nodes: ["<%= manager_hosts %>"]
   <% end %>
 
 discovery:
   # https://opensearch.org/docs/latest/tuning-your-cluster/index/#step-4-configure-discovery-hosts-for-a-cluster
-  seed_hosts: "<%= manager_hosts %>"
+  seed_hosts: ["<%= manager_hosts %>"]
   <% if p("opensearch.discovery.single_node") %>
   type: "single-node"
   <% end %>
