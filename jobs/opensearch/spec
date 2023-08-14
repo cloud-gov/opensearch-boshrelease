@@ -30,7 +30,6 @@ provides:
   type: opensearch
   properties:
   - opensearch.port
-  - opensearch.host
   - opensearch.cluster_name
 
 consumes:
