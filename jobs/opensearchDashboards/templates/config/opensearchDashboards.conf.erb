@@ -26,11 +26,11 @@ opensearch.hosts: "http://<%= p("opensearchDashboards.opensearch.host") + ':' + 
 # opensearchDashboards uses an index in opensearch to store saved searches, visualizations
 # and dashboards. It will create a new index if it doesn't already exist.
 # opensearchDashboards.index: ".opensearchDashboards"
-opensearchDashboards.index: "<%= p('opensearchDashboards.index') %>"
+opensearchDashboards.index: <%= p('opensearchDashboards.index') %>
 
 # The default application to load.
 # opensearchDashboards.defaultAppId: "discover"
-opensearchDashboards.defaultAppId: "<%= p('opensearchDashboards.defaultAppId') %>"
+opensearchDashboards.defaultAppId: <%= p('opensearchDashboards.defaultAppId') %>
 
 # If your opensearch is protected with basic auth, these are the user credentials
 # used by the opensearchDashboards server to perform maintenance on the opensearchDashboards.index at startup. Your opensearchDashboards
@@ -44,12 +44,12 @@ opensearch.password: "admin"
 # server.ssl.key: /path/to/your/server.key
 
 # Optional setting to validate that your opensearch backend uses the same key files (PEM formatted)
-# opensearch.ssl.cert: "<%= p('opensearchDashboards.opensearch.http.ssl.certificate') %>"
-# opensearch.ssl.key: "<%= p('opensearchDashboards.opensearch.http.ssl.private_key') %>"
+opensearch.ssl.cert: <%= p('opensearchDashboards.opensearch.http.ssl.certificate') %>
+opensearch.ssl.key: <%= p('opensearchDashboards.opensearch.http.ssl.private_key') %>
 
 # If you need to provide a CA certificate for your opensearch instance, put
 # the path of the pem file here.
-# opensearch.ssl.ca: /path/to/your/CA.pem
+opensearch.ssl.ca: <%= p('opensearchDashboards.opensearch.http.ssl.ca') %>
 
 # Set to false to have a complete disregard for the validity of the SSL
 # certificate.
