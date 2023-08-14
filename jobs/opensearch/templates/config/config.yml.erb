@@ -53,12 +53,12 @@ plugins:
 cluster:
   name: "<%= cluster_name %>"
   <% unless p("opensearch.discovery.single_node") %>
-  initial_cluster_manager_nodes: "<%= manager_hosts %>"
+  initial_cluster_manager_nodes: ["<%= manager_hosts %>"]
   <% end %>
 
 discovery:
   # https://opensearch.org/docs/latest/tuning-your-cluster/index/#step-4-configure-discovery-hosts-for-a-cluster
-  seed_hosts: "<%= manager_hosts %>"
+  seed_hosts: ["<%= manager_hosts %>"]
   <% if p("opensearch.discovery.single_node") %>
   type: "single-node"
   <% end %>
@@ -85,7 +85,7 @@ node:
 
 network:
   bind_host: "0.0.0.0"
-  publish_host: <%= spec.address %>
+  publish_host: <%= spec.ip %>
 http:
   host: <%= p("opensearch.http_host") %>
 
