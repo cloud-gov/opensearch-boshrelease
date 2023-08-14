@@ -1,0 +1,74 @@
+---
+# OPS file to enable secure node-to-node communications across opensearch cluster
+# Please mind to disable post-start when you run this OPS first time
+#
+# opensearch_manager
+- type: replace
+  path: /instance_groups/name=opensearch_manager/jobs/name=opensearch/properties/opensearch/http_host?
+  value: 127.0.0.1
+
+- type: replace
+  path: /instance_groups/name=opensearch_manager/jobs/name=opensearch/properties/opensearch/admin?
+  value:
+    dn: CN=admin.opensearch.internal
+
+- type: replace
+  path: /instance_groups/name=opensearch_manager/jobs/name=opensearch/properties/opensearch/node/ssl?
+  value: &tls_properties
+    dn: "CN=node.opensearch.internal"
+    ca: ((opensearch_node.ca))
+    certificate: ((opensearch_node.certificate))
+    private_key: ((opensearch_node.private_key))
+
+# opensearch_data
+- type: replace
+  path: /instance_groups/name=opensearch_data/jobs/name=opensearch/properties/opensearch/http_host?
+  value: 127.0.0.1
+
+- type: replace
+  path: /instance_groups/name=opensearch_data/jobs/name=opensearch/properties/opensearch/admin?
+  value:
+    dn: CN=admin.opensearch.internal
+    certificate: ((opensearch_admin.certificate))
+    private_key: ((opensearch_admin.private_key))
+
+- type: replace
+  path: /instance_groups/name=opensearch_data/jobs/name=opensearch/properties/opensearch/node/ssl?
+  value: *tls_properties
+
+- type: replace
+  path: /instance_groups/name=opensearch_data/jobs/name=opensearch/properties/opensearch/plugins?
+  value: *tls_plugin
+
+# variables
+- type: replace
+  path: /variables/name=opensearch_ca?
+  value:
+    name: opensearch_ca
+    type: certificate
+    options:
+      is_ca: true
+      common_name: opensearch-ca
+
+- type: replace
+  path: /variables/name=opensearch_node?
+  value:
+    name: opensearch_node
+    type: certificate
+    options:
+      ca: opensearch_ca
+      common_name: node.opensearch.internal
+      extended_key_usage:
+      - server_auth
+      - client_auth
+
+- type: replace
+  path: /variables/name=opensearch_admin?
+  value:
+    name: opensearch_admin
+    type: certificate
+    options:
+      ca: opensearch_ca
+      common_name: admin.opensearch.internal
+      extended_key_usage:
+      - client_auth
