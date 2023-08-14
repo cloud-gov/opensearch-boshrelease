@@ -44,8 +44,8 @@ opensearch.password: "admin"
 # server.ssl.key: /path/to/your/server.key
 
 # Optional setting to validate that your opensearch backend uses the same key files (PEM formatted)
-# opensearch.ssl.cert: /path/to/your/client.crt
-# opensearch.ssl.key: /path/to/your/client.key
+opensearch.ssl.cert:  "<%= p('opensearchDashboards.opensearch.http.ssl.certificate') %>"
+opensearch.ssl.key: "<%= p('opensearchDashboards.opensearch.http.ssl.private_key') %>"
 
 # If you need to provide a CA certificate for your opensearch instance, put
 # the path of the pem file here.

@@ -31,6 +31,8 @@ provides:
   properties:
   - opensearch.port
   - opensearch.cluster_name
+  - opensearch.http.ssl.certificate
+  - opensearch.http.ssl.private_key
 
 consumes:
 - name: opensearch

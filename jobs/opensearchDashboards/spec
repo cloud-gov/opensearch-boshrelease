@@ -31,6 +31,10 @@ properties:
   opensearchDashboards.opensearch.port:
     description: "Port of opensearch master to send opensearch requests to"
     default: "9200"
+  opensearchDashboards.opensearch.http.ssl.certificate:
+    description: "SSL cert of opensearch for backend"
+  opensearchDashboards.opensearch.http.ssl.private_key:
+    description: "SSL key of opensearch for backend"
   opensearchDashboards.defaultAppId:
     description: "The default application to load."
     default: "discover"
