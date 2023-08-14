@@ -1,3 +1,5 @@
+.vscode
+
 config/private.yml
 .final_builds
 blobs
