@@ -92,6 +92,7 @@ network:
   publish_host: <%= spec.ip %>
 http:
   host: <%= p("opensearch.http_host") %>
+  port: 9200
 
 <% if_p('opensearch.cloud.aws.access_key', 'opensearch.cloud.aws.secret_key') do %>
 cloud:
