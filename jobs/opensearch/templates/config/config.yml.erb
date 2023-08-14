@@ -16,9 +16,9 @@ plugins:
       admin_dn:
       - '<%= p("opensearch.admin.dn") %>'
     <% end %>
-    <% if_p('opensearch.node.ssl.dn"') do %>
+    <% if_p('opensearch.node.ssl.dn') do %>
     nodes_dn:
-    - '<%= p("opensearch.node.ssl.dn") %>'
+    - '<%= p('opensearch.node.ssl.dn') %>'
     <% end %>
     <% if p('opensearch.node.ssl.certificate', nil) || p('opensearch.http.ssl.certificate', nil) %>
     ssl:
@@ -88,6 +88,7 @@ network:
   publish_host: <%= spec.ip %>
 http:
   host: <%= p("opensearch.http_host") %>
+  port: 9200
 
 <% if_p('opensearch.cloud.aws.access_key', 'opensearch.cloud.aws.secret_key') do %>
 cloud:
