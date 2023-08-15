@@ -19,8 +19,8 @@ cp -u ${OPENSEARCH_HOME}/config/opensearch-security/*.yml ${OPENSEARCH_PATH_CONF
 
 # Update default admin user
 chmod +x ${OPENSEARCH_HOME}/plugins/opensearch-security/tools/hash.sh
-PASSWORD_HASH=$(${OPENSEARCH_HOME}/plugins/opensearch-security/tools/hash.sh -p "<%= p('opensearch.password') %>")
-cat << EOF > ${OPENSEARCH_PATH_CONF}/internal_users.yaml
+PASSWORD_HASH=$(${OPENSEARCH_HOME}/plugins/opensearch-security/tools/hash.sh -p "<%= p('opensearch.password') %>" | tail -n +5)
+cat << EOF > ${OPENSEARCH_PATH_CONF}/opensearch-security/internal_users.yaml
 ---
 # This is the internal user database
 # The hash value is a bcrypt hash and can be generated with plugin/tools/hash.sh
