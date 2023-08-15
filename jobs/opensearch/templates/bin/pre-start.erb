@@ -18,6 +18,7 @@ source /var/vcap/packages/openjdk-17/bosh/runtime.env
 cp -u ${OPENSEARCH_HOME}/config/opensearch-security/*.yml ${OPENSEARCH_PATH_CONF}/opensearch-security
 
 # Update default admin user
+chmod +x ${OPENSEARCH_HOME}/plugins/opensearch-security/tools/hash.sh
 PASSWORD_HASH=$(${OPENSEARCH_HOME}/plugins/opensearch-security/tools/hash.sh -p "<%= p('opensearch.password') %>")
 cat << EOF > ${OPENSEARCH_PATH_CONF}/internal_users.yaml
 ---
