@@ -29,6 +29,8 @@ plugins:
         pemcert_filepath: ssl/opensearch-node.crt
         pemtrustedcas_filepath: ssl/opensearch.ca
       <% end %>
+      http:
+        clientauth_mode: OPTIONAL
       <% if_p('opensearch.http.ssl.certificate') do %>
       http:
         enabled: true
