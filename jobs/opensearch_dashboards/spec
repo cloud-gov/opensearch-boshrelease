@@ -1,0 +1,96 @@
+---
+name: opensearch_dashboards
+
+description: This job runs opensearch_dashboards UI
+
+packages:
+  - opensearch_dashboards
+
+templates:
+  bin/opensearch_dashboards: bin/opensearch_dashboards.sh
+  bin/pre-start.erb: bin/pre-start
+  bin/post-start.erb: bin/post-start
+  config/opensearch_dashboards.conf.erb: config/opensearch_dashboards.conf
+  config/bpm.yml.erb: config/bpm.yml
+
+consumes:
+- name: opensearch
+  type: opensearch
+  optional: true
+
+provides:
+- name: opensearch_dashboards
+  type: opensearch_dashboards
+  properties:
+  - opensearch_dashboards.port
+
+properties:
+  opensearch_dashboards.opensearch.host:
+    description: "IP address of opensearch master to send opensearch requests to"
+    default: "localhost"
+  opensearch_dashboards.opensearch.port:
+    description: "Port of opensearch master to send opensearch requests to"
+    default: "9200"
+  opensearch_dashboards.opensearch.http.ssl.ca:
+    description: "SSL ca of opensearch for backend"
+  opensearch_dashboards.opensearch.http.ssl.certificate:
+    description: "SSL cert of opensearch for backend"
+  opensearch_dashboards.opensearch.http.ssl.private_key:
+    description: "SSL key of opensearch for backend"
+  opensearch_dashboards.defaultAppId:
+    description: "The default application to load."
+    default: "discover"
+  opensearch_dashboards.index:
+    description: "opensearch_dashboards uses an index in opensearch to store saved searches, visualizations and dashboards"
+    default: ".opensearch_dashboards"
+  opensearch_dashboards.port:
+    description: "opensearch_dashboards is served by a back end server. This controls which port to use."
+    default: 5601
+  opensearch_dashboards.host:
+    description: "This setting specifies the IP address of the back end server."
+    default: "0.0.0.0"
+  opensearch_dashboards.request_timeout:
+    description: "Time in milliseconds to wait for responses from the back end or opensearch.  This must be > 0"
+    default: 300000
+  opensearch_dashboards.shard_timeout:
+    description: "Time in milliseconds for opensearch to wait for responses from shards. Set to 0 to disable"
+    default: 30000
+  opensearch_dashboards.env:
+    description: "a list of arbitrary key-value pairs to be passed on as process environment variables. eg: FOO: 123"
+    default: []
+  opensearch_dashboards.source_files:
+    description: "List of files to source in opensearch_dashboards control script"
+    default: []
+  opensearch_dashboards.console_enabled:
+    description: "Enable opensearch_dashboards development console; should be set to `false` in a multi-tenant deployment."
+    default: false
+  opensearch_dashboards.searchprofiler_enabled:
+    description: "Enable opensearch_dashboards development search profiler; should be set to `false` in a multi-tenant deployment."
+    default: false
+  opensearch_dashboards.grokdebugger_enabled:
+    description: "Enable opensearch_dashboards development grok debugger; should be set to `false` in a multi-tenant deployment."
+    default: false
+  opensearch_dashboards.apm_enabled:
+    description: "Enable opensearch_dashboards APM ui; should be set to `false` in a multi-tenant deployment."
+    default: false
+  opensearch_dashboards.reporting_key:
+    description: "Define a reporting key to prevent issues with exporting a report in a load balanced scenario."
+    default: CloudFoundry123!
+  opensearch_dashboards.config_options:
+    description: "Additional options to append to opensearch_dashboards's config.yml (YAML format)."
+    default: ~
+  opensearch_dashboards.plugins:
+    description: "a list of key-value pairs of plugins. e.b. opensearch_dashboards-auth: /var/vcap/packagaes/opensearch_dashboards/opensearch_dashboards-auth"
+    default: []
+  opensearch_dashboards.memory_limit:
+    description: "Configure the GC in nodejs to treat this number as the available memory for this process. The value is in the form of % of VM memory."
+    default: 75
+  opensearch_dashboards.health.disable_post_start:
+    description: Allow node to run post-start script? (true / false)
+    default: false
+  opensearch_dashboards.health.interval:
+    description: opensearch_dashboards health check interval (seconds)
+    default: 5
+  opensearch_dashboards.health.timeout:
+    description: opensearch_dashboards health check number of attempts (seconds)
+    default: 300

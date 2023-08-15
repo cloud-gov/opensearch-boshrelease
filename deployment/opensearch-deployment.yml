@@ -53,7 +53,7 @@ instance_groups:
       opensearch:
         from: opensearch_manager
     properties:
-      opensearchDashboards:
+      opensearch_dashboards:
         config_options:
           server.maxPayloadBytes: 4194304
         console.enabled: false

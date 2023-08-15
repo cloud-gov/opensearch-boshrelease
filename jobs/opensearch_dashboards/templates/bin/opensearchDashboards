@@ -1,0 +1,40 @@
+#!/bin/bash
+
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+# Setup env vars and folders for the webapp_ctl script
+#source /var/vcap/jobs/opensearch_dashboards/helpers/ctl_setup.sh 'opensearch_dashboards'
+export JOB_NAME=opensearch_dashboards
+export JOB_DIR=/var/vcap/jobs/$JOB_NAME
+<%
+  opensearch_port = nil
+  if_link("opensearch") { |opensearch_link| opensearch_port = opensearch_link.p("opensearch.port") }
+  unless opensearch_port
+    opensearch_port = p("opensearch_dashboards.opensearch.port")
+  end
+%>
+
+# generate files
+
+MEMORY_LIMIT=$(($(grep MemTotal /proc/meminfo | awk '{print $2}') * <%= p('opensearch_dashboards.memory_limit') %>/100 / 1024))
+export NODE_OPTIONS="--max-old-space-size=$MEMORY_LIMIT"
+
+<% p("opensearch_dashboards.env").each do |env| %>
+export <%= env.keys[0] %>="<%= env.values[0] %>"
+<% end %>
+
+<% p("opensearch_dashboards.source_files").each do |sf| %>
+source <%= sf %>
+<% end %>
+
+<% p("opensearch_dashboards.plugins").each do |plugin| name, path = plugin.first %>
+    cd /var/vcap/packages/opensearch_dashboards/plugins/
+  <% if path.start_with? '/var/vcap' %>
+    /var/vcap/packages/opensearch_dashboards/bin/opensearch_dashboards-plugin install "file://<%= path %>"
+  <% else %>
+    /var/vcap/packages/opensearch_dashboards/bin/opensearch_dashboards-plugin install "<%= path %>"
+  <% end %>
+<% end %>
+
+/var/vcap/packages/opensearch_dashboards/bin/opensearch-dashboards -c $JOB_DIR/config/opensearch_dashboards.conf

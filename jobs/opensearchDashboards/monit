@@ -1,5 +1,0 @@
-check process opensearchDashboards
-  with pidfile /var/vcap/sys/run/bpm/opensearchDashboards/opensearchDashboards.pid
-  start program "/var/vcap/jobs/bpm/bin/bpm start opensearchDashboards" with timeout 300 seconds
-  stop program "/var/vcap/jobs/bpm/bin/bpm stop opensearchDashboards"
-  group vcap

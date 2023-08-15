@@ -1,5 +1,5 @@
 ---
-name: opensearchDashboards
+name: opensearch_dashboards
 
 dependencies: 
     - openjdk-17
