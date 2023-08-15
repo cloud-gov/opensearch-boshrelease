@@ -8,8 +8,11 @@ packages:
   - openjdk-17
 
 templates:
-  bin/pre-start.erb: bin/pre-start
+  bin/drain.erb: bin/drain
   bin/opensearch: bin/opensearch.sh
+  bin/pre-start.erb: bin/pre-start
+  bin/post-deploy.erb: bin/post-deploy
+  bin/post-start.erb: bin/post-start
   config/bpm.yml.erb: config/bpm.yml
   config/config.yml.erb: config/opensearch.yml
   config/ca.erb: config/ssl/opensearch.ca
