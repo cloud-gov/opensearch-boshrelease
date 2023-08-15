@@ -1,4 +1,4 @@
-name: opensearch-test
+name: opensearch
 instance_groups:
 - name: opensearch_manager
   azs:
