@@ -36,6 +36,35 @@ instance_groups:
   vm_type: t3.large
   networks:
    - name: services
+- name: opensearch_dashboards
+  azs:
+  - z1
+  instances: 1
+  jobs:
+  - name: opensearch_dashboards
+    consumes:
+      opensearch:
+        from: opensearch_manager
+    properties:
+      opensearchDashboards:
+        config_options:
+          server.maxPayloadBytes: 4194304
+        console.enabled: false
+        defaultappid: dashboard/App-Overview
+        env:
+        - NODE_ENV: production
+        health:
+          timeout: 600
+        memory_limit: 75
+    provides:
+      opensearch-dashboard:
+        as: opensearch_link
+    release: opensearch
+  persistent_disk: 10240
+  stemcell: default
+  vm_type: t3.large
+  networks:
+   - name: services
 - name: opensearch_data
   instances: 3
   jobs:
