@@ -41,6 +41,13 @@ instance_groups:
   - z1
   instances: 1
   jobs:
+  - name: bpm
+    release: bpm
+  - name: opensearch
+    release: opensearch
+    consumes:
+      opensearch: 
+        from: opensearch_manager
   - name: opensearch_dashboards
     consumes:
       opensearch:
