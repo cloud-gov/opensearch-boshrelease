@@ -22,11 +22,6 @@ instance_groups:
         node:
           allow_cluster_manager: true
           allow_data: false
-        http:
-          ssl:
-            certificate: ((opensearch_http_tls.certificate))
-            private_key: ((opensearch_http_tls.private_key))
-            ca: ((opensearch_ca.ca))
         http_host: 127.0.0.1
         jvm_options:
           - "-Dlog4j2.formatMsgNoLookups=true"
@@ -95,11 +90,6 @@ instance_groups:
         node:
           allow_cluster_manager: false
           allow_data: true
-        http:
-          ssl:
-            certificate: ((opensearch_http_tls.certificate))
-            private_key: ((opensearch_http_tls.private_key))
-            ca: ((opensearch_ca.ca))
         limits:
           fd: 131072  # 2 ** 17
         health:
