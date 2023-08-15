@@ -45,10 +45,6 @@
   path: /instance_groups/name=opensearch_dashboards/jobs/name=opensearch/properties/opensearch/node?/ssl?
   value: *tls_properties
 
-- type: replace
-  path: /instance_groups/name=opensearch_dashboards/jobs/name=opensearch/properties/opensearch/plugins?
-  value: *tls_plugin
-
 # variables
 - type: replace
   path: /variables/name=opensearch_ca?
