@@ -50,6 +50,10 @@ instance_groups:
     consumes:
       opensearch:
         from: opensearch_manager
+    properties:
+      opensearch:
+        username: ((opensearch_username))
+        password: ((opensearch_password))
   - name: opensearch_dashboards
     consumes:
       opensearch:
