@@ -6,3 +6,4 @@ releases/**/*.tgz
 final-builds-dir-opensearch.tgz
 releases-dir-opensearch.tgz
 .DS_Store
+.vscode
