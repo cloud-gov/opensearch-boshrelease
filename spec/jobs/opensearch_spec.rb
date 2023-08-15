@@ -19,8 +19,12 @@ describe 'opensearch job' do
     end
 
     it 'configures default settings' do
-      config = template.render(manifest)
+      config = YAML.load(template.render(manifest))
       expect(config['bootstrap']['memory_lock']).to eq(true)
+      expect(config['path']).to eq({
+        "data" => "/var/vcap/store/opensearch",
+        "name" => "/var/vcap/sys/log/opensearch"
+      })
     end
   end
 end
