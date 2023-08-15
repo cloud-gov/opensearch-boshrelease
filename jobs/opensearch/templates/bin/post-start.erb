@@ -71,14 +71,14 @@ echo "Disable post start script property is set to <%= p("opensearch.health.disa
   wait_for_listening
   OS="/var/vcap/packages/opensearch"
   source /var/vcap/packages/openjdk-17/bosh/runtime.env
-  ODS="${OS}/plugins/opensearch_security"
+  ODS="${OS}/plugins/opensearch-security"
   CNF="/var/vcap/jobs/opensearch/config"
   echo "=== Applying SSL config:"
   chmod +x ${ODS}/tools/securityadmin.sh
   ${ODS}/tools/securityadmin.sh -cd ${ODS}/securityconfig \
     -cacert ${CNF}/ssl/opensearch.ca \
-    -cert ${CNF}/ssl/opensearch-admin.crt \
-    -key ${CNF}/ssl/opensearch-admin.key \
+    -cert ${CNF}/ssl/opensearch-node.crt \
+    -key ${CNF}/ssl/opensearch-node.key \
     -icl -nhnv
   <% end %>
 <% end %>
