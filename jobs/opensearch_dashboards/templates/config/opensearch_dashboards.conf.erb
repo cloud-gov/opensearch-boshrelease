@@ -1,10 +1,10 @@
 # opensearch_dashboards is served by a back end server. This controls which port to use.
-server.port: <%= p('opensearch_dashboards.port') %>
+server.port: <%= p('opensearchDashboards.port') %>
 
 # Specifies the address to which the OpenSearch Dashboards server will bind. IP addresses and host names are both valid values.	
 # The default is 'localhost', which usually means remote machines will not be able to connect.	
 # To allow connections from remote users, set this parameter to a non-loopback address.
-server.host: <%= p('opensearch_dashboards.host') %>
+server.host: <%= p('opensearchDashboards.host') %>
 
 # Enables you to specify a path to mount OpenSearch Dashboards at if you are running behind a proxy.	
 # Use the `server.rewriteBasePath` setting to tell OpenSearch Dashboards if it should remove the basePath	
@@ -26,10 +26,10 @@ server.host: <%= p('opensearch_dashboards.host') %>
   opensearch_port = nil
   if_link("opensearch") { |opensearch_link| opensearch_port = opensearch_link.p("opensearch.port") }
   unless opensearch_port
-    opensearch_port = p("opensearch_dashboards.opensearch.port")
+    opensearch_port = p("opensearchDashboards.opensearch.port")
   end
 %>
-opensearch.hosts: "http://<%= p("opensearch_dashboards.opensearch.host") + ':' + opensearch_port.to_s %>"
+opensearch.hosts: "http://<%= p("opensearchDashboards.opensearch.host") + ':' + opensearch_port.to_s %>"
 
 # preserve_opensearch_host true will send the hostname specified in `opensearch`. If you set it to false,
 # then the host you use to connect to *this* opensearch_dashboards instance will be sent.
@@ -37,15 +37,15 @@ opensearch.hosts: "http://<%= p("opensearch_dashboards.opensearch.host") + ':' +
 
 # opensearch_dashboards uses an index in opensearch to store saved searches, visualizations
 # and dashboards. It will create a new index if it doesn't already exist.
-# opensearch_dashboards.index: ".opensearch_dashboards"
-opensearch_dashboards.index: <%= p('opensearch_dashboards.index') %>
+# opensearchDashboards.index: ".opensearch_dashboards"
+opensearchDashboards.index: <%= p('opensearchDashboards.index') %>
 
 # The default application to load.
-# opensearch_dashboards.defaultAppId: "discover"
-opensearch_dashboards.defaultAppId: <%= p('opensearch_dashboards.defaultAppId') %>
+# opensearchDashboards.defaultAppId: "discover"
+opensearchDashboards.defaultAppId: <%= p('opensearchDashboards.defaultAppId') %>
 
 # If your opensearch is protected with basic auth, these are the user credentials
-# used by the opensearch_dashboards server to perform maintenance on the opensearch_dashboards.index at startup. Your opensearch_dashboards
+# used by the opensearch_dashboards server to perform maintenance on the opensearchDashboards.index at startup. Your opensearch_dashboards
 # users will still need to authenticate with opensearch (which is proxied through
 # the opensearch_dashboards server)
 opensearch.username: "admin"
@@ -73,12 +73,12 @@ opensearch.password: "admin"
 # Time in milliseconds to wait for responses from the back end or opensearch.
 # This must be > 0
 # opensearch.requestTimeout: 300000
-opensearch.requestTimeout: <%= p('opensearch_dashboards.request_timeout') %>
+opensearch.requestTimeout: <%= p('opensearchDashboards.request_timeout') %>
 
 # Time in milliseconds for opensearch to wait for responses from shards.
 # Set to 0 to disable.
 # opensearch.shardTimeout: 0
-opensearch.shardTimeout: <%= p('opensearch_dashboards.shard_timeout') %>
+opensearch.shardTimeout: <%= p('opensearchDashboards.shard_timeout') %>
 
 # Time in milliseconds to wait for opensearch at opensearch_dashboards startup before retrying
 # opensearch.startupTimeout: 5000
@@ -89,7 +89,7 @@ opensearch.shardTimeout: <%= p('opensearch_dashboards.shard_timeout') %>
 #opensearch.disablePrototypePoisoningProtection: false
 
 # Set the path to where you would like the process id file to be created.
-# pid.file: /var/run/opensearch_dashboards.pid
+# pid.file: /var/run/opensearchDashboards.pid
 
 # Enables you to specify a file where OpenSearch Dashboards stores log output.	
 #logging.dest: stdout	
@@ -147,7 +147,7 @@ opensearch.shardTimeout: <%= p('opensearch_dashboards.shard_timeout') %>
 #  '100.64.0.0/10',	
 # ]
 
-# opensearch_dashboards.branding:	
+# opensearchDashboards.branding:	
 #   logo:	
 #     defaultUrl: ""	
 #     darkModeUrl: ""	
@@ -185,10 +185,10 @@ opensearch.shardTimeout: <%= p('opensearch_dashboards.shard_timeout') %>
 # ]
 
 # Set the value of this setting to false to hide the help menu link to the OpenSearch Dashboards user survey	
-# opensearch_dashboards.survey.url: "https://survey.opensearch.org"	
+# opensearchDashboards.survey.url: "https://survey.opensearch.org"	
 # Set the value of this setting to true to enable plugin augmentation on Dashboard	
 # vis_augmenter.pluginAugmentationEnabled: true
 
-<% if_p('opensearch_dashboards.config_options') do p("opensearch_dashboards.config_options", {}).each do | k, v | %>
+<% if_p('opensearchDashboards.config_options') do p("opensearchDashboards.config_options", {}).each do | k, v | %>
 <%= k %>: <%= v %><% end %>
 <% end %>
