@@ -8,9 +8,10 @@ instance_groups:
   - name: bpm
     release: bpm
   - name: opensearch
-    consumes:
+    consumes: &consumes-opensearch-manager
       opensearch:
         from: opensearch_manager
+        ip_addresses: true
     provides:
       opensearch:
         as: opensearch_manager
@@ -18,7 +19,7 @@ instance_groups:
       opensearch:
         clustername: opensearch
         limits:
-          fd: 131072
+          fd: 131072 # 2 ** 17
         node:
           allow_cluster_manager: true
           allow_data: false
@@ -42,17 +43,13 @@ instance_groups:
     release: bpm
   - name: opensearch
     release: opensearch
-    consumes:
-      opensearch:
-        from: opensearch_manager
+    consumes: *consumes-opensearch-manager
     properties:
       opensearch:
         username: ((opensearch_username))
         password: ((opensearch_password))
   - name: opensearch_dashboards
-    consumes:
-      opensearch:
-        from: opensearch_manager
+    consumes: *consumes-opensearch-manager
     properties:
       opensearch_dashboards:
         config_options:
@@ -82,9 +79,7 @@ instance_groups:
     release: bpm
   - name: opensearch
     release: opensearch
-    consumes:
-      opensearch:
-        from: opensearch_manager
+    consumes: *consumes-opensearch-manager
     properties:
       opensearch:
         node:
