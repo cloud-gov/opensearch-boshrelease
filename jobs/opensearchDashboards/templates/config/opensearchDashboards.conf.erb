@@ -12,8 +12,16 @@ server.host: <%= p('opensearchDashboards.host') %>
 # This setting cannot end in a slash.	
 #server.basePath: ""
 
-# The opensearch instance to use for all your queries.
-# opensearch.url: "http://localhost:9200"
+# Specifies whether OpenSearch Dashboards should rewrite requests that are prefixed with	
+# `server.basePath` or require that they are rewritten by your reverse proxy.	
+#server.rewriteBasePath: false	
+
+# The maximum payload size in bytes for incoming server requests.	
+#server.maxPayloadBytes: 1048576	
+
+# The OpenSearch Dashboards server's name.  This is used for display purposes.	
+#server.name: "your-hostname"
+
 <%
   opensearch_port = nil
   if_link("opensearch") { |opensearch_link| opensearch_port = opensearch_link.p("opensearch.port") }
@@ -48,12 +56,12 @@ opensearch.password: "admin"
 # server.ssl.key: /path/to/your/server.key
 
 # Optional setting to validate that your opensearch backend uses the same key files (PEM formatted)
-opensearch.ssl.certificate:: <%= p('opensearchDashboards.opensearch.http.ssl.certificate') %>
-opensearch.ssl.key: <%= p('opensearchDashboards.opensearch.http.ssl.private_key') %>
+# opensearch.ssl.certificate:: <%= p('opensearchDashboards.opensearch.http.ssl.certificate') %>
+# opensearch.ssl.key: <%= p('opensearchDashboards.opensearch.http.ssl.private_key') %>
 
 # If you need to provide a CA certificate for your opensearch instance, put
 # the path of the pem file here.
-opensearch.ssl.certificateAuthorities: <%= p('opensearchDashboards.opensearch.http.ssl.ca') %>
+# opensearch.ssl.certificateAuthorities: <%= p('opensearchDashboards.opensearch.http.ssl.ca') %>
 
 # Set to false to have a complete disregard for the validity of the SSL
 # certificate.
