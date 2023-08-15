@@ -23,6 +23,11 @@ instance_groups:
         node:
           allow_cluster_manager: true
           allow_data: false
+        http:
+          ssl:
+            ca: ((opensearch_https.ca))
+            certificate: ((opensearch_https.certificate))
+            private_key: ((opensearch_https.private_key))
         http_host: 127.0.0.1
         jvm_options:
           - "-Dlog4j2.formatMsgNoLookups=true"
@@ -46,6 +51,11 @@ instance_groups:
     consumes: *consumes-opensearch-manager
     properties:
       opensearch:
+        http:
+          ssl:
+            ca: ((opensearch_https.ca))
+            certificate: ((opensearch_https.certificate))
+            private_key: ((opensearch_https.private_key))
         username: ((opensearch_username))
         password: ((opensearch_password))
   - name: opensearch_dashboards
@@ -98,6 +108,11 @@ instance_groups:
           - "-Dlog4j2.formatMsgNoLookups=true"
         username: ((opensearch_username))
         password: ((opensearch_password))
+        http:
+          ssl:
+            ca: ((opensearch_https.ca))
+            certificate: ((opensearch_https.certificate))
+            private_key: ((opensearch_https.private_key))
   persistent_disk: 10240
   stemcell: default
   azs: [z1]
@@ -130,3 +145,11 @@ variables:
     type: password
   - name: opensearch_password
     type: password
+  - name: opensearch_https
+    type: certificate
+    options:
+      ca: opensearch_ca
+      common_name: http.opensearch.internal
+      extended_key_usage:
+      - server_auth
+      - client_auth
