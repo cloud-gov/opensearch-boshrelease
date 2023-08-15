@@ -39,7 +39,7 @@ opensearch.hosts: "http://<%= p("opensearch_dashboards.opensearch.host") + ':' +
 # and dashboards. It will create a new index if it doesn't already exist.
 # opensearchDashboards.index: ".opensearch_dashboards"
 opensearchDashboards.index: <%= p('opensearch_dashboards.index') %>
-opensearchDashboards.port: <%= p('opensearch_dashboards.port') %>
+
 # The default application to load.
 # opensearchDashboards.defaultAppId: "discover"
 opensearchDashboards.defaultAppId: <%= p('opensearch_dashboards.defaultAppId') %>
@@ -50,6 +50,9 @@ opensearchDashboards.defaultAppId: <%= p('opensearch_dashboards.defaultAppId') %
 # the opensearch_dashboards server)
 opensearch.username: "admin"
 opensearch.password: "admin"
+
+# TODO this is set to ignore different hostname in certificate 
+opensearch.ssl.verificationMode: certificate
 
 # SSL for outgoing requests from the opensearch_dashboards Server to the browser (PEM formatted)
 # server.ssl.cert: /path/to/your/server.crt
