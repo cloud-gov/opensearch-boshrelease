@@ -41,6 +41,10 @@ consumes:
   optional: true
 
 properties:
+  opensearch.username:
+    description: "Admin username for Opensearch"
+  opensearch.password:
+    description: "Admin password for Opensearch"
   opensearch.port:
     description: Port address of opensearch host to proxy requests for
     default: 9200

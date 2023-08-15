@@ -25,6 +25,10 @@ provides:
   - opensearch_dashboards.port
 
 properties:
+  opensearch_dashboards.username:
+    description: "Admin username for Opensearch Dashboards"
+  opensearch_dashboards.password:
+    description: "Admin password for Opensearch Dashboards"
   opensearch_dashboards.opensearch.host:
     description: "IP address of opensearch master to send opensearch requests to"
     default: "localhost"

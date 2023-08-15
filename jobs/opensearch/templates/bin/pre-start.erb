@@ -11,6 +11,32 @@ if [ -d ${JOB_DIR}/config/ssl ]; then
 	chown vcap ${JOB_DIR}/config/ssl
 fi
 
+source /var/vcap/packages/openjdk-17/bosh/runtime.env
+
+# Copy default security config if it doesn't already exist
+# TODO: Should this be necessary?
+cp -u ${OPENSEARCH_HOME}/config/opensearch-security/*.yml ${OPENSEARCH_PATH_CONF}/opensearch-security
+
+# Update default admin user
+PASSWORD_HASH=$(${OPENSEARCH_HOME}/plugins/opensearch-security/tools/hash.sh -p "<%= p('opensearch.password') %>")
+cat << EOF > ${OPENSEARCH_PATH_CONF}/internal_users.yaml
+---
+# This is the internal user database
+# The hash value is a bcrypt hash and can be generated with plugin/tools/hash.sh
+
+_meta:
+  type: "internalusers"
+  config_version: 2
+
+# Define your internal users here
+<%= p('opensearch.username') %>:
+  hash: "$PASSWORD_HASH"
+  reserved: true
+  hidden: false
+  backend_roles:
+  - "admin"
+EOF
+
 cd ${OPENSEARCH_HOME}
 chown -R vcap:vcap config plugins
 chown -R vcap:vcap ${OPENSEARCH_PATH_CONF}/opensearch-security

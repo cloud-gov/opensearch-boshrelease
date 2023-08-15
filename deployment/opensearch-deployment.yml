@@ -30,6 +30,8 @@ instance_groups:
         http_host: 127.0.0.1
         jvm_options:
           - "-Dlog4j2.formatMsgNoLookups=true"
+        username: ((opensearch_username))
+        password: ((opensearch_password))
     release: opensearch
   persistent_disk: 10240
   stemcell: default
@@ -46,7 +48,7 @@ instance_groups:
   - name: opensearch
     release: opensearch
     consumes:
-      opensearch: 
+      opensearch:
         from: opensearch_manager
   - name: opensearch_dashboards
     consumes:
@@ -63,6 +65,8 @@ instance_groups:
         health:
           timeout: 600
         memory_limit: 75
+        username: ((opensearch_username))
+        password: ((opensearch_password))
     provides:
       opensearch-dashboard:
         as: opensearch_link
@@ -103,6 +107,8 @@ instance_groups:
           indices.query.bool.max_clause_count: 2048
         jvm_options:
           - "-Dlog4j2.formatMsgNoLookups=true"
+        username: ((opensearch_username))
+        password: ((opensearch_password))
   persistent_disk: 10240
   stemcell: default
   azs: [z1]
@@ -130,4 +136,8 @@ update:
   max_in_flight: 1
   serial: false
   update_watch_time: 5000-600000
-variables: []
+variables:
+  - name: opensearch_username
+    type: password
+  - name: opensearch_password
+    type: password

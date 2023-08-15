@@ -59,9 +59,5 @@ fi
   chmod 600 ${JOB_DIR}/config/ssl/opensearch*.key
 <% end %>
 
-# Copy default security config if it doesn't already exists
-# TODO: Should this be necessary?
-cp -u ${OPENSEARCH_HOME}/config/opensearch-security/*.yml ${OPENSEARCH_PATH_CONF}/opensearch-security
-
 ${OPENSEARCH_HOME}/bin/opensearch \
   <%= p("opensearch.exec.options", []).join(' ') %>

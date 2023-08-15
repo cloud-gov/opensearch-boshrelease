@@ -1,26 +1,12 @@
+## Example config: https://github.com/opensearch-project/OpenSearch-Dashboards/blob/main/config/opensearch_dashboards.yml
+
 # opensearch_dashboards is served by a back end server. This controls which port to use.
 server.port: <%= p('opensearch_dashboards.port') %>
 
-# Specifies the address to which the OpenSearch Dashboards server will bind. IP addresses and host names are both valid values.	
-# The default is 'localhost', which usually means remote machines will not be able to connect.	
+# Specifies the address to which the OpenSearch Dashboards server will bind. IP addresses and host names are both valid values.
+# The default is 'localhost', which usually means remote machines will not be able to connect.
 # To allow connections from remote users, set this parameter to a non-loopback address.
 server.host: <%= p('opensearch_dashboards.host') %>
-
-# Enables you to specify a path to mount OpenSearch Dashboards at if you are running behind a proxy.	
-# Use the `server.rewriteBasePath` setting to tell OpenSearch Dashboards if it should remove the basePath	
-# from requests it receives, and to prevent a deprecation warning at startup.	
-# This setting cannot end in a slash.	
-#server.basePath: ""
-
-# Specifies whether OpenSearch Dashboards should rewrite requests that are prefixed with	
-# `server.basePath` or require that they are rewritten by your reverse proxy.	
-#server.rewriteBasePath: false	
-
-# The maximum payload size in bytes for incoming server requests.	
-#server.maxPayloadBytes: 1048576	
-
-# The OpenSearch Dashboards server's name.  This is used for display purposes.	
-#server.name: "your-hostname"
 
 <%
   opensearch_port = nil
@@ -48,30 +34,11 @@ opensearchDashboards.defaultAppId: <%= p('opensearch_dashboards.defaultAppId') %
 # used by the opensearch_dashboards server to perform maintenance on the opensearchDashboards.index at startup. Your opensearch_dashboards
 # users will still need to authenticate with opensearch (which is proxied through
 # the opensearch_dashboards server)
-opensearch.username: "admin"
-opensearch.password: "admin"
+opensearch.username: <%= p('opensearch_dashboards.username') %>
+opensearch.password: <%= p('opensearch_dashboards.password') %>
 
-# TODO this is set to ignore different hostname in certificate 
+# TODO this is set to ignore different hostname in certificate
 opensearch.ssl.verificationMode: certificate
-
-# SSL for outgoing requests from the opensearch_dashboards Server to the browser (PEM formatted)
-# server.ssl.cert: /path/to/your/server.crt
-# server.ssl.key: /path/to/your/server.key
-
-# opensearch.ssl.certificate: /var/vcap/jobs/opensearch/config/ssl/opensearch-http.crt
-# opensearch.ssl.key: /var/vcap/jobs/opensearch/config/ssl/opensearch-http.key
-
-# If you need to provide a CA certificate for your opensearch instance, put
-# the path of the pem file here.
-# opensearch.ssl.certificateAuthorities: /var/vcap/jobs/opensearch/config/ssl/opensearch-http.pem
-
-# Set to false to have a complete disregard for the validity of the SSL
-# certificate.
-# opensearch.ssl.verify: true
-
-# Time in milliseconds to wait for opensearch to respond to pings, defaults to
-# request_timeout setting
-# opensearch.pingTimeout: 1500
 
 # Time in milliseconds to wait for responses from the back end or opensearch.
 # This must be > 0
@@ -82,115 +49,6 @@ opensearch.requestTimeout: <%= p('opensearch_dashboards.request_timeout') %>
 # Set to 0 to disable.
 # opensearch.shardTimeout: 0
 opensearch.shardTimeout: <%= p('opensearch_dashboards.shard_timeout') %>
-
-# Time in milliseconds to wait for opensearch at opensearch_dashboards startup before retrying
-# opensearch.startupTimeout: 5000
-
-# Disables errors from the OpenSearch JS client and enables you to utilize protected words such as: 'boolean', 'proto', 'constructor'.	
-# within cluster. By default, OpenSearch Dashboards and the client will protect you against prototype poisoning attacks.	
-# WARNING: Index patterns are user-supplied data. Disabling this will place the expectation that you are handling the data safely.	
-#opensearch.disablePrototypePoisoningProtection: false
-
-# Set the path to where you would like the process id file to be created.
-# pid.file: /var/run/opensearchDashboards.pid
-
-# Enables you to specify a file where OpenSearch Dashboards stores log output.	
-#logging.dest: stdout	
-
-# Set the value of this setting to true to suppress all logging output.	
-#logging.silent: false	
-
-# Set the value of this setting to true to suppress all logging output other than error messages.	
-#logging.quiet: false	
-
-# Set the value of this setting to true to log all events, including system usage information	
-# and all requests.	
-#logging.verbose: false	
-
-# Set the interval in milliseconds to sample system and process performance	
-# metrics. Minimum is 100ms. Defaults to 5000.	
-#ops.interval: 5000
-
-# Specifies locale to be used for all localizable strings, dates and number formats.	
-# Supported languages are the following: English - en , by default , Chinese - zh-CN .	
-#i18n.locale: "en"	
-# Set the allowlist to check input graphite Url. Allowlist is the default check list.	
-#vis_type_timeline.graphiteAllowedUrls: ['https://www.hostedgraphite.com/UID/ACCESS_KEY/graphite']	
-# Set the denylist to check input graphite Url. Denylist is an IP list.	
-# Below is an example for reference	
-# vis_type_timeline.graphiteBlockedIPs: [	
-#  //Loopback	
-#  '127.0.0.0/8',	
-#  '::1/128',	
-#  //Link-local Address for IPv6	
-#  'fe80::/10',	
-#  //Private IP address for IPv4	
-#  '10.0.0.0/8',	
-#  //Unique local address (ULA)	
-#  'fc00::/7',	
-#  //Reserved IP address	
-#  '0.0.0.0/8',	
-#  '100.64.0.0/10',	
-# ]	
-# vis_type_timeline.graphiteDeniedIPs: []	
-# vis_type_timeline.graphiteDeniedIPs: [	
-#  //Loopback	
-#  '127.0.0.0/8',	
-#  '::1/128',	
-#  //Link-local Address for IPv6	
-#  'fe80::/10',	
-#  //Private IP address for IPv4	
-#  '10.0.0.0/8',	
-#  '172.16.0.0/12',	
-#  '192.168.0.0/16',	
-#  //Unique local address (ULA)	
-#  'fc00::/7',	
-#  //Reserved IP address	
-#  '0.0.0.0/8',	
-#  '100.64.0.0/10',	
-# ]
-
-# opensearchDashboards.branding:	
-#   logo:	
-#     defaultUrl: ""	
-#     darkModeUrl: ""	
-#   mark:	
-#     defaultUrl: ""	
-#     darkModeUrl: ""	
-#   loadingLogo:	
-#     defaultUrl: ""	
-#     darkModeUrl: ""	
-#   faviconUrl: ""	
-#   applicationTitle: ""	
-#   useExpandedHeader: false	
-# Set the value of this setting to true to capture region denied warnings and errors	
-# for your map rendering services.	
-# map.showRegionDeniedWarning: false	
-# Set the value of this setting to false to suppress search usage telemetry	
-# for reducing the load of OpenSearch cluster.	
-# data.search.usageTelemetry.enabled: false	
-# Set the value of this setting to false to disable VisBuilder	
-# functionality in Visualization.	
-# vis_builder.enabled: false
-
-# Set the value of this setting to true to enable multiple data source feature.	
-#data_source.enabled: false	
-# Set the value of these settings to customize crypto materials to encryption saved credentials	
-# in data sources.	
-#data_source.encryption.wrappingKeyName: 'changeme'	
-#data_source.encryption.wrappingKeyNamespace: 'changeme'	
-#data_source.encryption.wrappingKey: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]	
-#data_source.endpointDeniedIPs: [	
-#    '127.0.0.0/8',	
-#    '::1/128',	
-#    '169.254.0.0/16',	
-#    'fe80::/10',	
-# ]
-
-# Set the value of this setting to false to hide the help menu link to the OpenSearch Dashboards user survey	
-# opensearchDashboards.survey.url: "https://survey.opensearch.org"	
-# Set the value of this setting to true to enable plugin augmentation on Dashboard	
-# vis_augmenter.pluginAugmentationEnabled: true
 
 <% if_p('opensearch_dashboards.config_options') do p("opensearch_dashboards.config_options", {}).each do | k, v | %>
 <%= k %>: <%= v %><% end %>
