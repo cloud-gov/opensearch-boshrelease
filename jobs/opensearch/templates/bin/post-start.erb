@@ -83,10 +83,10 @@ echo "Disable post start script property is set to <%= p("opensearch.health.disa
   CNF="/var/vcap/jobs/opensearch/config"
   echo "=== Applying SSL config:"
   chmod +x ${ODS}/tools/securityadmin.sh
-  ${ODS}/tools/securityadmin.sh -cd ${ODS}/securityconfig \
+  ${ODS}/tools/securityadmin.sh -cd $CNF/opensearch-security \
     -cacert ${CNF}/ssl/opensearch.ca \
-    -cert ${CNF}/ssl/opensearch-node.crt \
-    -key ${CNF}/ssl/opensearch-node.key \
+    -cert ${CNF}/ssl/opensearch-admin.crt \
+    -key ${CNF}/ssl/opensearch-admin.key \
     -icl -nhnv
   <% end %>
 <% end %>
