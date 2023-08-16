@@ -71,6 +71,7 @@
     options:
       is_ca: true
       common_name: opensearch-ca
+      duration: 1825 # 365 days * 5 years
 
 - type: replace
   path: /variables/name=opensearch_node?
