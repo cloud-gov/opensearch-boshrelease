@@ -3,6 +3,8 @@
 set -e
 set -x
 
+export OPENSEARCH_JOB_DIR=/var/vcap/jobs/opensearch
+
 <% if !p("opensearch_dashboards.health.disable_post_start") %>
 
 echo "Waiting <%= p("opensearch_dashboards.health.timeout") %>s for opensearch_dashboards to accept connections..."
@@ -12,10 +14,13 @@ do
   # We have to set and unset the 'e' flag around the curl as a return code of 000 (no network) will result in an error.
   # This return code is valid and therefore we want to ignore this as an error.
   set +e
-  CODE=curl -sw '\n%{http_code}' --key /var/vcap/jobs/opensearch/config/ssl/opensearch-admin.key \
-  --cert /var/vcap/jobs/opensearch/config/ssl/opensearch-admin.crt  \
-  --cacert /var/vcap/jobs/opensearch/config/ssl/opensearch.ca  \
-  https://<%= p("opensearch_dashboards.host") %>:<%= p("opensearch_dashboards.port") %>`
+  CODE=$(
+    curl -sw '\n%{http_code}' \
+      --key ${OPENSEARCH_JOB_DIR}/config/ssl/opensearch-admin.key \
+      --cert ${OPENSEARCH_JOB_DIR}/config/ssl/opensearch-admin.crt  \
+      --cacert ${OPENSEARCH_JOB_DIR}/config/ssl/opensearch.ca  \
+      http://<%= p("opensearch_dashboards.host") %>:<%= p("opensearch_dashboards.port") %>
+  )
   set -e
   if [[ "$CODE" == "302" ]]; then
     echo Done!

@@ -2,6 +2,10 @@
 
 set -e
 set -x
+
+export JOB_NAME=opensearch
+export JOB_DIR=/var/vcap/jobs/$JOB_NAME
+
 wait_for_listening() {
   echo -n "=== Waiting <%= p("opensearch.health.connect_timeout") %>s for opensearch to accept connections..."
   elapsed=0
@@ -27,15 +31,15 @@ wait_for_greenstate() {
   until [ "${remaining}" -le 0 ]; do
     <% if p("opensearch.node.allow_data") and not p("opensearch.node.allow_cluster_manager") %>
     curl -sw '\n%{http_code}' \
-      --key ssl/opensearch-admin.key \
-      --cert ssl/opensearch-admin.crt  \
-      --cacert ssl/opensearch.ca \
+      --key ${JOB_DIR}/ssl/opensearch-admin.key \
+      --cert ${JOB_DIR}/ssl/opensearch-admin.crt  \
+      --cacert ${JOB_DIR}/ssl/opensearch.ca \
       https://localhost:9200/_cluster/health > ${out}
     <% else %>
     curl -sw '\n%{http_code}' \
-      --key ssl/opensearch-admin.key \
-      --cert ssl/opensearch-admin.crt  \
-      --cacert ssl/opensearch.ca \
+      --key ${JOB_DIR}/config/ssl/opensearch-admin.key \
+      --cert ${JOB_DIR}/config/ssl/opensearch-admin.crt  \
+      --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
       https://localhost:9200/_cluster/health?local=true > ${out}
     <% end %>
     body=$(cat ${out} | head -n -1)
