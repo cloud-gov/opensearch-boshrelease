@@ -14,8 +14,15 @@
 
 - type: replace
   path: /instance_groups/name=opensearch_manager/jobs/name=opensearch/properties/opensearch/node/ssl?
-  value: &tls_properties
+  value: &node-tls-properties
     dn: "CN=node.opensearch.internal"
+    ca: ((opensearch_node.ca))
+    certificate: ((opensearch_node.certificate))
+    private_key: ((opensearch_node.private_key))
+
+- type: replace
+  path: /instance_groups/name=opensearch_manager/jobs/name=opensearch/properties/opensearch/http/ssl?
+  value: &http-tls-properties
     ca: ((opensearch_node.ca))
     certificate: ((opensearch_node.certificate))
     private_key: ((opensearch_node.private_key))
@@ -34,7 +41,11 @@
 
 - type: replace
   path: /instance_groups/name=opensearch_data/jobs/name=opensearch/properties/opensearch/node/ssl?
-  value: *tls_properties
+  value: *node-tls-properties
+
+- type: replace
+  path: /instance_groups/name=opensearch_data/jobs/name=opensearch/properties/opensearch/http/ssl?
+  value: *http-tls-properties
 
 # opensearch_dashboards
 - type: replace
@@ -43,7 +54,11 @@
 
 - type: replace
   path: /instance_groups/name=opensearch_dashboards/jobs/name=opensearch/properties/opensearch/node?/ssl?
-  value: *tls_properties
+  value: *node-tls-properties
+
+- type: replace
+  path: /instance_groups/name=opensearch_dashboards/jobs/name=opensearch/properties/opensearch/http?/ssl?
+  value: *http-tls-properties
 
 # variables
 - type: replace
