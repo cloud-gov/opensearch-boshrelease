@@ -11,6 +11,8 @@
   path: /instance_groups/name=opensearch_manager/jobs/name=opensearch/properties/opensearch/admin?
   value:
     dn: CN=admin.opensearch.internal
+    certificate: ((opensearch_admin.certificate))
+    private_key: ((opensearch_admin.private_key))
 
 - type: replace
   path: /instance_groups/name=opensearch_manager/jobs/name=opensearch/properties/opensearch/node/ssl?
