@@ -9,7 +9,7 @@
 
 - type: replace
   path: /instance_groups/name=opensearch_manager/jobs/name=opensearch/properties/opensearch/admin?
-  value:
+  value: &admin-tls-properties
     dn: CN=admin.opensearch.internal
     certificate: ((opensearch_admin.certificate))
     private_key: ((opensearch_admin.private_key))
@@ -36,10 +36,7 @@
 
 - type: replace
   path: /instance_groups/name=opensearch_data/jobs/name=opensearch/properties/opensearch/admin?
-  value:
-    dn: CN=admin.opensearch.internal
-    certificate: ((opensearch_admin.certificate))
-    private_key: ((opensearch_admin.private_key))
+  value: *admin-tls-properties
 
 - type: replace
   path: /instance_groups/name=opensearch_data/jobs/name=opensearch/properties/opensearch/node/ssl?
@@ -56,8 +53,7 @@
 
 - type: replace
   path: /instance_groups/name=opensearch_dashboards/jobs/name=opensearch/properties/opensearch?/admin?
-  value:
-    private_key: ((opensearch_admin.private_key))
+  value: *admin-tls-properties
 
 - type: replace
   path: /instance_groups/name=opensearch_dashboards/jobs/name=opensearch/properties/opensearch?/node?/ssl?
