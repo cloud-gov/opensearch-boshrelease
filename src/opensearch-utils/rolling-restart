@@ -11,15 +11,15 @@ set -u
 
 if [ $# -eq 0 ]
 then
-  CLUSTER="localhost:9200"
+  CLUSTER="https://localhost:9200"
   INTERACTIVE=false
 elif [[ $1 == "-i" || $1 = "--interactive" ]]
 then
   INTERACTIVE=true
-  CLUSTER="${2:-localhost:9200}"
+  CLUSTER="${2:-https://localhost:9200}"
 else
   INTERACTIVE=false
-  CLUSTER="${1:-localhost:9200}"
+  CLUSTER="${1:-https://localhost:9200}"
 fi
 
 function decho {

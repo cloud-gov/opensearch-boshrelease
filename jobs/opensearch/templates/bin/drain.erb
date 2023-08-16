@@ -5,7 +5,7 @@ set -e
 <% if p('opensearch.node.allow_data') %>
 # disable allocations before bringing down data nodes
 
-curl -s -X PUT localhost:9200/_all/_settings \
+curl -s -X PUT https://localhost:9200/_all/_settings \
   -H 'Content-Type: application/json' \
   -d '{"settings": {"index.unassigned.node_left.delayed_timeout": "<%= p("opensearch.recovery.delay_allocation_restart") %>"}}' \
   > /dev/null
@@ -13,11 +13,11 @@ curl -s -X PUT localhost:9200/_all/_settings \
 <% end %>
 
 <% if p('opensearch.cloud.aws.bucket') != '' and p('opensearch.node.allow_cluster_manager') and spec.bootstrap %>
-curl -X DELETE -s localhost:9200/_snapshot/<%= p('opensearch.snapshots.repository') %> > /dev/null
+curl -X DELETE -s https://localhost:9200/_snapshot/<%= p('opensearch.snapshots.repository') %> > /dev/null
 <% end %>
 
 <% if p('opensearch.path_repo') != '' and p('opensearch.node.allow_cluster_manager') and spec.bootstrap %>
-curl -X DELETE -s localhost:9200/_snapshot/<%= p('opensearch.snapshots.repository') %> > /dev/null
+curl -X DELETE -s https://localhost:9200/_snapshot/<%= p('opensearch.snapshots.repository') %> > /dev/null
 <% end %>
 
 return_code=$?
