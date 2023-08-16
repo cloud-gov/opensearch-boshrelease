@@ -34,10 +34,10 @@ opensearchDashboards.defaultAppId: <%= p('opensearch_dashboards.defaultAppId') %
 # used by the opensearch_dashboards server to perform maintenance on the opensearchDashboards.index at startup. Your opensearch_dashboards
 # users will still need to authenticate with opensearch (which is proxied through
 # the opensearch_dashboards server)
-<%= if_p('opensearch_dashboards.username') do %>
+<% if_p('opensearch_dashboards.username') do %>
 opensearch.username: <%= p('opensearch_dashboards.username') %>
 <% end %>
-<%= if_p('opensearch_dashboards.password') do %>
+<% if_p('opensearch_dashboards.password') do %>
 opensearch.password: <%= p('opensearch_dashboards.password') %>
 <% end %>
 
