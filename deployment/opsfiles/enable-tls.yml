@@ -55,7 +55,12 @@
   value: 127.0.0.1
 
 - type: replace
-  path: /instance_groups/name=opensearch_dashboards/jobs/name=opensearch/properties/opensearch/node?/ssl?
+  path: /instance_groups/name=opensearch_dashboards/jobs/name=opensearch/properties/opensearch?/admin?
+  value:
+    private_key: ((opensearch_admin.private_key))
+
+- type: replace
+  path: /instance_groups/name=opensearch_dashboards/jobs/name=opensearch/properties/opensearch?/node?/ssl?
   value: *node-tls-properties
 
 - type: replace
