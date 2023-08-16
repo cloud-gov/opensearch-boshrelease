@@ -21,6 +21,7 @@
     ca: ((opensearch_node.ca))
     certificate: ((opensearch_node.certificate))
     private_key: ((opensearch_node.private_key))
+    alternative_names: ["localhost"]
 
 - type: replace
   path: /instance_groups/name=opensearch_manager/jobs/name=opensearch/properties/opensearch/http/ssl?
@@ -77,6 +78,7 @@
   value:
     name: opensearch_node
     type: certificate
+    update_mode: converge
     options:
       ca: opensearch_ca
       common_name: node.opensearch.internal
