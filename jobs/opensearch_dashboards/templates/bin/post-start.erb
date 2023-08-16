@@ -12,8 +12,10 @@ do
   # We have to set and unset the 'e' flag around the curl as a return code of 000 (no network) will result in an error.
   # This return code is valid and therefore we want to ignore this as an error.
   set +e
-  CODE=curl -sw '\n%{http_code}' --key ssl/opensearch-admin.key --cert ssl/opensearch-admin.crt  \
-  --cacert ssl/opensearch.ca  http://<%= p("opensearch_dashboards.host") %>:<%= p("opensearch_dashboards.port") %>`
+  CODE=curl -sw '\n%{http_code}' --key /var/vcap/jobs/opensearch/config/ssl/opensearch-admin.key \
+  --cert /var/vcap/jobs/opensearch/config/ssl/opensearch-admin.crt  \
+  --cacert /var/vcap/jobs/opensearch/config/ssl/opensearch.ca  \
+  https://<%= p("opensearch_dashboards.host") %>:<%= p("opensearch_dashboards.port") %>`
   set -e
   if [[ "$CODE" == "302" ]]; then
     echo Done!
