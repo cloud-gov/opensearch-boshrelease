@@ -44,7 +44,7 @@
   value: *node-tls-properties
 
 - type: replace
-  path: /instance_groups/name=opensearch_data/jobs/name=opensearch/properties/opensearch/http/ssl?
+  path: /instance_groups/name=opensearch_data/jobs/name=opensearch/properties/opensearch/http?/ssl?
   value: *http-tls-properties
 
 # opensearch_dashboards
@@ -57,7 +57,7 @@
   value: *node-tls-properties
 
 - type: replace
-  path: /instance_groups/name=opensearch_dashboards/jobs/name=opensearch/properties/opensearch/http?/ssl?
+  path: /instance_groups/name=opensearch_dashboards/jobs/name=opensearch/properties?/opensearch?/http?/ssl?
   value: *http-tls-properties
 
 # variables

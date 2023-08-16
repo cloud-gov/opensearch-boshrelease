@@ -47,8 +47,6 @@ instance_groups:
   - name: opensearch
     release: opensearch
     consumes: *consumes-opensearch-manager
-    properties:
-      opensearch:
   - name: opensearch_dashboards
     consumes: *consumes-opensearch-manager
     properties:
