@@ -12,7 +12,7 @@ do
   # We have to set and unset the 'e' flag around the curl as a return code of 000 (no network) will result in an error.
   # This return code is valid and therefore we want to ignore this as an error.
   set +e
-  CODE=`curl -m 1 -s -o /dev/null -w "%{http_code}" -u "<%= p("opensearch_dashboards.username") %>:<%= p("opensearch_dashboards.password") %>" http://<%= p("opensearch_dashboards.host") %>:<%= p("opensearch_dashboards.port") %>`
+  CODE=`curl -m 1 -s -o /dev/null -w "%{http_code}" http://<%= p("opensearch_dashboards.host") %>:<%= p("opensearch_dashboards.port") %>`
   set -e
   if [[ "$CODE" == "302" ]]; then
     echo Done!

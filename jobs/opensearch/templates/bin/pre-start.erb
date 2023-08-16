@@ -17,26 +17,6 @@ source /var/vcap/packages/openjdk-17/bosh/runtime.env
 # TODO: Should this be necessary?
 cp -u ${OPENSEARCH_HOME}/config/opensearch-security/*.yml ${OPENSEARCH_PATH_CONF}/opensearch-security
 
-# Update default admin user
-chmod +x ${OPENSEARCH_HOME}/plugins/opensearch-security/tools/hash.sh
-PASSWORD_HASH=$(${OPENSEARCH_HOME}/plugins/opensearch-security/tools/hash.sh -p "<%= p('opensearch.password') %>" | tail -n +5)
-cat << EOF > ${OPENSEARCH_PATH_CONF}/opensearch-security/internal_users.yml
----
-# This is the internal user database
-# The hash value is a bcrypt hash and can be generated with plugin/tools/hash.sh
-
-_meta:
-  type: "internalusers"
-  config_version: 2
-
-# Define your internal users here
-<%= p('opensearch.username') %>:
-  hash: "$PASSWORD_HASH"
-  reserved: true
-  backend_roles:
-  - "admin"
-EOF
-
 cd ${OPENSEARCH_HOME}
 chown -R vcap:vcap config plugins
 chown -R vcap:vcap ${OPENSEARCH_PATH_CONF}/opensearch-security
