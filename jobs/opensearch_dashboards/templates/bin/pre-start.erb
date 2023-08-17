@@ -13,3 +13,12 @@ chown -R vcap:vcap config data plugins
 if [ -d ${JOB_DIR}/config/ssl ]; then
 	chown vcap ${JOB_DIR}/config/ssl
 fi
+
+<% if_link("opensearch") do |opensearch_config| %>
+<% opensearch_config.if_p('opensearch.node.ssl.private_key') do %>
+  openssl pkcs8 -v1 "PBE-SHA1-3DES" \
+  -in "${JOB_DIR}/config/ssl/opensearch-node.pem" -topk8 \
+  -out "${JOB_DIR}/config/ssl/opensearch-node.key" -nocrypt
+  chmod 600 ${JOB_DIR}/config/ssl/opensearch*.key
+<% end %>
+<% end %>
