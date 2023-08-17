@@ -8,7 +8,7 @@ processes:
     - path: /var/vcap/data/packages/opensearch_dashboards
       writable: true
       allow_executions: true
-    - path: /var/vcap/data/jobs/opensearch_dashboards/config
+    - path: /var/vcap/jobs/opensearch_dashboards/config
       writable: true
     <% p("opensearch_dashboards.source_files").each do |sf| %>
     - path:  <%= sf %>
