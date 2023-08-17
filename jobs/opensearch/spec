@@ -70,10 +70,10 @@ properties:
       Shared file system to store snapshots.
       In order to register the shared file system repository it is
       necessary to mount the same shared filesystem to the same location
-      on all master and data nodes.
+      on all manager and data nodes.
     default: ''
   opensearch.node.allow_cluster_manager:
-    description: Allow node to become master? (true / false)
+    description: Allow node to become manager? (true / false)
     default: false
   opensearch.node.allow_data:
     description: Allow node to store data? (true / false)
