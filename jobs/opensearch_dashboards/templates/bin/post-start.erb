@@ -3,7 +3,8 @@
 set -e
 set -x
 
-export OPENSEARCH_JOB_DIR=/var/vcap/jobs/opensearch
+export JOB_NAME=opensearch_dashboards
+export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 
 <% if !p("opensearch_dashboards.health.disable_post_start") %>
 
@@ -16,7 +17,9 @@ do
   set +e
   CODE=$(
     curl -sw '%{http_code}' \
-      -u 'kibanaserver:kibanaserver' \
+      --cert ${JOB_DIR}/ssl/opensearch-dashboard.crt \
+      --key ${JOB_DIR}/ssl/opensearch-dashboard.key \
+      --cacert ${JOB_DIR}/ssl/opensearch.ca \
       http://<%= p("opensearch_dashboards.host") %>:<%= p("opensearch_dashboards.port") %>
   )
   set -e
