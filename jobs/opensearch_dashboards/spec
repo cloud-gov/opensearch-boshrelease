@@ -35,12 +35,15 @@ properties:
   opensearch_dashboards.opensearch.port:
     description: "Port of opensearch master to send opensearch requests to"
     default: "9200"
-  opensearch_dashboards.opensearch.http.ssl.ca:
-    description: "SSL ca of opensearch for backend"
-  opensearch_dashboards.opensearch.http.ssl.certificate:
-    description: "SSL cert of opensearch for backend"
-  opensearch_dashboards.opensearch.http.ssl.private_key:
-    description: "SSL key of opensearch for backend"
+  opensearch_dashboards.opensearch.ssl.ca:
+    description: "SSL CA to use when connecting from Opensearch Dashboards to Opensearch"
+  opensearch_dashboards.opensearch.ssl.certificate:
+    description: "SSL cert to use when connecting from Opensearch Dashboards to Opensearch"
+  opensearch_dashboards.opensearch.ssl.private_key:
+    description: "SSL key to use when connecting from Opensearch Dashboards to Opensearch"
+  opensearch_dashboards.opensearch.ssl.verification_mode:
+    description: "Verification mode to use when connecting from Opensearch Dashboards to Opensearch"
+    default: "full"
   opensearch_dashboards.defaultAppId:
     description: "The default application to load."
     default: "discover"
