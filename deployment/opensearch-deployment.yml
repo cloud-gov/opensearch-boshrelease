@@ -126,6 +126,8 @@ releases:
   version: latest
 - name: bpm
   version: latest
+- name: routing
+  version: latest
 stemcells:
 - alias: default
   os: ubuntu-jammy
