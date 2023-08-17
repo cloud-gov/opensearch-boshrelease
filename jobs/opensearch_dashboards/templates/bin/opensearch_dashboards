@@ -8,14 +8,6 @@ set -u # report the usage of uninitialized variables
 export JOB_NAME=opensearch_dashboards
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 
-<%
-  opensearch_port = nil
-  if_link("opensearch") { |opensearch_link| opensearch_port = opensearch_link.p("opensearch.port") }
-  unless opensearch_port
-    opensearch_port = p("opensearch_dashboards.opensearch.port")
-  end
-%>
-
 # generate files
 
 MEMORY_LIMIT=$(($(grep MemTotal /proc/meminfo | awk '{print $2}') * <%= p('opensearch_dashboards.memory_limit') %>/100 / 1024))

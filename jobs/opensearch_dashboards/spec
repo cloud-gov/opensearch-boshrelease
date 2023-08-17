@@ -65,21 +65,6 @@ properties:
   opensearch_dashboards.source_files:
     description: "List of files to source in opensearch_dashboards control script"
     default: []
-  opensearch_dashboards.console_enabled:
-    description: "Enable opensearch_dashboards development console; should be set to `false` in a multi-tenant deployment."
-    default: false
-  opensearch_dashboards.searchprofiler_enabled:
-    description: "Enable opensearch_dashboards development search profiler; should be set to `false` in a multi-tenant deployment."
-    default: false
-  opensearch_dashboards.grokdebugger_enabled:
-    description: "Enable opensearch_dashboards development grok debugger; should be set to `false` in a multi-tenant deployment."
-    default: false
-  opensearch_dashboards.apm_enabled:
-    description: "Enable opensearch_dashboards APM ui; should be set to `false` in a multi-tenant deployment."
-    default: false
-  opensearch_dashboards.reporting_key:
-    description: "Define a reporting key to prevent issues with exporting a report in a load balanced scenario."
-    default: CloudFoundry123!
   opensearch_dashboards.config_options:
     description: "Additional options to append to opensearch_dashboards's config.yml (YAML format)."
     default: ~
