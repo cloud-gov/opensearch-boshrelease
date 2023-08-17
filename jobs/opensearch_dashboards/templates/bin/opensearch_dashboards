@@ -7,6 +7,7 @@ set -u # report the usage of uninitialized variables
 #source /var/vcap/jobs/opensearch_dashboards/helpers/ctl_setup.sh 'opensearch_dashboards'
 export JOB_NAME=opensearch_dashboards
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
+
 <%
   opensearch_port = nil
   if_link("opensearch") { |opensearch_link| opensearch_port = opensearch_link.p("opensearch.port") }
@@ -26,6 +27,15 @@ export <%= env.keys[0] %>="<%= env.values[0] %>"
 
 <% p("opensearch_dashboards.source_files").each do |sf| %>
 source <%= sf %>
+<% end %>
+
+<% if_link("opensearch") do |opensearch_config| %>
+<% opensearch_config.if_p('opensearch.node.ssl.private_key') do %>
+  openssl pkcs8 -v1 "PBE-SHA1-3DES" \
+  -in "${JOB_DIR}/config/ssl/opensearch-node.pem" -topk8 \
+  -out "${JOB_DIR}/config/ssl/opensearch-node.key" -nocrypt
+  chmod 600 ${JOB_DIR}/config/ssl/opensearch*.key
+<% end %>
 <% end %>
 
 <% p("opensearch_dashboards.plugins").each do |plugin| name, path = plugin.first %>

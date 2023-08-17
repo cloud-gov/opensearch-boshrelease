@@ -1,0 +1,5 @@
+<% if_link("opensearch") do |opensearch_config| %>
+<% opensearch_config.if_p('opensearch.node.ssl.cert') do %>
+<%= opensearch_config.p('opensearch.node.ssl.cert', '') %>
+<% end %>
+<% end %>
