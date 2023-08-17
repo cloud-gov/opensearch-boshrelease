@@ -14,7 +14,7 @@ do
   set +e
   CODE=$(
     curl -sw '%{http_code}' \
-      -u 'kibanaserver:kibanaserver' \
+      -u '<%= p("opensearch_dashboards.username") %>:<%= p("opensearch_dashboards.password") %>' \
       http://<%= p("opensearch_dashboards.host") %>:<%= p("opensearch_dashboards.port") %>
   )
   set -e
