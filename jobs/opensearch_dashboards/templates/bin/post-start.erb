@@ -16,9 +16,7 @@ do
   set +e
   CODE=$(
     curl -sw '\n%{http_code}' \
-      --key ${OPENSEARCH_JOB_DIR}/config/ssl/opensearch-admin.key \
-      --cert ${OPENSEARCH_JOB_DIR}/config/ssl/opensearch-admin.crt  \
-      --cacert ${OPENSEARCH_JOB_DIR}/config/ssl/opensearch.ca  \
+      -u 'kibanaserver:kibanaserver' \
       http://<%= p("opensearch_dashboards.host") %>:<%= p("opensearch_dashboards.port") %>
   )
   set -e
