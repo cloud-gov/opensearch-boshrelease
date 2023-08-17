@@ -37,38 +37,6 @@ instance_groups:
   vm_type: t3.large
   networks:
    - name: services
-- name: opensearch_dashboards
-  azs:
-  - z1
-  instances: 1
-  jobs:
-  - name: bpm
-    release: bpm
-  - name: opensearch
-    release: opensearch
-    consumes: *consumes-opensearch-manager
-  - name: opensearch_dashboards
-    consumes: *consumes-opensearch-manager
-    properties:
-      opensearch_dashboards:
-        config_options:
-          server.maxPayloadBytes: 4194304
-        console.enabled: false
-        defaultappid: dashboard/App-Overview
-        env:
-        - NODE_ENV: production
-        health:
-          timeout: 600
-        memory_limit: 75
-    provides:
-      opensearch-dashboard:
-        as: opensearch_link
-    release: opensearch
-  persistent_disk: 10240
-  stemcell: default
-  vm_type: t3.large
-  networks:
-   - name: services
 - name: opensearch_data
   instances: 3
   jobs:
@@ -104,6 +72,38 @@ instance_groups:
   env:
     bosh:
       swap_size: 0
+- name: opensearch_dashboards
+  azs:
+  - z1
+  instances: 1
+  jobs:
+  - name: bpm
+    release: bpm
+  - name: opensearch
+    release: opensearch
+    consumes: *consumes-opensearch-manager
+  - name: opensearch_dashboards
+    consumes: *consumes-opensearch-manager
+    properties:
+      opensearch_dashboards:
+        config_options:
+          server.maxPayloadBytes: 4194304
+        console.enabled: false
+        defaultappid: dashboard/App-Overview
+        env:
+        - NODE_ENV: production
+        health:
+          timeout: 600
+        memory_limit: 75
+    provides:
+      opensearch-dashboard:
+        as: opensearch_link
+    release: opensearch
+  persistent_disk: 10240
+  stemcell: default
+  vm_type: t3.large
+  networks:
+   - name: services
 releases:
 - name: opensearch
   version: latest

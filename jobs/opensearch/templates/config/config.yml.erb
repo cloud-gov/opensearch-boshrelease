@@ -20,7 +20,9 @@ plugins:
     <% end %>
     <% if_p('opensearch.node.ssl.dn') do %>
     nodes_dn:
-    - '<%= p('opensearch.node.ssl.dn') %>'
+    <% p("opensearch.node.ssl.dn").each do | dn | %>
+    - '<%= dn %>'
+    <% end %>
     <% end %>
     <% if p('opensearch.node.ssl.certificate', nil) || p('opensearch.http.ssl.certificate', nil) %>
     ssl:

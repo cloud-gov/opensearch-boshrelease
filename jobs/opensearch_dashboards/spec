@@ -12,8 +12,8 @@ templates:
   bin/post-start.erb: bin/post-start
   config/opensearch_dashboards.conf.erb: config/opensearch_dashboards.conf
   config/bpm.yml.erb: config/bpm.yml
-  config/node-crt.erb: config/ssl/opensearch-node.crt
-  config/node-pem.erb: config/ssl/opensearch-node.pem
+  config/dashboard-crt.erb: config/ssl/opensearch-dashboard.crt
+  config/dashboard-pem.erb: config/ssl/opensearch-dashboard.pem
   config/ca.erb: config/ssl/opensearch.ca
 
 consumes:
@@ -38,6 +38,10 @@ properties:
   opensearch_dashboards.opensearch.port:
     description: "Port of opensearch master to send opensearch requests to"
     default: "9200"
+  opensearch_dashboards.opensearch.ssl.certificate:
+    description: Node certificate for communication between Opensearch Dashboards and Opensearch
+  opensearch_dashboards.opensearch.ssl.private_key:
+    description: Private key for communication between Opensearch Dashboards and Opensearch
   opensearch_dashboards.opensearch.ssl.verification_mode:
     description: "Verification mode to use when connecting from Opensearch Dashboards to Opensearch"
     default: "full"

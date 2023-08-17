@@ -95,7 +95,8 @@ properties:
   opensearch.node.ssl.private_key:
     description: Private key for node certificate
   opensearch.node.ssl.dn:
-    description: Nodes DN pattern
+    description: Nodes DN patterns
+    default: []
   opensearch.admin.certificate:
     description: Admin certificate to operate SSL plugin
   opensearch.admin.private_key:
