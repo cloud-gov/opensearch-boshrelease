@@ -15,7 +15,7 @@ server.host: <%= p('opensearch_dashboards.host') %>
     opensearch_port = p("opensearch_dashboards.opensearch.port")
   end
 %>
-opensearch.hosts: "http://<%= p("opensearch_dashboards.opensearch.host") + ':' + opensearch_port.to_s %>"
+opensearch.hosts: "https://<%= p("opensearch_dashboards.opensearch.host") + ':' + opensearch_port.to_s %>"
 
 # preserve_opensearch_host true will send the hostname specified in `opensearch`. If you set it to false,
 # then the host you use to connect to *this* opensearch_dashboards instance will be sent.
