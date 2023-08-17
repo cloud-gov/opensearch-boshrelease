@@ -15,7 +15,7 @@ do
   # This return code is valid and therefore we want to ignore this as an error.
   set +e
   CODE=$(
-    curl -sw '\n%{http_code}' \
+    curl -sw '%{http_code}' \
       -u 'kibanaserver:kibanaserver' \
       http://<%= p("opensearch_dashboards.host") %>:<%= p("opensearch_dashboards.port") %>
   )
