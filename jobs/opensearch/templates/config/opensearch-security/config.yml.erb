@@ -6,16 +6,6 @@ _meta:
 config:
   dynamic:
     authc:
-      basic_internal_auth_domain:
-        description: "Authenticate via HTTP Basic against internal users database"
-        http_enabled: true
-        transport_enabled: true
-        order: 4
-        http_authenticator:
-          type: basic
-          challenge: true
-        authentication_backend:
-          type: intern
       clientcert_auth_domain:
         description: "Authenticate via SSL client certificates"
         http_enabled: true

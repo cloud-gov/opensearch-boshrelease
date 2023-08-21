@@ -95,8 +95,6 @@ instance_groups:
         health:
           timeout: 600
         memory_limit: 75
-        username: ((opensearch_dashboards_username))
-        password: ((opensearch_dashboards_password))
     provides:
       opensearch-dashboard:
         as: opensearch_link
