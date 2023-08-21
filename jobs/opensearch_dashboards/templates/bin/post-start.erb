@@ -13,7 +13,8 @@ do
   # This return code is valid and therefore we want to ignore this as an error.
   set +e
   CODE=$(
-    curl -sw '%{http_code}' \
+    curl -o /dev/null \
+      -sw '%{http_code}' \
       http://<%= p("opensearch_dashboards.host") %>:<%= p("opensearch_dashboards.port") %>
   )
   set -e
