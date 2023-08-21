@@ -1,0 +1,9 @@
+---
+name: opensearch_dashboards
+
+dependencies: 
+    - openjdk-17
+
+files:
+    - opensearch-dashboards-2.9.0-linux-x64.tar.gz
+

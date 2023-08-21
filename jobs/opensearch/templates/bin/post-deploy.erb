@@ -3,14 +3,25 @@
 set -e
 set -x
 
+export JOB_NAME=opensearch
+export JOB_DIR=/var/vcap/jobs/$JOB_NAME
+
 <% if p('opensearch.cloud.aws.bucket') != '' and p('opensearch.node.allow_cluster_manager') and spec.bootstrap %>
-curl -X PUT -s localhost:9200/_snapshot/<%= p('opensearch.snapshots.repository') %> \
+curl -X PUT \
+  --key ${JOB_DIR}/ssl/opensearch-admin.key \
+  --cert ${JOB_DIR}/ssl/opensearch-admin.crt  \
+  --cacert ${JOB_DIR}/ssl/opensearch.ca \
+  -s https://localhost:9200/_snapshot/<%= p('opensearch.snapshots.repository') %> \
   -H 'Content-Type: application/json' \
   -d '{"type": "s3", "settings": {"bucket": "<%= p('opensearch.cloud.aws.bucket') %>"}}'
 <% end %>
 
 <% if p('opensearch.path_repo') != '' and p('opensearch.node.allow_cluster_manager') and spec.bootstrap %>
-curl -X PUT -s localhost:9200/_snapshot/<%= p('opensearch.snapshots.repository') %> \
+curl -X PUT \
+  --key ${JOB_DIR}/ssl/opensearch-admin.key \
+  --cert ${JOB_DIR}/ssl/opensearch-admin.crt  \
+  --cacert ${JOB_DIR}/ssl/opensearch.ca \
+  -s https://localhost:9200/_snapshot/<%= p('opensearch.snapshots.repository') %> \
   -H 'Content-Type: application/json' \
   -d '{"type": "fs", "settings": {"location": "<%= p('opensearch.path_repo') %>/<%= p('opensearch.snapshots.repository') %>", "compress": true}}'
 <% end %>

@@ -9,13 +9,24 @@
 
 - type: replace
   path: /instance_groups/name=opensearch_manager/jobs/name=opensearch/properties/opensearch/admin?
-  value:
+  value: &admin-tls-properties
     dn: CN=admin.opensearch.internal
+    certificate: ((opensearch_admin.certificate))
+    private_key: ((opensearch_admin.private_key))
 
 - type: replace
   path: /instance_groups/name=opensearch_manager/jobs/name=opensearch/properties/opensearch/node/ssl?
-  value: &tls_properties
-    dn: "CN=node.opensearch.internal"
+  value: &node-tls-properties
+    dn:
+      - "CN=node.opensearch.internal"
+      - "CN=dashboard.opensearch.internal"
+    ca: ((opensearch_node.ca))
+    certificate: ((opensearch_node.certificate))
+    private_key: ((opensearch_node.private_key))
+
+- type: replace
+  path: /instance_groups/name=opensearch_manager/jobs/name=opensearch/properties/opensearch/http/ssl?
+  value: &http-tls-properties
     ca: ((opensearch_node.ca))
     certificate: ((opensearch_node.certificate))
     private_key: ((opensearch_node.private_key))
@@ -27,14 +38,39 @@
 
 - type: replace
   path: /instance_groups/name=opensearch_data/jobs/name=opensearch/properties/opensearch/admin?
-  value:
-    dn: CN=admin.opensearch.internal
-    certificate: ((opensearch_admin.certificate))
-    private_key: ((opensearch_admin.private_key))
+  value: *admin-tls-properties
 
 - type: replace
   path: /instance_groups/name=opensearch_data/jobs/name=opensearch/properties/opensearch/node/ssl?
-  value: *tls_properties
+  value: *node-tls-properties
+
+- type: replace
+  path: /instance_groups/name=opensearch_data/jobs/name=opensearch/properties/opensearch/http?/ssl?
+  value: *http-tls-properties
+
+# opensearch_dashboards
+- type: replace
+  path: /instance_groups/name=opensearch_dashboards/jobs/name=opensearch/properties?/opensearch?/http_host?
+  value: 127.0.0.1
+
+- type: replace
+  path: /instance_groups/name=opensearch_dashboards/jobs/name=opensearch/properties/opensearch?/admin?
+  value: *admin-tls-properties
+
+- type: replace
+  path: /instance_groups/name=opensearch_dashboards/jobs/name=opensearch/properties/opensearch?/node?/ssl?
+  value: *node-tls-properties
+
+- type: replace
+  path: /instance_groups/name=opensearch_dashboards/jobs/name=opensearch/properties?/opensearch?/http?/ssl?
+  value: *http-tls-properties
+
+- type: replace
+  path: /instance_groups/name=opensearch_dashboards/jobs/name=opensearch_dashboards/properties?/opensearch_dashboards?/opensearch?/ssl?
+  value:
+    ca: ((opensearch_node.ca))
+    certificate: ((opensearch_dashboard.certificate))
+    private_key: ((opensearch_dashboard.private_key))
 
 # variables
 - type: replace
@@ -45,15 +81,32 @@
     options:
       is_ca: true
       common_name: opensearch-ca
+      duration: 1825 # 365 days * 5 years
 
 - type: replace
   path: /variables/name=opensearch_node?
   value:
     name: opensearch_node
     type: certificate
+    update_mode: converge
     options:
       ca: opensearch_ca
       common_name: node.opensearch.internal
+      alternative_names: ["localhost"]
+      extended_key_usage:
+      - server_auth
+      - client_auth
+
+- type: replace
+  path: /variables/name=opensearch_dashboard?
+  value:
+    name: opensearch_dashboard
+    type: certificate
+    update_mode: converge
+    options:
+      ca: opensearch_ca
+      common_name: dashboard.opensearch.internal
+      alternative_names: ["localhost"]
       extended_key_usage:
       - server_auth
       - client_auth

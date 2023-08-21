@@ -2,6 +2,10 @@
 
 set -e
 set -x
+
+export JOB_NAME=opensearch
+export JOB_DIR=/var/vcap/jobs/$JOB_NAME
+
 wait_for_listening() {
   echo -n "=== Waiting <%= p("opensearch.health.connect_timeout") %>s for opensearch to accept connections..."
   elapsed=0
@@ -26,9 +30,17 @@ wait_for_greenstate() {
   echo "=== Waiting for Green status from opensearch..."
   until [ "${remaining}" -le 0 ]; do
     <% if p("opensearch.node.allow_data") and not p("opensearch.node.allow_cluster_manager") %>
-    curl -sw '\n%{http_code}' localhost:9200/_cluster/health > ${out}
+    curl -sw '\n%{http_code}' \
+      --key ${JOB_DIR}/ssl/opensearch-admin.key \
+      --cert ${JOB_DIR}/ssl/opensearch-admin.crt  \
+      --cacert ${JOB_DIR}/ssl/opensearch.ca \
+      https://localhost:9200/_cluster/health > ${out}
     <% else %>
-    curl -sw '\n%{http_code}' localhost:9200/_cluster/health?local=true > ${out}
+    curl -sw '\n%{http_code}' \
+      --key ${JOB_DIR}/config/ssl/opensearch-admin.key \
+      --cert ${JOB_DIR}/config/ssl/opensearch-admin.crt  \
+      --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
+      https://localhost:9200/_cluster/health?local=true > ${out}
     <% end %>
     body=$(cat ${out} | head -n -1)
     status=$(cat ${out} | tail -n 1)
@@ -71,11 +83,11 @@ echo "Disable post start script property is set to <%= p("opensearch.health.disa
   wait_for_listening
   OS="/var/vcap/packages/opensearch"
   source /var/vcap/packages/openjdk-17/bosh/runtime.env
-  ODS="${OS}/plugins/opensearch_security"
+  ODS="${OS}/plugins/opensearch-security"
   CNF="/var/vcap/jobs/opensearch/config"
   echo "=== Applying SSL config:"
   chmod +x ${ODS}/tools/securityadmin.sh
-  ${ODS}/tools/securityadmin.sh -cd ${ODS}/securityconfig \
+  ${ODS}/tools/securityadmin.sh -cd $CNF/opensearch-security \
     -cacert ${CNF}/ssl/opensearch.ca \
     -cert ${CNF}/ssl/opensearch-admin.crt \
     -key ${CNF}/ssl/opensearch-admin.key \

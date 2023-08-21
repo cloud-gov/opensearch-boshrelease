@@ -1,0 +1,76 @@
+## Example config: https://github.com/opensearch-project/OpenSearch-Dashboards/blob/main/config/opensearch_dashboards.yml
+
+# opensearch_dashboards is served by a back end server. This controls which port to use.
+server.port: <%= p('opensearch_dashboards.port') %>
+
+# Specifies the address to which the OpenSearch Dashboards server will bind. IP addresses and host names are both valid values.
+# The default is 'localhost', which usually means remote machines will not be able to connect.
+# To allow connections from remote users, set this parameter to a non-loopback address.
+server.host: <%= p('opensearch_dashboards.host') %>
+
+<%
+  opensearch_port = nil
+  if_link("opensearch") { |opensearch_link| opensearch_port = opensearch_link.p("opensearch.port") }
+  unless opensearch_port
+    opensearch_port = p("opensearch_dashboards.opensearch.port")
+  end
+%>
+opensearch.hosts: "https://<%= p("opensearch_dashboards.opensearch.host") + ':' + opensearch_port.to_s %>"
+
+# preserve_opensearch_host true will send the hostname specified in `opensearch`. If you set it to false,
+# then the host you use to connect to *this* opensearch_dashboards instance will be sent.
+# opensearch.preserveHost: true
+
+# opensearch_dashboards uses an index in opensearch to store saved searches, visualizations
+# and dashboards. It will create a new index if it doesn't already exist.
+# opensearchDashboards.index: ".opensearch_dashboards"
+opensearchDashboards.index: <%= p('opensearch_dashboards.index') %>
+
+# The default application to load.
+# opensearchDashboards.defaultAppId: "discover"
+opensearchDashboards.defaultAppId: <%= p('opensearch_dashboards.defaultAppId') %>
+
+# If your opensearch is protected with basic auth, these are the user credentials
+# used by the opensearch_dashboards server to perform maintenance on the opensearchDashboards.index at startup. Your opensearch_dashboards
+# users will still need to authenticate with opensearch (which is proxied through
+# the opensearch_dashboards server)
+<% if_p('opensearch_dashboards.username') do %>
+opensearch.username: <%= p('opensearch_dashboards.username') %>
+<% end %>
+<% if_p('opensearch_dashboards.password') do %>
+opensearch.password: <%= p('opensearch_dashboards.password') %>
+<% end %>
+
+<% if_p('opensearch_dashboards.opensearch.ssl.certificate') do %>
+# Optional settings that provide the paths to the PEM-format SSL certificate and key files.
+# These files are used to verify the identity of OpenSearch Dashboards to OpenSearch and are required when
+# xpack.security.http.ssl.client_authentication in OpenSearch is set to required.
+opensearch.ssl.certificate: /var/vcap/jobs/opensearch_dashboards/config/ssl/opensearch-dashboard.crt
+<% end %>
+<% if_p('opensearch_dashboards.opensearch.ssl.private_key') do %>
+opensearch.ssl.key: /var/vcap/jobs/opensearch_dashboards/config/ssl/opensearch-dashboard.key
+<% end %>
+<% if_link("opensearch") do |opensearch_config| %>
+<% opensearch_config.if_p('opensearch.node.ssl.ca') do %>
+# Optional setting that enables you to specify a path to the PEM file for the certificate
+# authority for your OpenSearch instance.
+opensearch.ssl.certificateAuthorities: [ "/var/vcap/jobs/opensearch_dashboards/config/ssl/opensearch.ca" ]
+<% end %>
+<% end %>
+
+# To disregard the validity of SSL certificates, change this setting's value to 'none'.
+opensearch.ssl.verificationMode: <%= p('opensearch_dashboards.opensearch.ssl.verification_mode') %>
+
+# Time in milliseconds to wait for responses from the back end or opensearch.
+# This must be > 0
+# opensearch.requestTimeout: 300000
+opensearch.requestTimeout: <%= p('opensearch_dashboards.request_timeout') %>
+
+# Time in milliseconds for opensearch to wait for responses from shards.
+# Set to 0 to disable.
+# opensearch.shardTimeout: 0
+opensearch.shardTimeout: <%= p('opensearch_dashboards.shard_timeout') %>
+
+<% if_p('opensearch_dashboards.config_options') do p("opensearch_dashboards.config_options", {}).each do | k, v | %>
+<%= k %>: <%= v %><% end %>
+<% end %>

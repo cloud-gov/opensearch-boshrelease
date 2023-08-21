@@ -1,4 +1,4 @@
-name: opensearch-test
+name: opensearch
 instance_groups:
 - name: opensearch_manager
   azs:
@@ -8,9 +8,10 @@ instance_groups:
   - name: bpm
     release: bpm
   - name: opensearch
-    consumes:
+    consumes: &consumes-opensearch-manager
       opensearch:
         from: opensearch_manager
+        ip_addresses: true
     provides:
       opensearch:
         as: opensearch_manager
@@ -18,15 +19,15 @@ instance_groups:
       opensearch:
         clustername: opensearch
         limits:
-          fd: 131072
+          fd: 131072 # 2 ** 17
         node:
           allow_cluster_manager: true
           allow_data: false
         http:
           ssl:
-            certificate: ((opensearch_http_tls.certificate))
-            private_key: ((opensearch_http_tls.private_key))
-            ca: ((opensearch_ca.ca))
+            ca: ((opensearch_node.ca))
+            certificate: ((opensearch_node.certificate))
+            private_key: ((opensearch_node.private_key))
         http_host: 127.0.0.1
         jvm_options:
           - "-Dlog4j2.formatMsgNoLookups=true"
@@ -43,19 +44,12 @@ instance_groups:
     release: bpm
   - name: opensearch
     release: opensearch
-    consumes:
-      opensearch:
-        from: opensearch_manager
+    consumes: *consumes-opensearch-manager
     properties:
       opensearch:
         node:
           allow_cluster_manager: false
           allow_data: true
-        http:
-          ssl:
-            certificate: ((opensearch_http_tls.certificate))
-            private_key: ((opensearch_http_tls.private_key))
-            ca: ((opensearch_ca.ca))
         limits:
           fd: 131072  # 2 ** 17
         health:
@@ -78,7 +72,74 @@ instance_groups:
   env:
     bosh:
       swap_size: 0
+- name: opensearch_dashboards
+  azs:
+  - z1
+  instances: 1
+  jobs:
+  - name: bpm
+    release: bpm
+  - name: opensearch
+    release: opensearch
+    consumes: *consumes-opensearch-manager
+  - name: opensearch_dashboards
+    consumes: *consumes-opensearch-manager
+    properties:
+      opensearch_dashboards:
+        config_options:
+          server.maxPayloadBytes: 4194304
+        console.enabled: false
+        defaultappid: dashboard/App-Overview
+        env:
+        - NODE_ENV: production
+        health:
+          timeout: 600
+        memory_limit: 75
+    provides:
+      opensearch-dashboard:
+        as: opensearch_link
+    release: opensearch
+  - name: route_registrar
+    consumes:
+      nats-tls:
+        deployment: cf-development
+        from: nats-tls
+    properties:
+      nats:
+        tls:
+          client_cert: ((/bosh/cf-development/nats_client_cert.certificate))
+          client_key: ((/bosh/cf-development/nats_client_cert.private_key))
+          enabled: true
+      route_registrar:
+        routes:
+        - name: opensearch-dashboard
+          port: 5601
+          registration_interval: 2s
+          timeout: 1s
+          uris:
+          - logs-beta.dev.us-gov-west-1.aws-us-gov.cloud.gov
+    release: routing
+  - name: bosh-dns-aliases
+    properties:
+      aliases:
+      - domain: nats.service.cf.internal
+        targets:
+        - deployment: cf-development
+          domain: bosh
+          instance_group: nats
+          network: default
+          query: '*'
+    release: bosh-dns-aliases
+  persistent_disk: 10240
+  stemcell: default
+  vm_type: t3.large
+  networks:
+   - name: services
 releases:
+- name: bosh-dns-aliases
+  version: latest
+- name: routing
+  version: latest
 - name: opensearch
   version: latest
 - name: bpm

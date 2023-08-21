@@ -13,12 +13,16 @@ plugins:
     allow_default_init_securityindex: true
     <% if_p('opensearch.admin.dn') do %>
     authcz:
+    # Defines the DNs (distinguished names) of certificates
+    # to which admin privileges should be assigned
       admin_dn:
       - '<%= p("opensearch.admin.dn") %>'
     <% end %>
     <% if_p('opensearch.node.ssl.dn') do %>
     nodes_dn:
-    - '<%= p('opensearch.node.ssl.dn') %>'
+    <% p("opensearch.node.ssl.dn").each do | dn | %>
+    - '<%= dn %>'
+    <% end %>
     <% end %>
     <% if p('opensearch.node.ssl.certificate', nil) || p('opensearch.http.ssl.certificate', nil) %>
     ssl:
@@ -32,6 +36,7 @@ plugins:
       <% if_p('opensearch.http.ssl.certificate') do %>
       http:
         enabled: true
+        clientauth_mode: OPTIONAL
         pemkey_filepath: ssl/opensearch-http.key
         pemcert_filepath: ssl/opensearch-http.crt
         pemtrustedcas_filepath: ssl/opensearch.ca
@@ -85,7 +90,7 @@ node:
 
 network:
   bind_host: "0.0.0.0"
-  publish_host: <%= spec.address %>
+  publish_host: <%= spec.ip %>
 http:
   host: <%= p("opensearch.http_host") %>
 

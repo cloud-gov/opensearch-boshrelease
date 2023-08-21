@@ -11,6 +11,12 @@ if [ -d ${JOB_DIR}/config/ssl ]; then
 	chown vcap ${JOB_DIR}/config/ssl
 fi
 
+source /var/vcap/packages/openjdk-17/bosh/runtime.env
+
+# Copy default security config if it doesn't already exist
+# TODO: Should this be necessary?
+cp -u ${OPENSEARCH_HOME}/config/opensearch-security/*.yml ${OPENSEARCH_PATH_CONF}/opensearch-security
+
 cd ${OPENSEARCH_HOME}
 chown -R vcap:vcap config plugins
 chown -R vcap:vcap ${OPENSEARCH_PATH_CONF}/opensearch-security

@@ -1,0 +1,15 @@
+processes:
+  - name: opensearch_dashboards
+    hooks:
+      pre_start: /var/vcap/jobs/opensearch_dashboards/bin/pre-start
+    executable: /var/vcap/jobs/opensearch_dashboards/bin/opensearch_dashboards.sh
+    ephemeral_disk: true
+    additional_volumes:
+    - path: /var/vcap/data/packages/opensearch_dashboards
+      writable: true
+      allow_executions: true
+    - path: /var/vcap/jobs/opensearch_dashboards/config
+      writable: true
+    <% p("opensearch_dashboards.source_files").each do |sf| %>
+    - path:  <%= sf %>
+    <% end %>

@@ -2,22 +2,28 @@
 
 set -e
 
+export JOB_NAME=opensearch
+export JOB_DIR=/var/vcap/jobs/$JOB_NAME
+
 <% if p('opensearch.node.allow_data') %>
 # disable allocations before bringing down data nodes
 
-curl -s -X PUT localhost:9200/_all/_settings \
+curl -s -X PUT https://localhost:9200/_all/_settings \
   -H 'Content-Type: application/json' \
+  --key ${JOB_DIR}/ssl/opensearch-admin.key \
+  --cert ${JOB_DIR}/ssl/opensearch-admin.crt  \
+  --cacert ${JOB_DIR}/ssl/opensearch.ca \
   -d '{"settings": {"index.unassigned.node_left.delayed_timeout": "<%= p("opensearch.recovery.delay_allocation_restart") %>"}}' \
   > /dev/null
 
 <% end %>
 
 <% if p('opensearch.cloud.aws.bucket') != '' and p('opensearch.node.allow_cluster_manager') and spec.bootstrap %>
-curl -X DELETE -s localhost:9200/_snapshot/<%= p('opensearch.snapshots.repository') %> > /dev/null
+curl -X DELETE -s https://localhost:9200/_snapshot/<%= p('opensearch.snapshots.repository') %> > /dev/null
 <% end %>
 
 <% if p('opensearch.path_repo') != '' and p('opensearch.node.allow_cluster_manager') and spec.bootstrap %>
-curl -X DELETE -s localhost:9200/_snapshot/<%= p('opensearch.snapshots.repository') %> > /dev/null
+curl -X DELETE -s https://localhost:9200/_snapshot/<%= p('opensearch.snapshots.repository') %> > /dev/null
 <% end %>
 
 return_code=$?
