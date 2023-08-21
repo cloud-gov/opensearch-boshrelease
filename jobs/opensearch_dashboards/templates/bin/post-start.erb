@@ -13,11 +13,11 @@ do
   # This return code is valid and therefore we want to ignore this as an error.
   set +e
   CODE=$(
-    curl -o /dev/null -sw '%{http_code} /
-    http://<%= p("opensearch_dashboards.host") %>:<%= p("opensearch_dashboards.port") %>
+    curl -sw '%{http_code}' \
+      http://<%= p("opensearch_dashboards.host") %>:<%= p("opensearch_dashboards.port") %>
   )
   set -e
-  if [[ "$CODE" == "302" ]]; then
+  if [[ "$CODE" == "401" ]]; then
     echo Done!
     break
   fi
