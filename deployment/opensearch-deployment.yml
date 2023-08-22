@@ -117,7 +117,7 @@ instance_groups:
           registration_interval: 2s
           timeout: 1s
           uris:
-          - open.dev.us-gov-west-1.aws-us-gov.cloud.gov
+          - logs-beta.dev.us-gov-west-1.aws-us-gov.cloud.gov
     release: routing
   - name: bosh-dns-aliases
     properties:
