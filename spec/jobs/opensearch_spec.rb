@@ -306,5 +306,25 @@ describe 'opensearch job' do
         expect(config['http.host']).to eq('localhost')
       end
     end
+
+    describe 'config options' do
+      let(:manifest) do
+        {
+          'opensearch' => {
+            'config_options' => {
+              'indices.query.bool.max_clause_count' => 2048
+            }
+          }
+        }
+      end
+  
+      let(:config) do
+        config = YAML.load(template.render(manifest))
+      end
+
+      it 'sets the config options' do
+        expect(config['indices.query.bool.max_clause_count']).to eq(2048)
+      end
+    end
   end
 end
