@@ -73,6 +73,9 @@ properties:
       necessary to mount the same shared filesystem to the same location
       on all manager and data nodes.
     default: ''
+  opensearch.manager_hosts:
+    description: Manually specify the host names for the manager nodes
+    default: []
   opensearch.node.allow_cluster_manager:
     description: Allow node to become manager? (true / false)
     default: false
@@ -115,8 +118,8 @@ properties:
   opensearch.health.connect_interval:
     description: Post-start interval for node to become available (seconds)
     default: 5
-  opensearch.node.tags:
-    description: A hash of additional tags for the node
+  opensearch.node.attributes:
+    description: A hash of additional attributes for the node
   opensearch.exec.environment:
     description: A hash of additional environment variables for the process
   opensearch.exec.options:
