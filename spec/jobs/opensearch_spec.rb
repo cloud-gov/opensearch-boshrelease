@@ -10,29 +10,8 @@ describe 'opensearch job' do
   describe 'config.json' do
     let(:template) { job.template('config/opensearch.yml') }
 
-    let(:manifest) do
-      {
-        'opensearch' => {
-          'admin' => {
-            'dn' => 'admin-dn'
-          },
-          'node' => {
-            'ssl' => {
-              'dn' => ['node-1', 'node-2'],
-              'certificate' => 'node-certificate',
-            }
-          },
-          'http' => {
-            'ssl' => {
-              'certificate' => 'http-certificate'
-            }
-          }
-        }
-      }
-    end
-
     let(:config) do
-      config = YAML.load(template.render(manifest))
+      config = YAML.load(template.render({}))
     end
 
     it 'configures default settings' do
@@ -44,6 +23,31 @@ describe 'opensearch job' do
     end
 
     describe 'security' do
+      let(:manifest) do
+        {
+          'opensearch' => {
+            'admin' => {
+              'dn' => 'admin-dn'
+            },
+            'node' => {
+              'ssl' => {
+                'dn' => ['node-1', 'node-2'],
+                'certificate' => 'node-certificate',
+              }
+            },
+            'http' => {
+              'ssl' => {
+                'certificate' => 'http-certificate'
+              }
+            }
+          }
+        }
+      end
+  
+      let(:config) do
+        config = YAML.load(template.render(manifest))
+      end
+
       it 'configures admin node name' do
         expect(config['plugins.security.authcz.admin_dn']).to eq(['admin-dn'])
       end
@@ -68,7 +72,7 @@ describe 'opensearch job' do
       end
     end
 
-    describe 'cluster settings from links' do
+    describe 'multi-node cluster settings from links' do
       let(:link_properties) do
         {
           'opensearch' => {
@@ -89,7 +93,7 @@ describe 'opensearch job' do
       end
   
       let(:config) do
-        config = YAML.load(template.render(manifest, consumes: [link]))
+        config = YAML.load(template.render({}, consumes: [link]))
       end
 
       it 'sets cluster name' do
@@ -105,7 +109,7 @@ describe 'opensearch job' do
       end
     end
 
-    describe 'cluster settings from manifest' do
+    describe 'multi-node cluster settings from manifest' do
       let(:manifest) do
         {
           'opensearch' => {
@@ -125,6 +129,39 @@ describe 'opensearch job' do
 
       it 'sets cluster manager hosts' do
         expect(config['cluster.initial_cluster_manager_nodes']).to eq(['host-1','host-2'])
+      end
+
+      it 'sets discovery seed hosts' do
+        expect(config['discovery.seed_hosts']).to eq(['host-1','host-2'])
+      end
+    end
+
+    describe 'single node cluster' do
+      let(:manifest) do
+        {
+          'opensearch' => {
+            'manager_hosts' => ['host-1', 'host-2'],
+            'discovery' => {
+              'single_node' => true
+            }
+          }
+        }
+      end
+  
+      let(:config) do
+        config = YAML.load(template.render(manifest))
+      end
+
+      it 'does not set cluster manager hosts' do
+        expect(config['cluster.initial_cluster_manager_nodes']).to be_nil
+      end
+
+      it 'does set discovery seed hosts' do
+        expect(config['discovery.seed_hosts']).to be(['host-1', 'host-2'])
+      end
+
+      it 'sets discovery type' do
+        expect(config['discovery.type']).to eq('single-node')
       end
     end
   end
