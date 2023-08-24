@@ -164,5 +164,91 @@ describe 'opensearch job' do
         expect(config['discovery.type']).to eq('single-node')
       end
     end
+
+    describe 'node settings' do
+      let(:instance) do
+        Bosh::Template::Test::InstanceSpec.new(name: 'instance-name', index: 0)
+      end
+
+      let(:manifest) do
+        {
+          'opensearch' => {
+            'node' => {
+              'allow_cluster_manager' => allow_cluster_manager,
+              'allow_data' => allow_data,
+              'allow_ingest' => allow_ingest,
+            }
+          }
+        }
+      end
+  
+      let(:config) do
+        config = YAML.load(template.render(manifest, spec: instance))
+      end
+
+      it 'sets the node name' do
+        expect(config['node.name']).to eq('instance-name/0')
+      end
+
+      context 'when node is a cluster manager' do
+        let(:allow_cluster_manager) { true }
+        let(:allow_data) { false }
+        let(:allow_ingest) { false }
+
+        it 'sets the node roles correctly' do
+          expect(config['node.roles']).to eq(['cluster_manager'])
+        end
+      end
+
+      context 'when node is a data node' do
+        let(:allow_cluster_manager) { false }
+        let(:allow_data) { true }
+        let(:allow_ingest) { false }
+
+        it 'sets the node roles correctly' do
+          expect(config['node.roles']).to eq(['data'])
+        end
+      end
+
+      context 'when node is an ingest node' do
+        let(:allow_cluster_manager) { false }
+        let(:allow_data) { false }
+        let(:allow_ingest) { true }
+
+        it 'sets the node roles correctly' do
+          expect(config['node.roles']).to eq(['ingest'])
+        end
+      end
+
+      context 'when node is a data and ingest node' do
+        let(:allow_cluster_manager) { false }
+        let(:allow_data) { true }
+        let(:allow_ingest) { true }
+
+        it 'sets the node roles correctly' do
+          expect(config['node.roles']).to eq(['data', 'ingest'])
+        end
+      end
+
+      context 'when node is a manager and data node' do
+        let(:allow_cluster_manager) { true }
+        let(:allow_data) { true }
+        let(:allow_ingest) { false }
+
+        it 'sets the node roles correctly' do
+          expect(config['node.roles']).to eq(['cluster_manager', 'data'])
+        end
+      end
+
+      context 'when node has all roles' do
+        let(:allow_cluster_manager) { true }
+        let(:allow_data) { true }
+        let(:allow_ingest) { true }
+
+        it 'sets the node roles correctly' do
+          expect(config['node.roles']).to eq(['cluster_manager', 'data', 'ingest'])
+        end
+      end
+    end
   end
 end
