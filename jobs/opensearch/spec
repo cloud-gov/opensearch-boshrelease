@@ -118,8 +118,8 @@ properties:
   opensearch.health.connect_interval:
     description: Post-start interval for node to become available (seconds)
     default: 5
-  opensearch.node.tags:
-    description: A hash of additional tags for the node
+  opensearch.node.attributes:
+    description: A hash of additional attributes for the node
   opensearch.exec.environment:
     description: A hash of additional environment variables for the process
   opensearch.exec.options:

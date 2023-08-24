@@ -171,13 +171,31 @@ describe 'opensearch job' do
       let(:instance) do
         Bosh::Template::Test::InstanceSpec.new(name: 'instance-name', index: 0)
       end
+
+      let(:manifest) do
+        {
+          'opensearch' => {
+            'node' => {
+              'attributes' => {
+                'temp' => 'warm',
+                'foo' => 'bar'
+              }
+            }
+          }
+        }
+      end
   
       let(:config) do
-        config = YAML.load(template.render({}, spec: instance))
+        config = YAML.load(template.render(manifest, spec: instance))
       end
 
       it 'sets the node name' do
         expect(config['node.name']).to eq('instance-name/0')
+      end
+
+      it 'sets the node attributes' do
+        expect(config['node.attr.foo']).to eq('bar')
+        expect(config['node.attr.temp']).to eq('warm')
       end
 
       describe 'node roles' do
@@ -256,6 +274,36 @@ describe 'opensearch job' do
             expect(config['node.roles']).to eq(['cluster_manager', 'data', 'ingest'])
           end
         end
+      end
+    end
+
+    describe 'network settings' do
+      let(:instance) do
+        Bosh::Template::Test::InstanceSpec.new(ip: '127.0.0.1')
+      end
+
+      let(:manifest) do
+        {
+          'opensearch' => {
+            'http_host' => 'localhost'
+          }
+        }
+      end
+  
+      let(:config) do
+        config = YAML.load(template.render(manifest, spec: instance))
+      end
+
+      it 'sets the bind host' do
+        expect(config['network.bind_host']).to eq('0.0.0.0')
+      end
+
+      it 'sets the publish host' do
+        expect(config['network.publish_host']).to eq('127.0.0.1')
+      end
+
+      it 'sets the http host' do
+        expect(config['http.host']).to eq('localhost')
       end
     end
   end

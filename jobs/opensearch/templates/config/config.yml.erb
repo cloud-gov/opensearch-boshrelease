@@ -76,7 +76,7 @@ discovery.type: "single-node"
 %>
 node.name: "<%= name %>/<%= index %>"
 node.roles: [ <%= node_roles %> ]
-<% p("opensearch.node.tags", {}).each do | k, v | %>
+<% p("opensearch.node.attributes", {}).each do | k, v | %>
 node.attr.<%= k %>: "<%= v %>"
 <% end %>
 
