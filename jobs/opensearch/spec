@@ -73,6 +73,9 @@ properties:
       necessary to mount the same shared filesystem to the same location
       on all manager and data nodes.
     default: ''
+  opensearch.manager_hosts:
+    description: Manually specify the host names for the manager nodes
+    default: []
   opensearch.node.allow_cluster_manager:
     description: Allow node to become manager? (true / false)
     default: false
