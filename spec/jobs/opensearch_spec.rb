@@ -7,7 +7,7 @@ describe 'opensearch job' do
   let(:release) { Bosh::Template::Test::ReleaseDir.new(File.join(File.dirname(__FILE__), '../..')) }
   let(:job) { release.job('opensearch') }
 
-  describe 'config.json' do
+  describe 'config/opensearch.yml' do
     let(:template) { job.template('config/opensearch.yml') }
 
     context 'with no manifest' do
