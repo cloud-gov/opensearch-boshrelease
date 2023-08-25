@@ -24,10 +24,15 @@ chown -R vcap:vcap ${OPENSEARCH_PATH_CONF}/opensearch-security
 # leaving all plugin files and plugins installed for now
 # can revisit https://opensearch.org/docs/latest/install-and-configure/plugins/ for how to
 # allow installing specific plugins
-#
-# rm -rf /var/vcap/packages/opensearch/plugins/*
-<% if_p('opensearch.cloud.aws.access_key', 'opensearch.cloud.aws.secret_key') do %>
+
+# see https://opensearch.org/docs/latest/tuning-your-cluster/availability-and-recovery/snapshots/snapshot-restore/#amazon-s3
+<% if_p('opensearch.repository.s3.access_key', 'opensearch.repository.s3.secret_key') do %>
   ${OPENSEARCH_HOME}/bin/opensearch-plugin install -b repository-s3
+
+  echo '<%= p('opensearch.repository.s3.access_key') %>' \
+    | ${OPENSEARCH_HOME}/bin/opensearch-keystore add --stdin s3.client.default.access_key
+  echo '<%= p('opensearch.repository.s3.secret_key') %>' \
+    | ${OPENSEARCH_HOME}/bin/opensearch-keystore add --stdin s3.client.default.secret_key
 <% end %>
 <% p("opensearch.plugins").each do |plugin| name, path = plugin.first %>
   <% if path.start_with? '/var/vcap' %>
