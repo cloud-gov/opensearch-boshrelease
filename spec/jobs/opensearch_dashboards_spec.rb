@@ -34,6 +34,34 @@ describe 'opensearch_dashboards job' do
       end
     end
 
+    context 'with manifest' do
+      let(:manifest) do
+        {
+          'opensearch_dashboards' => {
+            'port' => 1234,
+            'host' => 'dashboard',
+            'index' => 'dashboard-index',
+            'defaultAppId' => 'fake-app-id',
+            'request_timeout' => 10,
+            'shard_timeout' => 5,
+          }
+        }
+      end
+
+      let(:config) do
+        config = YAML.load(template.render(manifest))
+      end
+  
+      it 'configures settings' do
+        expect(config['server.port']).to eq(1234)
+        expect(config['server.host']).to eq('dashboard')
+        expect(config['opensearchDashboards.index']).to eq('dashboard-index')
+        expect(config['opensearchDashboards.defaultAppId']).to eq('fake-app-id')
+        expect(config['opensearch.requestTimeout']).to eq(10)
+        expect(config['opensearch.shardTimeout']).to eq(5)
+      end
+    end
+
     describe 'with port settings' do
       context 'with no settings' do
         let(:config) do
@@ -106,6 +134,29 @@ describe 'opensearch_dashboards job' do
         it 'sets port correctly' do
           expect(config['opensearch.hosts']).to eq('https://localhost:1111')
         end
+      end
+    end
+
+    describe 'with auth settings' do
+      let(:manifest) do
+        {
+          'opensearch_dashboards' => {
+            'username' => 'fake-user',
+            'password' => 'changeme',
+          }
+        }
+      end
+
+      let(:config) do
+        config = YAML.load(template.render(manifest))
+      end
+      
+      it 'sets username correctly' do
+        expect(config['opensearch.username']).to eq('fake-user')
+      end
+
+      it 'sets password correctly' do
+        expect(config['opensearch.password']).to eq('changeme')
       end
     end
 
