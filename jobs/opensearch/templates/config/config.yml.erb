@@ -84,16 +84,6 @@ network.bind_host: "0.0.0.0"
 network.publish_host: <%= spec.ip %>
 http.host: <%= p("opensearch.http_host") %>
 
-<% if_p('opensearch.cloud.aws.access_key', 'opensearch.cloud.aws.secret_key') do %>
-cloud.aws.protocol: <%= p('opensearch.cloud.aws.protocol') %>
-cloud.aws.read_timeout: <%= p('opensearch.cloud.aws.read_timeout') %>
-cloud.aws.access_key: <%= p('opensearch.cloud.aws.access_key') %>
-cloud.aws.secret_key: <%= p('opensearch.cloud.aws.secret_key') %>
-<% if_p('opensearch.cloud.aws.region') do |region| %>
-cloud.aws.region: <%= region %>
-<% end %>
-<% end %>
-
 <% if_p('opensearch.config_options') do p("opensearch.config_options", {}).each do | k, v | %>
 <%= k %>: <%= v %><% end %>
 <% end %>
