@@ -50,7 +50,7 @@ def put_to_es(url_stem_base, es_config, request_params = {})
     opensearch_host = p("opensearch_config.opensearch.host")
     opensearch_port = p("opensearch_config.opensearch.port")
 
-    ret << "URL=http://#{opensearch_host}:#{opensearch_port}/#{url_stem}"
+    ret << "URL=https://#{opensearch_host}:#{opensearch_port}/#{url_stem}"
     if nil == content
      ret << 'curl -X DELETE ${CA} ${CERT} ${KEY} "${URL}"'
     else
