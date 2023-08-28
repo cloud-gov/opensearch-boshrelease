@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+set -u
+
+/var/vcap/jobs/opensearch_config/bin/upload-config
+
+# Fake loop
+while true; do
+  sleep 1
+done

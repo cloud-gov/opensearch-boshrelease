@@ -1,0 +1,41 @@
+---
+name: opensearch_config
+
+description: This job loads pre-defined configuration into opensearch cluster
+
+templates:
+  bin/upload-config.erb: bin/upload-config
+  bin/job.process: bin/job.process
+  bpm.yml.erb: config/bpm.yml
+  index-templates/shards-and-replicas.json.erb: index-templates/shards-and-replicas.json
+  index-templates/index-settings.json.erb: index-templates/index-settings.json
+  index-templates/index-mappings.json.erb: index-templates/index-mappings.json
+
+properties:
+  opensearch_config.opensearch.host:
+    description: "The opensearch master node hostname"
+    default: 127.0.0.1
+  opensearch_config.opensearch.port:
+    description: "the opensearch master node port"
+    default: 9200
+  opensearch_config.opensearch.ssl.certificate:
+    description: Node certificate for communication between Opensearch Dashboards and Opensearch
+  opensearch_config.opensearch.ssl.private_key:
+    description: Private key for communication between Opensearch Dashboards and Opensearch
+  opensearch_config.index_prefix:
+    description: |
+      Name prefix of your log indices that can uniquely distinguish them among other ES indices if apply pattern '*' to it, e.g. 'logs-*'.
+      It is used in the index templates predefined in the job to specify index pattern.
+      Make sure the prefix matches `logstash_parser.opensearch.index` property set for your parser.
+    default: "logstash-"
+  opensearch_config.component_templates:
+    description: "An array of key-value hashes; keys being component template name, value being template path or content"
+    default: []
+  opensearch_config.index_templates:
+    description: "An array with key-value hashes; keys being template name, value being template path or content"
+    default: []
+  opensearch_config.docs:
+    description: "An array with key-value hashes; keys being doc path, value being doc source"
+    default: []
+  opensearch_config.license:
+    description: "The openSearch License string"

@@ -1,0 +1,6 @@
+processes:
+  - name: opensearch_config
+    executable: /var/vcap/jobs/opensearch_config/bin/job.process
+    ephemeral_disk: true
+    additional_volumes:
+    - path: /var/vcap/jobs/opensearch
