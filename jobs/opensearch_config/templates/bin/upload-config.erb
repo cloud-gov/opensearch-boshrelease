@@ -1,6 +1,8 @@
 #!/bin/bash
 
 set -ex
+export OPS_JOB_NAME=opensearch
+export OPS_JOB_DIR=/var/vcap/jobs/$OPS_JOB_NAME
 export DATA_DIR=/var/vcap/data/opensearch_config
 <%
 opensearch_host = p("opensearch_config.opensearch.host")
@@ -8,12 +10,15 @@ opensearch_port = p("opensearch_config.opensearch.port")
 %>
 
 # Delete existing templates before uploading
-URL=http://<%= opensearch_host %>:<%= opensearch_port %>
-for template in $(curl -s ${URL}/_cat/templates | awk '{print $1}'); do
+URL=https://<%= opensearch_host %>:<%= opensearch_port %>
+CA="--cacert ${JOB_DIR}/config/ssl/opensearch.ca"
+CERT="--cert ${JOB_DIR}/config/ssl/opensearch-admin.crt"
+KEY="--key ${JOB_DIR}/config/ssl/opensearch-admin.key"
+for template in $(curl -s ${CA} ${CERT} ${KEY} ${URL}/_cat/templates | awk '{print $1}'); do
   if ! grep -qw ${template} <(echo "<%= p('opensearch_config.index_templates').map { |template| template.keys.first }.join(' ') %>"); then
     # hit template and index_template so we can try for legacy and component templates
-    curl -s -XDELETE ${URL}/_template/${template}
-    curl -s -XDELETE ${URL}/_index_template/${template}
+    curl -s -XDELETE ${CA} ${CERT} ${KEY} ${URL}/_template/${template}
+    curl -s -XDELETE ${CA} ${CERT} ${KEY} ${URL}/_index_template/${template}
   fi
 done
 
@@ -47,7 +52,7 @@ def put_to_es(url_stem_base, es_config, request_params = {})
 
     ret << "URL=http://#{opensearch_host}:#{opensearch_port}/#{url_stem}"
     if nil == content
-     ret << 'curl -X DELETE "${URL}"'
+     ret << 'curl -X DELETE ${CA} ${CERT} ${KEY} "${URL}"'
     else
       if content.start_with? '/var/vcap'
         ret << "CONTENT_PATH=\"#{content}\""
@@ -61,7 +66,7 @@ BASH
       end
 
       ret << <<BASH
-HTTP_CODE=$(curl -s -H 'Content-Type: application/json' -w '%{http_code}' -o ${DATA_DIR}/opensearch_config-response.txt -X PUT --data-binary @$CONTENT_PATH "$URL")
+HTTP_CODE=$(curl -s -H 'Content-Type: application/json' -w '%{http_code}' -o ${DATA_DIR}/opensearch_config-response.txt -X PUT --data-binary @$CONTENT_PATH  ${CA} ${CERT} ${KEY} "$URL")
 
 if grep --quiet "\"errors\":true" ${DATA_DIR}/opensearch_config-response.txt ; then
   cat ${DATA_DIR}/opensearch_config-response.txt >> /dev/stderr
@@ -85,7 +90,7 @@ end
 # wait for opensearch availability
 #
 
-until curl -sf 'http://<%= opensearch_host %>:<%= opensearch_port %>/_cluster/health?wait_for_status=yellow&timeout=10m'; do :; done
+until curl -sf ${CA} ${CERT} ${KEY} ${URL}/_cluster/health?wait_for_status=yellow&timeout=10m'; do :; done
 
 echo "--- Component Templates"
 <%= put_to_es('_component_template', p('opensearch_config.component_templates')) %>
