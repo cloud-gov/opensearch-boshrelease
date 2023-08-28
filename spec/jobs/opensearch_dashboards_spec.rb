@@ -62,7 +62,7 @@ describe 'opensearch_dashboards job' do
       end
     end
 
-    describe 'with port settings' do
+    describe 'with host/port settings' do
       context 'with no settings' do
         let(:config) do
           config = YAML.load(template.render({}))
@@ -101,7 +101,7 @@ describe 'opensearch_dashboards job' do
               'opensearch' => {
                 'ssl' => {
                   'certificate' => 'fake-cert',
-                  'private_key' => 'fake-key'
+                  'private_key' => 'changeme'
                 }
               }
             }
@@ -167,7 +167,8 @@ describe 'opensearch_dashboards job' do
             'opensearch' => {
               'ssl' => {
                 'certificate' => 'fake-cert',
-                'private_key' => 'fake-key'
+                'private_key' => 'changeme',
+                'verification_mode' => 'certificate',
               }
             }
           }
@@ -207,6 +208,30 @@ describe 'opensearch_dashboards job' do
 
       it 'sets the SSL CA for Opensearch communication' do
         expect(config['opensearch.ssl.certificateAuthorities']).to eq(['/var/vcap/jobs/opensearch_dashboards/config/ssl/opensearch.ca'])
+      end
+
+      it 'sets the SSL verification mode for Opensearch communication' do
+        expect(config['opensearch.ssl.verificationMode']).to eq('certificate')
+      end
+    end
+
+    describe 'with config options' do
+      let(:manifest) do
+        {
+          'opensearch_dashboards' => {
+            'config_options' => {
+              'foo' => 'bar'
+            }
+          }
+        }
+      end
+  
+      let(:config) do
+        config = YAML.load(template.render(manifest))
+      end
+
+      it 'sets the config options' do
+        expect(config['foo']).to eq('bar')
       end
     end
   end
