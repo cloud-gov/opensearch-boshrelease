@@ -1,2 +1,3 @@
 # opensearch-boshrelease
-A bosh release for opensearch
+
+A BOSH release for [Opensearch](https://opensearch.org/)
