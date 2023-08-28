@@ -11,9 +11,10 @@ opensearch_port = p("opensearch_config.opensearch.port")
 
 # Delete existing templates before uploading
 URL=https://<%= opensearch_host %>:<%= opensearch_port %>
-CA="--cacert ${JOB_DIR}/config/ssl/opensearch.ca"
-CERT="--cert ${JOB_DIR}/config/ssl/opensearch-admin.crt"
-KEY="--key ${JOB_DIR}/config/ssl/opensearch-admin.key"
+CA="--cacert ${OPS_JOB_DIR}/config/ssl/opensearch.ca"
+CERT="--cert ${OPS_JOB_DIR}/config/ssl/opensearch-admin.crt"
+KEY="--key ${OPS_JOB_DIR}/config/ssl/opensearch-admin.key"
+
 for template in $(curl -s ${CA} ${CERT} ${KEY} ${URL}/_cat/templates | awk '{print $1}'); do
   if ! grep -qw ${template} <(echo "<%= p('opensearch_config.index_templates').map { |template| template.keys.first }.join(' ') %>"); then
     # hit template and index_template so we can try for legacy and component templates
