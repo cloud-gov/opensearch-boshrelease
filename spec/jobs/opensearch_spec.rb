@@ -7,22 +7,51 @@ describe 'opensearch job' do
   let(:release) { Bosh::Template::Test::ReleaseDir.new(File.join(File.dirname(__FILE__), '../..')) }
   let(:job) { release.job('opensearch') }
 
-  describe 'config.json' do
+  describe 'config/opensearch.yml' do
     let(:template) { job.template('config/opensearch.yml') }
 
-    let(:config) do
-      config = YAML.load(template.render({}))
+    context 'with no manifest' do
+      let(:config) do
+        config = YAML.load(template.render({}))
+      end
+  
+      it 'configures default settings' do
+        expect(config['bootstrap.memory_lock']).to eq(true)
+        expect(config['path.logs']).to eq('/var/vcap/sys/log/opensearch')
+        expect(config['path.data']).to eq('/var/vcap/store/opensearch')
+        expect(config['plugins.security.allow_default_init_securityindex']).to eq(true)
+        expect(config['network.bind_host']).to eq('0.0.0.0')
+      end
+
+      it 'does not configure optional settings' do
+        expect(config['path.repo']).to be_nil
+        expect(config['plugins.security.authcz.admin_dn']).to be_nil
+        expect(config['plugins.security.nodes_dn']).to be_nil
+        expect(config['plugins.security.ssl.transport.enforce_hostname_verification']).to be_nil
+        expect(config['plugins.security.ssl.http.enabled']).to be_nil
+        expect(config['s3.client.default.protocol']).to be_nil
+      end
     end
 
-    it 'configures default settings' do
-      expect(config['bootstrap.memory_lock']).to eq(true)
-      expect(config['path.logs']).to eq('/var/vcap/sys/log/opensearch')
-      expect(config['path.data']).to eq('/var/vcap/store/opensearch')
-      expect(config['plugins.security.allow_default_init_securityindex']).to eq(true)
-      expect(config['network.bind_host']).to eq('0.0.0.0')
+    describe 'with path settings' do
+      let(:manifest) do
+        {
+          'opensearch' => {
+            'path_repo' => '/shared/file/path'
+          }
+        }
+      end
+  
+      let(:config) do
+        config = YAML.load(template.render(manifest))
+      end
+
+      it 'configures path repo' do
+        expect(config['path.repo']).to eq(['/shared/file/path'])
+      end
     end
 
-    describe 'security' do
+    describe 'with security settings' do
       let(:manifest) do
         {
           'opensearch' => {
@@ -72,7 +101,7 @@ describe 'opensearch job' do
       end
     end
 
-    describe 'multi-node cluster' do
+    describe 'with multi-node cluster settings' do
       context 'when links are provided' do
         let(:link_properties) do
           {
@@ -138,7 +167,7 @@ describe 'opensearch job' do
       end
     end
 
-    describe 'single node cluster' do
+    describe 'with single node cluster settings' do
       let(:manifest) do
         {
           'opensearch' => {
@@ -167,7 +196,7 @@ describe 'opensearch job' do
       end
     end
 
-    describe 'node settings' do
+    describe 'with node settings' do
       let(:instance) do
         Bosh::Template::Test::InstanceSpec.new(name: 'instance-name', index: 0)
       end
@@ -277,7 +306,7 @@ describe 'opensearch job' do
       end
     end
 
-    describe 'network settings' do
+    describe 'with network settings' do
       let(:instance) do
         Bosh::Template::Test::InstanceSpec.new(ip: '127.0.0.1')
       end
@@ -307,7 +336,70 @@ describe 'opensearch job' do
       end
     end
 
-    describe 'config options' do
+    describe 'with s3 repository settings' do
+      context 'using defaults' do
+        let(:manifest) do
+          {
+            'opensearch' => {
+              'repository' => {
+                's3' => {
+                  'access_key' => 'fake-access-key',
+                  'secret_key' => 'fake-secret-key',
+                }
+              }
+            }
+          }
+        end
+    
+        let(:config) do
+          config = YAML.load(template.render(manifest))
+        end
+
+        it 'sets the protocol to the default' do
+          expect(config['s3.client.default.protocol']).to eq('https')
+        end
+
+        it 'sets the read timeout to the default' do
+          expect(config['s3.client.default.read_timeout']).to eq('50s')
+        end
+      end
+
+      context 'with configured settings' do
+        let(:manifest) do
+          {
+            'opensearch' => {
+              'repository' => {
+                's3' => {
+                  'access_key' => 'fake-access-key',
+                  'secret_key' => 'fake-secret-key',
+                  'protocol' => 'http',
+                  'read_timeout' => '30s',
+                  'region' => 'region-1'
+                }
+              }
+            }
+          }
+        end
+    
+        let(:config) do
+          config = YAML.load(template.render(manifest))
+        end
+
+        it 'sets the protocol correctly' do
+          expect(config['s3.client.default.protocol']).to eq('http')
+        end
+
+        it 'sets the read timeout correctly' do
+          expect(config['s3.client.default.read_timeout']).to eq('30s')
+        end
+
+        it 'sets the region correctly' do
+          expect(config['s3.client.default.region']).to eq('region-1')
+        end
+      end
+    end
+
+    describe 'with config options' do
       let(:manifest) do
         {
           'opensearch' => {

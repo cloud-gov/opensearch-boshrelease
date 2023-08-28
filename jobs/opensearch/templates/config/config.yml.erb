@@ -84,13 +84,12 @@ network.bind_host: "0.0.0.0"
 network.publish_host: <%= spec.ip %>
 http.host: <%= p("opensearch.http_host") %>
 
-<% if_p('opensearch.cloud.aws.access_key', 'opensearch.cloud.aws.secret_key') do %>
-cloud.aws.protocol: <%= p('opensearch.cloud.aws.protocol') %>
-cloud.aws.read_timeout: <%= p('opensearch.cloud.aws.read_timeout') %>
-cloud.aws.access_key: <%= p('opensearch.cloud.aws.access_key') %>
-cloud.aws.secret_key: <%= p('opensearch.cloud.aws.secret_key') %>
-<% if_p('opensearch.cloud.aws.region') do |region| %>
-cloud.aws.region: <%= region %>
+# see https://opensearch.org/docs/latest/tuning-your-cluster/availability-and-recovery/snapshots/snapshot-restore/#amazon-s3
+<% if_p('opensearch.repository.s3.access_key', 'opensearch.repository.s3.secret_key') do %>
+s3.client.default.protocol: <%= p('opensearch.repository.s3.protocol') %>
+s3.client.default.read_timeout: <%= p('opensearch.repository.s3.read_timeout') %>
+<% if_p('opensearch.repository.s3.region') do |region| %>
+s3.client.default.region: <%= region %>
 <% end %>
 <% end %>
 
