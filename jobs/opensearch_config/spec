@@ -14,7 +14,7 @@ templates:
 properties:
   opensearch_config.opensearch.host:
     description: "The opensearch master node hostname"
-    default: 127.0.0.1
+    default: localhost
   opensearch_config.opensearch.port:
     description: "the opensearch master node port"
     default: 9200
