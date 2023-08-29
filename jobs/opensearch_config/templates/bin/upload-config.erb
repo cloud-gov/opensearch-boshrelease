@@ -67,7 +67,7 @@ BASH
       end
 
       ret << <<BASH
-HTTP_CODE=$(curl -s -H 'Content-Type: application/json' -w '%{http_code}' -o ${DATA_DIR}/opensearch_config-response.txt -X PUT --data-binary @$CONTENT_PATH  ${CA} ${CERT} ${KEY} "$URL")
+HTTP_CODE=$(curl -s -H 'Content-Type: application/json' -w '%{http_code}' -o ${DATA_DIR}/opensearch_config-response.txt -X PUT --data-binary @$CONTENT_PATH  ${CA} ${CERT} ${KEY} ${URL})
 
 if grep --quiet "\"errors\":true" ${DATA_DIR}/opensearch_config-response.txt ; then
   cat ${DATA_DIR}/opensearch_config-response.txt >> /dev/stderr
