@@ -15,6 +15,37 @@ CA="--cacert ${OPS_JOB_DIR}/config/ssl/opensearch.ca"
 CERT="--cert ${OPS_JOB_DIR}/config/ssl/opensearch-admin.crt"
 KEY="--key ${OPS_JOB_DIR}/config/ssl/opensearch-admin.key"
 
+wait_for_greenstate() {
+  out=$(mktemp health-XXXXXX)
+  remaining=5000
+  echo "=== Waiting for Green status from opensearch..."
+  until [ "${remaining}" -le 0 ]; do
+   curl -sw '\n%{http_code}' \
+      ${KEY} \
+      ${CERT}  \
+      ${CA} \
+      https://localhost:9200/_cluster/health?local=true > ${out}
+    #body=$(cat ${out} | head -n -1)
+    status=$(cat ${out} | tail -n 1)
+    echo "body: ${body}"
+    echo -n "[${status}] "
+    if [ ${status} = "200" ] && echo ${body} | grep '"status":"green"'; then
+      echo "Done"
+      break
+    fi
+  done
+
+  rm ${out}
+
+  if [ "${remaining}" -le 0 ]; then
+    echo "Node failed to join the cluster"
+    exit 1
+  fi
+}
+
+
+
+
 for template in $(curl -s ${CA} ${CERT} ${KEY} ${URL}/_cat/templates | awk '{print $1}'); do
   if ! grep -qw ${template} <(echo "<%= p('opensearch_config.index_templates').map { |template| template.keys.first }.join(' ') %>"); then
     # hit template and index_template so we can try for legacy and component templates
@@ -91,10 +122,7 @@ end
 # wait for opensearch availability
 #
 
-while [[ "green" != $(curl -s ${CA} ${CERT} ${KEY} ${URL}/_cat/health?h=status | tr -d '[:space:]') ]] ; do
-  sleep 8
-  echo looking for opensearch
-done
+wait_for_greenstate
 
 echo "--- Component Templates"
 <%= put_to_es('_component_template', p('opensearch_config.component_templates')) %>
@@ -110,3 +138,5 @@ echo "--- License"
 <% if_p("opensearch_config.license") do |license| %>
   <%= put_to_es('_license', license, acknowledge: true) %>
 <% end %>
+
+
