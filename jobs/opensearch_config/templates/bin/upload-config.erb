@@ -3,18 +3,21 @@
 set -ex
 export OPS_JOB_NAME=opensearch
 export OPS_JOB_DIR=/var/vcap/jobs/$OPS_JOB_NAME
+export JOB_NAME=opensearch_config
+export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 export DATA_DIR=/var/vcap/data/opensearch_config
 <%
 opensearch_host = p("opensearch_config.opensearch.host")
 opensearch_port = p("opensearch_config.opensearch.port")
 %>
 
+chown vcap:vcap ${JOB_DIR}/bin
 # Delete existing templates before uploading
 URL=https://<%= opensearch_host %>:<%= opensearch_port %>
 CA="--cacert ${OPS_JOB_DIR}/config/ssl/opensearch.ca"
 CERT="--cert ${OPS_JOB_DIR}/config/ssl/opensearch-admin.crt"
 KEY="--key ${OPS_JOB_DIR}/config/ssl/opensearch-admin.key"
-
+chown vcap:vcap ${JOB_DIR}/config/ssl
 wait_for_greenstate() {
   out=$(mktemp health-XXXXXX)
   remaining=5000
@@ -25,7 +28,7 @@ wait_for_greenstate() {
       ${CERT}  \
       ${CA} \
       https://localhost:9200/_cluster/health?local=true > ${out}
-    #body=$(cat ${out} | head -n -1)
+    body=$(cat ${out} | head -n -1)
     status=$(cat ${out} | tail -n 1)
     echo "body: ${body}"
     echo -n "[${status}] "
