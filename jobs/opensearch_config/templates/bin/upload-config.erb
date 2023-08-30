@@ -37,6 +37,8 @@ wait_for_greenstate() {
       echo "Done"
       break
     fi
+    remaining=$((remaining-15))
+    sleep 15
   done
 
   rm ${out}
