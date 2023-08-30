@@ -20,7 +20,7 @@ CERT="--cert ${OPS_JOB_DIR}/config/ssl/opensearch-admin.crt"
 KEY="--key ${OPS_JOB_DIR}/config/ssl/opensearch-admin.key"
 
 wait_for_greenstate() {
-  out=$(mktemp health-XXXXXX)
+  out=$(mktemp ${TMPDIR}/health-XXXXXX)
   remaining=5000
   echo "=== Waiting for Green status from opensearch..."
   until [ "${remaining}" -le 0 ]; do
