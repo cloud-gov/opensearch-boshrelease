@@ -23,23 +23,21 @@ wait_for_greenstate() {
   out=$(mktemp ${TMPDIR}/health-XXXXXX)
   remaining=5000
   echo "=== Waiting for Green status from opensearch..."
-  until [ "${remaining}" -le 0 ]; do
-   curl -sw '\n%{http_code}' \
-      ${KEY} \
-      ${CERT}  \
-      ${CA} \
-      https://localhost:9200/_cluster/health?local=true > ${out}
-    body=$(cat ${out} | head -n -1)
-    status=$(cat ${out} | tail -n 1)
-    echo "body: ${body}"
-    echo -n "[${status}] "
-    if [ ${status} = "200" ] && echo ${body} | grep '"status":"green"'; then
-      echo "Done"
-      break
-    fi
-    remaining=$((remaining-15))
-    sleep 15
-  done
+  
+  curl -sw '\n%{http_code}' \
+    ${KEY} \
+    ${CERT}  \
+    ${CA} \
+    https://localhost:9200/_cluster/health?local=true > ${out}
+  body=$(cat ${out} | head -n -1)
+  status=$(cat ${out} | tail -n 1)
+  echo "body: ${body}"
+  echo -n "[${status}] "
+  if [ ${status} = "200" ] && echo ${body} | grep '"status":"green"'; then
+    echo "Done"
+    break
+  fi
+  remaining=$((remaining-15))
 
   rm ${out}
 
