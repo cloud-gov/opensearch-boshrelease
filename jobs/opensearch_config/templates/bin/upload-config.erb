@@ -23,11 +23,11 @@ wait_for_greenstate() {
   remaining=500
   echo "=== Waiting for Green status from opensearch..."
   until [ "${remaining}" -le 0 ]; do
-    STATUS=curl -sw '\n%{http_code}' \
+    STATUS=$(curl -sw '\n%{http_code}' \
       ${KEY} \
       ${CERT}  \
       ${CA} \
-      https://localhost:9200/_cluster/health?local=true
+      https://localhost:9200/_cluster/health?local=true)
     if [[ $STATUS == *'"status":"green"'* ]]; then
       echo "Done"
       break
