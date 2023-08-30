@@ -20,31 +20,19 @@ CERT="--cert ${OPS_JOB_DIR}/config/ssl/opensearch-admin.crt"
 KEY="--key ${OPS_JOB_DIR}/config/ssl/opensearch-admin.key"
 
 wait_for_greenstate() {
-  out=$(mktemp ${TMPDIR}/health-XXXXXX)
-  remaining=5000
+  remaining=500
   echo "=== Waiting for Green status from opensearch..."
-  
-  curl -sw '\n%{http_code}' \
+  STATUS=curl -sw '\n%{http_code}' \
     ${KEY} \
     ${CERT}  \
     ${CA} \
     https://localhost:9200/_cluster/health?local=true > ${out}
-  body=$(cat ${out} | head -n -1)
-  status=$(cat ${out} | tail -n 1)
-  echo "body: ${body}"
-  echo -n "[${status}] "
-  if [ ${status} = "200" ] && echo ${body} | grep '"status":"green"'; then
+  if [[ $TEST == *'"status":"green"'* ]]; then
     echo "Done"
     break
   fi
   remaining=$((remaining-15))
-
-  rm ${out}
-
-  if [ "${remaining}" -le 0 ]; then
-    echo "Node failed to join the cluster"
-    exit 1
-  fi
+  sleep 15
 }
 
 
