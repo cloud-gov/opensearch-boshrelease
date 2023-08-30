@@ -4,3 +4,6 @@ processes:
     ephemeral_disk: true
     additional_volumes:
     - path: /var/vcap/jobs/opensearch-config-lfc
+    - path: /var/vcap/sys/tmp/opensearch_config
+      writable: true
+      allow_executions: true
