@@ -27,7 +27,7 @@ wait_for_greenstate() {
       ${KEY} \
       ${CERT}  \
       ${CA} \
-      https://localhost:9200/_cluster/health?local=true > ${out}
+      https://localhost:9200/_cluster/health?local=true
     if [[ $STATUS == *'"status":"green"'* ]]; then
       echo "Done"
       break
