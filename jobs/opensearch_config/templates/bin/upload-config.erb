@@ -120,7 +120,7 @@ end
 # wait for opensearch availability
 #
 
-wait_for_greenstate
+until curl -f ${KEY} ${CERT} ${CA} 'https://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=10m'; do :; done
 
 echo "--- Component Templates"
 <%= put_to_es('_component_template', p('opensearch_config.component_templates')) %>
