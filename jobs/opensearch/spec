@@ -39,6 +39,8 @@ provides:
   properties:
   - opensearch.port
   - opensearch.cluster_name
+  - opensearch.admin.certificate
+  - opensearch.admin.private_key
   - opensearch.node.ssl.ca
   - opensearch.node.ssl.certificate
   - opensearch.node.ssl.private_key
