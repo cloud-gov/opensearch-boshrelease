@@ -1,5 +1,5 @@
 ---
-name: opensearch-config-lfc
+name: opensearch_config_lfc
 
 description: |
   The job compiles opensearch mappings specific to Logsearch-for-cloudfoundry.
@@ -38,7 +38,7 @@ properties:
     description: Name index-settings component from logsearch-boshrelease is uploaded as
   opensearch_config.shards_and_replicas_component_name:
     description: Name shards-and-replicas component from logsearch-boshrelease is uploaded as
-  
+
 
   opensearch_config.index_settings:
     description: Index settings for logs
