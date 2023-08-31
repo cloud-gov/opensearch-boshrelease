@@ -6,3 +6,13 @@ export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 if [ -d ${JOB_DIR}/config/ssl ]; then
 	chown vcap:vcap ${JOB_DIR}/config/ssl
 fi
+
+<% if_link('opensearch') do |opensearchconfig| %>
+<% opensearchconfig.if_p('opensearch.admin.private_key') do %>
+  openssl pkcs8 -v1 "PBE-SHA1-3DES" \
+  -in "${JOB_DIR}/config/ssl/opensearch-admin.pem" -topk8 \
+  -out "${JOB_DIR}/config/ssl/opensearch-admin.key" -nocrypt
+  chmod 600 ${JOB_DIR}/config/ssl/opensearch*.key
+<% end %>
+<% end %>
+
