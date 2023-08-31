@@ -7,9 +7,16 @@ templates:
   bin/upload-config.erb: bin/upload-config
   bin/job.process: bin/job.process
   bpm.yml.erb: config/bpm.yml
+  config/admin-crt.erb: config/ssl/opensearch-admin.crt
+  config/admin-pem.erb: config/ssl/opensearch-admin.pem
+  config/ca.erb: config/ssl/opensearch.ca
   index-templates/shards-and-replicas.json.erb: index-templates/shards-and-replicas.json
   index-templates/index-settings.json.erb: index-templates/index-settings.json
   index-templates/index-mappings.json.erb: index-templates/index-mappings.json
+
+consumes:
+- name: opensearch
+  type: opensearch
 
 properties:
   opensearch_config.opensearch.host:
