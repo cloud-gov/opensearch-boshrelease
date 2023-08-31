@@ -1,11 +1,9 @@
 #!/bin/bash
 
 set -ex
-export OPS_JOB_NAME=opensearch
-export OPS_JOB_DIR=/var/vcap/jobs/$OPS_JOB_NAME
 export JOB_NAME=opensearch_config
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
-export DATA_DIR=/var/vcap/data/opensearch_config
+export DATA_DIR=/var/vcap/data/$JOB_NAME
 <%
 opensearch_host = p("opensearch_config.opensearch.host")
 opensearch_port = p("opensearch_config.opensearch.port")
@@ -13,9 +11,9 @@ opensearch_port = p("opensearch_config.opensearch.port")
 
 # Delete existing templates before uploading
 URL=https://<%= opensearch_host %>:<%= opensearch_port %>
-CA="--cacert ${OPS_JOB_DIR}/config/ssl/opensearch.ca"
-CERT="--cert ${OPS_JOB_DIR}/config/ssl/opensearch-admin.crt"
-KEY="--key ${OPS_JOB_DIR}/config/ssl/opensearch-admin.key"
+CA="--cacert ${JOB_DIR}/config/ssl/opensearch.ca"
+CERT="--cert ${JOB_DIR}/config/ssl/opensearch-admin.crt"
+KEY="--key ${JOB_DIR}/config/ssl/opensearch-admin.key"
 
 for template in $(curl -s ${CA} ${CERT} ${KEY} ${URL}/_cat/templates | awk '{print $1}'); do
   if ! grep -qw ${template} <(echo "<%= p('opensearch_config.index_templates').map { |template| template.keys.first }.join(' ') %>"); then
