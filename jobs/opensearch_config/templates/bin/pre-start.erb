@@ -1,0 +1,8 @@
+#!/bin/bash
+
+export JOB_NAME=opensearch_config
+export JOB_DIR=/var/vcap/jobs/$JOB_NAME
+
+if [ -d ${JOB_DIR}/config/ssl ]; then
+	chown vcap:vcap ${JOB_DIR}/config/ssl
+fi

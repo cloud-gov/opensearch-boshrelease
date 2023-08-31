@@ -4,9 +4,10 @@ name: opensearch_config
 description: This job loads pre-defined configuration into opensearch cluster
 
 templates:
+  bin/pre-start.erb: bin/pre-start
   bin/upload-config.erb: bin/upload-config
   bin/job.process: bin/job.process
-  bpm.yml.erb: config/bpm.yml
+  config/bpm.yml.erb: config/bpm.yml
   config/admin-crt.erb: config/ssl/opensearch-admin.crt
   config/admin-pem.erb: config/ssl/opensearch-admin.pem
   config/ca.erb: config/ssl/opensearch.ca
