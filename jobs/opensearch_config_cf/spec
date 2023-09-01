@@ -1,5 +1,5 @@
 ---
-name: opensearch_config_lfc
+name: opensearch_config_cf
 
 description: |
   The job compiles opensearch mappings specific to Logsearch-for-cloudfoundry.
