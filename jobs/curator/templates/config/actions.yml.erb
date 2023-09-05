@@ -1,0 +1,43 @@
+---
+actions:
+  <% if_p('opensearch.snapshots.repository') do |repo| %>
+  1:
+    action: snapshot
+    description: >-
+      Create snapshot for all indicies
+    options:
+      disable_action: <% if p('opensearch.path_repo') != '' or p('opensearch.cloud.aws.bucket') != '' %>False<% else %>True<% end %>
+      repository: <%= repo %>
+      wait_for_completion: True
+      ignore_empty_list: True
+    filters:
+    - filtertype: pattern
+      kind: prefix
+      value: logs-
+    - filtertype: age
+      source: creation_date
+      direction: older
+      unit: <%= p('curator.purge_logs.unit') %>
+      unit_count: <%= p('curator.purge_logs.retention_period') %>
+  <% end %>
+  2:
+    action: delete_indices
+    description: >-
+      Delete indices older than <%= p('curator.purge_logs.retention_period') %> <%= p('curator.purge_logs.unit') %> (based on index name), for logs-
+      prefixed indices. Ignore the error if the filter does not result in an
+      actionable list of indices (ignore_empty_list) and exit cleanly.
+    options:
+      ignore_empty_list: True
+      disable_action: False
+    filters:
+    - filtertype: pattern
+      kind: regex
+      value: logs*
+    - filtertype: age
+      source: creation_date
+      direction: older
+      unit: <%= p('curator.purge_logs.unit') %>
+      unit_count: <%= p('curator.purge_logs.retention_period') %>
+<% p("curator.actions", []).each_with_index do | action, index | %>
+  <%= index + 3 %>:<%= action.to_yaml.gsub("---", "").gsub("\n", "\n    ") %>
+<% end %>
