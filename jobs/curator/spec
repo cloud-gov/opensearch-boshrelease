@@ -8,10 +8,10 @@ packages:
   - python3
 
 templates:
-  #bin/pre-start: bin/pre-start
-  #bin/run-curator: bin/run-curator
-  #config/actions.yml.erb: config/actions.yml
-  #config/config.yml.erb: config/config.yml
+  bin/pre-start: bin/pre-start
+  bin/run-curator: bin/run-curator
+  config/actions.yml.erb: config/actions.yml
+  config/config.yml.erb: config/config.yml
 
 properties:
   opensearch.snapshots.repository:
