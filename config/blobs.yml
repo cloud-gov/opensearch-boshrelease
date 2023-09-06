@@ -26,6 +26,10 @@ curator/vendor/chardet-5.2.0-py3-none-any.whl:
   size: 199385
   object_id: df02eabc-7ff7-4424-55bc-24aa29640147
   sha: sha256:e1cf59446890a00105fe7b7912492ea04b6e6f06d4b742b2c788469e34c82970
+curator/vendor/charset_normalizer-3.2.0-py3-none-any.whl:
+  size: 46668
+  object_id: 1459959c-d724-4aff-7f52-adc6b6e16124
+  sha: sha256:8e098148dd37b4ce3baca71fb394c81dc5d9c7728c95df695d2dca218edf40e6
 curator/vendor/click-7.1.2-py2.py3-none-any.whl:
   size: 82780
   object_id: 7030b9c2-a5a7-444a-6b7e-ff4049562b3a
