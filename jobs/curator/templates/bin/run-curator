@@ -11,4 +11,5 @@ export CONFIG_DIR=/var/vcap/jobs/curator/config
 export PYTHONPATH=/var/vcap/packages/curator/lib/python3.7/site-packages/
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/var/vcap/packages/python3/lib
 
+
 curator --config $CONFIG_DIR/config.yml $CONFIG_DIR/actions.yml

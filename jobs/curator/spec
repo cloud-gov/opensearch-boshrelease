@@ -12,6 +12,15 @@ templates:
   bin/run-curator: bin/run-curator
   config/actions.yml.erb: config/actions.yml
   config/config.yml.erb: config/config.yml
+  config/bpm.yml.erb: config/bpm.yml
+  config/admin-crt.erb: config/ssl/opensearch-admin.crt
+  config/admin-pem.erb: config/ssl/opensearch-admin.pem
+  config/ca.erb: config/ssl/opensearch.ca
+
+
+consumes:
+- name: opensearch
+  type: opensearch
 
 properties:
   opensearch.snapshots.repository:

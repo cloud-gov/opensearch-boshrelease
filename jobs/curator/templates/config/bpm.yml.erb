@@ -1,0 +1,8 @@
+processes:
+  - name: curator
+    hooks:
+      pre_start: /var/vcap/jobs/curator/bin/pre-start
+    ephemeral_disk: true
+    additional_volumes:
+    - path: /var/vcap/jobs/opensearch/config
+      writable: true
