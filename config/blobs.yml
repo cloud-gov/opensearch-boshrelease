@@ -74,6 +74,10 @@ curator/vendor/voluptuous-0.13.1-py3-none-any.whl:
   size: 29790
   object_id: dd2c1d70-b9c7-431e-5285-1ff9e0c7fc26
   sha: sha256:4b838b185f5951f2d6e8752b68fcf18bd7a9c26ded8f143f92d6d28f3921a3e6
+curator/vendor/wheel-0.41.2.tar.gz:
+  size: 98050
+  object_id: 418dced9-9c61-4579-5744-23f6d1221554
+  sha: sha256:0c5ac5ff2afb79ac23ab82bab027a0be7b5dbcf2e54dc50efe4bf507de1f7985
 opensearch-2.9.0-linux-x64.tar.gz:
   size: 805162121
   object_id: a0062097-fe9f-4720-666f-8fb84933550d
