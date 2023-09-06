@@ -74,10 +74,10 @@ curator/vendor/six-1.16.0-py2.py3-none-any.whl:
   size: 11053
   object_id: 23f63c14-a88f-452d-66f9-3d0ce44cc4e3
   sha: sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254
-curator/vendor/urllib3-2.0.4-py3-none-any.whl:
-  size: 123908
-  object_id: 25b3ac93-1251-4340-5ede-c949b2e37f43
-  sha: sha256:de7df1803967d2c2a98e4b11bb7d6bd9210474c46e8a0401514e3a42a75ebde4
+curator/vendor/urllib3-1.26.5-py2.py3-none-any.whl:
+  size: 138144
+  object_id: 38253a32-ae62-422c-52ef-c20a71843760
+  sha: sha256:753a0374df26658f99d826cfe40394a686d05985786d946fbe4165b5148f5a7c
 curator/vendor/voluptuous-0.13.1-py3-none-any.whl:
   size: 29790
   object_id: dd2c1d70-b9c7-431e-5285-1ff9e0c7fc26
