@@ -26,10 +26,10 @@ curator/vendor/chardet-5.2.0-py3-none-any.whl:
   size: 199385
   object_id: df02eabc-7ff7-4424-55bc-24aa29640147
   sha: sha256:e1cf59446890a00105fe7b7912492ea04b6e6f06d4b742b2c788469e34c82970
-curator/vendor/click-8.1.7-py3-none-any.whl:
-  size: 97941
-  object_id: 62279397-be81-4902-7172-16e512cbe7ad
-  sha: sha256:ae74fb96c20a0277a1d615f1e4d73c8414f5a98db8b799a7931d1582f3390c28
+curator/vendor/click-7.1.2-py2.py3-none-any.whl:
+  size: 82780
+  object_id: 7030b9c2-a5a7-444a-6b7e-ff4049562b3a
+  sha: sha256:dacca89f4bfadd5de3d7489b7c8a566eee0d3676333fbb50030263894c38c0dc
 curator/vendor/docutils-0.20.1-py3-none-any.whl:
   size: 572666
   object_id: 86bf09ce-07c6-419f-5c00-4ab9acc2cc8d
