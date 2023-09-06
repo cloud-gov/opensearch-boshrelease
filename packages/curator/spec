@@ -5,6 +5,7 @@ dependencies:
   - python3
 
 files:
+   - curator/vendor/flit_core-3.9.0.tar.gz
    - curator/vendor/wheel-0.41.2.tar.gz
    - curator/vendor/setuptools-68.1.2.tar.gz
    - curator-opensearch-0.0.11.tar.gz

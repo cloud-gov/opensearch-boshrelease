@@ -30,6 +30,10 @@ curator/vendor/docutils-0.20.1-py3-none-any.whl:
   size: 572666
   object_id: 86bf09ce-07c6-419f-5c00-4ab9acc2cc8d
   sha: sha256:96f387a2c5562db4476f09f13bbab2192e764cac08ebbf3a34a95d9b1e4a59d6
+curator/vendor/flit_core-3.9.0.tar.gz:
+  size: 41917
+  object_id: f650b554-8354-4191-591d-82c15d6f25d7
+  sha: sha256:72ad266176c4a3fcfab5f2930d76896059851240570ce9a98733b658cb786eba
 curator/vendor/idna-3.4-py3-none-any.whl:
   size: 61538
   object_id: 7116348d-1840-43da-6f92-29b2839c0780
