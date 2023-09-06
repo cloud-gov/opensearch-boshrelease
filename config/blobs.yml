@@ -62,10 +62,10 @@ curator/vendor/s3transfer-0.6.2-py3-none-any.whl:
   size: 79765
   object_id: aaed6545-d8ba-45c4-4219-48b1d0868206
   sha: sha256:b014be3a8a2aab98cfe1abc7229cc5a9a0cf05eb9c1f2b86b230fd8df3f78084
-curator/vendor/setuptools-68.1.2.tar.gz:
-  size: 2198001
-  object_id: 2d9012fb-066d-4c3a-41c3-6ba178f1c954
-  sha: sha256:3d4dfa6d95f1b101d695a6160a7626e15583af71a5f52176efa5d39a054d475d
+curator/vendor/setuptools-67.8.0.tar.gz:
+  size: 2635214
+  object_id: 91b7b498-12e2-449f-54b5-2873c028f11f
+  sha: sha256:d696681648c66c81142169219d0353a9b693b341827b7accc0f3820ec5423a7c
 curator/vendor/six-1.16.0-py2.py3-none-any.whl:
   size: 11053
   object_id: 23f63c14-a88f-452d-66f9-3d0ce44cc4e3
