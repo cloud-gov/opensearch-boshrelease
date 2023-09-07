@@ -1,0 +1,19 @@
+---
+client:
+  hosts: <%= p("curator.opensearch.hosts") %>
+  port: <%= p("curator.opensearch.port") %>
+  url_prefix:
+  use_ssl: True
+  certificate: /var/vcap/jobs/curator/config/ssl/opensearch.ca
+  client_cert: /var/vcap/jobs/curator/config/ssl/opensearch-admin.crt
+  client_key: /var/vcap/jobs/curator/config/ssl/opensearch-admin.key
+  ssl_no_validate: False
+  http_auth:
+  timeout: 30
+  master_only: False
+
+logging:
+  loglevel: <%= p('curator.loglevel') %>
+  logfile:
+  logformat: <%= p('curator.logformat') %>
+  blacklist: ['opensearch', 'urllib3']
