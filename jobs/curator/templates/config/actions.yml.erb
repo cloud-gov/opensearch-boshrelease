@@ -30,9 +30,10 @@ actions:
       ignore_empty_list: True
       disable_action: False
     filters:
-    - filtertype: pattern
-      kind: regex
-      value: logs*
+    ## removed until the future when logs are created
+    # - filtertype: pattern
+    #  kind: regex
+    #  value: logs*
     - filtertype: age
       source: creation_date
       direction: older
