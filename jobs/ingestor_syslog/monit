@@ -1,0 +1,5 @@
+check process ingestor_syslog
+  with pidfile /var/vcap/sys/run/bpm/ingestor_syslog/ingestor_syslog.pid
+  start program "/var/vcap/jobs/bpm/bin/bpm start ingestor_syslog"
+  stop program "/var/vcap/jobs/bpm/bin/bpm stop ingestor_syslog"
+  group vcap

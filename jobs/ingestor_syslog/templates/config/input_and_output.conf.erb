@@ -1,0 +1,93 @@
+input {
+  <% if p("logstash_ingestor.syslog.port") %>
+  tcp {
+    add_field => [ "type", "syslog" ]
+    host => "0.0.0.0"
+    port => "<%= p("logstash_ingestor.syslog.port") %>"
+    <% if_p("logstash_ingestor.syslog.use_keepalive") do |v| %>
+    tcp_keep_alive => <%= v %>
+    <% end %>
+  }
+  udp {
+    add_field => [ "type", "syslog" ]
+    host => "0.0.0.0"
+    port => "<%= p("logstash_ingestor.syslog.port") %>"
+  }
+  <% end %>
+
+  <% if_p("logstash_ingestor.syslog_tls.port") do | port | %>
+  tcp {
+    add_field => [ "type", "syslog" ]
+    host => "0.0.0.0"
+    port => "<%= port %>"
+    ssl_enable => true
+    <% if p("logstash_ingestor.syslog_tls.skip_ssl_validation") %>
+    ssl_verify => false
+    <% end %>
+    ssl_cert => "/var/vcap/jobs/ingestor_syslog/config/syslog_tls.crt"
+    ssl_key => "/var/vcap/jobs/ingestor_syslog/config/syslog_tls.key"
+    <% if_p("logstash_ingestor.syslog_tls.use_keepalive") do |v| %>
+    tcp_keep_alive => <%= v %>
+    <% end %>
+  }
+  <% end %>
+
+  <% if_p("logstash_ingestor.relp.port") do | port | %>
+  relp {
+    add_field => { "_logstash_input" => "relp" }
+    host => "0.0.0.0"
+    port => "<%= port %>"
+  }
+  <% end %>
+
+  <% p("logstash_parser.inputs", []).each do | input | %>
+      <%= input["plugin"] %> {
+        <% input["options"].each do | k, v | %>
+          <%= k %> => <%= v.inspect %>
+        <% end %>
+      }
+  <% end %>
+}
+
+<%
+  es_output_hosts = nil
+  if_p("logstash_parser.opensearch.data_hosts") { |hosts| es_output_hosts = hosts.map { |ip| "#{ip}:9200" }.join(',') }
+  unless es_output_hosts
+    es_output_hosts =  link("opensearch").address
+  end
+%>
+
+output {
+    <% if p("logstash_parser.debug") %>
+        stdout {
+            codec => "json"
+        }
+    <% end %>
+
+    <% p('logstash_parser.outputs').each do | output | %>
+        <%= output['plugin'] %> {
+        <% if 'opensearch' == output['plugin'] %>
+            <%
+              options = {
+                "hosts" => [ es_output_hosts ],
+                "index" => p('logstash_parser.opensearch.index'),
+                "manage_template" => false
+              }
+              if p('logstash_parser.opensearch.idle_flush_time', nil)
+                options['idle_flush_time'] = p('logstash_parser.opensearch.idle_flush_time')
+              end
+              if p('logstash_parser.opensearch.document_id', nil)
+                options['document_id'] = p('logstash_parser.opensearch.document_id')
+              end
+              if p('logstash_parser.opensearch.routing', nil)
+                options['routing'] = p('logstash_parser.opensearch.routing')
+              end
+              output['options'] = options.merge(output['options'])
+            %>
+        <% end %>
+        <% output['options'].each do | k, v | %>
+          <%= k %> => <%= v.inspect %>
+        <% end %>
+        }
+    <% end %>
+}

@@ -90,6 +90,30 @@ curator/vendor/wheel-0.41.2.tar.gz:
   size: 98050
   object_id: 418dced9-9c61-4579-5744-23f6d1221554
   sha: sha256:0c5ac5ff2afb79ac23ab82bab027a0be7b5dbcf2e54dc50efe4bf507de1f7985
+logstash/logstash-8.9.2-linux-x86_64.tar.gz:
+  size: 346522558
+  object_id: 61bc773e-e0a2-4cf5-416e-0964a3d83978
+  sha: sha256:86eb38b40f66dea4f3c747582c53f574d88ea0c57b8f60325baa00022cbba998
+logstash/logstash-filter-alter-3.0.3.zip:
+  size: 14307
+  object_id: 3fc69367-949d-4a2c-6eca-371ae2d7c5fa
+  sha: sha256:68e16c1fb165aa17020107dcd8ce3cab67508a7f7b3e5c2ec02f24242d26b09c
+logstash/logstash-filter-translate-3.4.2.zip:
+  size: 43355
+  object_id: bd3fa6f2-5247-454d-6a5e-f6973c9db386
+  sha: sha256:3d655e632f55ebce47eb22e15246c770a83808dd3c3dac80e7fa512e8fa92f06
+logstash/logstash-input-relp-3.0.4.zip:
+  size: 21671
+  object_id: 906b35a7-34ab-478f-6fa3-6d6d8532001f
+  sha: sha256:500c056b8f7738943d394f3d781452e31202e67f87c9ed0d50ed5c94f87c18af
+logstash/logstash-input-syslog-3.6.0.zip:
+  size: 24955
+  object_id: a48cc48c-dd63-4c44-71ee-b81e6f47a023
+  sha: sha256:2bf760cef73d438a731e1018f10c1e3977e648360a443cdd6805a16e0e847973
+logstash/logstash-output-syslog-3.0.5.zip:
+  size: 16822
+  object_id: c73ef03f-7517-42d4-4812-5d174726ca9a
+  sha: sha256:0e4f7e72037f9e15d4954eb7d02a8b183925fa049faf6fef66d3269df829d37a
 opensearch-2.9.0-linux-x64.tar.gz:
   size: 805162121
   object_id: a0062097-fe9f-4720-666f-8fb84933550d

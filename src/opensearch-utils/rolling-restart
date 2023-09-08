@@ -3,7 +3,7 @@
 #
 # perform a rolling restart of all data/master nodes in a stable cluster
 #
-# args: [-i|--interactive] [elasticsearch-host:port]
+# args: [-i|--interactive] [opensearch-host:port]
 #
 
 set -e
