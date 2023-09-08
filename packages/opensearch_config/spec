@@ -1,0 +1,9 @@
+---
+name: opensearch-config
+
+dependencies:
+  - ruby-3.1
+
+files:
+  - opensearch-config/**/*
+  - ruby/rake-12.3.2.gem
