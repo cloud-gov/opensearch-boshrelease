@@ -1,5 +1,5 @@
 ---
-name: opensearch-config
+name: opensearch_config
 
 dependencies:
   - ruby-3.1
