@@ -6,4 +6,4 @@ dependencies:
 
 files:
   - opensearch_config/**/*
-  - ruby/rake-12.3.2.gem
+  - ruby/rake-13.0.6.gem
