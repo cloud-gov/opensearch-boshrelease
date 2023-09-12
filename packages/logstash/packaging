@@ -10,8 +10,8 @@ tar xzf logstash/logstash-8.9.2-linux-x86_64.tar.gz -C "${BOSH_INSTALL_TARGET}" 
 export PATH="${BOSH_INSTALL_TARGET}/bin:${PATH}"
 
 # Installs missing plugins
-logstash-plugin install "file://${PWD}/logstash/logstash-filter-alter-3.0.3.zip"
-logstash-plugin install "file://${PWD}/logstash/logstash-filter-translate-3.4.2.zip"
-logstash-plugin install "file://${PWD}/logstash/logstash-input-relp-3.0.4.zip"
-logstash-plugin install "file://${PWD}/logstash/logstash-input-syslog-3.6.0.zip"
-logstash-plugin install "file://${PWD}/logstash/logstash-output-syslog-3.0.5.zip"
+logstash-plugin install --no-verify "file://${PWD}/logstash/logstash-filter-alter-3.0.3.zip"
+logstash-plugin install --no-verify "file://${PWD}/logstash/logstash-filter-translate-3.4.2.zip"
+logstash-plugin install --no-verify "file://${PWD}/logstash/logstash-input-relp-3.0.4.zip"
+logstash-plugin install --no-verify "file://${PWD}/logstash/logstash-input-syslog-3.6.0.zip"
+logstash-plugin install --no-verify "file://${PWD}/logstash/logstash-output-syslog-3.0.5.zip"
