@@ -8,5 +8,6 @@ mkdir -p $BOSH_INSTALL_TARGET/bin
 pushd github.com/cloudfoundry-community/firehose-to-syslog
 go mod init v2
 go mod tidy
-popd
 go build -o "$BOSH_INSTALL_TARGET/bin/firehose-to-syslog" github.com/cloudfoundry-community/firehose-to-syslog
+popd
+
