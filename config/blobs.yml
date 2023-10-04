@@ -95,13 +95,13 @@ logstash/logstash-8.9.2-linux-x86_64.tar.gz:
   object_id: 61bc773e-e0a2-4cf5-416e-0964a3d83978
   sha: sha256:86eb38b40f66dea4f3c747582c53f574d88ea0c57b8f60325baa00022cbba998
 logstash/logstash-filter-alter-3.0.3.zip:
-  size: 14307
-  object_id: 3fc69367-949d-4a2c-6eca-371ae2d7c5fa
-  sha: sha256:68e16c1fb165aa17020107dcd8ce3cab67508a7f7b3e5c2ec02f24242d26b09c
+  size: 7655
+  object_id: 552763c7-779b-4ac3-5993-04a06d967c93
+  sha: sha256:76cbede4e9b774cadf6260fee4e7430949f77a6c76e7e512212b8ac50c75723a
 logstash/logstash-filter-translate-3.4.2.zip:
-  size: 43355
-  object_id: bd3fa6f2-5247-454d-6a5e-f6973c9db386
-  sha: sha256:3d655e632f55ebce47eb22e15246c770a83808dd3c3dac80e7fa512e8fa92f06
+  size: 649362
+  object_id: e9b87119-265c-43ce-788d-5592aabffcb3
+  sha: sha256:f465635431b474abaf61c6673d7c91cb5f62b09a193d45a5622342f5a5b967c6
 logstash/logstash-input-relp-3.0.4.zip:
   size: 21671
   object_id: 906b35a7-34ab-478f-6fa3-6d6d8532001f
