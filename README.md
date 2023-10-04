@@ -17,7 +17,7 @@ A BOSH release for [Opensearch](https://opensearch.org/)
     bin/logstash-plugin list --verbose | grep logstash-filter-alter
     ```
 
-1. [Create an offline version of the plugin for use with BOSH](https://discuss.elastic.co/t/issue-installing-translate-plugin/101816/2) and make sure to use the correct version from the previous step in the filename:
+1. [Create an offline version of the plugin for use with BOSH](https://www.elastic.co/guide/en/logstash/current/offline-plugins.html) and make sure to use the correct version from the previous step in the filename:
 
     ```shell
     bin/logstash-plugin prepare-offline-pack --output logstash-filter-alter-3.0.3.zip logstash-filter-alter
