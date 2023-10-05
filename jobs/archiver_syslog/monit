@@ -1,0 +1,5 @@
+check process archiver_syslog
+  with pidfile /var/vcap/sys/run/bpm/archiver_syslog/archiver_syslog.pid
+  start program "/var/vcap/jobs/bpm/bin/bpm start archiver_syslog"
+  stop program "/var/vcap/jobs/bpm/bin/bpm stop archiver_syslog"
+  group vcap

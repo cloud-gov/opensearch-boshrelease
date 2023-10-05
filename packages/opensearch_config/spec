@@ -1,0 +1,9 @@
+---
+name: opensearch_config
+
+dependencies:
+  - ruby-3.1
+
+files:
+  - opensearch_config/**/*
+  - ruby/rake-13.0.6.gem

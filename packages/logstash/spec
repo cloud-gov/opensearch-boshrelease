@@ -1,0 +1,14 @@
+---
+name: logstash
+
+dependencies:
+  - openjdk-17
+
+files:
+  - logstash/logstash-8.9.2-linux-x86_64.tar.gz
+  - logstash/logstash-filter-alter-3.0.3.zip
+  - logstash/logstash-filter-translate-3.4.2.zip
+  - logstash/logstash-input-relp-3.0.4.zip
+  - logstash/logstash-input-syslog-3.6.0.zip
+  - logstash/logstash-output-syslog-3.0.5.zip
+

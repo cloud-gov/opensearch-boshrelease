@@ -1,0 +1,195 @@
+---
+name: ingestor_syslog
+
+description: |
+  This job runs Logstash process which ingests data by standard Syslog protocol, make some processing,
+  then forward it to opensearch cluster
+
+packages:
+- logstash
+- opensearch_config
+- openjdk-17
+
+templates:
+  bin/ingestor_syslog: bin/ingestor_syslog.sh
+  bin/pre-start: bin/pre-start
+  bin/post-start.erb: bin/post-start
+  config/bpm.yml.erb: config/bpm.yml
+  config/input_and_output.conf.erb: config/input_and_output.conf
+  config/filters_pre.conf.erb: config/filters_pre.conf
+  config/filters_post.conf.erb: config/filters_post.conf
+  config/filters_override.conf.erb: config/filters_override.conf
+  config/syslog_tls.crt.erb: config/syslog_tls.crt
+  config/syslog_tls.key.erb: config/syslog_tls.key
+  config/logstash.yml.erb: config/logstash.yml
+  config/jvm.options.erb: config/jvm.options
+
+provides:
+- name: ingestor
+  type: ingestor
+  properties:
+  - logstash_ingestor.syslog.port
+  - logstash_ingestor.syslog.transport
+  - logstash_ingestor.syslog_tls.port
+  - logstash_ingestor.relp.port
+- name: syslog_forwarder
+  type: syslog_forwarder
+  properties:
+  - logstash_ingestor.syslog.port
+- name: ingestor_inputs
+  type: ingestor_inputs
+  properties:
+  - logstash_parser.inputs
+consumes:
+- name: opensearch
+  type: opensearch
+  optional: true
+
+properties:
+  logstash.heap_size:
+    description: sets jvm heap sized
+  logstash.heap_percentage:
+    description: The percentage value used in the calculation to set the heap size.
+    default: 46
+  logstash.jvm_options:
+    description: additional jvm options
+    default: []
+  logstash.metadata_level:
+    description: "Whether to include additional metadata throughout the event lifecycle. NONE = disabled, DEBUG = fully enabled"
+    default: "NONE"
+  logstash.log_level:
+    description: The default logging level (e.g. WARN, DEBUG, INFO)
+    default: info
+  logstash.plugins:
+    description: "Array of hashes describing logstash plugins to install"
+    example:
+    - {name: logstash-output-cloudwatchlogs, version: 2.0.0}
+    default: []
+  logstash.env:
+    description: "a list of arbitrary key-value pairs to be passed on as process environment variables. eg: FOO: 123"
+    default: []
+
+  logstash.queue.type:
+    description: Internal queuing model, "memory" for legacy in-memory based queuing and "persisted" for disk-based acked queueing.
+    default: persisted
+  logstash.queue.page_capacity:
+    description: The page data files size. The queue data consists of append-only data files separated into pages.
+    default: 250mb
+  logstash.queue.max_events:
+    description: The maximum number of unread events in the queue.
+    default: 0
+  logstash.queue.max_bytes:
+    description: The total capacity of the queue in number of bytes.
+    default: 1024mb
+  logstash.queue.checkpoint.acks:
+    description: The maximum number of acked events before forcing a checkpoint.
+    default: 1024
+  logstash.queue.checkpoint.writes:
+    description: The maximum number of written events before forcing a checkpoint.
+    default: 1024
+  logstash.queue.checkpoint.interval:
+    description: The interval in milliseconds when a checkpoint is forced on the head page.
+    default: 1000
+
+  logstash_ingestor.filters:
+    description: Filters to execute on the ingestors
+    default: ""
+
+  logstash_ingestor.syslog.port:
+    description: Port to listen for syslog messages
+    default: 5514
+  logstash_ingestor.syslog.transport:
+    description: Transport protocol to use
+    default: "tcp"
+  logstash_ingestor.syslog.use_keepalive:
+    description: Instruct the socket to use TCP keep alives
+
+  logstash_ingestor.health.disable_post_start:
+    description: Skip post-start health checks?
+    default: false
+  logstash_ingestor.health.interval:
+    description: Logstash syslog health check interval (seconds)
+    default: 5
+  logstash_ingestor.health.timeout:
+    description: Logstash syslog health check number of attempts (seconds)
+    default: 300
+
+  logstash_ingestor.syslog_tls.port:
+    description: Port to listen for syslog-TLS messages (omit to disable)
+  logstash_ingestor.syslog_tls.ssl_cert:
+    description: Syslog-TLS SSL certificate (file contents, not a path) - required if logstash_ingestor.syslog_tls.port set
+  logstash_ingestor.syslog_tls.ssl_key:
+    description: Syslog-TLS SSL key (file contents, not a path) - required if logstash_ingestor.syslog_tls.port set
+  logstash_ingestor.syslog_tls.skip_ssl_validation:
+    description: Verify the identity of the other end of the SSL connection against the CA.
+    default: false
+  logstash_ingestor.syslog_tls.use_keepalive:
+    description: Instruct the socket to use TCP keep alives
+
+  logstash_ingestor.relp.port:
+    description: Port to listen for RELP messages
+    default: 2514
+
+  logstash_parser.debug:
+    description: Debug level logging
+    default: false
+  logstash_parser.message_max_size:
+    description: "Maximum log message length.  Anything larger is truncated (TODO: move this to ingestor?)"
+    default: 1048576
+  logstash_parser.filters:
+    description: "The configuration to embed into the logstash filters section. Can either be a set of parsing rules as a string or a list of hashes in the form of [{name: path_to_parsing_rules.conf}]"
+    default: ''
+  logstash_parser.deployment_dictionary:
+    description: "A list of files concatenated into one deployment dictionary file. Each file contains a hash of job name-deployment name keypairs for @source.deployment lookup."
+    default: [ "/var/vcap/packages/opensearch_config/deployment_lookup.yml" ]
+  logstash_parser.inputs:
+    description: |
+      A list of input plugins, with a hash of options for each of them. Please refer to example below.
+    example:
+      inputs:
+        - plugin: rabbitmq
+          options:
+            host: 192.168.1.1
+            user: logsearch
+            password: c1oudbunny
+  logstash_parser.outputs:
+    description: |
+      A list of output plugins, with a hash of options for each of them. Please refer to example below.
+    example:
+      inputs:
+        - plugin: mongodb
+          options:
+            uri: 192.168.1.1
+            database: logsearch
+            collection: logs
+    default: [ { plugin: "opensearch", options: {} } ]
+  logstash_parser.workers:
+    description: "The number of worker threads that logstash should use (default: auto = one per CPU)"
+    default: auto
+  logstash_parser.opensearch.idle_flush_time:
+    description: "How frequently to flush events if the output queue is not full."
+  logstash_parser.opensearch.document_id:
+    description: "Use a specific, dynamic ID rather than an auto-generated identifier."
+    default: ~
+  logstash_parser.opensearch.index:
+    description: "The specific, dynamic index name to write events to."
+    default: "logstash-%{+YYYY.MM.dd}"
+  logstash_parser.opensearch.index_type:
+    description: "The specific, dynamic index type name to write events to."
+    default: "%{@type}"
+  logstash_parser.opensearch.routing:
+    description: "The routing to be used when indexing a document."
+  logstash_parser.opensearch.data_hosts:
+    description: The list of opensearch data node IPs
+  logstash_parser.timecop.reject_greater_than_hours:
+    description: "Logs with timestamps greater than this many hours in the future won't be parsed and will get tagged with fail/timecop"
+    default: 1
+  logstash_parser.timecop.reject_less_than_hours:
+    description: "Logs with timestamps less than this many hours in the past won't be parsed and will get tagged with fail/timecop"
+    default: 24
+  logstash_parser.enable_json_filter:
+    description: "Toggles the if_it_looks_like_json.conf filter rule"
+    default: false
+  logstash_parser.wait_for_templates:
+    description: "A list of index templates that need to be present in opensearch before the process starts"
+    default: ["index_template"]
