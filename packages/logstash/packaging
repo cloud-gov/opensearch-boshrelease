@@ -9,9 +9,6 @@ tar xzf logstash/logstash-8.9.2-linux-x86_64.tar.gz -C "${BOSH_INSTALL_TARGET}" 
 
 export PATH="${BOSH_INSTALL_TARGET}/bin:${PATH}"
 
-# cd /var/vcap/data/compile/logstash/logstash/
-# logstash-plugin install --no-verify
-
 # Installs missing plugins
 logstash-plugin install --no-verify "file://${PWD}/logstash/logstash-filter-alter-3.0.3.zip"
 logstash-plugin install --no-verify "file://${PWD}/logstash/logstash-filter-translate-3.4.2.zip"
