@@ -1,7 +1,0 @@
----
-name: data-prepper
-
-dependencies: []
-
-files:
-  - ingestor/data-prepper-2.5.0.tar.gz
