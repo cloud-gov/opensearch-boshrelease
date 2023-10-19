@@ -16,6 +16,10 @@ openssl pkcs8 -v1 "PBE-SHA1-3DES" \
 -out "${JOB_DIR}/config/ssl/ingestor.key" -nocrypt
 chmod 600 ${JOB_DIR}/config/ssl/ingestor.key
 
+if [ -d ${JOB_DIR}/config/ssl ]; then
+	chown -R vcap:vcap ${JOB_DIR}/config/ssl
+fi
+
 <%
   es_host = nil
   if_p("logstash_parser.opensearch.data_hosts") { |hosts| es_host = hosts.first }
