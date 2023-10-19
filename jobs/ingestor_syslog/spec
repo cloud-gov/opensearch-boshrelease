@@ -23,6 +23,9 @@ templates:
   config/syslog_tls.key.erb: config/syslog_tls.key
   config/logstash.yml.erb: config/logstash.yml
   config/jvm.options.erb: config/jvm.options
+  config/ingestor-crt.erb: config/ssl/ingestor.crt
+  config/ingestor-pem.erb: config/ssl/ingestor.pem
+  config/ca.erb: config/ssl/opensearch.ca
 
 provides:
 - name: ingestor
@@ -179,6 +182,10 @@ properties:
     default: "%{@type}"
   logstash_parser.opensearch.routing:
     description: "The routing to be used when indexing a document."
+  logstash_parser.opensearch.ssl.certificate:
+    description: Node certificate for communication between logstash_parser and Opensearch
+  logstash_parser.opensearch.ssl.private_key:
+    description: Private key for communication between logstash_parser and Opensearch
   logstash_parser.opensearch.data_hosts:
     description: The list of opensearch data node IPs
   logstash_parser.timecop.reject_greater_than_hours:

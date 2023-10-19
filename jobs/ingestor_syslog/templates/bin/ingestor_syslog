@@ -11,6 +11,13 @@ export STORE_DIR=/var/vcap/store/$JOB_NAME
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 source /var/vcap/packages/openjdk-17/bosh/runtime.env
 
+<% if_p('logstash_parser.opensearch.ssl.private_key') do %>
+  openssl pkcs8 -v1 "PBE-SHA1-3DES" \
+  -in "${JOB_DIR}/config/ssl/ingestor.pem" -topk8 \
+  -out "${JOB_DIR}/config/ssl/ingestor.key" -nocrypt
+  chmod 600 ${JOB_DIR}/config/ssl/ingestor.key
+<% end %>
+
 <%
   es_host = nil
   if_p("logstash_parser.opensearch.data_hosts") { |hosts| es_host = hosts.first }
@@ -26,7 +33,11 @@ function wait_for_template {
   set +e
   while true;  do
     echo "Waiting for index template to be uploaded: $template_name"
-    curl -I -f -i "$MASTER_URL"/_template/$template_name > /dev/null 2>&1
+    curl \
+    --key ${JOB_DIR}/ssl/ingestor.key \
+    --cert ${JOB_DIR}/ssl/ingestor.crt  \
+    --cacert ${JOB_DIR}/ssl/opensearch.ca \
+    -I -f -i "$MASTER_URL"/_template/$template_name > /dev/null 2>&1
     [ $? ] && break
     sleep 5
   done
