@@ -110,6 +110,10 @@ logstash/logstash-input-syslog-3.6.0.zip:
   size: 605224
   object_id: 8ed631eb-eb7c-47fa-631c-904061ef6412
   sha: sha256:db06d886e62a8718f33cbfd23ab8eabec80c9673fa9346995518e43989d0bbaf
+logstash/logstash-output-opensearch-2.0.2.zip:
+  size: 24204545
+  object_id: f15ae09c-ac8c-4dba-51ce-952917dedad6
+  sha: sha256:11d471575afb3cf5d6ef26fa112e7c42e38f24d0a02b0a5d9405a5c8d8bb157c
 logstash/logstash-output-syslog-3.0.5.zip:
   size: 41727
   object_id: 21474ee6-824a-4547-7f45-b236864358ab
