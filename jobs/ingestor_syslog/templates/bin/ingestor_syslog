@@ -11,15 +11,6 @@ export STORE_DIR=/var/vcap/store/$JOB_NAME
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 source /var/vcap/packages/openjdk-17/bosh/runtime.env
 
-openssl pkcs8 -v1 "PBE-SHA1-3DES" \
--in "${JOB_DIR}/config/ssl/ingestor.pem" -topk8 \
--out "${JOB_DIR}/config/ssl/ingestor.key" -nocrypt
-chmod 600 ${JOB_DIR}/config/ssl/ingestor.key
-
-if [ -d ${JOB_DIR}/config/ssl ]; then
-	chown -R vcap:vcap ${JOB_DIR}/config/ssl
-fi
-
 <%
   es_host = nil
   if_p("logstash_parser.opensearch.data_hosts") { |hosts| es_host = hosts.first }
