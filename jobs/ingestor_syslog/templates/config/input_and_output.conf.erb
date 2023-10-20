@@ -51,7 +51,7 @@ input {
 
 <%
   es_output_hosts = nil
-  if_p("logstash_parser.opensearch.data_hosts") { |hosts| es_output_hosts = hosts.map { |ip| "#{ip}:9200" }.join(',') }
+  if_p("logstash_parser.opensearch.data_hosts") { |hosts| es_output_hosts = hosts.map { |ip| "https://#{ip}:9200" }.join(',') }
   unless es_output_hosts
     es_output_hosts =  link("opensearch").address
   end
@@ -72,6 +72,7 @@ output {
                 "hosts" => [ es_output_hosts ],
                 "index" => p('logstash_parser.opensearch.index'),
                 "manage_template" => false
+                "ssl_certificate_verification" => false
               }
               if p('logstash_parser.opensearch.idle_flush_time', nil)
                 options['idle_flush_time'] = p('logstash_parser.opensearch.idle_flush_time')
