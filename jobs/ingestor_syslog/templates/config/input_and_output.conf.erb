@@ -74,7 +74,7 @@ output {
                 "manage_template" => false,
                 "ssl_certificate_verification" => true,
                 "ssl" => true,
-                "cacert" => "/var/vcap/jobs/ingestor_syslog/config/ssl/opensearch.ca"
+                "cacert" => "/var/vcap/jobs/ingestor_syslog/config/ssl/ingestor.crt"
               }
               if p('logstash_parser.opensearch.idle_flush_time', nil)
                 options['idle_flush_time'] = p('logstash_parser.opensearch.idle_flush_time')
