@@ -73,6 +73,8 @@ output {
                 "index" => p('logstash_parser.opensearch.index'),
                 "manage_template" => false,
                 "ssl_certificate_verification" => true,
+                "tls_certificate" => "/var/vcap/jobs/ingestor_syslog/config/ssl/ingestor.crt",
+                "tls_key" => "/var/vcap/jobs/ingestor_syslog/config/ssl/ingestor.pem",
                 "ssl" => true,
                 "cacert" => "/var/vcap/jobs/ingestor_syslog/config/ssl/opensearch.pem"
               }
