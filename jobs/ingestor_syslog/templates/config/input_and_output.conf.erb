@@ -71,7 +71,7 @@ output {
               options = {
                 "hosts" => [ es_output_hosts ],
                 "index" => p('logstash_parser.opensearch.index'),
-                "manage_template" => false
+                "manage_template" => false,
                 "ssl_certificate_verification" => false
               }
               if p('logstash_parser.opensearch.idle_flush_time', nil)
