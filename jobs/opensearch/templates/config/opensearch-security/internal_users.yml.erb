@@ -48,6 +48,11 @@ logstash:
   - "logstash"
   description: "Demo logstash user, using external role mapping"
 
+logstash.opensearch.internal:
+  reserved: true
+  backend_roles:
+  - "logstash"
+
 readall:
   hash: "$2a$12$ae4ycwzwvLtZxwZ82RmiEunBbIPiAmGZduBAjKN0TXdwQFtCwARz2"
   reserved: false
