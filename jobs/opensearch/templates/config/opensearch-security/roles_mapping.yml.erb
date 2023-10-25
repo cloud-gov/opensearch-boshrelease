@@ -31,6 +31,15 @@ logstash:
   - "logstash"
   - "admin"
 
+logstash.opensearch.internal:
+  reserved: true
+  hidden: false
+  users:
+  - "logstash.opensearch.internal"
+  backend_roles:
+  - "logstash"
+  - "admin"
+
 kibana_user:
   reserved: false
   backend_roles:
