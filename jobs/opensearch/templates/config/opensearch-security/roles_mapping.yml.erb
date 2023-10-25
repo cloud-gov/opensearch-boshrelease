@@ -23,7 +23,7 @@ own_index:
   description: "Allow full access to an index named like the username"
 
 logstash:
-  reserved: true
+  reserved: false
   hidden: false
   users:
   - "logstash.opensearch.internal"
@@ -33,7 +33,7 @@ logstash:
   - "all_access"
 
 logstash.opensearch.internal:
-  reserved: true
+  reserved: false
   hidden: false
   users:
   - "logstash.opensearch.internal"
