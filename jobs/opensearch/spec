@@ -26,7 +26,7 @@ templates:
   config/log4j2.properties.erb: config/log4j2.properties
   config/performance-analyzer.properties.erb: config/opensearch-performance-analyzer/performance-analyzer.properties
   config/plugin-stats-metadata: config/opensearch-performance-analyzer/plugin-stats-metadata
-  config/opensearch-security/role.yml.erb: config/opensearch-security/roles.yml
+  config/opensearch-security/roles.yml.erb: config/opensearch-security/roles.yml
   config/opensearch-security/config.yml.erb: config/opensearch-security/config.yml
   config/opensearch-security/roles_mapping.yml.erb: config/opensearch-security/roles_mapping.yml
   config/opensearch-notifications/notifications.erb : config/opensearch-notifications/notifications.yml
