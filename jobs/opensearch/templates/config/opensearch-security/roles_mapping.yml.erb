@@ -27,15 +27,14 @@ index_management_full_access:
   hidden: false
   users:
   - "logstash.opensearch.internal"
-  backend_roles:
-  - "logstash.opensearch.internal"
+
 logstash:
   reserved: false
   hidden: false
   users:
   - "logstash.opensearch.internal"
   backend_roles:
-  - "logstash.opensearch.internal"
+  - "logstash"
 
 kibana_user:
   reserved: false
@@ -59,4 +58,3 @@ kibana_server:
   - "kibanaserver"
   # Give permission for Dashboards to access Opensearch
   - "dashboard.opensearch.internal"
-  - "logstash.opensearch.internal"
