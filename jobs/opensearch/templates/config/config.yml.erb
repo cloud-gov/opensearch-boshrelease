@@ -96,3 +96,5 @@ s3.client.default.region: <%= region %>
 <% if_p('opensearch.config_options') do p("opensearch.config_options", {}).each do | k, v | %>
 <%= k %>: <%= v %><% end %>
 <% end %>
+
+plugins.security.system_indices.enabled: true

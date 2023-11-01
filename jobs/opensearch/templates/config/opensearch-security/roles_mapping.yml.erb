@@ -22,8 +22,17 @@ own_index:
   - "*"
   description: "Allow full access to an index named like the username"
 
+index_management_full_access:
+  reserved: false
+  hidden: false
+  users:
+  - "logstash.opensearch.internal"
+
 logstash:
   reserved: false
+  hidden: false
+  users:
+  - "logstash.opensearch.internal"
   backend_roles:
   - "logstash"
 
