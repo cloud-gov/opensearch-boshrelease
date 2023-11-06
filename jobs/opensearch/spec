@@ -62,6 +62,9 @@ properties:
   opensearch.cluster_name:
     description: The name of the open search cluster
     default: "opensearch"
+  opensearch.enable_proxy_auth:
+    description: "Enable proxy-based authentication for login to Opensearch"
+    default: false
   opensearch.log_level:
     description: The default logging level (e.g. WARN, DEBUG, INFO)
     default: INFO
