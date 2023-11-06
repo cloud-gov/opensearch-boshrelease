@@ -5,6 +5,13 @@ _meta:
 
 config:
   dynamic:
+    <% if_p('opensearch.enable_proxy_auth') do %>
+    http:
+      xff:
+        enabled: true
+        internalProxies: '<%= link('opensearch_dashboards').instances[0].address %>'
+        remoteIpHeader: "x-forwarded-for"
+    <% end %>
     authc:
       clientcert_auth_domain:
         description: "Authenticate via SSL client certificates"
@@ -18,3 +25,18 @@ config:
           challenge: false
         authentication_backend:
           type: noop
+      <% if_p('opensearch.enable_proxy_auth') do %>
+      proxy_auth_domain:
+        http_enabled: true
+        transport_enabled: true
+        order: 0
+        http_authenticator:
+          type: extended-proxy
+          challenge: false
+          config:
+            user_header: "x-proxy-user"
+            roles_header: "x-proxy-roles"
+            attr_header_prefix: "x-proxy-ext-"
+        authentication_backend:
+          type: noop
+      <% end %>

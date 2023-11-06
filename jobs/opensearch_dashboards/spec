@@ -45,6 +45,9 @@ properties:
   opensearch_dashboards.opensearch.ssl.verification_mode:
     description: "Verification mode to use when connecting from Opensearch Dashboards to Opensearch"
     default: "full"
+  opensearch_dashboards.opensearch.enable_proxy_auth:
+    description: "Enable proxy-based authentication for login to Opensearch Dashboards"
+    default: false
   opensearch_dashboards.defaultAppId:
     description: "The default application to load."
     default: "discover"
