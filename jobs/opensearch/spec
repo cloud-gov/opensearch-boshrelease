@@ -50,6 +50,8 @@ consumes:
 - name: opensearch
   type: opensearch
   optional: true
+- name: opensearch_dashboards
+  type: opensearch_dashboards
 
 properties:
   opensearch.username:

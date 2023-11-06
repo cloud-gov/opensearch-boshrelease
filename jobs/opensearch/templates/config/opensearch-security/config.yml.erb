@@ -5,6 +5,13 @@ _meta:
 
 config:
   dynamic:
+    <% if_p('opensearch.enable_proxy_auth') do %>
+    http:
+      xff:
+        enabled: true
+        internalProxies: '<%= link('opensearch_dashboards').instances[0].address %>'
+        remoteIpHeader: "x-forwarded-for"
+    <% end %>
     authc:
       clientcert_auth_domain:
         description: "Authenticate via SSL client certificates"
