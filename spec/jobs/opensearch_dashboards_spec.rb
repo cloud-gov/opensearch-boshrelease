@@ -234,5 +234,36 @@ describe 'opensearch_dashboards job' do
         expect(config['foo']).to eq('bar')
       end
     end
+
+    describe 'with proxy auth ' do
+      let(:manifest) do
+        {
+          'opensearch_dashboards' => {
+            'opensearch' => {
+              'enable_proxy_auth' => true
+            }
+          }
+        }
+      end
+  
+      let(:config) do
+        config = YAML.load(template.render(manifest))
+      end
+
+      it 'sets the proxy auth config' do
+        expect(config['opensearch.requestHeadersAllowlist']).to eq([
+          "securitytenant",
+          "Authorization",
+          "x-forwarded-for",
+          "x-proxy-user",
+          "x-proxy-roles",
+          "x-proxy-ext-spaceids",
+          "x-proxy-ext-orgids"
+        ])
+        expect(config['opensearch_security.auth.type']).to eq("proxy")
+        expect(config['opensearch_security.proxycache.user_header']).to eq("x-proxy-user")
+        expect(config['opensearch_security.proxycache.roles_header']).to eq("x-proxy-roles")
+      end
+    end
   end
 end
