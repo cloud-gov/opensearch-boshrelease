@@ -3,10 +3,6 @@
 export JOB_NAME=opensearch_dashboards
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 
-if ! [[ $(ls -1 /var/vcap/packages/opensearch_dashboards/plugins | wc -l) == 0 ]]; then
-  rm -rf /var/vcap/packages/opensearch_dashboards/plugins/*
-fi
-
 cd /var/vcap/packages/opensearch_dashboards
 chown -R vcap:vcap config data plugins
 
