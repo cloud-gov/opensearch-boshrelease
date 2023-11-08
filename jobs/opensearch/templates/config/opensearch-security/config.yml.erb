@@ -5,7 +5,7 @@ _meta:
 
 config:
   dynamic:
-    <% if p('opensearch.enable_proxy_auth') do %>
+    <% if p('opensearch.enable_proxy_auth') %>
     http:
       xff:
         enabled: true
@@ -25,7 +25,7 @@ config:
           challenge: false
         authentication_backend:
           type: noop
-      <% if p('opensearch.enable_proxy_auth') do %>
+      <% if p('opensearch.enable_proxy_auth') %>
       proxy_auth_domain:
         http_enabled: true
         transport_enabled: true
