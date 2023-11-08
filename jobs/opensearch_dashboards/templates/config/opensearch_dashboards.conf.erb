@@ -71,7 +71,7 @@ opensearch.requestTimeout: <%= p('opensearch_dashboards.request_timeout') %>
 # opensearch.shardTimeout: 0
 opensearch.shardTimeout: <%= p('opensearch_dashboards.shard_timeout') %>
 
-<% if_p('opensearch_dashboards.opensearch.enable_proxy_auth') do %>
+<% if p('opensearch_dashboards.opensearch.enable_proxy_auth') do %>
 opensearch.requestHeadersAllowlist: ["securitytenant","Authorization","x-forwarded-for","x-proxy-user","x-proxy-roles","x-proxy-ext-spaceids","x-proxy-ext-orgids"]
 opensearch_security.auth.type: "proxy"
 opensearch_security.proxycache.user_header: "x-proxy-user"
