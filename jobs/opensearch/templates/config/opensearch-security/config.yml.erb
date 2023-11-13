@@ -9,7 +9,7 @@ config:
     http:
       xff:
         enabled: true
-        internalProxies: '<%= link('opensearch_dashboards').instances[0].address %>'
+        internalProxies: '52\.222\.122\.*|52\.222\.123.*'
         remoteIpHeader: "x-forwarded-for"
     <% end %>
     authc:
