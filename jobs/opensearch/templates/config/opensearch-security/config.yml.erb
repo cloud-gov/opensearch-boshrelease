@@ -9,7 +9,7 @@ config:
     http:
       xff:
         enabled: true
-        internalProxies: '52\.222\.122\.*|52\.222\.123.*'
+        internalProxies: ".*"
         remoteIpHeader: "x-forwarded-for"
     <% end %>
     authc:
