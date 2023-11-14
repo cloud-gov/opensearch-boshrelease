@@ -35,15 +35,6 @@ describe 'opensearch job' do
     end
 
     describe 'with proxy auth settings' do
-      let(:link) do
-        Bosh::Template::Test::Link.new(
-          name: 'opensearch_dashboards',
-          instances: [
-            Bosh::Template::Test::LinkInstance.new(address: 'dashboard-1'),
-          ],
-        )
-      end
-
       let(:manifest) do
         {
           'opensearch' => {
@@ -53,14 +44,14 @@ describe 'opensearch job' do
       end
   
       let(:config) do
-        config = YAML.load(template.render(manifest, consumes: [link]))
+        config = YAML.load(template.render(manifest))
       end
 
       it 'configures http settings' do
         http_xff_config = config['config']['dynamic']['http']['xff']
         expect(http_xff_config).to eq({
           "enabled" => true,
-          "internalProxies" => "dashboard-1",
+          "internalProxies" => "127.0.0.1",
           "remoteIpHeader" => "x-forwarded-for",
         })
       end
