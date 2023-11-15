@@ -8,10 +8,8 @@ description: |
 templates:
   component-index-mappings.json.erb:             component-index-mappings.json
   component-index-mappings-app.json.erb:         component-index-mappings-app.json
-  component-index-mappings-platform.json.erb:    component-index-mappings-platform.json
   index-mappings.json.erb:                       index-mappings.json
   index-mappings-app.json.erb:                   index-mappings-app.json
-  index-mappings-platform.json.erb:              index-mappings-platform.json
 
 properties:
   opensearch_config.index_prefix:
