@@ -40,7 +40,18 @@ kibana_user:
   reserved: false
   backend_roles:
   - "kibanauser"
+  - "user"
   description: "Maps kibanauser to kibana_user"
+
+cf_user:
+  reserved: true
+  hidden: false
+  backend_roles:
+  - "user"
+  hosts: []
+  users: []
+  and_backend_roles: []
+  description: "CF users with privileges to their own spaces"
 
 readall:
   reserved: false
