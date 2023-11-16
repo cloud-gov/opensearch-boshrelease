@@ -9,6 +9,6 @@ source "${BOSH_PACKAGES_DIR:-/var/vcap/packages}/ruby-3.1/bosh/compile.env"
 
 gem install "ruby/rake-${RAKE_VERSION}.gem" --local
 
-opensearch_config/bin/build
+cf-logs-config/bin/build
 
-cp opensearch_config/target/* "${BOSH_INSTALL_TARGET}"
+cp cf-logs-config/target/* "${BOSH_INSTALL_TARGET}"
