@@ -362,3 +362,20 @@ security_analytics_ack_alerts:
   reserved: true
   cluster_permissions:
     - 'cluster:admin/opensearch/securityanalytics/alerts/*'
+
+cf_user:
+  reserved: false
+  hidden: false
+  cluster_permissions:
+  - "read"
+  - "cluster:monitor/nodes/stats"
+  - "cluster:monitor/task/get"
+  index_permissions:
+  - index_patterns:
+    - "logs-app-*"
+    dls: "{\"bool\": {\"should\": [{\"terms\": { \"@cf.space_id\": [${attr.proxy.spaceids}] }}, {\"terms\": {\"@cf.org_id\": [${attr.proxy.orgids}]}}]}}"
+    fls:
+    allowed_actions:
+    - "read"
+  tenant_permissions: []
+  static: false
