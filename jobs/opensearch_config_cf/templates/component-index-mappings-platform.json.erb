@@ -20,6 +20,7 @@ keyword_default = { "type": "keyword", "index": true }.to_json
           "type" : "object",
           "dynamic": true,
           "properties" : {
+            "ecs_compatibility": "disabled",
             "location" : { "type" : "geo_point" }
           }
         },
