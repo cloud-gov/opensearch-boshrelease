@@ -1,10 +1,11 @@
 ---
-name: parser-config-lfc
+name: parser-config-cf
 
 description: This job contains Logstash parsing rules for Cloud Foundry logs
 
 packages:
 - opensearch-config-logstash-filters
+
 
 templates:
   deployment_lookup.yml.erb: config/deployment_lookup.yml
@@ -29,5 +30,5 @@ properties:
   logstash_parser.custom_filters:
     description: |
       Custom logstash filters that will be appended to the logstash filters list.
-      Populates the file /var/vcap/jobs/parser-config-lfc/config/logstash-filters-custom.conf
+      Populates the file /var/vcap/jobs/parser-config-cf/config/logstash-filters-custom.conf
     default: ""

@@ -2,8 +2,7 @@
 name: opensearch_config_cf
 
 description: |
-  The job compiles opensearch mappings specific to Logsearch-for-cloudfoundry.
-  These mappings are add-ons to mappings defined in Logsearch release.
+  The job compiles opensearch component/index mappings
 
 templates:
   component-index-mappings.json.erb:             component-index-mappings.json
