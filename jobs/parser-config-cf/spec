@@ -4,8 +4,7 @@ name: parser-config-cf
 description: This job contains Logstash parsing rules for Cloud Foundry logs
 
 packages:
-- opensearch-config-logstash-filters
-
+- cf-logs-logstash-filters
 
 templates:
   deployment_lookup.yml.erb: config/deployment_lookup.yml
