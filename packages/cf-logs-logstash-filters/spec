@@ -1,5 +1,5 @@
 ---
-name: cf-logs-config-logstash-filters
+name: cf-logs-logstash-filters
 
 dependencies:
   - ruby-3.1
