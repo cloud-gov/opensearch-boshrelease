@@ -107,5 +107,6 @@ fi
     --path.data ${STORE_DIR} \
     --path.config ${JOB_DIR}/config/logstash.conf \
     --path.settings ${JOB_DIR}/config \
+    --pipeline.ecs_compatibility <%= p("logstash.ecs_compatibility") %> \
     --pipeline.workers ${LOGSTASH_WORKERS} \
     --log.format=json --log.level=<%= p("logstash.log_level") %>

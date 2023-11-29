@@ -68,6 +68,11 @@ properties:
     example:
     - {name: logstash-output-cloudwatchlogs, version: 2.0.0}
     default: []
+  
+  logstash.ecs_compatibility:
+    description: Whether to enable ECS compatibility for geoip filters. See https://www.elastic.co/guide/en/logstash/current/plugins-filters-geoip.html#plugins-filters-geoip-ecs_compatibility
+    default: "disabled"
+
   logstash.env:
     description: "a list of arbitrary key-value pairs to be passed on as process environment variables. eg: FOO: 123"
     default: []
