@@ -5,7 +5,7 @@ description: This job runs Logstash to forward Syslog data to archive
 
 packages:
 - logstash
-- opensearch_config
+- base-logstash-filters
 - openjdk-17
 
 templates:
