@@ -1,8 +1,8 @@
 processes:
-  - name: opensearch_config
+  - name: upload_opensearch_config
     hooks:
-      pre_start: /var/vcap/jobs/opensearch_config/bin/pre-start
-    executable: /var/vcap/jobs/opensearch_config/bin/job.process
+      pre_start: /var/vcap/jobs/upload_opensearch_config/bin/pre-start
+    executable: /var/vcap/jobs/upload_opensearch_config/bin/job.process
     ephemeral_disk: true
     additional_volumes:
     - path: /var/vcap/jobs/opensearch_config_cf
