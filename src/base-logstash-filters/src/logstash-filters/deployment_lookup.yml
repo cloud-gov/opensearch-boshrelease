@@ -1,9 +1,7 @@
-elasticsearch_data.*: logs-opensearch
-elasticsearch_master.*: logs-opensearch
+opensearch*: logs-opensearch
+curator.*: logs-opensearch
 firehose-to-syslog.*: logs-opensearch
 ingestor.*: logs-opensearch
-ingestor-bosh-nats.*: logs-opensearch
-kibana.*: logs-opensearch
+archiver.*: logs-opensearch
+parser.*: logs-opensearch
 maintenance.*: logs-opensearch
-monitor.*: logs-opensearch
-ls-router.*: logs-opensearch
