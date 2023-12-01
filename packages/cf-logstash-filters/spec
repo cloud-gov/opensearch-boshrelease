@@ -1,0 +1,10 @@
+---
+name: cf-logstash-filters
+
+dependencies:
+  - ruby-3.1
+files:
+  - cf-logstash-filters/*
+  - cf-logstash-filters/bin/*
+  - cf-logstash-filters/src/logstash-filters/**/*
+  - ruby/rake-13.0.6.gem
