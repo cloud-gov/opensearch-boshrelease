@@ -1,14 +1,10 @@
 ---
-name: parser-config-cf
+name: deployment_lookup_config
 
-description: This job contains Logstash parsing rules for Cloud Foundry logs
-
-packages:
-- cf-logstash-filters
+description: This job contains a deployment lookup dictionary for Cloud Foundry deployments
 
 templates:
   deployment_lookup.yml.erb: config/deployment_lookup.yml
-  logstash-filters-custom.conf.erb: config/logstash-filters-custom.conf
 
 properties:
   logstash_parser.deployment_name.cf:
@@ -26,8 +22,3 @@ properties:
   logstash_parser.deployment_name.rabbitmq:
     description: "Name of RabbiMQ deployment (if there is one). RabbiMQ jobs are mapped to this value in deployment_lookup.yml dictionary file."
     default: p-rabbitmq
-  logstash_parser.custom_filters:
-    description: |
-      Custom logstash filters that will be appended to the logstash filters list.
-      Populates the file /var/vcap/jobs/parser-config-cf/config/logstash-filters-custom.conf
-    default: ""
