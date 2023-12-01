@@ -1,5 +1,0 @@
-check process opensearch_config
-  with pidfile /var/vcap/sys/run/bpm/opensearch_config/opensearch_config.pid
-  start program "/var/vcap/jobs/bpm/bin/bpm start opensearch_config" with timeout 300 seconds
-  stop program "/var/vcap/jobs/bpm/bin/bpm stop opensearch_config"
-  group vcap

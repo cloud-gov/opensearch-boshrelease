@@ -3,7 +3,7 @@
 set -e
 set -u
 
-/var/vcap/jobs/opensearch_config/bin/upload-config
+/var/vcap/jobs/upload_opensearch_config/bin/upload-config
 
 # Fake loop
 while true; do

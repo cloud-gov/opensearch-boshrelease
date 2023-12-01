@@ -1,16 +1,16 @@
 ---
-name: opensearch_config_cf
+name: opensearch_templates
 
 description: |
-  The job compiles opensearch component/index mappings
+  The job compiles OpenSearch component/index templates
 
 templates:
-  component-index-mappings.json.erb:             component-index-mappings.json
+  component-index-mappings-base.json.erb:        component-index-mappings-base.json
   component-index-mappings-app.json.erb:         component-index-mappings-app.json
   component-index-mappings-platform.json.erb:    component-index-mappings-platform.json
-  index-mappings.json.erb:                       index-mappings.json
-  index-mappings-app.json.erb:                   index-mappings-app.json
-  index-mappings-platform.json.erb:              index-mappings-platform.json
+  index-template-base.json.erb:                  index-template.json
+  index-template-app.json.erb:                   index-template-app.json
+  index-template-platform.json.erb:              index-template-platform.json
 
 properties:
   opensearch_config.index_prefix:
@@ -26,19 +26,17 @@ properties:
       Name prefix of your `platform` log indices. If you don't split `app` and `platform` indices, then just set it with the value of `opensearch_config.index_prefix`.
     default: "logs-platform"
   opensearch_config.base_index_component_name:
-    description: Name component-index-mappings.json is uploaded as.
+    description: Name that component template component-index-mappings-base.json is uploaded as by upload_opensearch_config
   opensearch_config.app_index_component_name:
-    description: Name component-index-mappings-app.json is uploaded as.
+    description: Name that component-index-mappings-app.json is uploaded as by upload_opensearch_config
   opensearch_config.platform_index_component_name:
-    description: Name component-index-mappings-platform.json is uploaded as.
+    description: Name that component-index-mappings-platform.json is uploaded as by upload_opensearch_config
   opensearch_config.index_mappings_component_name:
-    description: Name index-mappings component from logsearch-boshrelease is uploaded as
+    description: Name index-settings component template is uploaded as by upload_opensearch_config
   opensearch_config.index_settings_component_name:
-    description: Name index-settings component from logsearch-boshrelease is uploaded as
+    description: Name index-settings component template is uploaded as by upload_opensearch_config
   opensearch_config.shards_and_replicas_component_name:
-    description: Name shards-and-replicas component from logsearch-boshrelease is uploaded as
-
-
+    description: Name shards-and-replicas component template is uploaded as by upload_opensearch_config
   opensearch_config.index_settings:
     description: Index settings for logs
   opensearch_config.app_index_settings:
