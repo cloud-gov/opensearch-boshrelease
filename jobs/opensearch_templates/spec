@@ -1,5 +1,5 @@
 ---
-name: opensearch_config_cf
+name: opensearch_templates
 
 description: |
   The job compiles opensearch component/index mappings
