@@ -4,3 +4,6 @@
 [submodule "src/github.com/cloudfoundry-community/logsearch-smoke-tests"]
 	path = src/github.com/cloudfoundry-community/logsearch-smoke-tests
 	url = https://github.com/cloudfoundry-community/logsearch-smoke-tests.git
+[submodule "src/logsearch-smoke-tests"]
+	path = src/logsearch-smoke-tests
+	url = https://github.com/cloudfoundry-community/logsearch-smoke-tests.git

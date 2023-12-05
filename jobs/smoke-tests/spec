@@ -1,0 +1,48 @@
+---
+name: smoke-tests
+
+description: |
+  This job runs Smoke tests by pushing an application into Cloud Foundry.
+  Then these logs must be retrieved from OpenSearch cluster
+
+packages:
+  - cf-cli-7-linux
+  - golang-1.21-linux
+  - smoke-tests
+
+templates:
+  run.erb: bin/run
+  config.json.erb: bin/config.json
+
+consumes:
+- name: cloud_controller
+  type: cloud_controller
+  optional: true
+- name: opensearch
+  type: opensearch
+  optional: true
+
+properties:
+  smoke_tests.api:
+    description: The Elastic Runtime API endpoint URL
+  smoke_tests.apps_domain:
+    description: The Elastic Runtime Application Domain
+    default: ""
+  smoke_tests.system_domain:
+    description: Full URL of Cloud Foundry System Domain
+  smoke_tests.admin_user:
+    description: The Elastic Runtime API admin user
+    default: admin
+  smoke_tests.admin_password:
+    description: The Elastic Runtime API admin user's password
+  smoke_tests.test_password:
+    description: Configurable Password for the test user
+  smoke_tests.opensearch_master.host:
+    description: IP of the opensearch master node
+    default: 127.0.0.1
+  smoke_tests.opensearch_master.port:
+    description: Port of the opensearch master node
+    default: 9200
+  smoke_tests.opensearch_master.app_index:
+    description: App index name
+    default: 'logs-app-{{.Org}}-{{.Space}}-{{.Time.Format \"2006.01.02\"}}'
