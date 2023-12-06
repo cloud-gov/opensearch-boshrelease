@@ -2,7 +2,9 @@
 # this package installs all the requirements of the requests package
 # into a python virtual environment.
 #
-# To update this run `python3 -m pip download requests` then bosh add-blob each of the wheels
+# To update this run:
+#   python3 -m pip download requests
+#   ls | grep whl | xargs -I {} bosh add-blob {} requests/{}
 
 name: python3-requests
 
