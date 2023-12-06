@@ -128,18 +128,23 @@ opensearch-dashboards-2.9.0-linux-x64.tar.gz:
   sha: sha256:f8328b9c1156d254faa561c03cbc51159f5e335812c7b27a98bbe0556b9f030c
 requests/certifi-2023.11.17-py3-none-any.whl:
   size: 162530
+  object_id: 3697a500-d95e-4cb1-49fa-1ae714231203
   sha: sha256:e036ab49d5b79556f99cfc2d9320b34cfbe5be05c5871b51de9329f0603b0474
 requests/charset_normalizer-3.3.2-cp310-cp310-macosx_10_9_x86_64.whl:
   size: 122521
+  object_id: 9289fc17-896f-4b6d-7520-3b4fe909c9fb
   sha: sha256:06435b539f889b1f6f4ac1758871aae42dc3a8c0e24ac9e60c2384973ad73027
 requests/idna-3.6-py3-none-any.whl:
   size: 61567
+  object_id: 4c2add5f-dfab-45a7-7114-8937916f7cb5
   sha: sha256:c05567e9c24a6b9faaa835c4821bad0590fbb9d5779e7caa6e1cc4978e7eb24f
 requests/requests-2.31.0-py3-none-any.whl:
   size: 62574
+  object_id: e538e7aa-5a30-45f5-488d-2af2b0b4f174
   sha: sha256:58cd2187c01e70e6e26505bca751777aa9f2ee0b7f4300988b709f44e013003f
 requests/urllib3-2.1.0-py3-none-any.whl:
   size: 104579
+  object_id: 108c07f9-1d3c-4e0d-5d33-85a0cc1970d5
   sha: sha256:55901e917a5896a349ff771be919f8bd99aff50b79fe58fec595eb37bbc56bb3
 ruby/rake-13.0.6.gem:
   size: 84992
