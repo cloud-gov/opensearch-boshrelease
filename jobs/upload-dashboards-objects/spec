@@ -8,7 +8,7 @@ description: |
 packages:
 - ruby-3.1
 - python3
-- python3-requests-package
+- python3-requests
 
 consumes:
 

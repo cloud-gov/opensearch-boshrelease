@@ -1,0 +1,13 @@
+---
+# this package installs all the requirements of the requests package
+# into a python virtual environment.
+#
+# To update this run `python3 -m pip download requests` then bosh add-blob each of the wheels
+
+name: python3-requests
+
+dependencies:
+- python3
+
+files:
+- requests/*
