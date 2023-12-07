@@ -228,7 +228,7 @@ end
 %>
 {
   "attributes": {
-    "title": "<%= p('elasticsearch_config.index_prefix') %>*",
+    "title": "<%= p('opensearch_config.index_prefix') %>*",
     "timeFieldName": "@timestamp",
     "fields": "<%= fields_json.to_json.gsub(/"/) { '\"' } %>"
   }

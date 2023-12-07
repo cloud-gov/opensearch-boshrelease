@@ -20,7 +20,7 @@
     "kibanaSavedObjectMeta": {
       "searchSourceJSON": "<%= JSON.parse(
       {
-        "index": "#{p('elasticsearch_config.app_index_prefix')}*",
+        "index": "#{p('opensearch_config.app_index_prefix')}*",
         "query": {
           "query_string": {
             "query": "rtr.response_time_ms:>2000",
@@ -49,7 +49,7 @@
             },
             "meta": {
               "disabled": false,
-              "index": "#{p('elasticsearch_config.app_index_prefix')}*",
+              "index": "#{p('opensearch_config.app_index_prefix')}*",
               "key": "@source.type",
               "negate": false,
               "value": "RTR"

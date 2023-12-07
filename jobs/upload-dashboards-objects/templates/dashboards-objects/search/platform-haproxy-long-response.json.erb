@@ -18,7 +18,7 @@
     "kibanaSavedObjectMeta": {
       "searchSourceJSON": "<%= JSON.parse(
       {
-        "index": "#{p('elasticsearch_config.platform_index_prefix')}*",
+        "index": "#{p('opensearch_config.platform_index_prefix')}*",
         "filter": [
           {
             "$state": {
@@ -26,7 +26,7 @@
             },
             "meta": {
               "disabled": false,
-              "index": "#{p('elasticsearch_config.platform_index_prefix')}*",
+              "index": "#{p('opensearch_config.platform_index_prefix')}*",
               "key": "@source.component",
               "negate": false,
               "value": "haproxy"

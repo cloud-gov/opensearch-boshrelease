@@ -19,7 +19,7 @@
     "kibanaSavedObjectMeta": {
       "searchSourceJSON": "<%= JSON.parse(
       {
-        "index": "#{p('elasticsearch_config.app_index_prefix')}*",
+        "index": "#{p('opensearch_config.app_index_prefix')}*",
         "query": {
           "query_string": {
             "analyze_wildcard": true,
@@ -33,7 +33,7 @@
             },
             "meta": {
               "disabled": false,
-              "index": "#{p('elasticsearch_config.app_index_prefix')}*",
+              "index": "#{p('opensearch_config.app_index_prefix')}*",
               "key": "@source.type",
               "negate": false,
               "value": "COUNT"

@@ -17,12 +17,12 @@
     "kibanaSavedObjectMeta": {
       "searchSourceJSON": "<%= JSON.parse(
       {
-        "index": "#{p('elasticsearch_config.platform_index_prefix')}*",
+        "index": "#{p('opensearch_config.platform_index_prefix')}*",
         "filter": [
           {
             "meta": {
               "negate": false,
-              "index": "#{p('elasticsearch_config.platform_index_prefix')}*",
+              "index": "#{p('opensearch_config.platform_index_prefix')}*",
               "key": "@level",
               "value": "ERROR",
               "disabled": false
