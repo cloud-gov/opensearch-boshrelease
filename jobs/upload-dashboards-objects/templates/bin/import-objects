@@ -22,8 +22,9 @@ logging.basicConfig(level=logging.INFO)
 
 if __name__ == "__main__":
     session = requests.Session()
+    logs_url = 'https://localhost:5601'
 
-    logs = session.get('https://<%= logs_hostname %>.<%= system_domain %>'<% if p("cloudfoundry.skip_ssl_validation") %>, verify=False<% end %>)
+    logs = session.get(logs_url<% if p("cloudfoundry.skip_ssl_validation") %>, verify=False<% end %>)
     assert logs.url == 'https://login.<%= system_domain %>/login', logs.url
     assert logs.status_code == 200, logs.status_code
 
@@ -35,21 +36,29 @@ if __name__ == "__main__":
             'X-Uaa-Csrf': logs.cookies['X-Uaa-Csrf'],
         },
     )
-    assert login.url == 'https://<%= logs_hostname %>.<%= system_domain %>/app/home', login.url
+    assert login.url == f'{logs_url}/app/home', login.url
     assert login.status_code == 200, login.status_code
 
     for filename in glob.iglob('/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/**/*.json', recursive=True):
         headers = {'content-type': 'application/json', 'kbn-xsrf': 'true'}
         r = session.post(
-                'https://<%= logs_hostname %>.<%= system_domain %>/api/saved_objects/{}/{}'.format(os.path.basename(os.path.dirname(filename)), os.path.basename(os.path.splitext(filename)[0])),
-                data=open(filename, 'rb'),
-                headers=headers
+          '{}/api/saved_objects/{}/{}'.format(
+            logs_url,
+            os.path.basename(os.path.dirname(filename)),
+            os.path.basename(os.path.splitext(filename)[0])
+          ),
+          data=open(filename, 'rb'),
+          headers=headers
         )
         if r.status_code == 409:
             put = session.put(
-                    'https://<%= logs_hostname %>.<%= system_domain %>/api/saved_objects/{}/{}'.format(os.path.basename(os.path.dirname(filename)), os.path.basename(os.path.splitext(filename)[0])),
-                    data=open(filename, 'rb'),
-                    headers=headers
+              '{}/api/saved_objects/{}/{}'.format(
+                logs_url,
+                os.path.basename(os.path.dirname(filename)),
+                os.path.basename(os.path.splitext(filename)[0])
+              ),
+              data=open(filename, 'rb'),
+              headers=headers
             )
             if put.status_code == 200:
                 logging.info('Object %s Uploaded Successfully', filename)
@@ -61,7 +70,7 @@ if __name__ == "__main__":
             logging.info('Object %s Failed to Upload', filename)
 
     r = session.post(
-      'https://<%= logs_hostname %>.<%= system_domain %>/api/kibana/settings',
+      '{}/api/opensearch-dashboards/settings'.format(logs_url),
       data='{"changes":{"defaultIndex":"<%= p('dashboards_objects.default_index') %>"}}',
       headers=headers
     )
