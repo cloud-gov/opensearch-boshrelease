@@ -115,14 +115,8 @@ properties:
     description: the host-portion of the login FQDN, without the domain name
     default: login
 
-  cloudfoundry.firehose_events:
-    description: "Array of events you would like to get. Valid options are CounterEvent,Error,HttpStartStop,LogMessage,ValueMetric,ContainerMetric"
-    default: ["LogMessage"]
   cloudfoundry.system_domain:
     description: The Cloud Foundry System Domain
-  cloudfoundry.logs_hostname:
-    description: logs deployment hostname
-    default: logs
   cloudfoundry.skip_ssl_validation:
     description: "Set to true to skip SSL validation (defaults to false)"
     default: false
@@ -131,15 +125,15 @@ properties:
   cloudfoundry.password:
     description: The Cloud Foundry API user's password.
 
-  elasticsearch_config.index_prefix:
+  opensearch_config.index_prefix:
     description: |
       Name prefix of your log indices that you use in `logstash_parser.elasticsearch.index` property set for your parser.
     default: "logs-"
-  elasticsearch_config.app_index_prefix:
+  opensearch_config.app_index_prefix:
     description: |
-      Name prefix of your `app` log indices. If you don't split `app` and `platform` indices, then just set it with the value of `elasticsearch_config.index_prefix`.
+      Name prefix of your `app` log indices. If you don't split `app` and `platform` indices, then just set it with the value of `opensearch_config.index_prefix`.
     default: "logs-app"
-  elasticsearch_config.platform_index_prefix:
+  opensearch_config.platform_index_prefix:
     description: |
-      Name prefix of your `platform` log indices. If you don't split `app` and `platform` indices, then just set it with the value of `elasticsearch_config.index_prefix`.
+      Name prefix of your `platform` log indices. If you don't split `app` and `platform` indices, then just set it with the value of `opensearch_config.index_prefix`.
     default: "logs-platform"
