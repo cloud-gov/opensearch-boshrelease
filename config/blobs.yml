@@ -128,20 +128,24 @@ opensearch-dashboards-2.9.0-linux-x64.tar.gz:
   sha: sha256:f8328b9c1156d254faa561c03cbc51159f5e335812c7b27a98bbe0556b9f030c
 requests/certifi-2023.11.17-py3-none-any.whl:
   size: 162530
-  object_id: ff33d182-7da4-4292-6a0b-1e14e9f12bbd
+  object_id: c25e57d8-51af-494b-6412-98fa154aed61
   sha: sha256:e036ab49d5b79556f99cfc2d9320b34cfbe5be05c5871b51de9329f0603b0474
 requests/charset_normalizer-3.3.2-py3-none-any.whl:
   size: 48543
-  object_id: d1bc1957-dc43-4ba8-6b29-c333a623bb1c
+  object_id: 0579ada2-f20b-4f30-4621-a2070fca5d48
   sha: sha256:3e4d1f6587322d2788836a99c69062fbb091331ec940e02d12d179c1d53e25fc
 requests/idna-3.6-py3-none-any.whl:
   size: 61567
-  object_id: 3bfdb364-66bf-43ad-76fd-5ece6e817b2a
+  object_id: 974f8a5d-781c-48ac-43e2-9c80ed33b73f
   sha: sha256:c05567e9c24a6b9faaa835c4821bad0590fbb9d5779e7caa6e1cc4978e7eb24f
 requests/requests-2.31.0-py3-none-any.whl:
   size: 62574
-  object_id: 1023dc8e-e06c-4759-789c-b0b4ad4d37cb
+  object_id: d1d4dc56-e68d-4468-7d75-cec8daa0dc77
   sha: sha256:58cd2187c01e70e6e26505bca751777aa9f2ee0b7f4300988b709f44e013003f
+requests/urllib3-2.0.7-py3-none-any.whl:
+  size: 124213
+  object_id: e24fa2ae-c610-4949-6aec-c404ab60aaee
+  sha: sha256:fdb6d215c776278489906c2f8916e6e7d4f5a9b602ccbcfdf7f016fc8da0596e
 requests/urllib3-2.1.0-py3-none-any.whl:
   size: 104579
   object_id: 2e1a1c4d-53ee-4e69-4814-940f927a5447
