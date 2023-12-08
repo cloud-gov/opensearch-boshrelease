@@ -102,9 +102,6 @@ properties:
     - {type: search, pattern: /var/vcap/jobs/upload-dashboards-objects/dashboards-objects/search/*.json}
     - {type: visualization, pattern: /var/vcap/jobs/upload-dashboards-objects/dashboards-objects/visualization/*.json}
     - {type: dashboard, pattern: /var/vcap/jobs/upload-dashboards-objects/dashboards-objects/dashboard/*.json}
-  dashboards_objects.upload_data_files:
-    description: "List of text files to put in API endpoint /_bulk"
-    default: []
   dashboards_objects.default_index:
     description: "Default index to set in OpenSearch Dashboards"
     default: "logs-app*"
