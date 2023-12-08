@@ -3,7 +3,7 @@
 # into a python virtual environment.
 #
 # To update this run:
-#   python3 -m pip download requests
+#   python3 -m pip download requests --platform linux_x86_64
 #   ls | grep whl | xargs -I {} bosh add-blob {} requests/{}
 
 name: python3-requests
