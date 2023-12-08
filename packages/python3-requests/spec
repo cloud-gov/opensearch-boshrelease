@@ -3,7 +3,7 @@
 # into a python virtual environment.
 #
 # To update this run:
-#   python3 -m pip download requests --platform linux_x86_64 --only-binary=:all: --python-version 3.7.11
+#   python3 -m pip download requests --platform linux_x86_64 --only-binary=:all: --python-version 3.12.0
 #   ls | grep whl | xargs -I {} bosh add-blob {} requests/{}
 #
 # Use the version of Python specified in the python3 package. See https://github.com/cloud-gov/cg-python3-boshrelease
