@@ -22,8 +22,8 @@ consumes:
   type: opensearch
 
 provides:
-- name: snort_connection
-  type: conn
+- name: curator
+  type: curator
 
 properties:
   opensearch.snapshots.repository:
