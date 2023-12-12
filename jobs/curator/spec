@@ -22,7 +22,7 @@ consumes:
   type: opensearch
 
 provides:
-- name: snort-connection
+- name: snort_connection
   type: conn
   optional: true
 
