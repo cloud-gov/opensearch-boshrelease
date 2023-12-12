@@ -24,7 +24,6 @@ consumes:
 provides:
 - name: snort_connection
   type: conn
-  optional: true
 
 properties:
   opensearch.snapshots.repository:
