@@ -21,6 +21,11 @@ consumes:
 - name: opensearch
   type: opensearch
 
+provides:
+- name: snort-connection
+  type: conn
+  optional: true
+
 properties:
   opensearch.snapshots.repository:
     description: Repository name for automatic snapshots
