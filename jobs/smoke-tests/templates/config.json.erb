@@ -1,6 +1,6 @@
 <%
-elasticsearch_host = p("smoke_tests.opensearch_master.host")
-elasticsearch_port = p("smoke_tests.opensearch_master.port")
+opensearch_host = p("smoke_tests.opensearch_master.host")
+opensearch_port = p("smoke_tests.opensearch_master.port")
 
   system_domain = nil
   if_p('smoke_tests.system_domain') do |prop|
@@ -20,7 +20,7 @@ elasticsearch_port = p("smoke_tests.opensearch_master.port")
   "test_password":                    "<%= v %>",
   <% end -%>
   "system_domain":                    "<%= system_domain %>",
-  "elasticsearch_master_ip":          "<%= elasticsearch_host %>",
-  "elasticsearch_master_port":        "<%= elasticsearch_port %>",
-  "elasticsearch_app_index":          "<%= p('smoke_tests.elasticsearch_master.app_index') %>"
+  "elasticsearch_master_ip":          "<%= opensearch_host %>",
+  "elasticsearch_master_port":        "<%= opensearch_port %>",
+  "elasticsearch_app_index":          "<%= p('smoke_tests.opensearch_manager.app_index') %>"
 }
