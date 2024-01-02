@@ -21,6 +21,10 @@ consumes:
 - name: opensearch
   type: opensearch
 
+provides:
+- name: curator
+  type: curator
+
 properties:
   opensearch.snapshots.repository:
     description: Repository name for automatic snapshots
