@@ -2,4 +2,4 @@
 name: smoke-tests
 
 files:
-  - logsearch-smoke-tests/**/*
+  - - github.com/cloudfoundry-community/logsearch-smoke-tests/**/*
