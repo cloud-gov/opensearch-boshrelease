@@ -21,7 +21,7 @@ test (){
 set -e
 set -x
 export CGO_ENABLED=0
-go install -v github.com/cloudfoundry-community/logsearch-smoke-tests/vendor/github.com/onsi/ginkgo/ginkgo@latest
+go install -v github.com/onsi/ginkgo/ginkgo@latest
 
 CGO_ENABLED=0 CF_COLOR=false CF_VERBOSE_OUTPUT=true ginkgo smoke -r -v -noColor=true -keepGoing=true -trace=true -slowSpecThreshold=300
 }
