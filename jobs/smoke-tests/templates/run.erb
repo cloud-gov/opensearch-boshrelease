@@ -13,6 +13,7 @@ export CONFIG=/var/vcap/jobs/smoke-tests/bin/config.json
 
 cd /var/vcap/packages/smoke-tests/src/github.com/cloudfoundry-community/logsearch-smoke-tests
 go mod init
+go mod vendor
 echo "Running smoke tests..."
 
 EXITSTATUS=0
