@@ -12,7 +12,7 @@ export CF_COLOR=false
 export CONFIG=/var/vcap/jobs/smoke-tests/bin/config.json
 
 cd /var/vcap/packages/smoke-tests/src/github.com/cloudfoundry-community/logsearch-smoke-tests
-
+go mod init
 echo "Running smoke tests..."
 
 EXITSTATUS=0
