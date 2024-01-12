@@ -1,3 +1,7 @@
 [submodule "src/github.com/cloudfoundry-community/firehose-to-syslog"]
 	path = src/github.com/cloudfoundry-community/firehose-to-syslog
 	url = https://github.com/cloudfoundry-community/firehose-to-syslog.git
+[submodule "src/github.com/cloudfoundry-community/opensearch-smoke-tests"]
+	path = src/github.com/cloudfoundry-community/opensearch-smoke-tests
+	url = https://github.com/cloud-gov/opensearch-smoke-tests.git
+	branch = opensearch
