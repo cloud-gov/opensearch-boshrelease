@@ -43,6 +43,12 @@ properties:
   smoke_tests.opensearch_master.port:
     description: Port of the opensearch master node
     default: 9200
+  smoke_tests.opensearch_master.opensearch_ca:
+    description: opensearch ca
+  smoke_tests.opensearch_master.opensearch_cert:
+    description: opensearch cert
+  smoke_tests.opensearch_master.opensearch_key:
+    description: opensearch key
   smoke_tests.opensearch_manager.app_index:
     description: App index name
     default: 'logs-app-{{.Org}}-{{.Space}}-{{.Time.Format \"2006.01.02\"}}'

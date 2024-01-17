@@ -22,5 +22,8 @@ opensearch_port = p("smoke_tests.opensearch_master.port")
   "system_domain":                    "<%= system_domain %>",
   "elasticsearch_master_ip":          "<%= opensearch_host %>",
   "elasticsearch_master_port":        "<%= opensearch_port %>",
-  "elasticsearch_app_index":          "<%= p('smoke_tests.opensearch_manager.app_index') %>"
+  "elasticsearch_app_index":          "<%= p('smoke_tests.opensearch_manager.app_index') %>",
+  "opensearch_ca":                 "<%= p('smoke_tests.opensearch_master.opensearch_ca') %>",
+  "opensearch_cert":               "<%= p('smoke_tests.opensearch_master.opensearch_cert') %>",
+  "opensearch_key":                "<%= p('smoke_tests.opensearch_master.opensearch_key') %>"
 }
