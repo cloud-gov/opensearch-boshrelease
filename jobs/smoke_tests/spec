@@ -21,6 +21,10 @@ consumes:
   optional: true
 
 properties:
+  smoke_tests.opensearch.ssl.private_key:
+    description: opensearch private key
+  smoke_tests.opensearch.ssl.certificate:
+    description: opensearch certifcate
   smoke_tests.syslog_ingestor.host:
     description: 'IP of the syslog ingestor'
   smoke_tests.syslog_ingestor.port:
