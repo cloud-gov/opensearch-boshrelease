@@ -1,54 +1,43 @@
 ---
-name: smoke-tests
+name: smoke_tests
 
-description: |
-  This job runs Smoke tests by pushing an application into Cloud Foundry.
-  Then these logs must be retrieved from OpenSearch cluster
+description: This job runs Smoke tests to make sure the cluster is configured properly
 
-packages:
-  - cf-cli-7-linux
-  - golang-1.21-linux
-  - smoke-tests
+packages: []
 
 templates:
-  run.erb: bin/run
-  config.json.erb: bin/config.json
+  run.sh: bin/run
 
 consumes:
-- name: cloud_controller
-  type: cloud_controller
-  optional: true
 - name: opensearch
   type: opensearch
   optional: true
+- name: ingestor
+  type: ingestor
+  optional: true
 
 properties:
-  smoke_tests.api:
-    description: The Elastic Runtime API endpoint URL
-  smoke_tests.apps_domain:
-    description: The Elastic Runtime Application Domain
-    default: ""
-  smoke_tests.system_domain:
-    description: Full URL of Cloud Foundry System Domain
-  smoke_tests.admin_user:
-    description: The Elastic Runtime API admin user
-    default: admin
-  smoke_tests.admin_password:
-    description: The Elastic Runtime API admin user's password
-  smoke_tests.test_password:
-    description: Configurable Password for the test user
-  smoke_tests.opensearch_master.host:
-    description: IP of the opensearch master node
-    default: 127.0.0.1
-  smoke_tests.opensearch_master.port:
-    description: Port of the opensearch master node
+  smoke_tests.syslog_ingestor.host:
+    description: 'IP of the syslog ingestor'
+  smoke_tests.syslog_ingestor.port:
+    description: 'Port of the syslog ingestor'
+    default: 5514
+  smoke_tests.opensearch_manager.host:
+    description: 'IP of the opensearch master node'
+  smoke_tests.opensearch_manager.port:
+    description: 'Port of the opensearch master node'
     default: 9200
-  smoke_tests.opensearch_master.opensearch_ca:
-    description: opensearch ca
-  smoke_tests.opensearch_master.opensearch_cert:
-    description: opensearch cert
-  smoke_tests.opensearch_master.opensearch_key:
-    description: opensearch key
-  smoke_tests.opensearch_manager.app_index:
-    description: App index name
-    default: 'logs-app-{{.Org}}-{{.Space}}-{{.Time.Format \"2006.01.02\"}}'
+  smoke_tests.use_tls:
+    description: Set it to true if the ingestor or the ls-router expects TCP-TLS traffic
+    default: false
+  smoke_tests.count_test.run:
+    description: Whether to run the count test
+    default: false
+  smoke_tests.count_test.index_pattern:
+    description: Index pattern to run the count test against (e.g. logs-* )
+  smoke_tests.count_test.time_field:
+    description: Name of the time field in your index
+  smoke_tests.count_test.minimum:
+    description: Minimum expected documents in the given time window
+  smoke_tests.count_test.time_interval:
+    description: 'How far back to look in time for the count. e.g. "15m", "1h", "2d" see https://www.open.co/guide/en/opensearch/reference/current/common-options.html#date-math for more'
