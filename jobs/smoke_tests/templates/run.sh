@@ -1,7 +1,14 @@
 #!/bin/bash
 
 set -x
-
+JOB_NAME=smoke_tests
+export JOB_DIR=/var/vcap/jobs/$JOB_NAME
+<% if_link('opensearch') do |smoke_tests_syslog| %>
+openssl pkcs8 -v1 "PBE-SHA1-3DES" \
+-in "${JOB_DIR}/config/ssl/smoketest.pem" -topk8 \
+-out "${JOB_DIR}/config/ssl/smoketest.key" -nocrypt
+chmod 600 ${JOB_DIR}/config/ssl/smoketest.key
+<% end %>
 <%
   ingestor_host = nil
   if_link("ingestor") { |ingestor_link| ingestor_host = ingestor_link.instances.first.address }
@@ -54,7 +61,10 @@ query_body='{ "query": {
     }
   }
 }'
-result=$(curl -s $url -H "content-type: application/json" -d "$query_body" | grep count | cut -d: -f2 | sed 's/,//' )
+result=$(curl  --key ${JOB_DIR}/ssl/smoketest.key \
+    --cert ${JOB_DIR}/ssl/smoketest.crt  \
+    --cacert ${JOB_DIR}/ssl/opensearch.ca \
+    $url -H "content-type: application/json" -d "$query_body" | grep count | cut -d: -f2 | sed 's/,//' )
 
 if [[ ${result} -lt ${MIN} ]]; then
   echo "ERROR: expected at least ${MIN} documents, only got ${result}"
