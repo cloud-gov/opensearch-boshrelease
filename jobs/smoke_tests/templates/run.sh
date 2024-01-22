@@ -61,9 +61,9 @@ query_body='{ "query": {
     }
   }
 }'
-result=$(curl  --key ${JOB_DIR}/ssl/smoketest.key \
-    --cert ${JOB_DIR}/ssl/smoketest.crt  \
-    --cacert ${JOB_DIR}/ssl/opensearch.ca \
+result=$(curl  --key ${JOB_DIR}/config/ssl/smoketest.key \
+    --cert ${JOB_DIR}/config/ssl/smoketest.crt  \
+    --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
     $url -H "content-type: application/json" -d "$query_body" | grep count | cut -d: -f2 | sed 's/,//' )
 
 if [[ ${result} -lt ${MIN} ]]; then

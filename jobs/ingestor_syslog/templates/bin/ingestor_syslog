@@ -27,9 +27,9 @@ function wait_for_template {
   while true;  do
     echo "Waiting for index template to be uploaded: $template_name"
     curl \
-    --key ${JOB_DIR}/config/ssl/ingestor.key \
-    --cert ${JOB_DIR}/config/ssl/ingestor.crt  \
-    --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
+    --key ${JOB_DIR}/ssl/ingestor.key \
+    --cert ${JOB_DIR}/ssl/ingestor.crt  \
+    --cacert ${JOB_DIR}/ssl/opensearch.ca \
     -I -f -i "$MASTER_URL"/_template/$template_name > /dev/null 2>&1
     [ $? ] && break
     sleep 5
