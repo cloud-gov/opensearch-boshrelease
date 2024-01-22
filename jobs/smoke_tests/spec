@@ -9,7 +9,7 @@ templates:
   run.sh: bin/run
   config/smoketest-crt.erb: config/ssl/smoketest.crt
   config/smoketest-pem.erb: config/ssl/smoketest.pem
-  config/ca.erb: config/ssl/opensearch.pem
+  config/ca.erb: config/ssl/opensearch.ca
 
 
 consumes:
