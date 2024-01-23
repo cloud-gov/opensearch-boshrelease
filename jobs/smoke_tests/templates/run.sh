@@ -73,7 +73,10 @@ SLEEP=5
 
 echo -n "Polling for $TRIES seconds"
 while [ $TRIES -gt 0 ]; do
-  result=$(curl -s $MASTER_URL/_search?q=$SMOKE_ID)
+  result=$(curl --key ${JOB_DIR}/config/ssl/smoketest.key \
+    --cert ${JOB_DIR}/config/ssl/smoketest.crt  \
+    --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
+    -s $MASTER_URL/_search?q=$SMOKE_ID)
   if [[ $result == *"$SMOKE_ID"* ]]; then
     echo -e "\nSUCCESS: Found log containing $SMOKE_ID"
     echo $result
