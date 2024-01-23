@@ -35,7 +35,7 @@ chmod 600 ${JOB_DIR}/config/ssl/smoketest.key
   end
 %>
 
-MASTER_URL="http://<%= opensearch_host %>:<%= opensearch_port %>"
+MASTER_URL="https://<%= opensearch_host %>:<%= opensearch_port %>"
 INGESTOR_HOST="<%= ingestor_host %>"
 INGESTOR_PORT="<%= ingestor_port %>"
 
