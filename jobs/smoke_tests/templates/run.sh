@@ -22,17 +22,10 @@ chmod 600 ${JOB_DIR}/config/ssl/smoketest.key
     ingestor_port = p("smoke_tests.syslog_ingestor.port")
   end
 
-  opensearch_host = nil
-  if_link("opensearch") { |opensearch_link| opensearch_host = opensearch_link.instances.first.address }
-  unless opensearch_host
-    opensearch_host = p("smoke_tests.opensearch_manager.host")
-  end
 
-  opensearch_port = nil
-  if_link("opensearch") { |opensearch_link| opensearch_port = opensearch_link.p("opensearch.port") }
-  unless opensearch_port
-    opensearch_port = p("smoke_tests.opensearch_manager.port")
-  end
+  opensearch_host = p("smoke_tests.opensearch_manager.host")
+  opensearch_port = p("smoke_tests.opensearch_manager.port")
+
 %>
 
 MASTER_URL="https://<%= opensearch_host %>:<%= opensearch_port %>"
