@@ -7,6 +7,7 @@ packages: []
 
 templates:
   run.sh: bin/run
+  job.process: bin/job.process
   config/bpm.yml.erb: config/bpm.yml
   config/smoketest-crt.erb: config/ssl/smoketest.crt
   config/smoketest-pem.erb: config/ssl/smoketest.pem
