@@ -3,13 +3,11 @@
 export JOB_NAME=smoke_tests
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 
-<% if_link('opensearch') do |smoke_tests| %>
-<% smoke_tests.if_p('smoke_tests.opensearch.ssl.private_key') do %>
+<% if_p('smoke_tests.opensearch.ssl.private_key') do %>
   openssl pkcs8 -v1 "PBE-SHA1-3DES" \
   -in "${JOB_DIR}/config/ssl/smoketest.pem" -topk8 \
   -out "${JOB_DIR}/config/ssl/smoketest.key" -nocrypt
   chmod 600 ${JOB_DIR}/config/ssl/smoketest*.key
-<% end %>
 <% end %>
 
 if [ -d ${JOB_DIR}/config/ssl ]; then
