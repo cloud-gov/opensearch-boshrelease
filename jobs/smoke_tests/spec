@@ -6,8 +6,9 @@ description: This job runs Smoke tests to make sure the cluster is configured pr
 packages: []
 
 templates:
-  run.sh: bin/run
-  job.process: bin/job.process
+  bin/job.process: bin/job.process
+  bin/pre-start.erb: bin/pre-start
+  bin/run.sh: bin/run
   config/bpm.yml.erb: config/bpm.yml
   config/smoketest-crt.erb: config/ssl/smoketest.crt
   config/smoketest-pem.erb: config/ssl/smoketest.pem
