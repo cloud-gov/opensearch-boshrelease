@@ -1,5 +1,0 @@
----
-name: smoke-tests
-
-files:
-  - github.com/cloudfoundry-community/opensearch-smoke-tests/**/*
