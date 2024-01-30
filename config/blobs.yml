@@ -70,10 +70,10 @@ curator/vendor/s3transfer-0.6.2-py3-none-any.whl:
   size: 79765
   object_id: aaed6545-d8ba-45c4-4219-48b1d0868206
   sha: sha256:b014be3a8a2aab98cfe1abc7229cc5a9a0cf05eb9c1f2b86b230fd8df3f78084
-curator/vendor/setuptools-67.8.0.tar.gz:
-  size: 2635214
-  object_id: 91b7b498-12e2-449f-54b5-2873c028f11f
-  sha: sha256:d696681648c66c81142169219d0353a9b693b341827b7accc0f3820ec5423a7c
+curator/vendor/setuptools-69.0.3.tar.gz:
+  size: 2219609
+  object_id: 82547212-6589-4e56-775e-fe8131f1f3c9
+  sha: sha256:be1af57fc409f93647f2e8e4573a142ed38724b8cdd389706a867bb4efcf1e78
 curator/vendor/six-1.16.0-py2.py3-none-any.whl:
   size: 11053
   object_id: 23f63c14-a88f-452d-66f9-3d0ce44cc4e3
@@ -150,3 +150,7 @@ ruby/rake-13.0.6.gem:
   size: 84992
   object_id: ae89e0d2-b8d0-454f-6eff-6673b2956ada
   sha: sha256:5ce4bf5037b4196c24ac62834d8db1ce175470391026bd9e557d669beeb19097
+setuptools-69.0.3.tar.gz:
+  size: 2219609
+  object_id: 43974832-c51e-4621-4ec0-2ecac8e8abf2
+  sha: sha256:be1af57fc409f93647f2e8e4573a142ed38724b8cdd389706a867bb4efcf1e78
