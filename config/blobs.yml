@@ -150,7 +150,3 @@ ruby/rake-13.0.6.gem:
   size: 84992
   object_id: ae89e0d2-b8d0-454f-6eff-6673b2956ada
   sha: sha256:5ce4bf5037b4196c24ac62834d8db1ce175470391026bd9e557d669beeb19097
-setuptools-69.0.3.tar.gz:
-  size: 2219609
-  object_id: 43974832-c51e-4621-4ec0-2ecac8e8abf2
-  sha: sha256:be1af57fc409f93647f2e8e4573a142ed38724b8cdd389706a867bb4efcf1e78

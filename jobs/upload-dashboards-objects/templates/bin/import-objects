@@ -1,4 +1,4 @@
-#!/var/vcap/packages/upload-dashboards-objects-python3/venv/bin/python3
+#!/var/vcap/packages/python3-requests/venv/bin/python3
 
 <%
   system_domain = nil
