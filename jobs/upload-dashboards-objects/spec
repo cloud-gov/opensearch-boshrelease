@@ -16,6 +16,9 @@ consumes:
   type: cloud_controller
   optional: true
 
+- name: opensearch_dashboards
+  type: opensearch_dashboards
+
 templates:
   bin/generate-objects: bin/generate-objects
   bin/import-objects: bin/import-objects
