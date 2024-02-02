@@ -14,9 +14,6 @@
   if_p('cloudfoundry.logs_hostname') do |prop|
     logs_hostname = prop
   end
-
-  dashboards_link = link("opensearch_dashboards")
-  dashboards_host = dashboards_link.instances.first.address
 %>
 
 import glob
@@ -34,7 +31,7 @@ if __name__ == "__main__":
     cert = '<%= job_dir %>/config/ssl/dashboard-web.crt'
     key = '<%= job_dir %>/config/ssl/dashboard-web.key'
 
-    logs_url = 'https://<%= dashboards_host %>:<%= dashboards_link.p('opensearch_dashboards.port') %>'
+    logs_url = 'https://<%= p('opensearch_dashboards.host') %>:<%= dashboards_link.p('opensearch_dashboards.port') %>'
 
     logs = session.get(logs_url, cert=(cert, key)<% if p("cloudfoundry.skip_ssl_validation") %>, verify=False<% end %>)
     assert logs.url == 'https://login.<%= system_domain %>/login', logs.url
