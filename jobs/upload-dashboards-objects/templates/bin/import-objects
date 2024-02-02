@@ -14,6 +14,8 @@
   if_p('cloudfoundry.logs_hostname') do |prop|
     logs_hostname = prop
   end
+
+  dashboards_link = link('opensearch_dashboards')
 %>
 
 import glob
