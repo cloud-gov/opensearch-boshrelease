@@ -17,7 +17,7 @@ fi
   chmod 600 ${JOB_DIR}/config/ssl/dashboard*.key
 <% end %>
 
-<% if_p('opensearch_dashboards.ssl.private_key') do %>
+<% if_p('opensearch_dashboards.server.ssl.private_key') do %>
   openssl pkcs8 -v1 "PBE-SHA1-3DES" \
   -in "${JOB_DIR}/config/ssl/dashboard-web.pem" -topk8 \
   -out "${JOB_DIR}/config/ssl/dashboard-web.key" -nocrypt
