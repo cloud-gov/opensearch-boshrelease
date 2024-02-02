@@ -19,10 +19,19 @@ consumes:
 - name: opensearch_dashboards
   type: opensearch_dashboards
 
+- name: opensearch
+  type: opensearch
+  optional: true
+
 templates:
   bin/generate-objects: bin/generate-objects
   bin/import-objects: bin/import-objects
   bin/run: bin/run
+  bin/pre-start.erb: bin/pre-start
+
+  config/ssl/dashboard-web-crt.erb: config/ssl/dashboard-web.crt
+  config/ssl/dashboard-web-pem.erb: config/ssl/dashboard-web.pem
+  config/ssl/ca.erb: config/ssl/opensearch.ca
 
   # OpenSearch Dashboards objects (defaults).
   dashboards-objects/index-pattern/logs-app.json.erb:       dashboards-objects/index-pattern/logs-app*.json

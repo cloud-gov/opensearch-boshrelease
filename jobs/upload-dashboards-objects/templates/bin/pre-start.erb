@@ -1,0 +1,14 @@
+#!/bin/bash
+
+<% if_link("opensearch_dashboards") do |opensearch_dashboards_config| %>
+<% if opensearch_dashboards_config.p('opensearch.server.ssl.private_key') != '' do %>
+  openssl pkcs8 -v1 "PBE-SHA1-3DES" \
+  -in "${JOB_DIR}/config/ssl/dashboard-web.pem" -topk8 \
+  -out "${JOB_DIR}/config/ssl/dashboard-web.key" -nocrypt
+  chmod 600 ${JOB_DIR}/config/ssl/dashboard-web*.key
+<% end %>
+<% end %>
+
+if [ -d ${JOB_DIR}/config/ssl ]; then
+	chown -R vcap:vcap ${JOB_DIR}/config/ssl
+fi

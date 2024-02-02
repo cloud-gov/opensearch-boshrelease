@@ -1,6 +1,9 @@
 #!/var/vcap/packages/python3-requests/venv/bin/python3
 
 <%
+
+  job_dir = "/var/vcap/jobs/upload-dashboards-objects"
+
   system_domain = nil
   if_p('cloudfoundry.system_domain') do |prop|
     system_domain = prop
@@ -27,9 +30,9 @@ if __name__ == "__main__":
     session = requests.Session()
 
     # set CA
-    session.verify = '/var/vcap/jobs/opensearch/config/ssl/opensearch.ca'
-    cert = '/var/vcap/jobs/opensearch/config/ssl/opensearch-admin.crt'
-    key = '/var/vcap/jobs/opensearch/config/ssl/opensearch-admin.key'
+    session.verify = '<%= job_dir %>/config/ssl/opensearch.ca'
+    cert = '<%= job_dir %>/config/ssl/dashboard-web.crt'
+    key = '<%= job_dir %>/config/ssl/dashboard-web.key'
 
     logs_url = 'https://<%= dashboards_host %>:<%= dashboards_link.p('opensearch_dashboards.port') %>'
 
