@@ -3,6 +3,9 @@
 set -e
 set -x
 
+export JOB_NAME=opensearch_dashboards
+export JOB_DIR=/var/vcap/jobs/$JOB_NAME
+
 <% if !p("opensearch_dashboards.health.disable_post_start") %>
 
 echo "Waiting <%= p("opensearch_dashboards.health.timeout") %>s for opensearch_dashboards to accept connections..."
@@ -15,7 +18,10 @@ do
   CODE=$(
     curl -o /dev/null \
       -sw '%{http_code}' \
-      http://<%= p("opensearch_dashboards.host") %>:<%= p("opensearch_dashboards.port") %>
+      --key ${JOB_DIR}/config/ssl/dashboard-web.key \
+      --cert ${JOB_DIR}/config/ssl/dashboard-web.crt  \
+      --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
+      https://<%= p("opensearch_dashboards.host") %>:<%= p("opensearch_dashboards.port") %>
   )
   set -e
   if [[ "$CODE" == "401" ]]; then
