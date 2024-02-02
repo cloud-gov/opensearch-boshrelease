@@ -21,7 +21,7 @@ do
       --key ${JOB_DIR}/config/ssl/dashboard-web.key \
       --cert ${JOB_DIR}/config/ssl/dashboard-web.crt  \
       --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
-      https://<%= p("opensearch_dashboards.host") %>:<%= p("opensearch_dashboards.port") %>
+      https://localhost:<%= p("opensearch_dashboards.port") %>
   )
   set -e
   if [[ "$CODE" == "401" ]]; then
