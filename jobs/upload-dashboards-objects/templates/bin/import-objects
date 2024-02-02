@@ -29,13 +29,14 @@ if __name__ == "__main__":
     session = requests.Session()
 
     # set CA
-    session.verify = '<%= job_dir %>/config/ssl/opensearch.ca'
+    ca =  '<%= job_dir %>/config/ssl/opensearch.ca'
     cert = '<%= job_dir %>/config/ssl/dashboard-web.crt'
     key = '<%= job_dir %>/config/ssl/dashboard-web.key'
 
     logs_url = 'https://<%= p('opensearch_dashboards.host') %>:<%= dashboards_link.p('opensearch_dashboards.port') %>'
+    login_url = 'https://<%= p("dashboards_objects.login_host_name") %>.<%= system_domain %>'
 
-    logs = session.get(logs_url, cert=(cert, key)<% if p("cloudfoundry.skip_ssl_validation") %>, verify=False<% end %>)
+    logs = session.get(login_url)
     assert logs.url == 'https://login.<%= system_domain %>/login', logs.url
     assert logs.status_code == 200, logs.status_code
 
@@ -49,9 +50,9 @@ if __name__ == "__main__":
     )
     assert login.url == f'{logs_url}/app/home', login.url
     assert login.status_code == 200, login.status_code
-
+    
     for filename in glob.iglob('/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/**/*.json', recursive=True):
-        headers = {'content-type': 'application/json', 'kbn-xsrf': 'true'}
+        headers = {'content-type': 'application/json', 'osd-xsrf': 'true'}
         r = session.post(
           '{}/api/saved_objects/{}/{}'.format(
             logs_url,
@@ -59,7 +60,9 @@ if __name__ == "__main__":
             os.path.basename(os.path.splitext(filename)[0])
           ),
           data=open(filename, 'rb'),
-          headers=headers
+          headers=headers,
+          cert=(cert, key),
+          verify=ca
         )
         if r.status_code == 409:
             put = session.put(
@@ -69,7 +72,9 @@ if __name__ == "__main__":
                 os.path.basename(os.path.splitext(filename)[0])
               ),
               data=open(filename, 'rb'),
-              headers=headers
+              headers=headers,
+              cert=(cert, key),
+              verify=ca
             )
             if put.status_code == 200:
                 logging.info('Object %s Uploaded Successfully', filename)
@@ -83,7 +88,9 @@ if __name__ == "__main__":
     r = session.post(
       '{}/api/opensearch-dashboards/settings'.format(logs_url),
       data='{"changes":{"defaultIndex":"<%= p('dashboards_objects.default_index') %>"}}',
-      headers=headers
+      headers=headers,
+      cert=(cert, key),
+      verify=ca
     )
     if r.status_code == 200:
         logging.info('Successfully Set <%= p('dashboards_objects.default_index') %> as Default Index')
