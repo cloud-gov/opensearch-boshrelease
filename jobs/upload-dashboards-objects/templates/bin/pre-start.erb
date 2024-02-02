@@ -1,5 +1,8 @@
 #!/bin/bash
 
+export JOB_NAME=upload-dashboards-objects
+export JOB_DIR=/var/vcap/jobs/$JOB_NAME
+
 <% if_link("opensearch_dashboards") do |opensearch_dashboards_config| %>
 <% if opensearch_dashboards_config.p('opensearch_dashboards.server.ssl.private_key') != '' %>
   openssl pkcs8 -v1 "PBE-SHA1-3DES" \
