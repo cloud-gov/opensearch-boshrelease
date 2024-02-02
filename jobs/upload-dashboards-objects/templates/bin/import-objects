@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
     logs_url = 'https://<%= dashboards_host %>:<%= dashboards_link.p('opensearch_dashboards.port') %>'
 
-    logs = session.get(logs_url, cert=(cert, key), <% if p("cloudfoundry.skip_ssl_validation") %>, verify=False<% end %>)
+    logs = session.get(logs_url, cert=(cert, key)<% if p("cloudfoundry.skip_ssl_validation") %>, verify=False<% end %>)
     assert logs.url == 'https://login.<%= system_domain %>/login', logs.url
     assert logs.status_code == 200, logs.status_code
 
