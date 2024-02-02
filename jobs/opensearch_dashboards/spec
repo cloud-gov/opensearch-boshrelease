@@ -28,6 +28,8 @@ provides:
   type: opensearch_dashboards
   properties:
   - opensearch_dashboards.port
+  - opensearch_dashboards.server.ssl.certificate
+  - opensearch_dashboards.server.ssl.private_key
 
 properties:
   opensearch_dashboards.username:
