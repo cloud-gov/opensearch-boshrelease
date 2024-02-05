@@ -178,5 +178,5 @@ properties:
   opensearch.discovery.single_node:
     description: True to run cluster as a single node
     default: false
-  opensearch.admin_user.password:
+  opensearch.admin.user.password:
     description: Hash of password for admin user
