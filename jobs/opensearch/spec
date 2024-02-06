@@ -28,7 +28,6 @@ templates:
   config/plugin-stats-metadata: config/opensearch-performance-analyzer/plugin-stats-metadata
   config/opensearch-security/roles.yml.erb: config/opensearch-security/roles.yml
   config/opensearch-security/config.yml.erb: config/opensearch-security/config.yml
-  config/opensearch-security/internal_users.yml.erb: config/opensearch-security/internal_users.yml
   config/opensearch-security/roles_mapping.yml.erb: config/opensearch-security/roles_mapping.yml
   config/opensearch-notifications/notifications.erb : config/opensearch-notifications/notifications.yml
   config/opensearch-notifications-core/notifications-core.erb : config/opensearch-notifications-core/notifications-core.yml
@@ -178,5 +177,3 @@ properties:
   opensearch.discovery.single_node:
     description: True to run cluster as a single node
     default: false
-  opensearch.admin.user.password:
-    description: Hash of password for admin user
