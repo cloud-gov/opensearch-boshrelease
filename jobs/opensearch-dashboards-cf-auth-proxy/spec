@@ -1,0 +1,11 @@
+---
+name: opensearch-dashboards-cf-auth-proxy
+
+description: This job runs the proxy for dashboard
+
+packages:
+  - python3
+
+templates: []
+
+properties: []
