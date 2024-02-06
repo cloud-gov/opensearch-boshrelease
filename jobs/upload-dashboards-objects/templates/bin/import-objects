@@ -51,7 +51,8 @@ if __name__ == "__main__":
     assert login.url == f'{logs_url}/app/home', login.url
     assert login.status_code == 200, login.status_code
     
-    for filename in glob.iglob('/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/**/*.json', recursive=True):
+    <% p("dashboards_objects.upload_patterns").each do |pattern| %>
+    for filename in glob.iglob("<%= pattern.fetch("pattern") %>", recursive=True):
         headers = {'content-type': 'application/json', 'osd-xsrf': 'true'}
         r = session.post(
           '{}/api/saved_objects/{}/{}'.format(
@@ -84,6 +85,7 @@ if __name__ == "__main__":
             logging.info('Object %s Uploaded Successfully', filename)
         else:
             logging.info('Object %s Failed to Upload', filename)
+    <% end %>
 
     r = session.post(
       '{}/api/opensearch-dashboards/settings'.format(logs_url),
