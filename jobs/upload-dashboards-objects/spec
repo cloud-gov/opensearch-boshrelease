@@ -1,0 +1,154 @@
+---
+name: upload-dashboards-objects
+
+description: |
+  This job uploads OpenSearch Dashboards saved objects (index-patterns, searches, visualizations and dashboards).
+  Allows to upload defaults predefined in the job and custom data files.
+
+packages:
+- ruby-3.1
+- python3
+- python3-requests
+
+consumes:
+
+- name: cloud_controller
+  type: cloud_controller
+  optional: true
+
+- name: opensearch_dashboards
+  type: opensearch_dashboards
+
+- name: opensearch
+  type: opensearch
+  optional: true
+
+templates:
+  bin/generate-objects: bin/generate-objects
+  bin/import-objects: bin/import-objects
+  bin/run: bin/run
+  bin/pre-start.erb: bin/pre-start
+
+  config/ssl/dashboard-web-crt.erb: config/ssl/dashboard-web.crt
+  config/ssl/dashboard-web-pem.erb: config/ssl/dashboard-web.pem
+  config/ssl/ca.erb: config/ssl/opensearch.ca
+
+  # OpenSearch Dashboards objects (defaults).
+  dashboards-objects/index-pattern/logs-app.json.erb:       dashboards-objects/index-pattern/logs-app*.json
+  dashboards-objects/index-pattern/logs.json.erb:           dashboards-objects/index-pattern/logs-*.json
+  dashboards-objects/index-pattern/logs-platform.json.erb:  dashboards-objects/index-pattern/logs-platform*.json
+
+  dashboards-objects/search/app-all.json.erb:                         dashboards-objects/search/app-all.json
+  dashboards-objects/search/app-all-messages.json.erb:                dashboards-objects/search/app-all-messages.json
+  dashboards-objects/search/app-all-errors.json.erb:                  dashboards-objects/search/app-all-errors.json
+  dashboards-objects/search/app-all-overview.json.erb:                dashboards-objects/search/app-all-overview.json
+  dashboards-objects/search/app-logs.json.erb:                        dashboards-objects/search/app-logs.json
+  dashboards-objects/search/app-logs-errors.json.erb:                 dashboards-objects/search/app-logs-errors.json
+  dashboards-objects/search/app-container-metric.json.erb:            dashboards-objects/search/app-container-metric.json
+  dashboards-objects/search/app-counter.json.erb:                     dashboards-objects/search/app-counter.json
+  dashboards-objects/search/app-http.json.erb:                        dashboards-objects/search/app-http.json
+  dashboards-objects/search/app-rtr.json.erb:                         dashboards-objects/search/app-rtr.json
+  dashboards-objects/search/app-rtr-long-response.json.erb:           dashboards-objects/search/app-rtr-long-response.json
+  dashboards-objects/search/app-value-metric.json.erb:                dashboards-objects/search/app-value-metric.json
+  dashboards-objects/search/platform-all.json.erb:                    dashboards-objects/search/platform-all.json
+  dashboards-objects/search/platform-all-errors.json.erb:             dashboards-objects/search/platform-all-errors.json
+  dashboards-objects/search/platform-all-overview.json.erb:           dashboards-objects/search/platform-all-overview.json
+  dashboards-objects/search/platform-haproxy.json.erb:                dashboards-objects/search/platform-haproxy.json
+  dashboards-objects/search/platform-haproxy-long-response.json.erb:  dashboards-objects/search/platform-haproxy-long-response.json
+  dashboards-objects/search/platform-uaa-audit.json.erb:              dashboards-objects/search/platform-uaa-audit.json
+
+  dashboards-objects/dashboard/App-Errors.json.erb:          dashboards-objects/dashboard/App-Errors.json
+  dashboards-objects/dashboard/App-Location.json.erb:        dashboards-objects/dashboard/App-Location.json
+  dashboards-objects/dashboard/App-Logs.json.erb:            dashboards-objects/dashboard/App-Logs.json
+  dashboards-objects/dashboard/App-Metrics.json.erb:         dashboards-objects/dashboard/App-Metrics.json
+  dashboards-objects/dashboard/App-Overview.json.erb:        dashboards-objects/dashboard/App-Overview.json
+  dashboards-objects/dashboard/App-Performance.json.erb:     dashboards-objects/dashboard/App-Performance.json
+  dashboards-objects/dashboard/Platform-Errors.json.erb:     dashboards-objects/dashboard/Platform-Errors.json
+  dashboards-objects/dashboard/Platform-Haproxy.json.erb:    dashboards-objects/dashboard/Platform-Haproxy.json
+  dashboards-objects/dashboard/Platform-Logs.json.erb:       dashboards-objects/dashboard/Platform-Logs.json
+  dashboards-objects/dashboard/Platform-Overview.json.erb:   dashboards-objects/dashboard/Platform-Overview.json
+  dashboards-objects/dashboard/Platform-UAA-Audit.json.erb:  dashboards-objects/dashboard/Platform-UAA-Audit.json
+
+  dashboards-objects/visualization/App-APP-logs-count-(top-10-apps).json.erb: dashboards-objects/visualization/App-APP-logs-count-(top-10-apps).json
+  dashboards-objects/visualization/App-APP-logs-count-by-level-(top-5-apps).json.erb: dashboards-objects/visualization/App-APP-logs-count-by-level-(top-5-apps).json
+  dashboards-objects/visualization/App-APP-logs-count-by-level.json.erb: dashboards-objects/visualization/App-APP-logs-count-by-level.json
+  dashboards-objects/visualization/App-APP-logs-count-in-timeline.json.erb: dashboards-objects/visualization/App-APP-logs-count-in-timeline.json
+  dashboards-objects/visualization/App-apps-with-errors.json.erb: dashboards-objects/visualization/App-apps-with-errors.json
+  dashboards-objects/visualization/App-errors-count-in-timeline-(top-5-apps).json.erb: dashboards-objects/visualization/App-errors-count-in-timeline-(top-5-apps).json
+  dashboards-objects/visualization/App-links.json.erb: dashboards-objects/visualization/App-links.json
+  dashboards-objects/visualization/App-logs-by-source-type-(top-10).json.erb: dashboards-objects/visualization/App-logs-by-source-type-(top-10).json
+  dashboards-objects/visualization/App-logs-count-by-source-type-(APP-or-cf-top-5-apps).json.erb: dashboards-objects/visualization/App-logs-count-by-source-type-(APP-or-cf-top-5-apps).json
+  dashboards-objects/visualization/App-METRIC-CPU-usage.json.erb: dashboards-objects/visualization/App-METRIC-CPU-usage.json
+  dashboards-objects/visualization/App-METRIC-disk-usage.json.erb: dashboards-objects/visualization/App-METRIC-disk-usage.json
+  dashboards-objects/visualization/App-METRIC-memory-usage.json.erb: dashboards-objects/visualization/App-METRIC-memory-usage.json
+  dashboards-objects/visualization/App-names.json.erb: dashboards-objects/visualization/App-names.json
+  dashboards-objects/visualization/App-RTR-request-count-(top-10-apps).json.erb: dashboards-objects/visualization/App-RTR-request-count-(top-10-apps).json
+  dashboards-objects/visualization/App-RTR-request-count-by-timezone-(top-5).json.erb: dashboards-objects/visualization/App-RTR-request-count-by-timezone-(top-5).json
+  dashboards-objects/visualization/App-RTR-requests-map.json.erb: dashboards-objects/visualization/App-RTR-requests-map.json
+  dashboards-objects/visualization/App-RTR-response-times-(50th-and-95th-first-10-apps).json.erb: dashboards-objects/visualization/App-RTR-response-times-(50th-and-95th-first-10-apps).json
+  dashboards-objects/visualization/App-RTR-response-times.json.erb: dashboards-objects/visualization/App-RTR-response-times.json
+  dashboards-objects/visualization/App-RTR-traffic-by-response_time_ms-(first-10-apps).json.erb: dashboards-objects/visualization/App-RTR-traffic-by-response_time_ms-(first-10-apps).json
+  dashboards-objects/visualization/Platform-components.json.erb: dashboards-objects/visualization/Platform-components.json
+  dashboards-objects/visualization/Platform-components-with-errors.json.erb: dashboards-objects/visualization/Platform-components-with-errors.json
+  dashboards-objects/visualization/Platform-errors-count-by-source-component-(top-5).json.erb: dashboards-objects/visualization/Platform-errors-count-by-source-component-(top-5).json
+  dashboards-objects/visualization/Platform-errors-count-in-timeline.json.erb: dashboards-objects/visualization/Platform-errors-count-in-timeline.json
+  dashboards-objects/visualization/Platform-Haproxy-requests-(top-10).json.erb: dashboards-objects/visualization/Platform-Haproxy-requests-(top-10).json
+  dashboards-objects/visualization/Platform-Haproxy-request-status-codes-in-timeline.json.erb: dashboards-objects/visualization/Platform-Haproxy-request-status-codes-in-timeline.json
+  dashboards-objects/visualization/Platform-Haproxy-request-time-duration-(50th-95th-99th-top-5).json.erb: dashboards-objects/visualization/Platform-Haproxy-request-time-duration-(50th-95th-99th-top-5).json
+  dashboards-objects/visualization/Platform-Haproxy-request-time-duration.json.erb: dashboards-objects/visualization/Platform-Haproxy-request-time-duration.json
+  dashboards-objects/visualization/Platform-links.json.erb: dashboards-objects/visualization/Platform-links.json
+  dashboards-objects/visualization/Platform-logs-by-component-(top-5).json.erb: dashboards-objects/visualization/Platform-logs-by-component-(top-5).json
+  dashboards-objects/visualization/Platform-logs-by-source-job-(top-5).json.erb: dashboards-objects/visualization/Platform-logs-by-source-job-(top-5).json
+  dashboards-objects/visualization/Platform-logs-count-(top-10-components).json.erb: dashboards-objects/visualization/Platform-logs-count-(top-10-components).json
+  dashboards-objects/visualization/Platform-logs-count-by-level.json.erb: dashboards-objects/visualization/Platform-logs-count-by-level.json
+  dashboards-objects/visualization/Platform-logs-count-in-timeline.json.erb: dashboards-objects/visualization/Platform-logs-count-in-timeline.json
+  dashboards-objects/visualization/Platform-UAA-Audit-event-locations.json.erb: dashboards-objects/visualization/Platform-UAA-Audit-event-locations.json
+  dashboards-objects/visualization/Platform-UAA-Audit-events-by-type.json.erb: dashboards-objects/visualization/Platform-UAA-Audit-events-by-type.json
+  dashboards-objects/visualization/Platform-UAA-Audit-event-types.json.erb: dashboards-objects/visualization/Platform-UAA-Audit-event-types.json
+
+properties:
+  dashboards_objects.upload_patterns:
+    description: "List of glob patterns of OpenSearch Dashboards objects to upload"
+    default:
+    - {type: index-pattern, pattern: /var/vcap/jobs/upload-dashboards-objects/dashboards-objects/index-pattern/*.json}
+    - {type: search, pattern: /var/vcap/jobs/upload-dashboards-objects/dashboards-objects/search/*.json}
+    - {type: visualization, pattern: /var/vcap/jobs/upload-dashboards-objects/dashboards-objects/visualization/*.json}
+    - {type: dashboard, pattern: /var/vcap/jobs/upload-dashboards-objects/dashboards-objects/dashboard/*.json}
+  dashboards_objects.default_index:
+    description: "Default index to set in OpenSearch Dashboards"
+    default: "logs-app*"
+  dashboards_objects.host_name:
+    description: the host-portion of the FQDN OpenSearch Dashboards is served from, without the domain name
+    default: logs
+  dashboards_objects.login_host_name:
+    description: the host-portion of the login FQDN, without the domain name
+    default: login
+
+  cloudfoundry.firehose_events:
+    description: "Array of events you would like to get. Valid options are CounterEvent,Error,HttpStartStop,LogMessage,ValueMetric,ContainerMetric"
+    default: ["LogMessage"]
+  cloudfoundry.system_domain:
+    description: The Cloud Foundry System Domain
+  cloudfoundry.skip_ssl_validation:
+    description: "Set to true to skip SSL validation (defaults to false)"
+    default: false
+  cloudfoundry.user:
+    description: The Cloud Foundry API user.
+  cloudfoundry.password:
+    description: The Cloud Foundry API user's password.
+
+  opensearch_config.index_prefix:
+    description: |
+      Name prefix of your log indices that you use in `logstash_parser.elasticsearch.index` property set for your parser.
+    default: "logs-"
+  opensearch_config.app_index_prefix:
+    description: |
+      Name prefix of your `app` log indices. If you don't split `app` and `platform` indices, then just set it with the value of `opensearch_config.index_prefix`.
+    default: "logs-app"
+  opensearch_config.platform_index_prefix:
+    description: |
+      Name prefix of your `platform` log indices. If you don't split `app` and `platform` indices, then just set it with the value of `opensearch_config.index_prefix`.
+    default: "logs-platform"
+
+  opensearch_dashboards.host:
+    description: "Host to use for requests to OpenSearch dashboards"

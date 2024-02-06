@@ -199,11 +199,11 @@ describe 'opensearch_dashboards job' do
       end
 
       it 'sets the SSL certificate for Opensearch communication' do
-        expect(config['opensearch.ssl.certificate']).to eq('/var/vcap/jobs/opensearch_dashboards/config/ssl/opensearch-dashboard.crt')
+        expect(config['opensearch.ssl.certificate']).to eq('/var/vcap/jobs/opensearch_dashboards/config/ssl/dashboard-opensearch.crt')
       end
 
       it 'sets the SSL private key for Opensearch communication' do
-        expect(config['opensearch.ssl.key']).to eq('/var/vcap/jobs/opensearch_dashboards/config/ssl/opensearch-dashboard.key')
+        expect(config['opensearch.ssl.key']).to eq('/var/vcap/jobs/opensearch_dashboards/config/ssl/dashboard-opensearch.key')
       end
 
       it 'sets the SSL CA for Opensearch communication' do
@@ -212,6 +212,61 @@ describe 'opensearch_dashboards job' do
 
       it 'sets the SSL verification mode for Opensearch communication' do
         expect(config['opensearch.ssl.verificationMode']).to eq('certificate')
+      end
+    end
+
+    describe 'with server SSL settings' do
+      let(:manifest) do
+        {
+          'opensearch_dashboards' => {
+            'server' => {
+              'ssl' => {
+                'enabled' => true,
+                'certificate' => 'fake-cert',
+                'private_key' => 'changeme',
+              }
+            }
+          }
+        }
+      end
+
+      let(:link) do
+        Bosh::Template::Test::Link.new(
+          name: 'opensearch',
+          instances: [
+            Bosh::Template::Test::LinkInstance.new(),
+          ],
+          properties: {
+            'opensearch' => {
+              'port' => '9200',
+              'node' => {
+                'ssl' => {
+                  'ca' => 'fake-ca'
+                }
+              }
+            }
+          }
+        )
+      end
+
+      let(:config) do
+        config = YAML.load(template.render(manifest, consumes: [link]))
+      end
+
+      it 'enables server SSL' do
+        expect(config['server.ssl.enabled']).to eq(true)
+      end
+
+      it 'sets the server SSL certificate' do
+        expect(config['server.ssl.certificate']).to eq('/var/vcap/jobs/opensearch_dashboards/config/ssl/dashboard-web.crt')
+      end
+
+      it 'sets the server SSL private key' do
+        expect(config['server.ssl.key']).to eq('/var/vcap/jobs/opensearch_dashboards/config/ssl/dashboard-web.key')
+      end
+
+      it 'sets the server SSL CA' do
+        expect(config['server.ssl.certificateAuthorities']).to eq(['/var/vcap/jobs/opensearch_dashboards/config/ssl/opensearch.ca'])
       end
     end
 

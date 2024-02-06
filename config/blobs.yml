@@ -70,10 +70,10 @@ curator/vendor/s3transfer-0.6.2-py3-none-any.whl:
   size: 79765
   object_id: aaed6545-d8ba-45c4-4219-48b1d0868206
   sha: sha256:b014be3a8a2aab98cfe1abc7229cc5a9a0cf05eb9c1f2b86b230fd8df3f78084
-curator/vendor/setuptools-67.8.0.tar.gz:
-  size: 2635214
-  object_id: 91b7b498-12e2-449f-54b5-2873c028f11f
-  sha: sha256:d696681648c66c81142169219d0353a9b693b341827b7accc0f3820ec5423a7c
+curator/vendor/setuptools-69.0.3.tar.gz:
+  size: 2219609
+  object_id: 82547212-6589-4e56-775e-fe8131f1f3c9
+  sha: sha256:be1af57fc409f93647f2e8e4573a142ed38724b8cdd389706a867bb4efcf1e78
 curator/vendor/six-1.16.0-py2.py3-none-any.whl:
   size: 11053
   object_id: 23f63c14-a88f-452d-66f9-3d0ce44cc4e3
@@ -126,6 +126,26 @@ opensearch-dashboards-2.9.0-linux-x64.tar.gz:
   size: 314585875
   object_id: 8a7b9858-37a1-4f9e-4d6d-3cbe61433cac
   sha: sha256:f8328b9c1156d254faa561c03cbc51159f5e335812c7b27a98bbe0556b9f030c
+requests/certifi-2023.11.17-py3-none-any.whl:
+  size: 162530
+  object_id: f2afff72-e415-4390-61c1-eb8010ed4e4a
+  sha: sha256:e036ab49d5b79556f99cfc2d9320b34cfbe5be05c5871b51de9329f0603b0474
+requests/charset_normalizer-3.3.2-py3-none-any.whl:
+  size: 48543
+  object_id: 187ef1e4-e1ee-4ec1-5c27-0cef19b9a913
+  sha: sha256:3e4d1f6587322d2788836a99c69062fbb091331ec940e02d12d179c1d53e25fc
+requests/idna-3.6-py3-none-any.whl:
+  size: 61567
+  object_id: 0649a900-85ac-4049-79be-74e5b0fd994d
+  sha: sha256:c05567e9c24a6b9faaa835c4821bad0590fbb9d5779e7caa6e1cc4978e7eb24f
+requests/requests-2.31.0-py3-none-any.whl:
+  size: 62574
+  object_id: a3c308b7-a820-4936-7c94-d58675e9b219
+  sha: sha256:58cd2187c01e70e6e26505bca751777aa9f2ee0b7f4300988b709f44e013003f
+requests/urllib3-2.1.0-py3-none-any.whl:
+  size: 104579
+  object_id: 291e120e-854f-4599-4be9-85fac7f82bd0
+  sha: sha256:55901e917a5896a349ff771be919f8bd99aff50b79fe58fec595eb37bbc56bb3
 ruby/rake-13.0.6.gem:
   size: 84992
   object_id: ae89e0d2-b8d0-454f-6eff-6673b2956ada

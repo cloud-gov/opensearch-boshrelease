@@ -1,0 +1,128 @@
+<% require 'json' %>
+<% if( ['LogMessage', 'ContainerMetric'].any? { |event| p('cloudfoundry.firehose_events').include?(event)} ) %>
+{
+  "attributes": {
+    "title": "App - Overview",
+    "hits": 0,
+    "description": "",
+    "panelsJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/"/) { '\"' }
+      [
+        {
+          "panelIndex": "1",
+          "panelRefName": "panel_0",
+          "version": "7.3.0",
+          "gridData": {
+            "x": 0,
+            "y": 0,
+            "w": 36,
+            "h": 4,
+            "i": "1"
+          },
+          "embeddableConfig": {
+            "vis": {
+              "legendOpen": true
+            }
+          }
+        },
+        {
+          "panelIndex": "2",
+          "panelRefName": "panel_1",
+          "version": "7.3.0",
+          "gridData": {
+            "x": 0,
+            "y": 4,
+            "w": 36,
+            "h": 8,
+            "i": "2"
+          },
+          "embeddableConfig": {}
+        },
+        {
+          "panelIndex": "3",
+          "panelRefName": "panel_2",
+          "version": "7.3.0",
+          "gridData": {
+            "x": 36,
+            "y": 0,
+            "w": 12,
+            "h": 12,
+            "i": "3"
+          },
+          "embeddableConfig": {}
+        },
+        {
+          "panelIndex": "4",
+          "panelRefName": "panel_3",
+          "version": "7.3.0",
+          "gridData": {
+            "x": 0,
+            "y": 12,
+            "w": 48,
+            "h": 20,
+            "i": "4"
+          },
+          "embeddableConfig": {
+            "columns": [
+              "@cf.org",
+              "@cf.space",
+              "@cf.app",
+              "@source.job",
+              "@source.component",
+              "@source.type",
+              "@level",
+              "@message"
+            ],
+            "sort": [
+              "@timestamp",
+              "desc"
+            ]
+          }
+        }
+      ]
+ENDOFFJSON
+  %>",
+    "optionsJSON": "{\"darkTheme\":false}",
+    "version": 1,
+    "timeRestore": false,
+    "kibanaSavedObjectMeta": {
+      "searchSourceJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/"/) { '\"' }
+      {
+        "filter": [
+          {
+            "query": {
+              "query_string": {
+                "analyze_wildcard": true,
+                "query": "*"
+              }
+            }
+          }
+        ]
+      }
+ENDOFFJSON
+  %>"
+    }
+  },
+  "references": [
+    {
+      "id": "App-links",
+      "name": "panel_0",
+      "type": "visualization"
+    },
+    {
+      "id": "App-logs-by-source-type-(top-10)",
+      "name": "panel_1",
+      "type": "visualization"
+    },
+    {
+      "id": "App-names",
+      "name": "panel_2",
+      "type": "visualization"
+    },
+    {
+      "id": "app-all-overview",
+      "name": "panel_3",
+      "type": "search"
+    }
+  ]
+}
+<% end %>

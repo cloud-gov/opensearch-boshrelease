@@ -2,6 +2,11 @@
 
 A BOSH release for [Opensearch](https://opensearch.org/)
 
+## How to update the vendored Python version
+
+1. Follow these steps: <https://github.com/cloud-gov/internal-docs/blob/main/docs/runbooks/BOSH/building-bosh-releases.md#vendoring-python>
+1. Follow these steps to ensure that the changes to `.final_builds/package/python3` get updated in the `final-builds-opensearch.tgz` file tracked in S3: <https://github.com/cloud-gov/internal-docs/blob/main/docs/runbooks/BOSH/building-bosh-releases.md#updating-vendored-packages-in-a-forked-release>
+
 ## How to add blobs for Logstash filter plugins
 
 1. Install Java locally and download Logstash version from `config/blobs.yml` to your local machine

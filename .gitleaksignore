@@ -1,0 +1,16 @@
+jobs/upload-dashboards-objects/templates/bin/import-objects:generic-credential:10
+jobs/upload-dashboards-objects/templates/dashboards-objects/search/app-all-errors.json.erb:generic-credential:29
+jobs/upload-dashboards-objects/templates/dashboards-objects/search/app-container-metric.json.erb:generic-credential:40
+jobs/upload-dashboards-objects/templates/dashboards-objects/search/app-counter.json.erb:generic-credential:37
+jobs/upload-dashboards-objects/templates/dashboards-objects/search/app-http.json.erb:generic-credential:38
+jobs/upload-dashboards-objects/templates/dashboards-objects/search/app-logs-errors.json.erb:generic-credential:28
+jobs/upload-dashboards-objects/templates/dashboards-objects/search/app-logs-errors.json.erb:generic-credential:48
+jobs/upload-dashboards-objects/templates/dashboards-objects/search/app-logs.json.erb:generic-credential:29
+jobs/upload-dashboards-objects/templates/dashboards-objects/search/app-rtr-long-response.json.erb:generic-credential:53
+jobs/upload-dashboards-objects/templates/dashboards-objects/search/app-rtr.json.erb:generic-credential:50
+jobs/upload-dashboards-objects/templates/dashboards-objects/search/app-value-metric.json.erb:generic-credential:37
+jobs/upload-dashboards-objects/templates/dashboards-objects/search/platform-all-errors.json.erb:generic-credential:26
+jobs/upload-dashboards-objects/templates/dashboards-objects/search/platform-haproxy-long-response.json.erb:generic-credential:30
+jobs/upload-dashboards-objects/templates/dashboards-objects/search/platform-haproxy.json.erb:generic-credential:27
+jobs/upload-dashboards-objects/templates/dashboards-objects/search/platform-uaa-audit.json.erb:generic-credential:27
+jobs/upload-dashboards-objects/templates/dashboards-objects/search/platform-uaa-audit.json.erb:generic-credential:47

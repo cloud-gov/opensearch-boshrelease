@@ -1,0 +1,5 @@
+<% if_link("opensearch_dashboards") do |opensearch_dashboards_config| %>
+<% opensearch_dashboards_config.if_p('opensearch_dashboards.server.ssl.certificate') do %>
+<%= opensearch_dashboards_config.p('opensearch_dashboards.server.ssl.certificate', '') %>
+<% end %>
+<% end %>
