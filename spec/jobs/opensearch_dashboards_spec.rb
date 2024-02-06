@@ -215,6 +215,61 @@ describe 'opensearch_dashboards job' do
       end
     end
 
+    describe 'with server SSL settings' do
+      let(:manifest) do
+        {
+          'opensearch_dashboards' => {
+            'server' => {
+              'ssl' => {
+                'enabled' => true,
+                'certificate' => 'fake-cert',
+                'private_key' => 'changeme',
+              }
+            }
+          }
+        }
+      end
+
+      let(:link) do
+        Bosh::Template::Test::Link.new(
+          name: 'opensearch',
+          instances: [
+            Bosh::Template::Test::LinkInstance.new(),
+          ],
+          properties: {
+            'opensearch' => {
+              'port' => '9200',
+              'node' => {
+                'ssl' => {
+                  'ca' => 'fake-ca'
+                }
+              }
+            }
+          }
+        )
+      end
+
+      let(:config) do
+        config = YAML.load(template.render(manifest, consumes: [link]))
+      end
+
+      it 'enables server SSL' do
+        expect(config['server.ssl.enabled']).to eq(true)
+      end
+
+      it 'sets the server SSL certificate' do
+        expect(config['server.ssl.certificate']).to eq('/var/vcap/jobs/opensearch_dashboards/config/ssl/dashboard-web.crt')
+      end
+
+      it 'sets the server SSL private key' do
+        expect(config['server.ssl.key']).to eq('/var/vcap/jobs/opensearch_dashboards/config/ssl/dashboard-web.key')
+      end
+
+      it 'sets the server SSL CA' do
+        expect(config['server.ssl.certificateAuthorities']).to eq(['/var/vcap/jobs/opensearch_dashboards/config/ssl/opensearch.ca'])
+      end
+    end
+
     describe 'with config options' do
       let(:manifest) do
         {
