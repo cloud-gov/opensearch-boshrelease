@@ -1,5 +1,5 @@
 ---
-name: opensearch-dashboards-cf-auth-proxy
+name: opensearch_dashboards_cf_auth_proxy
 
 dependencies:
     - python3

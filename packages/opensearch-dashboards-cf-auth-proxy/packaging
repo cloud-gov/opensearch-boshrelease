@@ -1,5 +1,5 @@
 set -e
 
-/var/vcap/packages/python3/bin/python3 -m venv --copies ${BOSH_INSTALL_TARGET}/venv
+#/var/vcap/packages/python3/bin/python3 -m venv --copies ${BOSH_INSTALL_TARGET}/venv
 tar xzf opensearch-dashboards-cf-auth-proxy.tar.gz -C $BOSH_INSTALL_TARGET --strip-components 1
 # ${BOSH_INSTALL_TARGET}/venv/bin/python3 -m pip install --no-index requests/*.whl
