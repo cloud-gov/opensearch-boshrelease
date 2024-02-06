@@ -199,7 +199,7 @@ describe 'opensearch_dashboards job' do
       end
 
       it 'sets the SSL certificate for Opensearch communication' do
-        expect(config['opensearch.ssl.certificate']).to eq('/var/vcap/jobs/opensearch_dashboards/config/ssl/opensearch-dashboard.crt')
+        expect(config['opensearch.ssl.certificate']).to eq('/var/vcap/jobs/opensearch_dashboards/config/ssl/dashboard-opensearch.crt')
       end
 
       it 'sets the SSL private key for Opensearch communication' do
