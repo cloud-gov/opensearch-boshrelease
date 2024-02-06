@@ -6,6 +6,14 @@ description: This job runs the proxy for dashboard
 packages:
   - python3
 
-templates: []
+templates:
+  bin/pre-start.erb: bin/pre-start
 
-properties: []
+
+properties:
+  opensearch_dashboards.opensearch.host:
+    description: "IP address of opensearch master to send opensearch requests to"
+    default: "localhost"
+  opensearch_dashboards.opensearch.port:
+    description: "Port of opensearch master to send opensearch requests to"
+    default: "9200"
