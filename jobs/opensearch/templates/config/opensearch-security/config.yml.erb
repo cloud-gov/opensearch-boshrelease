@@ -13,17 +13,6 @@ config:
         remoteIpHeader: "x-forwarded-for"
     <% end %>
     authc:
-      basic_internal_auth_domain:
-        description: "Authenticate via HTTP Basic against internal users database"
-        http_enabled: true
-        transport_enabled: true
-        # needs to come after challenging auth options
-        order: 4
-        http_authenticator:
-          type: basic
-          challenge: true
-        authentication_backend:
-          type: intern
       clientcert_auth_domain:
         description: "Authenticate via SSL client certificates"
         http_enabled: true
