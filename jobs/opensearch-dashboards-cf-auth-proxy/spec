@@ -9,12 +9,30 @@ packages:
 
 templates:
   bin/pre-start.erb: bin/pre-start
+  config/.env.erb: config/.env
 
 
 properties:
-  opensearch_dashboards.opensearch.host:
-    description: "IP address of opensearch master to send opensearch requests to"
+  opensearch-dashboards-cf-auth-proxy.env:
+    description: set to unit for tests, local for development, production for production
+    default: production
+  opensearch-dashboards-cf-auth-proxy.opensearch_dashboards.url:
+    description: this is the url of the proxied Opensearch dashboards instance
     default: "localhost"
-  opensearch_dashboards.opensearch.port:
-    description: "Port of opensearch master to send opensearch requests to"
-    default: "9200"
+  opensearch-dashboards-cf-auth-proxy.cf.admin_group:
+    default: the admin group of cf
+  opensearch-dashboards-cf-auth-proxy.cf.api_url:
+    description: api url of cf
+  opensearch-dashboards-cf-auth-proxy.uaa.auth_url:
+    description: where to send your users for authentication. Probably looks like https://login.<domain>/oauth/authorize
+  opensearch-dashboards-cf-auth-proxy.uaa.base_url:
+    description: base URL for app where your client can exchange codes and refresh tokens for tokens. Probably looks like https://uaa.<domain>/
+  opensearch-dashboards-cf-auth-proxy.uaa.client.id:
+    description: the client ID of your uaa clinet
+  opensearch-dashboards-cf-auth-proxy.uaa.client.secret:
+    description: the client secret for your uaa client
+  opensearch-dashboards-cf-auth-proxy.secret_key:
+    description: the key used for cookie signing
+  opensearch-dashboards-cf-auth-proxy.session_lifetime:
+    description: the lifetime of the session
+    default: 9600
