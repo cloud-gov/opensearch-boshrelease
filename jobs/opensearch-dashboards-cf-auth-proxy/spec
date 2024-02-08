@@ -16,6 +16,11 @@ properties:
   opensearch-dashboards-cf-auth-proxy.env:
     description: set to unit for tests, local for development, production for production
     default: production
+  opensearch-dashboards-cf-auth-proxy.secret_key:
+    description: the key used for cookie signing
+  opensearch-dashboards-cf-auth-proxy.session_lifetime:
+    description: the lifetime of the session
+    default: 9600
   opensearch-dashboards-cf-auth-proxy.opensearch_dashboards.url:
     description: this is the url of the proxied Opensearch dashboards instance
     default: "localhost"
@@ -31,8 +36,3 @@ properties:
     description: the client ID of your uaa clinet
   opensearch-dashboards-cf-auth-proxy.uaa.client.secret:
     description: the client secret for your uaa client
-  opensearch-dashboards-cf-auth-proxy.secret_key:
-    description: the key used for cookie signing
-  opensearch-dashboards-cf-auth-proxy.session_lifetime:
-    description: the lifetime of the session
-    default: 9600
