@@ -2,10 +2,10 @@ auth-proxy/Jinja2-3.1.3-py3-none-any.whl:
   size: 133236
   object_id: f86fb186-68cb-453a-5b1a-b6a0aac58f60
   sha: sha256:7d6d50dd97d52cbc355597bd845fabfbac3f551e1f99619e39a35ce8c370b5fa
-auth-proxy/MarkupSafe-2.1.5-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl:
-  size: 25818
-  object_id: 057112ef-d420-4aaf-73b4-af50f2c17973
-  sha: sha256:2174c595a0d73a3080ca3257b40096db99799265e1c27cc5a610743acd86d62f
+auth-proxy/MarkupSafe-2.1.5-cp310-cp310-musllinux_1_1_x86_64.whl:
+  size: 30021
+  object_id: 27f3208d-0796-4db9-7f79-660146740532
+  sha: sha256:fce659a462a1be54d2ffcacea5e3ba2d74daa74f30f5f143fe0c58636e355fdd
 auth-proxy/PyJWT-2.8.0-py3-none-any.whl:
   size: 22591
   object_id: fc779b2c-aa09-417d-4cd1-86c6a08394bd
