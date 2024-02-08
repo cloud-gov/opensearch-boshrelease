@@ -1,0 +1,2 @@
+#!/var/vcap/packages/opensearch_dashboards_cf_auth_proxy/venv/bin
+python3 /var/vcap/jobs/opensearch-dashboards-cf-auth-proxy/packages/opensearch_dashboards_cf_auth_proxy/opensearch_dashboards_cf_auth_proxy/app.py

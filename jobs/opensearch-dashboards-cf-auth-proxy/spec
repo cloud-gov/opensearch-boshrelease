@@ -9,6 +9,7 @@ packages:
 
 templates:
   bin/pre-start.erb: bin/pre-start
+  bin/Runapp: bin/Runapp
   config/.env.erb: config/.env
 
 
