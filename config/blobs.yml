@@ -1,7 +1,19 @@
+auth-proxy/Jinja2-3.1.3-py3-none-any.whl:
+  size: 133236
+  object_id: f86fb186-68cb-453a-5b1a-b6a0aac58f60
+  sha: sha256:7d6d50dd97d52cbc355597bd845fabfbac3f551e1f99619e39a35ce8c370b5fa
+auth-proxy/MarkupSafe-2.1.5-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl:
+  size: 25818
+  object_id: 057112ef-d420-4aaf-73b4-af50f2c17973
+  sha: sha256:2174c595a0d73a3080ca3257b40096db99799265e1c27cc5a610743acd86d62f
 auth-proxy/PyJWT-2.8.0-py3-none-any.whl:
   size: 22591
   object_id: fc779b2c-aa09-417d-4cd1-86c6a08394bd
   sha: sha256:59127c392cc44c2da5bb3192169a91f429924e17aff6534d70fdc02ab3e04320
+auth-proxy/blinker-1.7.0-py3-none-any.whl:
+  size: 13068
+  object_id: 26ea930c-6e94-4add-5b09-547896b61325
+  sha: sha256:c3f865d4d54db7abc53758a01601cf343fe55b84c1de4e3fa910e420b438d5b9
 auth-proxy/certifi-2024.2.2-py3-none-any.whl:
   size: 163774
   object_id: f7c98402-cec5-4c63-77b1-a074f54654af
@@ -10,6 +22,10 @@ auth-proxy/charset_normalizer-3.3.2-py3-none-any.whl:
   size: 48543
   object_id: cac75579-13b3-4a38-53b2-88e39d10435e
   sha: sha256:3e4d1f6587322d2788836a99c69062fbb091331ec940e02d12d179c1d53e25fc
+auth-proxy/click-8.1.7-py3-none-any.whl:
+  size: 97941
+  object_id: b75a5db5-e8dd-491b-575c-962460e201ba
+  sha: sha256:ae74fb96c20a0277a1d615f1e4d73c8414f5a98db8b799a7931d1582f3390c28
 auth-proxy/environs-10.3.0-py3-none-any.whl:
   size: 12565
   object_id: a9a15277-5dc6-4c98-59bf-4d7abf33e368
@@ -26,6 +42,10 @@ auth-proxy/idna-3.6-py3-none-any.whl:
   size: 61567
   object_id: 876717a1-96c3-4a0c-73f9-c2fb58a39aeb
   sha: sha256:c05567e9c24a6b9faaa835c4821bad0590fbb9d5779e7caa6e1cc4978e7eb24f
+auth-proxy/itsdangerous-2.1.2-py3-none-any.whl:
+  size: 15749
+  object_id: bd725ca0-1d25-4f0c-5555-0dc428ecf5e6
+  sha: sha256:2c2349112351b88699d8d4b6b075022c0808887cb7ad10069318a8b0bc88db44
 auth-proxy/marshmallow-3.20.2-py3-none-any.whl:
   size: 49449
   object_id: d9b8c3e4-8b80-48ec-524b-8a68ce4277b5
@@ -50,6 +70,10 @@ auth-proxy/urllib3-2.2.0-py3-none-any.whl:
   size: 120877
   object_id: ab44aca9-1188-40fe-4d0c-22a1e3a8f8b4
   sha: sha256:ce3711610ddce217e6d113a2732fafad960a03fd0318c91faa79481e35c11224
+auth-proxy/werkzeug-3.0.1-py3-none-any.whl:
+  size: 226669
+  object_id: b8d2d67b-b438-44da-5b4f-ceae8c4fa29f
+  sha: sha256:90a285dc0e42ad56b34e696398b8122ee4c681833fb35b8334a095d82c56da10
 curator-opensearch-0.0.11.tar.gz:
   size: 247372
   object_id: 3cb859ae-895b-4e55-4119-f3dd963e4b00
