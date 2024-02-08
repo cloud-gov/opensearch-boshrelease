@@ -34,6 +34,10 @@ auth-proxy/flask-3.0.2-py3-none-any.whl:
   size: 101300
   object_id: f8d36a81-6c42-4740-74f8-0ecd513acde4
   sha: sha256:3232e0e9c850d781933cf0207523d1ece087eb8d87b23777ae38456e2fbe7c6e
+auth-proxy/flit_core-3.8.0.tar.gz:
+  size: 41224
+  object_id: 940bcba2-17b3-4d77-5153-89d703f40ff8
+  sha: sha256:b305b30c99526df5e63d6022dd2310a0a941a187bd3884f4c8ef0418df6c39f3
 auth-proxy/gunicorn-21.2.0-py3-none-any.whl:
   size: 80176
   object_id: bf45b039-dbd5-4553-51ff-d64ae6101aac
