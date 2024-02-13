@@ -13,6 +13,9 @@ templates:
   config/.env.erb: config/.env
 
 properties:
+  opensearch-dashboards-cf-auth-proxy.port:
+    description: port for the auth-proxy-app
+    default: 3141
   opensearch-dashboards-cf-auth-proxy.env:
     description: set to unit for tests, local for development, production for production
     default: production
