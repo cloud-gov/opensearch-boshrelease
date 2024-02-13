@@ -3,3 +3,6 @@ processes:
     hooks:
       pre_start: /var/vcap/jobs/opensearch-dashboards-cf-auth-proxy/bin/pre-start
     executable: /var/vcap/jobs/opensearch-dashboards-cf-auth-proxy/bin/Runapp
+    additional_volumes:
+    - path: /var/vcap/sys/log/opensearch-dashboards-cf-auth-proxy
+      writable: true
