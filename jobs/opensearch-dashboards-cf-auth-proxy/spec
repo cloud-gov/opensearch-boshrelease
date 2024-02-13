@@ -11,6 +11,7 @@ templates:
   bin/pre-start.erb: bin/pre-start
   bin/Runapp: bin/Runapp
   config/.env.erb: config/.env
+  config/bpm.yml.erb: config/bpm.yml
 
 properties:
   opensearch-dashboards-cf-auth-proxy.port:
