@@ -6,7 +6,7 @@ set -x
 export JOB_NAME=opensearch-dashboards-cf-auth-proxy
 export PACKAGE_DIR=/var/vcap/packages/opensearch_dashboards_cf_auth_proxy
 export LOG_DIR=/var/vcap/sys/log/$JOB_NAME
-export JOB_DIR= /var/vcap/jobs/$JOB_NAME
+export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 export PATH=$PACKAGE_DIR/bin:$PATH
 export PYTHONPATH=$PACKAGE_DIR/lib/python3.12/site-packages/
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/var/vcap/packages/python3/lib
