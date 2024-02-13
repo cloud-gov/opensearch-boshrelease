@@ -4,9 +4,9 @@ set -e
 set -x
 
 
-export PATH=/var/vcap/packages/opensearch-dashboards-cf-auth-proxy/bin:$PATH
+export PATH=/var/vcap/packages/opensearch_dashboards_cf_auth_proxy/bin:$PATH
 export CONFIG_DIR=/var/vcap/jobs/opensearch-dashboards-cf-auth-proxy/config
-export PYTHONPATH=/var/vcap/packages/opensearch-dashboards-cf-auth-proxy/lib/python3.12/site-packages/
+export PYTHONPATH=/var/vcap/packages/opensearch_dashboards_cf_auth_proxy/lib/python3.12/site-packages/
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/var/vcap/packages/python3/lib
 
 # not sure what this should be to actually run it
