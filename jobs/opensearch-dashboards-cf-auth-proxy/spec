@@ -16,6 +16,11 @@ templates:
   config/auth-proxy-pem.erb: config/ssl/auth-proxy.pem
   config/ca.erb: config/ssl/opensearch.ca
 
+consumes:
+- name: opensearch
+  type: opensearch
+  optional: true
+
 properties:
   opensearch-dashboards-cf-auth-proxy.opensearch.ssl.certificate:
     description: cert for auth-proxy
