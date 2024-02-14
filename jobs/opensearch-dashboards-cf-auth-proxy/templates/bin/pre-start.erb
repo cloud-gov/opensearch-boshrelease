@@ -3,9 +3,13 @@
 export JOB_NAME=opensearch-dashboards-cf-auth-proxy
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 
-export PATH=/var/vcap/packages/opensearch_dashboards_cf_auth_proxy/bin:$PATH
-export CONFIG_DIR=/var/vcap/jobs/opensearch_dashboards_cf_auth_proxy/config
-export PYTHONPATH=/var/vcap/packages/opensearch_dashboards_cf_auth_proxy/lib/python3.12/site-packages/
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/var/vcap/packages/python3/lib
+<% if_p('opensearch-dashboards-cf-auth-proxy.opensearch.ssl.key') do %>
+    openssl pkcs8 -v1 "PBE-SHA1-3DES" \
+    -in "${JOB_DIR}/config/ssl/auth-proxy.pem" -topk8 \
+    -out "${JOB_DIR}/config/ssl/auth-proxy.key" -nocrypt
+    chmod 600 ${JOB_DIR}/config/ssl/auth-proxy*.key
+<% end %>
 
-
+if [ -d ${JOB_DIR}/config/ssl ]; then
+  chown -R vcap:vcap ${JOB_DIR}/config/ssl
+fi

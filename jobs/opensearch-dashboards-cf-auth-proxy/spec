@@ -12,8 +12,15 @@ templates:
   bin/Runapp: bin/Runapp
   config/.env.erb: config/.env
   config/bpm.yml.erb: config/bpm.yml
+  config/auth-proxy-crt.erb: config/ssl/auth-proxy.crt
+  config/auth-proxy-pem.erb: config/ssl/auth-proxy.pem
+  config/ca.erb: config/ssl/opensearch.ca
 
 properties:
+  opensearch-dashboards-cf-auth-proxy.opensearch.ssl.certificate:
+    description: cert for auth-proxy
+  opensearch-dashboards-cf-auth-proxy.opensearch.ssl.key:
+    description: key for auth proxy
   opensearch-dashboards-cf-auth-proxy.port:
     description: port for the auth-proxy-app
     default: 3141
