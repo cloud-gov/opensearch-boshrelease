@@ -16,6 +16,9 @@ cd "$PACKAGE_DIR/src"
 export FLASK_APP="cf_auth_proxy.app:create_app()"
 gunicorn \
   -b "0.0.0.0:$AUTH_PORT" \
+  --keyfile $JOB_DIR/config/ssl/auth-proxy.key \
+  --certfile $JOB_DIR/config/ssl/auth-proxy.crt \
+  --ca_certs $JOB_DIR/config/ssl/opensearch.ca \
   --access-logfile $LOG_DIR/$JOB_NAME.access.log \
   --error-logfile $LOG_DIR/$JOB_NAME.error.log \
   --log-level "<%= p('opensearch-dashboards-cf-auth-proxy.log_level') %>" \
