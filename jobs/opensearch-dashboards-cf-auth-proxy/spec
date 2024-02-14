@@ -17,9 +17,9 @@ templates:
   config/ca.erb: config/ssl/opensearch.ca
 
 consumes:
-- name: opensearch
-  type: opensearch
-  optional: true
+  - name: opensearch
+    type: opensearch
+    optional: true
 
 properties:
   opensearch-dashboards-cf-auth-proxy.opensearch.ssl.certificate:
@@ -36,7 +36,7 @@ properties:
     description: the key used for cookie signing
   opensearch-dashboards-cf-auth-proxy.session_lifetime:
     description: the lifetime of the session
-    default: 9600
+    default: 3600
   opensearch-dashboards-cf-auth-proxy.opensearch_dashboards.url:
     description: this is the url of the proxied Opensearch dashboards instance
     default: "localhost"
