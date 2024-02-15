@@ -23,4 +23,6 @@ gunicorn \
   --error-logfile $LOG_DIR/$JOB_NAME.error.log \
   --log-level "<%= p('opensearch-dashboards-cf-auth-proxy.log_level') %>" \
   --timeout <%= p('opensearch-dashboards-cf-auth-proxy.gunicorn.timeout') %> \
+  --workers <%= p('opensearch-dashboards-cf-auth-proxy.gunicorn.num_workers') %> \
+  --worker_class <%= p('opensearch-dashboards-cf-auth-proxy.gunicorn.worker_class') %> \
   "$FLASK_APP"

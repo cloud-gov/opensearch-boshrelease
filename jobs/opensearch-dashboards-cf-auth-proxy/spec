@@ -61,6 +61,12 @@ properties:
   opensearch-dashboards-cf-auth-proxy.log_level:
     descrition: "Log level for auth proxy"
     default: "info"
+  opensearch-dashboards-cf-auth-proxy.gunicorn.num_workers:
+    descrition: "Number of gunicorn workers to run. See https://docs.gunicorn.org/en/stable/settings.html#workers"
+    default: 1
   opensearch-dashboards-cf-auth-proxy.gunicorn.timeout:
     descrition: "Timeout for silent workers to be killed"
     default: 300
+  opensearch-dashboards-cf-auth-proxy.gunicorn.worker_class:
+    descrition: "gunicorn worker class to use. See https://docs.gunicorn.org/en/stable/settings.html#worker-class"
+    default: "sync"
