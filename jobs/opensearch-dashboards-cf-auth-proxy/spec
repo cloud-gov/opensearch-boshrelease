@@ -40,6 +40,12 @@ properties:
   opensearch-dashboards-cf-auth-proxy.opensearch_dashboards.url:
     description: this is the url of the proxied Opensearch dashboards instance
     default: "localhost"
+  opensearch-dashboards-cf-auth-proxy.opensearch_dashboards.ssl.certificate:
+    description: cert for opensearch_dashboards
+  opensearch-dashboards-cf-auth-proxy.opensearch_dashboards.ssl.key:
+    description: key for opensearch_dashboards
+  opensearch-dashboards-cf-auth-proxy.opensearch_dashboards.ssl.ca:
+    description: ca for opensearch_dashboards
   opensearch-dashboards-cf-auth-proxy.cf.admin_group:
     default: the admin group of cf
   opensearch-dashboards-cf-auth-proxy.cf.api_url:
