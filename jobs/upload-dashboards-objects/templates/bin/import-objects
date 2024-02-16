@@ -36,21 +36,6 @@ if __name__ == "__main__":
     logs_url = 'https://<%= p('opensearch_dashboards.host') %>:<%= dashboards_link.p('opensearch_dashboards.port') %>'
     login_url = 'https://<%= p("dashboards_objects.login_host_name") %>.<%= system_domain %>'
 
-    logs = session.get(login_url)
-    assert logs.url == 'https://login.<%= system_domain %>/login', logs.url
-    assert logs.status_code == 200, logs.status_code
-
-    login = session.post(
-        'https://<%= p("dashboards_objects.login_host_name") %>.<%= system_domain %>/login.do',
-        data={
-            'username': '<%= p('cloudfoundry.user') %>',
-            'password': '<%= p('cloudfoundry.password') %>',
-            'X-Uaa-Csrf': logs.cookies['X-Uaa-Csrf'],
-        },
-    )
-    assert login.url == f'{logs_url}/app/home', login.url
-    assert login.status_code == 200, login.status_code
-
     headers = {
       'content-type': 'application/json',
       'osd-xsrf': 'true',
