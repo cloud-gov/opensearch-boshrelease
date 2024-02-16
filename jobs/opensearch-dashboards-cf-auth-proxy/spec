@@ -22,9 +22,9 @@ consumes:
     optional: true
 
 properties:
-  opensearch-dashboards-cf-auth-proxy.opensearch.ssl.certificate:
+  opensearch-dashboards-cf-auth-proxy.ssl.certificate:
     description: cert for auth-proxy
-  opensearch-dashboards-cf-auth-proxy.opensearch.ssl.key:
+  opensearch-dashboards-cf-auth-proxy.ssl.key:
     description: key for auth proxy
   opensearch-dashboards-cf-auth-proxy.port:
     description: port for the auth-proxy-app
