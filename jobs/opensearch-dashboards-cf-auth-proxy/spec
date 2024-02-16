@@ -9,7 +9,7 @@ packages:
 
 templates:
   bin/pre-start.erb: bin/pre-start
-  bin/Runapp: bin/Runapp
+  bin/run-proxy.erb: bin/run-proxy
   config/.env.erb: config/.env
   config/bpm.yml.erb: config/bpm.yml
   config/auth-proxy-crt.erb: config/ssl/auth-proxy.crt
