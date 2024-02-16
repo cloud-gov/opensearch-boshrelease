@@ -14,6 +14,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/var/vcap/packages/python3/lib
 source $JOB_DIR/config/.env
 cd "$PACKAGE_DIR/src"
 export FLASK_APP="cf_auth_proxy.app:create_app()"
+
 gunicorn \
   -b "0.0.0.0:$AUTH_PORT" \
   --keyfile $JOB_DIR/config/ssl/auth-proxy.key \
