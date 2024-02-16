@@ -1,0 +1,15 @@
+#!/bin/bash
+
+export JOB_NAME=opensearch-dashboards-cf-auth-proxy
+export JOB_DIR=/var/vcap/jobs/$JOB_NAME
+
+<% if_p('opensearch-dashboards-cf-auth-proxy.ssl.key') do %>
+    openssl pkcs8 -v1 "PBE-SHA1-3DES" \
+    -in "${JOB_DIR}/config/ssl/auth-proxy.pem" -topk8 \
+    -out "${JOB_DIR}/config/ssl/auth-proxy.key" -nocrypt
+    chmod 600 ${JOB_DIR}/config/ssl/auth-proxy*.key
+<% end %>
+
+if [ -d ${JOB_DIR}/config/ssl ]; then
+  chown -R vcap:vcap ${JOB_DIR}/config/ssl
+fi

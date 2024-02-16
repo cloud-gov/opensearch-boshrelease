@@ -11,7 +11,7 @@
 name: python3-requests
 
 dependencies:
-- python3
+  - python3
 
 files:
-- requests/*
+  - requests/*

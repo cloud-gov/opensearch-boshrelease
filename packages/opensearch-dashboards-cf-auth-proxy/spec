@@ -1,0 +1,17 @@
+---
+# this package installs all the requirements of the requests package
+# into a python virtual environment.
+#
+# To update this run:
+#  - Run bin/download-wheels.sh from https://github.com/cloud-gov/opensearch-dashboards-cf-auth-proxy to download wheels
+#  - Run bin/add-auth-proxy-blobs.sh from this repo
+#
+# Use the version of Python specified in the python3 package. See https://github.com/cloud-gov/cg-python3-boshrelease
+name: opensearch_dashboards_cf_auth_proxy
+
+dependencies:
+    - python3
+
+files:
+    - opensearch-dashboards-cf-auth-proxy.tar.gz
+    - auth-proxy/*

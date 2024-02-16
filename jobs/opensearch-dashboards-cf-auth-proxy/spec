@@ -1,0 +1,72 @@
+---
+name: opensearch-dashboards-cf-auth-proxy
+
+description: This job runs the proxy for dashboard
+
+packages:
+  - python3
+  - opensearch_dashboards_cf_auth_proxy
+
+templates:
+  bin/pre-start.erb: bin/pre-start
+  bin/run-proxy.erb: bin/run-proxy
+  config/.env.erb: config/.env
+  config/bpm.yml.erb: config/bpm.yml
+  config/auth-proxy-crt.erb: config/ssl/auth-proxy.crt
+  config/auth-proxy-pem.erb: config/ssl/auth-proxy.pem
+  config/ca.erb: config/ssl/opensearch.ca
+
+consumes:
+  - name: opensearch
+    type: opensearch
+    optional: true
+
+properties:
+  opensearch-dashboards-cf-auth-proxy.ssl.certificate:
+    description: cert for auth-proxy
+  opensearch-dashboards-cf-auth-proxy.ssl.key:
+    description: key for auth proxy
+  opensearch-dashboards-cf-auth-proxy.port:
+    description: port for the auth-proxy-app
+    default: 3141
+  opensearch-dashboards-cf-auth-proxy.env:
+    description: set to unit for tests, local for development, production for production
+    default: production
+  opensearch-dashboards-cf-auth-proxy.secret_key:
+    description: the key used for cookie signing
+  opensearch-dashboards-cf-auth-proxy.session_lifetime:
+    description: the lifetime of the session
+    default: 3600
+  opensearch-dashboards-cf-auth-proxy.opensearch_dashboards.url:
+    description: this is the url of the proxied Opensearch dashboards instance
+    default: "localhost"
+  opensearch-dashboards-cf-auth-proxy.opensearch_dashboards.ssl.certificate:
+    description: cert for opensearch_dashboards
+  opensearch-dashboards-cf-auth-proxy.opensearch_dashboards.ssl.key:
+    description: key for opensearch_dashboards
+  opensearch-dashboards-cf-auth-proxy.opensearch_dashboards.ssl.ca:
+    description: ca for opensearch_dashboards
+  opensearch-dashboards-cf-auth-proxy.cf.admin_group:
+    default: the admin group of cf
+  opensearch-dashboards-cf-auth-proxy.cf.api_url:
+    description: api url of cf
+  opensearch-dashboards-cf-auth-proxy.uaa.auth_url:
+    description: where to send your users for authentication. Probably looks like https://login.<domain>/oauth/authorize
+  opensearch-dashboards-cf-auth-proxy.uaa.base_url:
+    description: base URL for app where your client can exchange codes and refresh tokens for tokens. Probably looks like https://uaa.<domain>/
+  opensearch-dashboards-cf-auth-proxy.uaa.client.id:
+    description: the client ID of your uaa clinet
+  opensearch-dashboards-cf-auth-proxy.uaa.client.secret:
+    description: the client secret for your uaa client
+  opensearch-dashboards-cf-auth-proxy.log_level:
+    descrition: "Log level for auth proxy"
+    default: "info"
+  opensearch-dashboards-cf-auth-proxy.gunicorn.num_workers:
+    descrition: "Number of gunicorn workers to run. See https://docs.gunicorn.org/en/stable/settings.html#workers"
+    default: 1
+  opensearch-dashboards-cf-auth-proxy.gunicorn.timeout:
+    descrition: "Timeout for silent workers to be killed"
+    default: 300
+  opensearch-dashboards-cf-auth-proxy.gunicorn.worker_class:
+    descrition: "gunicorn worker class to use. See https://docs.gunicorn.org/en/stable/settings.html#worker-class"
+    default: "eventlet"
