@@ -1,23 +1,5 @@
 #!/var/vcap/packages/python3-requests/venv/bin/python3
 
-<%
-
-  job_dir = "/var/vcap/jobs/upload-dashboards-objects"
-
-  system_domain = nil
-  if_p('cloudfoundry.system_domain') do |prop|
-    system_domain = prop
-  end.else do
-    system_domain = link('cloud_controller').p('system_domain')
-  end
-  logs_hostname = "logs"
-  if_p('cloudfoundry.logs_hostname') do |prop|
-    logs_hostname = prop
-  end
-
-  dashboards_link = link('opensearch_dashboards')
-%>
-
 import glob
 import logging
 import os
