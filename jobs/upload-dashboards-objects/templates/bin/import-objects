@@ -1,23 +1,5 @@
 #!/var/vcap/packages/python3-requests/venv/bin/python3
 
-<%
-
-  job_dir = "/var/vcap/jobs/upload-dashboards-objects"
-
-  system_domain = nil
-  if_p('cloudfoundry.system_domain') do |prop|
-    system_domain = prop
-  end.else do
-    system_domain = link('cloud_controller').p('system_domain')
-  end
-  logs_hostname = "logs"
-  if_p('cloudfoundry.logs_hostname') do |prop|
-    logs_hostname = prop
-  end
-
-  dashboards_link = link('opensearch_dashboards')
-%>
-
 import glob
 import logging
 import os
@@ -36,24 +18,16 @@ if __name__ == "__main__":
     logs_url = 'https://<%= p('opensearch_dashboards.host') %>:<%= dashboards_link.p('opensearch_dashboards.port') %>'
     login_url = 'https://<%= p("dashboards_objects.login_host_name") %>.<%= system_domain %>'
 
-    logs = session.get(login_url)
-    assert logs.url == 'https://login.<%= system_domain %>/login', logs.url
-    assert logs.status_code == 200, logs.status_code
+    headers = {
+      'content-type': 'application/json',
+      'osd-xsrf': 'true',
+      'x-proxy-roles': 'admin',
+      'x-proxy-user': 'admin',
+      'x-forwarded-for': '127.0.0.1',
+    }
 
-    login = session.post(
-        'https://<%= p("dashboards_objects.login_host_name") %>.<%= system_domain %>/login.do',
-        data={
-            'username': '<%= p('cloudfoundry.user') %>',
-            'password': '<%= p('cloudfoundry.password') %>',
-            'X-Uaa-Csrf': logs.cookies['X-Uaa-Csrf'],
-        },
-    )
-    assert login.url == f'{logs_url}/app/home', login.url
-    assert login.status_code == 200, login.status_code
-    
     <% p("dashboards_objects.upload_patterns").each do |pattern| %>
     for filename in glob.iglob("<%= pattern.fetch("pattern") %>", recursive=True):
-        headers = {'content-type': 'application/json', 'osd-xsrf': 'true'}
         r = session.post(
           '{}/api/saved_objects/{}/{}'.format(
             logs_url,
