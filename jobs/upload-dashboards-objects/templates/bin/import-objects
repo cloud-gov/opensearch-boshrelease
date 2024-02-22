@@ -1,5 +1,12 @@
 #!/var/vcap/packages/python3-requests/venv/bin/python3
 
+<%
+
+  job_dir = "/var/vcap/jobs/upload-dashboards-objects"
+
+  dashboards_link = link('opensearch_dashboards')
+%>
+
 import glob
 import logging
 import os
@@ -16,7 +23,6 @@ if __name__ == "__main__":
     key = '<%= job_dir %>/config/ssl/dashboard-web.key'
 
     logs_url = 'https://<%= p('opensearch_dashboards.host') %>:<%= dashboards_link.p('opensearch_dashboards.port') %>'
-    login_url = 'https://<%= p("dashboards_objects.login_host_name") %>.<%= system_domain %>'
 
     headers = {
       'content-type': 'application/json',
