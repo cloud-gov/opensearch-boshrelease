@@ -4,13 +4,6 @@
 
   job_dir = "/var/vcap/jobs/upload-dashboards-objects"
 
-  system_domain = nil
-  if_p('cloudfoundry.system_domain') do |prop|
-    system_domain = prop
-  end.else do
-    system_domain = link('cloud_controller').p('system_domain')
-  end
-
   dashboards_link = link('opensearch_dashboards')
 %>
 
@@ -30,7 +23,6 @@ if __name__ == "__main__":
     key = '<%= job_dir %>/config/ssl/dashboard-web.key'
 
     logs_url = 'https://<%= p('opensearch_dashboards.host') %>:<%= dashboards_link.p('opensearch_dashboards.port') %>'
-    login_url = 'https://<%= p("dashboards_objects.login_host_name") %>.<%= system_domain %>'
 
     headers = {
       'content-type': 'application/json',
