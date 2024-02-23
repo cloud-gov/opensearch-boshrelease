@@ -2,8 +2,8 @@ auth-proxy/Jinja2-3.1.3-py3-none-any.whl:
   size: 133236
   object_id: 2a7e8da4-a944-42c8-4af4-6089dcf7c668
   sha: sha256:7d6d50dd97d52cbc355597bd845fabfbac3f551e1f99619e39a35ce8c370b5fa
-auth-proxy/MarkupSafe-2.1.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl:
-  size: 28462
+? auth-proxy/MarkupSafe-2.1.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+: size: 28462
   object_id: e1188548-8f03-4579-6b7d-17c8dc9c1ccb
   sha: sha256:f5dfb42c4604dddc8e4305050aa6deb084540643ed5804d7455b5df8fe16f5e5
 auth-proxy/PyJWT-2.8.0-py3-none-any.whl:
@@ -46,8 +46,8 @@ auth-proxy/flit_core-3.8.0.tar.gz:
   size: 41224
   object_id: 940bcba2-17b3-4d77-5153-89d703f40ff8
   sha: sha256:b305b30c99526df5e63d6022dd2310a0a941a187bd3884f4c8ef0418df6c39f3
-auth-proxy/greenlet-3.0.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl:
-  size: 670455
+? auth-proxy/greenlet-3.0.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+: size: 670455
   object_id: 4ad2a93a-a23c-4b5e-7bec-8e46bbefc9e3
   sha: sha256:881b7db1ebff4ba09aaaeae6aa491daeb226c8150fc20e836ad00041bcb11230
 auth-proxy/gunicorn-21.2.0-py3-none-any.whl:
@@ -226,10 +226,10 @@ opensearch-dashboards-2.9.0-linux-x64.tar.gz:
   size: 314585875
   object_id: 8a7b9858-37a1-4f9e-4d6d-3cbe61433cac
   sha: sha256:f8328b9c1156d254faa561c03cbc51159f5e335812c7b27a98bbe0556b9f030c
-opensearch-dashboards-cf-auth-proxy.tar.gz:
-  size: 26878
-  object_id: 11e30254-e909-4d87-4b27-6c452f8313e2
-  sha: sha256:31d57993e48a2bffd0f16033a1838a545006b1fdff538ce828d167a71c64296a
+opensearch-dashboards-cf-auth-proxy-0.0.1.tar.gz:
+  size: 27642
+  object_id: 16aa1823-bc8b-481c-49c0-36b14888e120
+  sha: sha256:f994e0f3e8902331e9f97d0b1183c33108ffbf4a667f44d11a2ee30876251a63
 requests/certifi-2023.11.17-py3-none-any.whl:
   size: 162530
   object_id: f2afff72-e415-4390-61c1-eb8010ed4e4a

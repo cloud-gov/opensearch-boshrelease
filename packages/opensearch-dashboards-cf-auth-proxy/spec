@@ -13,5 +13,5 @@ dependencies:
     - python3
 
 files:
-    - opensearch-dashboards-cf-auth-proxy.tar.gz
+    - opensearch-dashboards-cf-auth-proxy-0.0.1.tar.gz
     - auth-proxy/*

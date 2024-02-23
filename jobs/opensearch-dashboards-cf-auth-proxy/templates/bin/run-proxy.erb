@@ -12,7 +12,7 @@ export PYTHONPATH=$PACKAGE_DIR/lib/python3.12/site-packages/
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/var/vcap/packages/python3/lib
 
 source $JOB_DIR/config/.env
-cd "$PACKAGE_DIR/src"
+cd "$PACKAGE_DIR"
 export FLASK_APP="cf_auth_proxy.app:create_app()"
 
 gunicorn \
