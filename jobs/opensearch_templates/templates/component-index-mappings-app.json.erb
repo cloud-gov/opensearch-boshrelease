@@ -28,6 +28,9 @@ keyword_default = { "type": "keyword", "index": true }.to_json
             "space_id":     <%= keyword_default %>
           }
         },
+        "app": {
+          "type": "flattened"
+        },
         "logmessage": {
           "type": "object",
           "dynamic": true,
@@ -124,7 +127,7 @@ keyword_default = { "type": "keyword", "index": true }.to_json
             "source":  <%= keyword_default %>,
             "code": { "type": "long" }
           }
-        },      
+        },
         "httpstartstop": {
           "type": "object",
           "dynamic": true,
