@@ -57,6 +57,15 @@ input {
   end
 %>
 
+input {
+  grok
+  {
+    match =>
+    {
+      "message" => ' "cf_org_name":%{STRING:org_name} '
+    }
+  }
+}
 output {
     <% if p("logstash_parser.debug") %>
         stdout {
