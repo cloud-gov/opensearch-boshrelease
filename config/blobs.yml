@@ -219,9 +219,9 @@ logstash/logstash-output-syslog-3.0.5.zip:
   object_id: 21474ee6-824a-4547-7f45-b236864358ab
   sha: sha256:80a2b08f2b58ae81c823cc0bb1dd7956fbc173037fc621bfa31af34140724e02
 logstash/logstash-patterns-core-4.3.4.zip:
-  size: 117407
-  object_id: d97f4dd9-50da-4db5-78d1-c6ebde11eb38
-  sha: sha256:50d024c3573b77d8fe2c5be5cfd50ee662164c02ff75ad499cc82d699785d9b3
+  size: 89348
+  object_id: 4309081b-623d-4b4f-5f76-47ff9bd6dd06
+  sha: sha256:b8343f4839f04b0a860077e34635db337c614e3e599ffedb2942bb7bdc2514a9
 opensearch-2.9.0-linux-x64.tar.gz:
   size: 805162121
   object_id: a0062097-fe9f-4720-666f-8fb84933550d
