@@ -16,3 +16,4 @@ logstash-plugin install --no-verify "file://${PWD}/logstash/logstash-input-relp-
 logstash-plugin install --no-verify "file://${PWD}/logstash/logstash-input-syslog-3.6.0.zip"
 logstash-plugin install --no-verify "file://${PWD}/logstash/logstash-output-syslog-3.0.5.zip"
 logstash-plugin install --no-verify "file://${PWD}/logstash/logstash-output-opensearch-2.0.2.zip"
+logstash-plugin install --no-verify "file://${PWD}/logstash/logstash-patterns-core-4.3.4.zip"
