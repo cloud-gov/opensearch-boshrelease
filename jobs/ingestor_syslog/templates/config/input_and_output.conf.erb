@@ -62,7 +62,7 @@ filter {
   {
     match =>
     {
-      "message" => ' "cf_org_name":%{STRING:org_name} '
+      "message" => ' "cf_org_name":%{WORD:org_name} '
     }
   }
 }
