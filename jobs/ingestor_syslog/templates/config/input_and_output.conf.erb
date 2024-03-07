@@ -102,7 +102,7 @@ output {
           <%
             options = {
               "hosts" => [ es_output_hosts ],
-              "index" => p('logstash_parser.opensearch.index'),
+              "index" => 'test',
               "manage_template" => false,
               "ssl_certificate_verification" => true,
               "tls_certificate" => "/var/vcap/jobs/ingestor_syslog/config/ssl/ingestor.crt",
