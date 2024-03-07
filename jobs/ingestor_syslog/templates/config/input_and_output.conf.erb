@@ -67,8 +67,7 @@ output {
         <%= output['plugin'] %> {
         <% if 'opensearch' == output['plugin'] %>
             <%
-            if [@cf][org]
-              {
+            if [@cf][org] {
               options = {
                 "hosts" => [ es_output_hosts ],
                 "index" => p('logstash_parser.opensearch.app_index'),
