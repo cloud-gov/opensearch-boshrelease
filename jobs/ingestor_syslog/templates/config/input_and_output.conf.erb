@@ -99,36 +99,7 @@ output {
         }
       } else
       {
-        <%= output['plugin'] %> {
-        <% if 'opensearch' == output['plugin'] %>
-          <%
-            options = {}
-            options = {
-              "hosts" => [ es_output_hosts ],
-              "index" => p('logstash_parser.opensearch.index'),
-              "manage_template" => false,
-              "ssl_certificate_verification" => true,
-              "tls_certificate" => "/var/vcap/jobs/ingestor_syslog/config/ssl/ingestor.crt",
-              "tls_key" => "/var/vcap/jobs/ingestor_syslog/config/ssl/ingestor.key",
-              "ssl" => true,
-              "cacert" => "/var/vcap/jobs/ingestor_syslog/config/ssl/opensearch.pem"
-            }
-            if p('logstash_parser.opensearch.idle_flush_time', nil)
-              options['idle_flush_time'] = p('logstash_parser.opensearch.idle_flush_time')
-            end
-            if p('logstash_parser.opensearch.document_id', nil)
-              options['document_id'] = p('logstash_parser.opensearch.document_id')
-            end
-            if p('logstash_parser.opensearch.routing', nil)
-              options['routing'] = p('logstash_parser.opensearch.routing')
-            end
-            output['options'] = options.merge(output['options'])
-          %>
-        <% end %>
 
-        <% output['options'].each do | k, v | %>
-          <%= k %> => <%= v.inspect %>
-        <% end %>
         }
       }
     <% end %>
