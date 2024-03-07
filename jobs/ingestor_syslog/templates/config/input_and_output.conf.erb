@@ -66,8 +66,8 @@ output {
     <% p('logstash_parser.outputs').each do | output | %>
         <%= output['plugin'] %> {
         <% if 'opensearch' == output['plugin'] %>
-            <%
             if [@cf][org] {
+              <%
               options = {
                 "hosts" => [ es_output_hosts ],
                 "index" => p('logstash_parser.opensearch.app_index'),
@@ -78,7 +78,9 @@ output {
                 "ssl" => true,
                 "cacert" => "/var/vcap/jobs/ingestor_syslog/config/ssl/opensearch.pem"
                 }
+              %>
               } else {
+                <%
                 options = {
                   "hosts" => [ es_output_hosts ],
                   "index" => p('logstash_parser.opensearch.index'),
@@ -89,7 +91,9 @@ output {
                   "ssl" => true,
                   "cacert" => "/var/vcap/jobs/ingestor_syslog/config/ssl/opensearch.pem"
                 }
+                %>
               }
+              <%
               if p('logstash_parser.opensearch.idle_flush_time', nil)
                 options['idle_flush_time'] = p('logstash_parser.opensearch.idle_flush_time')
               end
@@ -100,7 +104,7 @@ output {
                 options['routing'] = p('logstash_parser.opensearch.routing')
               end
               output['options'] = options.merge(output['options'])
-            %>
+              %>
         <% end %>
         <% output['options'].each do | k, v | %>
           <%= k %> => <%= v.inspect %>
