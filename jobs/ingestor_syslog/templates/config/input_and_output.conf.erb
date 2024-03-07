@@ -65,9 +65,10 @@ output {
     <% end %>
 
     <% p('logstash_parser.outputs').each do | output | %>
-      if [@cf][org] {
-      <%= output['plugin'] %> {
-      <% if 'opensearch' == output['plugin'] %>
+    if [@cf][org] {
+      <%= output['plugin'] %>
+        {
+        <% if 'opensearch' == output['plugin'] %>
           <%
             options = {
               "hosts" => [ es_output_hosts ],
@@ -90,19 +91,20 @@ output {
             end
             output['options'] = options.merge(output['options'])
           %>
-      <% end %>
+        <% end %>
 
         <% output['options'].each do | k, v | %>
           <%= k %> => <%= v.inspect %>
         <% end %>
         }
-      } else {
+      } else
+      {
         <%= output['plugin'] %> {
-      <% if 'opensearch' == output['plugin'] %>
+        <% if 'opensearch' == output['plugin'] %>
           <%
             options = {
               "hosts" => [ es_output_hosts ],
-              "index" => 'test',
+              "index" => p('logstash_parser.opensearch.index'),
               "manage_template" => false,
               "ssl_certificate_verification" => true,
               "tls_certificate" => "/var/vcap/jobs/ingestor_syslog/config/ssl/ingestor.crt",
@@ -121,7 +123,7 @@ output {
             end
             output['options'] = options.merge(output['options'])
           %>
-      <% end %>
+        <% end %>
 
         <% output['options'].each do | k, v | %>
           <%= k %> => <%= v.inspect %>
