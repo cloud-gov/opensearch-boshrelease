@@ -79,9 +79,7 @@ output {
                 "ssl" => true,
                 "cacert" => "/var/vcap/jobs/ingestor_syslog/config/ssl/opensearch.pem"
                 }
-              }
-            else
-              {
+              } else {
                 options = {
                   "hosts" => [ es_output_hosts ],
                   "index" => p('logstash_parser.opensearch.index'),
