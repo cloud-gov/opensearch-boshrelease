@@ -102,6 +102,7 @@ output {
         <%= output['plugin'] %> {
         <% if 'opensearch' == output['plugin'] %>
           <%
+            options = {}
             options = {
               "hosts" => [ es_output_hosts ],
               "index" => p('logstash_parser.opensearch.index'),
