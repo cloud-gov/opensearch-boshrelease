@@ -70,7 +70,14 @@ output {
             <%
               options = {
                 "hosts" => [ es_output_hosts ],
-                "index" => p('logstash_parser.opensearch.index'),
+                if [@cf][org]
+                  {
+                   "index" => p('logstash_parser.opensearch.app_index'),
+                  }
+                else
+                  {
+                    "index" => p('logstash_parser.opensearch.index'),
+                  }
                 "manage_template" => false,
                 "ssl_certificate_verification" => true,
                 "tls_certificate" => "/var/vcap/jobs/ingestor_syslog/config/ssl/ingestor.crt",

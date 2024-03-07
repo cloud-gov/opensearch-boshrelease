@@ -69,7 +69,7 @@ properties:
     example:
     - {name: logstash-output-cloudwatchlogs, version: 2.0.0}
     default: []
-  
+
   logstash.ecs_compatibility:
     description: Whether to enable ECS compatibility for geoip filters. See https://www.elastic.co/guide/en/logstash/current/plugins-filters-geoip.html#plugins-filters-geoip-ecs_compatibility
     default: "disabled"
@@ -180,6 +180,9 @@ properties:
   logstash_parser.opensearch.document_id:
     description: "Use a specific, dynamic ID rather than an auto-generated identifier."
     default: ~
+  logstash_parser.opensearch.app_index:
+    description: "The specific, dynamic index name to write events to."
+    default: "logstash-%{[@cf][org]}-%{+YYYY.MM.dd}"
   logstash_parser.opensearch.index:
     description: "The specific, dynamic index name to write events to."
     default: "logstash-%{+YYYY.MM.dd}"
