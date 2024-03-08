@@ -122,7 +122,7 @@ output {
             if p('logstash_parser.opensearch.routing', nil)
               options2['routing'] = p('logstash_parser.opensearch.routing')
             end
-            output['options'] = []
+            output['options'] = {}
             output['options'] = options2.merge(output['options'])
           %>
         <% end %>
