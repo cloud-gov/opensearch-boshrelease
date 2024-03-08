@@ -181,7 +181,7 @@ properties:
     description: "Use a specific, dynamic ID rather than an auto-generated identifier."
     default: ~
   logstash_parser.opensearch.app_index:
-    description: "The specific, dynamic index name to write events to."
+    description: "The specific, dynamic index name to write events to for apps."
     default: "logstash-%{[@cf][org]}-%{+YYYY.MM.dd}"
   logstash_parser.opensearch.index:
     description: "The specific, dynamic index name to write events to."
