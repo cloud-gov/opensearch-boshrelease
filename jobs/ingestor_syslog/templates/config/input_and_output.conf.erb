@@ -107,7 +107,7 @@ output {
 
           hosts => ["https://localhost:9231"]
 
-          index => "logs-app-%{+YYYY.MM.dd}"
+          index => p('logstash_parser.opensearch.app'),
 
           manage_template => false
 
