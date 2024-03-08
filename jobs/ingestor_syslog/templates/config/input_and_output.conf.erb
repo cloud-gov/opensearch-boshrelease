@@ -103,7 +103,7 @@ output {
         {
         <% if 'opensearch' == output['plugin'] %>
           <%
-            options = {
+            roptions = {
               "hosts" => [ es_output_hosts ],
               "index" => p('logstash_parser.opensearch.index'),
               "manage_template" => false,
@@ -114,15 +114,15 @@ output {
               "cacert" => "/var/vcap/jobs/ingestor_syslog/config/ssl/opensearch.pem"
             }
             if p('logstash_parser.opensearch.idle_flush_time', nil)
-              options['idle_flush_time'] = p('logstash_parser.opensearch.idle_flush_time')
+              roptions['idle_flush_time'] = p('logstash_parser.opensearch.idle_flush_time')
             end
             if p('logstash_parser.opensearch.document_id', nil)
-              options['document_id'] = p('logstash_parser.opensearch.document_id')
+              roptions['document_id'] = p('logstash_parser.opensearch.document_id')
             end
             if p('logstash_parser.opensearch.routing', nil)
-              options['routing'] = p('logstash_parser.opensearch.routing')
+              roptions['routing'] = p('logstash_parser.opensearch.routing')
             end
-            output['options'] = options.merge(output['options'])
+            output['roptions'] = options.merge(output['roptions'])
           %>
         <% end %>
 
