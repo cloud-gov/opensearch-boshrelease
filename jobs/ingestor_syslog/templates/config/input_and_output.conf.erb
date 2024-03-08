@@ -122,11 +122,11 @@ output {
             if p('logstash_parser.opensearch.routing', nil)
               options2['routing'] = p('logstash_parser.opensearch.routing')
             end
-            output['options2'] = options2.merge(output['options2'])
+            output['options'] = options2.merge(output['options2'])
           %>
         <% end %>
 
-        <% output['options2'].each do | k, v | %>
+        <% output['options'].each do | k, v | %>
           <%= k %> => <%= v.inspect %>
         <% end %>
 
