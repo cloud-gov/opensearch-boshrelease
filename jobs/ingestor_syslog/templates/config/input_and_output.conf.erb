@@ -89,7 +89,7 @@ output {
             if p('logstash_parser.opensearch.routing', nil)
               options['routing'] = p('logstash_parser.opensearch.routing')
             end
-            #output['options'] = options.merge(output['options'])
+            output['options'] = options.merge(output['options'])
           %>
         <% end %>
 
@@ -98,6 +98,7 @@ output {
         <% end %>
         }
       } else
+        output['options'] = []
         {
           <%= output['plugin'] %>
         {
