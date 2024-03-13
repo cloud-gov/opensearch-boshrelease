@@ -50,6 +50,9 @@ consumes:
   optional: true
 
 properties:
+  logstash.ssl_client_authentication:
+    description: Controls the servers behavior in regard to requesting a certificate from client connections
+    default: required
   logstash.heap_size:
     description: sets jvm heap sized
   logstash.heap_percentage:
@@ -69,7 +72,7 @@ properties:
     example:
     - {name: logstash-output-cloudwatchlogs, version: 2.0.0}
     default: []
-  
+
   logstash.ecs_compatibility:
     description: Whether to enable ECS compatibility for geoip filters. See https://www.elastic.co/guide/en/logstash/current/plugins-filters-geoip.html#plugins-filters-geoip-ecs_compatibility
     default: "disabled"
