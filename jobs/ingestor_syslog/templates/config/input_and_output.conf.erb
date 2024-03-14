@@ -7,7 +7,7 @@ input {
     <% if_p("logstash_ingestor.syslog.use_keepalive") do |v| %>
     tcp_keep_alive => <%= v %>
     <% end %>
-    <% if_p("logstash.ssl_client_authentication") %>
+    <% if p("logstash.ssl_client_authentication") %>
     ssl_client_authentication =>  p("logstash.ssl_client_authentication")
     <% end %>
   }
