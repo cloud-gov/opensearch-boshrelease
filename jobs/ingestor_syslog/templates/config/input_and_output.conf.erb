@@ -8,7 +8,7 @@ input {
     tcp_keep_alive => <%= v %>
     <% end %>
     <% if p("logstash.ssl_client_authentication") %>
-    ssl_client_authentication =>  p("logstash.ssl_client_authentication")
+    ssl_client_authentication =>  "<%= p("logstash.ssl_client_authentication") %>"
     <% end %>
   }
   udp {
