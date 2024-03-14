@@ -14,6 +14,6 @@ logstash-plugin install --no-verify "file://${PWD}/logstash/logstash-filter-alte
 logstash-plugin install --no-verify "file://${PWD}/logstash/logstash-filter-translate-3.4.2.zip"
 logstash-plugin install --no-verify "file://${PWD}/logstash/logstash-input-relp-3.0.4.zip"
 logstash-plugin install --no-verify "file://${PWD}/logstash/logstash-input-syslog-3.6.0.zip"
-logstash-plugin install --no-verify "file://${PWD}/logstash/logstash-input-tcp-6.3.5.zip"
+logstash-plugin install --no-verify "file://${PWD}/logstash/logstash-input-tcp-6.4.1.zip"
 logstash-plugin install --no-verify "file://${PWD}/logstash/logstash-output-syslog-3.0.5.zip"
 logstash-plugin install --no-verify "file://${PWD}/logstash/logstash-output-opensearch-2.0.2.zip"
