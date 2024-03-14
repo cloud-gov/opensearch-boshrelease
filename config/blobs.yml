@@ -2,8 +2,8 @@ auth-proxy/Jinja2-3.1.3-py3-none-any.whl:
   size: 133236
   object_id: 2a7e8da4-a944-42c8-4af4-6089dcf7c668
   sha: sha256:7d6d50dd97d52cbc355597bd845fabfbac3f551e1f99619e39a35ce8c370b5fa
-? auth-proxy/MarkupSafe-2.1.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-: size: 28462
+auth-proxy/MarkupSafe-2.1.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl:
+  size: 28462
   object_id: e1188548-8f03-4579-6b7d-17c8dc9c1ccb
   sha: sha256:f5dfb42c4604dddc8e4305050aa6deb084540643ed5804d7455b5df8fe16f5e5
 auth-proxy/PyJWT-2.8.0-py3-none-any.whl:
@@ -46,8 +46,8 @@ auth-proxy/flit_core-3.8.0.tar.gz:
   size: 41224
   object_id: 940bcba2-17b3-4d77-5153-89d703f40ff8
   sha: sha256:b305b30c99526df5e63d6022dd2310a0a941a187bd3884f4c8ef0418df6c39f3
-? auth-proxy/greenlet-3.0.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-: size: 670455
+auth-proxy/greenlet-3.0.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl:
+  size: 670455
   object_id: 4ad2a93a-a23c-4b5e-7bec-8e46bbefc9e3
   sha: sha256:881b7db1ebff4ba09aaaeae6aa491daeb226c8150fc20e836ad00041bcb11230
 auth-proxy/gunicorn-21.2.0-py3-none-any.whl:
@@ -210,6 +210,10 @@ logstash/logstash-input-syslog-3.6.0.zip:
   size: 605224
   object_id: 8ed631eb-eb7c-47fa-631c-904061ef6412
   sha: sha256:db06d886e62a8718f33cbfd23ab8eabec80c9673fa9346995518e43989d0bbaf
+logstash/logstash-input-tcp-6.3.5.zip:
+  size: 14479895
+  object_id: ce4ae8ad-f541-4414-4749-3003850fa271
+  sha: sha256:723e19ae19a9ddad691c87ba4bf060e18814a9dfc9732768a9e1ee28bf637a96
 logstash/logstash-output-opensearch-2.0.2.zip:
   size: 24204545
   object_id: f15ae09c-ac8c-4dba-51ce-952917dedad6
