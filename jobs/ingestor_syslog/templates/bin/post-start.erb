@@ -10,7 +10,7 @@ set -x
 echo "Waiting <%= p("logstash_ingestor.health.timeout") %>s for syslog to accept connections..."
 elapsed=0
 
-<% if_p("logstash_ingestor.syslog.port") %>
+<% if p("logstash_ingestor.syslog.port") %>
 until [ $elapsed -ge <%= p("logstash_ingestor.health.timeout") %> ]
 do
   nc -vz localhost <%= p("logstash_ingestor.syslog.port") %> 2>&1 && break
@@ -19,7 +19,7 @@ do
 done
 <% end %>
 
-<% if_p("logstash_ingestor.syslog_tls.port") %>
+<% if p("logstash_ingestor.syslog_tls.port") %>
 until [ $elapsed -ge <%= p("logstash_ingestor.health.timeout") %> ]
 do
   nc -vz localhost <%= p("logstash_ingestor.syslog_tls.port") %> 2>&1 && break
