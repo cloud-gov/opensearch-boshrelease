@@ -1,7 +1,7 @@
 input
 {
 
-  <% if_p("logstash_ingestor.syslog.port") %>
+  <% if p("logstash_ingestor.syslog.port") %>
   tcp
   {
     add_field => [ "type", "syslog" ]
@@ -16,12 +16,10 @@ input
     host => "0.0.0.0"
     port => "<%= p("logstash_ingestor.syslog.port") %>"
   }
-  <% end %>
 
+  <% else_if_p("logstash_ingestor.syslog_tls.port") do | port | %>
 
-
-  <% if_p("logstash_ingestor.syslog_tls.port") do | port | %>
-  tcp {
+    tcp {
     add_field => [ "type", "syslog" ]
     host => "0.0.0.0"
     port => "<%= port %>"
