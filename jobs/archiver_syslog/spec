@@ -16,6 +16,7 @@ templates:
   config/input_and_output.conf.erb: config/input_and_output.conf
   config/syslog_tls.crt.erb: config/syslog_tls.crt
   config/syslog_tls.key.erb: config/syslog_tls.key
+  config/ca.erb: config/ssl/opensearch.ca
   config/logstash.yml.erb: config/logstash.yml
 
 provides:
