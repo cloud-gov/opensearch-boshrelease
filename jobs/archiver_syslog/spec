@@ -32,6 +32,9 @@ provides:
   - logstash_ingestor.syslog.port
 
 properties:
+  logstash.ssl_client_authentication:
+    description: Controls the servers behavior in regard to requesting a certificate from client connections
+    default: required
   logstash.heap_size:
     description: sets jvm heap sized
   logstash.jvm_options:
