@@ -26,8 +26,7 @@ templates:
   config/jvm.options.erb: config/jvm.options
   config/ingestor-crt.erb: config/ssl/ingestor.crt
   config/ingestor-pem.erb: config/ssl/ingestor.pem
-  config/ca.erb: config/ssl/opensearch.pem
-  config/ca2.erb: config/ssl/opensearch.ca
+  config/ca.erb: config/ssl/opensearch.ca
 
 provides:
 - name: ingestor
