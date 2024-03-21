@@ -32,6 +32,11 @@ provides:
   properties:
   - logstash_ingestor.syslog.port
 
+consumes:
+- name: opensearch
+  type: opensearch
+  optional: true
+
 properties:
   logstash.ssl_client_authentication:
     description: Controls the servers behavior in regard to requesting a certificate from client connections
