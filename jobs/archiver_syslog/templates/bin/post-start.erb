@@ -7,12 +7,24 @@ set -x
 
 echo "Waiting <%= p("logstash_ingestor.health.timeout") %>s for syslog to accept connections..."
 elapsed=0
+
+<% if_p("logstash_ingestor.syslog.port")  do |port| %>
 until [ $elapsed -ge <%= p("logstash_ingestor.health.timeout") %> ]
 do
-  nc -vz localhost <%= p("logstash_ingestor.syslog.port") %> 2>&1 && break
+  nc -vz localhost <%= port %> 2>&1 && break
   elapsed=$[$elapsed+<%= p("logstash_ingestor.health.interval") %>]
   sleep <%= p("logstash_ingestor.health.interval") %>
 done
+<% end %>
+
+<% if_p("logstash_ingestor.syslog_tls.port") do |tls_port| %>
+until [ $elapsed -ge <%= p("logstash_ingestor.health.timeout") %> ]
+do
+  nc -vz localhost <%= tls_port %> 2>&1 && break
+  elapsed=$[$elapsed+<%= p("logstash_ingestor.health.interval") %>]
+  sleep <%= p("logstash_ingestor.health.interval") %>
+done
+<% end %>
 
 if [ "$elapsed" -ge "<%= p("logstash_ingestor.health.timeout") %>" ]; then
   echo "ERROR: Cannot connect to syslog. Exiting..."
