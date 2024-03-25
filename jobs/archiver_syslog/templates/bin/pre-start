@@ -1,8 +1,15 @@
 #!/bin/bash
 source /var/vcap/packages/openjdk-17/bosh/runtime.env
 
+export JOB_NAME=archiver_syslog
+export JOB_DIR=/var/vcap/jobs/$JOB_NAME
+
 <% p("logstash.plugins").each do |plugin| %>
 /var/vcap/packages/logstash/bin/logstash-plugin install \
   <%= plugin.except("name").map { |key, value| "--#{key}=#{value}" }.join(" ") %> \
   <%= plugin["name"] %>
 <% end %>
+
+if [ -d ${JOB_DIR}/config/ssl ]; then
+	chown -R vcap:vcap ${JOB_DIR}/config/ssl
+fi
