@@ -1,16 +1,20 @@
 input {
-  <% if p("logstash_ingestor.syslog.port") %>
-  tcp {
-    add_field => [ "type", "syslog" ]
-    host => "0.0.0.0"
-    port => "<%= p("logstash_ingestor.syslog.port") %>"
-  }
-  udp {
-    add_field => [ "type", "syslog" ]
-    host => "0.0.0.0"
-    port => "<%= p("logstash_ingestor.syslog.port") %>"
-  }
-  <% end %>
+  <% if_p("logstash_ingestor.syslog.port") do |port| %>
+    tcp
+    {
+      add_field => [ "type", "syslog" ]
+      host => "0.0.0.0"
+      port => "<%= port %>"
+      <% if_p("logstash_ingestor.syslog.use_keepalive") do |v| %>
+      tcp_keep_alive => <%= v %>
+      <% end %>
+    }
+    udp {
+      add_field => [ "type", "syslog" ]
+      host => "0.0.0.0"
+      port => "<%= port %>"
+    }
+    <% end %>
 
   <% if_p("logstash_ingestor.syslog_tls.port") do | tls_port | %>
 
