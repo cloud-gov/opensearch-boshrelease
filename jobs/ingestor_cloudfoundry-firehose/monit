@@ -1,5 +1,0 @@
-check process ingestor_cloudfoundry-firehose
-  with pidfile /var/vcap/sys/run/bpm/ingestor_cloudfoundry-firehose/ingestor_cloudfoundry-firehose.pid
-  start program "/var/vcap/jobs/bpm/bin/bpm start ingestor_cloudfoundry-firehose"
-  stop program "/var/vcap/jobs/bpm/bin/bpm stop ingestor_cloudfoundry-firehose"
-  group vcap
