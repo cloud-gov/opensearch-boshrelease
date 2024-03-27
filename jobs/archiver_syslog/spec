@@ -4,9 +4,9 @@ name: archiver_syslog
 description: This job runs Logstash to forward Syslog data to archive
 
 packages:
-- logstash
-- base-logstash-filters
-- openjdk-17
+  - logstash
+  - base-logstash-filters
+  - openjdk-17
 
 templates:
   bin/archiver_syslog: bin/archiver_syslog.sh
@@ -20,22 +20,22 @@ templates:
   config/logstash.yml.erb: config/logstash.yml
 
 provides:
-- name: archiver
-  type: archiver
-  properties:
-  - logstash_ingestor.syslog.port
-  - logstash_ingestor.syslog.transport
-  - logstash_ingestor.syslog_tls.port
-  - logstash_ingestor.relp.port
-- name: syslog_forwarder
-  type: syslog_forwarder
-  properties:
-  - logstash_ingestor.syslog.port
+  - name: archiver
+    type: archiver
+    properties:
+      - logstash_ingestor.syslog.port
+      - logstash_ingestor.syslog.transport
+      - logstash_ingestor.syslog_tls.port
+      - logstash_ingestor.relp.port
+  - name: syslog_forwarder
+    type: syslog_forwarder
+    properties:
+      - logstash_ingestor.syslog.port
 
 consumes:
-- name: opensearch
-  type: opensearch
-  optional: true
+  - name: opensearch
+    type: opensearch
+    optional: true
 
 properties:
   logstash.ssl_client_authentication:
@@ -55,7 +55,7 @@ properties:
   logstash.plugins:
     description: "Array of hashes describing logstash plugins to install"
     example:
-    - {name: logstash-output-cloudwatchlogs, version: 2.0.0}
+      - { name: logstash-output-cloudwatchlogs, version: 2.0.0 }
     default: []
   logstash.env:
     description: "a list of arbitrary key-value pairs to be passed on as process environment variables. eg: FOO: 123"
@@ -94,7 +94,6 @@ properties:
 
   logstash_ingestor.syslog.port:
     description: Port to listen for syslog messages
-    # default: 5514
   logstash_ingestor.syslog.transport:
     description: Transport protocol to use
     default: "tcp"
@@ -132,4 +131,3 @@ properties:
   logstash_archiver.files:
     description: Number of files open which the system ulimit settings allow
     default: 4096
-

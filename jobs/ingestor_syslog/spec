@@ -109,7 +109,6 @@ properties:
 
   logstash_ingestor.syslog.port:
     description: Port to listen for syslog messages
-    # default: 5514
   logstash_ingestor.syslog.transport:
     description: Transport protocol to use
     default: "tcp"
