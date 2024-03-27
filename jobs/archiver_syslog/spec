@@ -4,9 +4,9 @@ name: archiver_syslog
 description: This job runs Logstash to forward Syslog data to archive
 
 packages:
-- logstash
-- base-logstash-filters
-- openjdk-17
+  - logstash
+  - base-logstash-filters
+  - openjdk-17
 
 templates:
   bin/archiver_syslog: bin/archiver_syslog.sh
@@ -16,22 +16,31 @@ templates:
   config/input_and_output.conf.erb: config/input_and_output.conf
   config/syslog_tls.crt.erb: config/syslog_tls.crt
   config/syslog_tls.key.erb: config/syslog_tls.key
+  config/ca.erb: config/ssl/opensearch.ca
   config/logstash.yml.erb: config/logstash.yml
 
 provides:
-- name: archiver
-  type: archiver
-  properties:
-  - logstash_ingestor.syslog.port
-  - logstash_ingestor.syslog.transport
-  - logstash_ingestor.syslog_tls.port
-  - logstash_ingestor.relp.port
-- name: syslog_forwarder
-  type: syslog_forwarder
-  properties:
-  - logstash_ingestor.syslog.port
+  - name: archiver
+    type: archiver
+    properties:
+      - logstash_ingestor.syslog.port
+      - logstash_ingestor.syslog.transport
+      - logstash_ingestor.syslog_tls.port
+      - logstash_ingestor.relp.port
+  - name: syslog_forwarder
+    type: syslog_forwarder
+    properties:
+      - logstash_ingestor.syslog.port
+
+consumes:
+  - name: opensearch
+    type: opensearch
+    optional: true
 
 properties:
+  logstash.ssl_client_authentication:
+    description: Controls the servers behavior in regard to requesting a certificate from client connections
+    default: required
   logstash.heap_size:
     description: sets jvm heap sized
   logstash.jvm_options:
@@ -46,7 +55,7 @@ properties:
   logstash.plugins:
     description: "Array of hashes describing logstash plugins to install"
     example:
-    - {name: logstash-output-cloudwatchlogs, version: 2.0.0}
+      - { name: logstash-output-cloudwatchlogs, version: 2.0.0 }
     default: []
   logstash.env:
     description: "a list of arbitrary key-value pairs to be passed on as process environment variables. eg: FOO: 123"
@@ -85,7 +94,6 @@ properties:
 
   logstash_ingestor.syslog.port:
     description: Port to listen for syslog messages
-    default: 5514
   logstash_ingestor.syslog.transport:
     description: Transport protocol to use
     default: "tcp"
@@ -109,6 +117,8 @@ properties:
   logstash_ingestor.syslog_tls.skip_ssl_validation:
     description: Verify the identity of the other end of the SSL connection against the CA.
     default: false
+  logstash_ingestor.syslog_tls.use_keepalive:
+    description: Instruct the socket to use TCP keep alives
 
   logstash_ingestor.relp.port:
     description: Port to listen for RELP messages
