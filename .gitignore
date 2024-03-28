@@ -9,3 +9,4 @@ final-builds-dir-opensearch.tgz
 releases-dir-opensearch.tgz
 .DS_Store
 .vscode
+.zip
