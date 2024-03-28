@@ -12,15 +12,10 @@ export JOB_DIR=/var/vcap/jobs/$JOB_NAME
   end
 
   ingestor_port = nil
-  if_link("ingestor") { |ingestor_link|
-  if p("logstash_ingestor.syslog.port")
-    ingestor_port = ingestor_link.p("logstash_ingestor.syslog.port")
+  if_link("ingestor") { |ingestor_link| ingestor_port = ingestor_link.p("logstash_ingestor.syslog_tls.port") }
+  unless ingestor_port
+    ingestor_port = p("smoke_tests.syslog_ingestor.port")
   end
-
-  if p("logstash_ingestor.syslog_tls.port")
-    ingestor_port = ingestor_link.p("logstash_ingestor.syslog_tls.port")
-  end
-  }
 
   opensearch_host = p("smoke_tests.opensearch_manager.host")
   opensearch_port = p("smoke_tests.opensearch_manager.port")
