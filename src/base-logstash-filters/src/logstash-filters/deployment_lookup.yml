@@ -1,6 +1,5 @@
 opensearch*: logs-opensearch
 curator.*: logs-opensearch
-firehose-to-syslog.*: logs-opensearch
 ingestor.*: logs-opensearch
 archiver.*: logs-opensearch
 parser.*: logs-opensearch
