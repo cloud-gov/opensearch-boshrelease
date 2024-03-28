@@ -10,6 +10,8 @@ templates:
   bin/run.sh: bin/run
   config/smoketest-crt.erb: config/ssl/smoketest.crt
   config/smoketest-pem.erb: config/ssl/smoketest.pem
+  config/ingestor-crt.erb: config/ssl/ingestor.crt
+  config/ingestor-pem.erb: config/ssl/ingestor.pem
   config/ca.erb: config/ssl/opensearch.ca
 
 
@@ -37,9 +39,13 @@ properties:
   smoke_tests.opensearch_manager.port:
     description: 'Port of the opensearch master node'
     default: 9200
-  smoke_tests.use_tls:
+  smoke_tests.tls.use_tls:
     description: Set it to true if the ingestor or the ls-router expects TCP-TLS traffic
     default: false
+  smoke_tests.tls.certificate:
+    description: ingestor server certificate
+  smoke_tests.tls.private_key:
+    description: ingestor server key
   smoke_tests.count_test.run:
     description: Whether to run the count test
     default: false
