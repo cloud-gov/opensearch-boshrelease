@@ -20,7 +20,7 @@ keyword_default = { "type": "keyword", "index": true }.to_json
           "dynamic": true,
           "properties": {
             "app":          <%= keyword_default %>,
-            "app_name":     <%= keyword_default %>,
+            "app_name":     { "type": "text" },
             "app_id":       <%= keyword_default %>,
             "app_instance": { "type": "long" },
             "org":          <%= keyword_default %>,
