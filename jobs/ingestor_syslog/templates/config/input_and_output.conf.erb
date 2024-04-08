@@ -73,7 +73,6 @@ output {
     <% end %>
 
     <% p('logstash_parser.outputs').each do | output | %>
-      #if [syslog_program] == "APP/PROC/WEB/0" {
         <%= output['plugin'] %> {
         <% if 'opensearch' == output['plugin'] %>
             <%
@@ -103,6 +102,5 @@ output {
           <%= k %> => <%= v.inspect %>
         <% end %>
         }
-      #}
     <% end %>
 }
