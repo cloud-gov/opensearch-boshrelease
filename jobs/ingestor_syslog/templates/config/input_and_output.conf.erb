@@ -24,7 +24,7 @@ input
     add_field => [ "type", "syslog" ]
     host => "0.0.0.0"
     port => "<%= tls_port %>"
-    ssl_enable => true
+    ssl_enabled => true
     <% if p("logstash_ingestor.syslog_tls.skip_ssl_validation") %>
     ssl_verify => false
     <% end %>
@@ -73,7 +73,7 @@ output {
     <% end %>
 
     <% p('logstash_parser.outputs').each do | output | %>
-      if [syslog_program] == "APP/PROC/WEB/0" {
+      #if [syslog_program] == "APP/PROC/WEB/0" {
         <%= output['plugin'] %> {
         <% if 'opensearch' == output['plugin'] %>
             <%
@@ -103,6 +103,6 @@ output {
           <%= k %> => <%= v.inspect %>
         <% end %>
         }
-      }
+      #}
     <% end %>
 }
