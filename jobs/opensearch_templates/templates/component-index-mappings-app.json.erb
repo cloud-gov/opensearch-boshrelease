@@ -137,6 +137,7 @@ keyword_default = { "type": "keyword", "index": true }.to_json
           "type": "object",
           "dynamic": true,
           "properties": {
+            "start_timestamp": { "type": "long" },
             "stop_timestamp": { "type": "long" },
             "request_id":     <%= keyword_default %>,
             "peer_type":      <%= keyword_default %>,
