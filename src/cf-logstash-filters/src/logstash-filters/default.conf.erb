@@ -2,7 +2,6 @@
 # Otherwise these fields are set from syslog_ fields in teardown script afterwards.
 
 # NOTE: @timestamp for CF components logs is set in logsearch-boshrelease from syslog_timestamp (timestamp set by metron_agent).
-# Timestamp set by metron_agent for Firehose logs is <message JSON>.timestamp field. (That's why app.conf snippet sets date with it).
 
 # Setup snippet (should precede all other snippets)
 <%= File.read('src/logstash-filters/snippets/setup.conf') %>
