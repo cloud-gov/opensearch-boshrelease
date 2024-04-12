@@ -1,5 +1,5 @@
 <% require 'json' %>
-<% if(p('cloudfoundry.firehose_events').include? 'ContainerMetric') %>
+<% if(p('cloudfoundry.event_types').include? 'ContainerMetric') %>
 {
   "attributes": {
     "title": "App METRIC: CPU usage",

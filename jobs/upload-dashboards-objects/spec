@@ -124,7 +124,7 @@ properties:
     description: the host-portion of the login FQDN, without the domain name
     default: login
 
-  cloudfoundry.firehose_events:
+  cloudfoundry.event_types:
     description: "Array of events you would like to get. Valid options are CounterEvent,Error,HttpStartStop,LogMessage,ValueMetric,ContainerMetric"
     default: ["LogMessage"]
   cloudfoundry.system_domain:

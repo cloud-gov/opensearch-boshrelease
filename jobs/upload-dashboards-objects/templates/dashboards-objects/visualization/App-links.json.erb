@@ -1,22 +1,22 @@
 <% require 'json' %>
-<% if( ['LogMessage', 'ContainerMetric'].any? { |event| p('cloudfoundry.firehose_events').include?(event)} ) %>
-<% 
-logmessage_enabled = p('cloudfoundry.firehose_events').include? 'LogMessage'
-containermetric_enabled = p('cloudfoundry.firehose_events').include? 'ContainerMetric'
+<% if( ['LogMessage', 'ContainerMetric'].any? { |event| p('cloudfoundry.event_types').include?(event)} ) %>
+<%
+logmessage_enabled = p('cloudfoundry.event_types').include? 'LogMessage'
+containermetric_enabled = p('cloudfoundry.event_types').include? 'ContainerMetric'
 
 if (logmessage_enabled == true)
   links = "[performance](#/dashboard/App-Performance) | [errors](#/dashboard/App-Errors) | [logs](#/dashboard/App-Logs) | [location](#/dashboard/App-Location)"
-  
+
   if (containermetric_enabled == true)
     links += " | [metrics](#/dashboard/App-Metrics)"
   end
-    
+
 elsif (containermetric_enabled == true)
   links = "[metrics](#/dashboard/App-Metrics)"
-  
+
 end
 
-%> 
+%>
 {
   "attributes": {
     "title": "App links",
@@ -44,7 +44,7 @@ end
           }
         },
         "filter": [
-  
+
         ]
       }
 ENDOFFJSON

@@ -1,5 +1,5 @@
 <% require 'json' %>
-<% if( ['LogMessage', 'ContainerMetric'].any? { |event| p('cloudfoundry.firehose_events').include?(event)} ) %>
+<% if( ['LogMessage', 'ContainerMetric'].any? { |event| p('cloudfoundry.event_types').include?(event)} ) %>
 {
   "attributes": {
     "title": "[app] All",
@@ -23,7 +23,7 @@
       {
         "index": "#{p('opensearch_config.app_index_prefix')}*",
         "filter": [
-          
+
         ],
         "highlight": {
           "pre_tags": [
@@ -34,7 +34,7 @@
           ],
           "fields": {
             "*": {
-              
+
             }
           },
           "require_field_match": false,

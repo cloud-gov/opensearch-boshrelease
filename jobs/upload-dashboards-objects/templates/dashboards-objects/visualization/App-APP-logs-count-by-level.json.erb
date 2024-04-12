@@ -1,5 +1,5 @@
 <% require 'json' %>
-<% if(p('cloudfoundry.firehose_events').include? 'LogMessage') %>
+<% if(p('cloudfoundry.event_types').include? 'LogMessage') %>
 {
   "attributes": {
     "title": "App APP: logs count by level",

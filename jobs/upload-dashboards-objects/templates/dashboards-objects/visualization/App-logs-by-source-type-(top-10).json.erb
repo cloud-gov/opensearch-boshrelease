@@ -1,5 +1,5 @@
 <% require 'json' %>
-<% if( ['LogMessage', 'ContainerMetric'].any? { |event| p('cloudfoundry.firehose_events').include?(event)} ) %>
+<% if( ['LogMessage', 'ContainerMetric'].any? { |event| p('cloudfoundry.event_types').include?(event)} ) %>
 {
   "attributes": {
     "title": "App: logs by source type (top 10)",

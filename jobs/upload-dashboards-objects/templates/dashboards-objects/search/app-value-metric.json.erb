@@ -1,5 +1,5 @@
 <% require 'json' %>
-<% if(p('cloudfoundry.firehose_events').include? 'ValueMetric') %>
+<% if(p('cloudfoundry.event_types').include? 'ValueMetric') %>
 {
   "attributes": {
     "title": "[app] Value Metric",

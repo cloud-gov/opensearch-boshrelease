@@ -1,6 +1,6 @@
-<% 
+<%
 
-require 'json' 
+require 'json'
 
 #########################
 ## -- Common fields -- ##
@@ -12,7 +12,7 @@ fields_json =
     {"name":"_score","type":"number","count":0,"scripted":false,"indexed":false,"analyzed":false,"doc_values":false},
     {"name":"_source","type":"_source","count":0,"scripted":false,"indexed":false,"analyzed":false,"doc_values":false},
     {"name":"_index","type":"text","count":0,"scripted":false,"indexed":false,"analyzed":false,"doc_values":false},
-    
+
     {"name":"tags","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
 
     {"name":"@input","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
@@ -37,16 +37,16 @@ fields_json =
     {"name":"@source.type","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
     {"name":"@source.vm","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
   ]
-  
+
 ###########################
 ## -- App fields -- ##
 ###########################
-logmessage_enabled = p('cloudfoundry.firehose_events').include? 'LogMessage'
-containermetric_enabled = p('cloudfoundry.firehose_events').include? 'ContainerMetric'
-valuemetric_enabled = p('cloudfoundry.firehose_events').include? 'ValueMetric'
-counterevent_enabled = p('cloudfoundry.firehose_events').include? 'CounterEvent'
-error_enabled = p('cloudfoundry.firehose_events').include? 'Error'
-http_enabled = p('cloudfoundry.firehose_events').include? 'HttpStartStop'
+logmessage_enabled = p('cloudfoundry.event_types').include? 'LogMessage'
+containermetric_enabled = p('cloudfoundry.event_types').include? 'ContainerMetric'
+valuemetric_enabled = p('cloudfoundry.event_types').include? 'ValueMetric'
+counterevent_enabled = p('cloudfoundry.event_types').include? 'CounterEvent'
+error_enabled = p('cloudfoundry.event_types').include? 'Error'
+http_enabled = p('cloudfoundry.event_types').include? 'HttpStartStop'
 
 # Only LogMessage, ContainerMetric, Http* events contain `app_id` field so other app-related `@cf.*` fields are set for them too. See protocol definition https://github.com/cloudfoundry/dropsonde-protocol/blob/master/events/README.md.
 if(logmessage_enabled == true or containermetric_enabled == true or http_enabled == true)
