@@ -198,10 +198,6 @@ logstash/logstash-filter-alter-3.0.3.zip:
   size: 7655
   object_id: 552763c7-779b-4ac3-5993-04a06d967c93
   sha: sha256:76cbede4e9b774cadf6260fee4e7430949f77a6c76e7e512212b8ac50c75723a
-logstash/logstash-filter-json_encode-3.0.3.zip:
-  size: 6447
-  object_id: 4aaa92f8-43bd-4220-6e2e-fa299fdf6df1
-  sha: sha256:bb20136a0098bb80165ecec906152bd187c1fe3bc144286f6373d3bb49a31630
 logstash/logstash-filter-translate-3.4.2.zip:
   size: 649362
   object_id: e9b87119-265c-43ce-788d-5592aabffcb3
