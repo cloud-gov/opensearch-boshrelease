@@ -150,7 +150,7 @@ keyword_default = { "type": "keyword", "index": true }.to_json
             "instance_index": { "type": "long" },
             "instance_id":    <%= keyword_default %>,
             "forwarded":      <%= keyword_default %>,
-            "duration_ms":    { "type": "long" }
+            "duration_ms":    { "type": "float" }
           }
         }
       }
