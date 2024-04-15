@@ -25,7 +25,10 @@ keyword_default = { "type": "keyword", "index": true }.to_json
             "org":          <%= keyword_default %>,
             "org_id":       <%= keyword_default %>,
             "space":        <%= keyword_default %>,
-            "space_id":     <%= keyword_default %>
+            "space_id":     <%= keyword_default %>,
+            "process_id":     <%= keyword_default %>,
+            "process_instance_id": <%= keyword_default %>,
+            "process_type":  <%= keyword_default %>
           }
         },
         "app": {
@@ -93,13 +96,15 @@ keyword_default = { "type": "keyword", "index": true }.to_json
         },
         "containermetric": {
           "type": "object",
-          "dynamic": true,
           "properties": {
             "memory_bytes_quota": { "type": "long" },
             "memory_bytes":       { "type": "long" },
             "disk_bytes_quota":   { "type": "long" },
             "disk_bytes":         { "type": "long" },
-            "cpu_percentage":     { "type": "scaled_float", "scaling_factor": 100 }
+            "cpu_percentage":     { "type": "scaled_float", "scaling_factor": 100 },
+            "unit":  <%= keyword_default %>,
+            "name":  <%= keyword_default %>,
+            "value": <%= keyword_default %>
           }
         },
         "valuemetric": {
@@ -132,6 +137,7 @@ keyword_default = { "type": "keyword", "index": true }.to_json
           "type": "object",
           "dynamic": true,
           "properties": {
+            "start_timestamp": { "type": "long" },
             "stop_timestamp": { "type": "long" },
             "request_id":     <%= keyword_default %>,
             "peer_type":      <%= keyword_default %>,
@@ -144,7 +150,7 @@ keyword_default = { "type": "keyword", "index": true }.to_json
             "instance_index": { "type": "long" },
             "instance_id":    <%= keyword_default %>,
             "forwarded":      <%= keyword_default %>,
-            "duration_ms":    { "type": "long" }
+            "duration_ms":    { "type": "float" }
           }
         }
       }

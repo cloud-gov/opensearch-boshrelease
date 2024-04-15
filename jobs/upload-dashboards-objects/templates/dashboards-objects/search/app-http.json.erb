@@ -1,5 +1,5 @@
 <% require 'json' %>
-<% if(p('cloudfoundry.firehose_events').include? 'HttpStartStop') %>
+<% if(p('cloudfoundry.event_types').include? 'HttpStartStop') %>
 {
   "attributes": {
     "title": "[app] Http",

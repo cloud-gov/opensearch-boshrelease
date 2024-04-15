@@ -1,5 +1,5 @@
 <% require 'json' %>
-<% if(p('cloudfoundry.firehose_events').include? 'LogMessage') %>
+<% if(p('cloudfoundry.event_types').include? 'LogMessage') %>
 {
   "attributes": {
     "title": "[app] APP Logs - ERRORs",
@@ -71,7 +71,7 @@
           ],
           "fields": {
             "*": {
-              
+
             }
           },
           "require_field_match": false,

@@ -1,6 +1,6 @@
 <%
 
-require 'json' 
+require 'json'
 
 #########################
 ## -- Common fields -- ##
@@ -12,7 +12,7 @@ fields_json =
     {"name":"_score","type":"number","count":0,"scripted":false,"indexed":false,"analyzed":false,"doc_values":false},
     {"name":"_source","type":"_source","count":0,"scripted":false,"indexed":false,"analyzed":false,"doc_values":false},
     {"name":"_index","type":"keyword","count":0,"scripted":false,"indexed":false,"analyzed":false,"doc_values":false},
-    
+
     {"name":"tags","type":"keyword","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
 
     {"name":"@input","type":"keyword","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
@@ -42,7 +42,7 @@ fields_json =
 ## -- Platform fields -- ##
 ###########################
 fields_json.concat(
-  [   
+  [
     {"name":"uaa.timestamp","type":"keyword","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
     {"name":"uaa.pid","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
     {"name":"uaa.thread","type":"keyword","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
@@ -53,7 +53,7 @@ fields_json.concat(
     {"name":"uaa.audit.remote_address","type":"keyword","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
     {"name":"uaa.audit.type","type":"keyword","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
     {"name":"uaa.audit.principal","type":"keyword","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-    
+
     {"name":"haproxy.accept_date","type":"keyword","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
     {"name":"haproxy.time_backend_connect","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
     {"name":"haproxy.frontend_name","type":"keyword","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
@@ -82,7 +82,7 @@ fields_json.concat(
     {"name":"haproxy.beconn","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
     {"name":"haproxy.time_request","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
     {"name":"haproxy.time_queue","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-    
+
     {"name":"geoip.location","type":"geo_point","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
     {"name":"geoip.timezone","type":"keyword","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
     {"name":"geoip.longitude","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
@@ -97,12 +97,12 @@ fields_json.concat(
 ###########################
 ## -- App fields -- ##
 ###########################
-logmessage_enabled = p('cloudfoundry.firehose_events').include? 'LogMessage'
-containermetric_enabled = p('cloudfoundry.firehose_events').include? 'ContainerMetric'
-valuemetric_enabled = p('cloudfoundry.firehose_events').include? 'ValueMetric'
-counterevent_enabled = p('cloudfoundry.firehose_events').include? 'CounterEvent'
-error_enabled = p('cloudfoundry.firehose_events').include? 'Error'
-http_enabled = p('cloudfoundry.firehose_events').include? 'HttpStartStop'
+logmessage_enabled = p('cloudfoundry.event_types').include? 'LogMessage'
+containermetric_enabled = p('cloudfoundry.event_types').include? 'ContainerMetric'
+valuemetric_enabled = p('cloudfoundry.event_types').include? 'ValueMetric'
+counterevent_enabled = p('cloudfoundry.event_types').include? 'CounterEvent'
+error_enabled = p('cloudfoundry.event_types').include? 'Error'
+http_enabled = p('cloudfoundry.event_types').include? 'HttpStartStop'
 
 # Only LogMessage, ContainerMetric, Http* events contain `app_id` field so other app-related `@cf.*` fields are set for them too. See protocol definition https://github.com/cloudfoundry/dropsonde-protocol/blob/master/events/README.md.
 if(logmessage_enabled == true or containermetric_enabled == true or http_enabled == true)
