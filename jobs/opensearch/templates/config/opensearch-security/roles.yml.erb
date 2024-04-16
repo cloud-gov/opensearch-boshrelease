@@ -377,5 +377,9 @@ cf_user:
     fls:
     allowed_actions:
     - "read"
-  tenant_permissions: []
+  tenant_permissions:
+  - tenant_patterns:
+    - "Jasonk_tenant"
+    allowed_actions:
+    - "kibana_all_read"
   static: false
