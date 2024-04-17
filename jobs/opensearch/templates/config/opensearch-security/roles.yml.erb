@@ -387,13 +387,6 @@ jason_org:
   - "read"
   - "cluster:monitor/nodes/stats"
   - "cluster:monitor/task/get"
-  index_permissions:
-  - index_patterns:
-    - "logs-app-*"
-    dls: "{\"bool\": {\"must\": {\"match\": { [${attr.proxy.orgids}]: \"cfbaa8e9-6d25-4242-a26a-fd6bad2c59b5\" }}}}"
-    fls:
-    allowed_actions:
-    - "read"
   tenant_permissions:
   - tenant_patterns:
     - "Jasonk_tenant"
