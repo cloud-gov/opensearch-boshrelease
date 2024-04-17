@@ -377,11 +377,7 @@ cf_user:
     fls:
     allowed_actions:
     - "read"
-  tenant_permissions:
-  - tenant_patterns:
-    - "Jasonk_tenant"
-    allowed_actions:
-    - "kibana_all_read"
+  tenant_permissions: []
   static: false
 
 jason_org:
@@ -394,7 +390,7 @@ jason_org:
   index_permissions:
   - index_patterns:
     - "logs-app-*"
-    dls: "{\"bool\": {\"should\": [{\"terms\": { \"@cf.space_id\": [${attr.proxy.spaceids}] }}, {\"terms\": {\"@cf.org_id\": [${attr.proxy.orgids}]}}]}}"
+    dls: "{\"bool\": {\"must\": {\"match\": { [${attr.proxy.orgids}]: \"cfbaa8e9-6d25-4242-a26a-fd6bad2c59b5\" }}}}"
     fls:
     allowed_actions:
     - "read"
