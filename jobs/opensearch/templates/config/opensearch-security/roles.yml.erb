@@ -383,3 +383,25 @@ cf_user:
     allowed_actions:
     - "kibana_all_read"
   static: false
+
+jason_org:
+  reserved: false
+  hidden: false
+  cluster_permissions:
+  - "read"
+  - "cluster:monitor/nodes/stats"
+  - "cluster:monitor/task/get"
+  index_permissions:
+  - index_patterns:
+    - "logs-app-*"
+    dls: "{\"bool\": {\"should\": [{\"terms\": { \"@cf.space_id\": [${attr.proxy.spaceids}] }}, {\"terms\": {\"@cf.org_id\": [${attr.proxy.orgids}]}}]}}"
+    fls:
+    allowed_actions:
+    - "read"
+  tenant_permissions:
+  - tenant_patterns:
+    - "Jasonk_tenant"
+    allowed_actions:
+    - "kibana_all_read"
+  static: false
+
