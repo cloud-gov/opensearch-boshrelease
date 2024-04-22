@@ -1,0 +1,20 @@
+---
+name: upload_tenant
+
+description: This job uploads tenants
+
+templates:
+  bin/pre-start.erb: bin/pre-start
+  config/admin-crt.erb: config/ssl/opensearch-admin.crt
+  config/admin-pem.erb: config/ssl/opensearch-admin.pem
+  config/ca.erb: config/ssl/opensearch.ca
+
+consumes:
+- name: opensearch
+  type: opensearch
+
+properties:
+  opensearch_config.opensearch.ssl.certificate:
+    description: Node certificate for communication between Opensearch Dashboards and Opensearch
+  opensearch_config.opensearch.ssl.private_key:
+    description: Private key for communication between Opensearch Dashboards and Opensearch
