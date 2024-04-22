@@ -4,6 +4,8 @@ set -eu
 
 export JOB_NAME=upload_tenant
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
+export PATH=/var/vcap/packages/cf-cli-8-linux/bin:${PATH}
+export CF_COLOR=false
 
 CA="--cacert ${JOB_DIR}/config/ssl/opensearch.ca"
 CERT="--cert ${JOB_DIR}/config/ssl/opensearch-admin.crt"
