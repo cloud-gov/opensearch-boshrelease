@@ -16,5 +16,7 @@ if [ -d ${JOB_DIR}/config/ssl ]; then
 	chown -R vcap:vcap ${JOB_DIR}/config/ssl
 fi
 
+<%
 cf api p('upload_tenant.cf.domain')
 cf auth p('upload_tenant.cf.username') p('upload_tenant.cf.password')
+%>
