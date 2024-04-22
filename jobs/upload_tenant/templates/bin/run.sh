@@ -8,6 +8,13 @@ export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 CA="--cacert ${JOB_DIR}/config/ssl/opensearch.ca"
 CERT="--cert ${JOB_DIR}/config/ssl/opensearch-admin.crt"
 KEY="--key ${JOB_DIR}/config/ssl/opensearch-admin.key"
+<%
+  api = p("upload_tenant.cf.domain")
+  username = p("upload_tenant.cf.username")
+  password = p("upload_tenant.cf.password")
+%>
+cf api "<%= api %>"
+cf auth "<%= username %>" "<%= password %>"
 
 for org in `cf orgs| tail -n +4`; do
 
