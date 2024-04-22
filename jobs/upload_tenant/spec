@@ -3,7 +3,11 @@ name: upload_tenant
 
 description: This job uploads tenants
 
+packages:
+  - cf-cli-8-linux
+
 templates:
+  bin/run: bin/run
   bin/pre-start.erb: bin/pre-start
   config/admin-crt.erb: config/ssl/opensearch-admin.crt
   config/admin-pem.erb: config/ssl/opensearch-admin.pem
@@ -18,3 +22,9 @@ properties:
     description: Node certificate for communication between Opensearch Dashboards and Opensearch
   opensearch_config.opensearch.ssl.private_key:
     description: Private key for communication between Opensearch Dashboards and Opensearch
+  upload_tenant.cf.domain:
+    description: domain of cf
+  upload_tenant.cf.username:
+    description: username of cf
+  upload_tenant.cf.password:
+    description: password of cf
