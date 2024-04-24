@@ -19,7 +19,7 @@ cf api "<%= api %>"
 cf auth "<%= username %>" "<%= password %>"
 
 for org in `cf orgs| tail -n +4`; do
-
+ORG_GUID=${cf ${org} --guid}
 curl -X PUT \
   ${CA} ${CERT} ${KEY} \
   -s https://localhost:9200/_plugins/_security/api/tenants/${org} \
@@ -33,7 +33,7 @@ curl -X PUT \
 curl -X PUT \
   ${CA} ${CERT} ${KEY} \
   -s https://localhost:9200/_plugins/_security/api/rolesmapping/${org}-tenant \
-  -H 'Content-Type: application/json' -d'{"backend_roles": ["${org}"]}'
+  -H 'Content-Type: application/json' -d'{"backend_roles": ["${ORG_GUID}"]}'
 
 done
 
