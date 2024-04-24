@@ -19,7 +19,7 @@ cf api "<%= api %>"
 cf auth "<%= username %>" "<%= password %>"
 
 for org in `cf orgs| tail -n +4`; do
-ORG_GUID=${cf ${org} --guid}
+ORG_GUID=$(cf org ${org} --guid)
 curl -X PUT \
   ${CA} ${CERT} ${KEY} \
   -s https://localhost:9200/_plugins/_security/api/tenants/${org} \
