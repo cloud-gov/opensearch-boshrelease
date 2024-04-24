@@ -28,12 +28,12 @@ curl -X PUT \
 curl -X PUT \
   ${CA} ${CERT} ${KEY} \
   -s https://localhost:9200/_plugins/_security/api/roles/${org}-tenant \
-  -H 'Content-Type: application/json' -d'{"tenant_permissions": [{"tenant_patterns": ["${org}"],"allowed_actions": ["kibana_all_reaid"]}]}'
+  -H 'Content-Type: application/json' -d'{"tenant_permissions": [{"tenant_patterns": [${org}],"allowed_actions": ["kibana_all_reaid"]}]}'
 
 curl -X PUT \
   ${CA} ${CERT} ${KEY} \
   -s https://localhost:9200/_plugins/_security/api/rolesmapping/${org}-tenant \
-  -H 'Content-Type: application/json' -d'{"backend_roles": ["${ORG_GUID}"]}'
+  -H 'Content-Type: application/json' -d'{"backend_roles": [${ORG_GUID}]}'
 
 done
 
