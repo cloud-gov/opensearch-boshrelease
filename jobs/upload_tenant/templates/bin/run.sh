@@ -28,7 +28,7 @@ curl -X PUT \
 curl -X PUT \
   ${CA} ${CERT} ${KEY} \
   -s https://localhost:9200/_plugins/_security/api/roles/${org}-tenant \
-  -H 'Content-Type: application/json' -d'{"tenant_permissions":[{"tenant_patterns": ['"${org_quoted}"'],"allowed_actions": ["kibana_all_read"]}]}'
+  -H 'Content-Type: application/json' -d'{"tenant_permissions":[{"tenant_patterns": ['"${org_quoted}"'],"allowed_actions": ["kibana_all_write"]}]}'
 
 curl -X PUT \
   ${CA} ${CERT} ${KEY} \
