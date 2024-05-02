@@ -31,7 +31,7 @@ index=\"logs-app-${org_guid}-*\"
 curl -X PUT \
   ${CA} ${CERT} ${KEY} \
   -s https://localhost:9200/_plugins/_security/api/roles/${org}-tenant \
-  -H 'Content-Type: application/json' -d'{"index_permissions":[{"index_patterns":['"${index}"'],"tenant_permissions":[{"tenant_patterns": ['"${org_quoted}"'],"allowed_actions": ["kibana_all_write"]}]}'
+  -H 'Content-Type: application/json' -d'{"index_permissions":[{"index_patterns":['"${index}"']}],"tenant_permissions":[{"tenant_patterns": ['"${org_quoted}"'],"allowed_actions": ["kibana_all_write"]}]}'
 
 
 curl -X PUT \
