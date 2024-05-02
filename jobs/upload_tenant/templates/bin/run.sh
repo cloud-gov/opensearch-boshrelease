@@ -19,7 +19,7 @@ cf api "<%= api %>"
 cf auth "<%= username %>" "<%= password %>"
 
 for org in `cf orgs| tail -n +4`; do
-org_guid= $(cf org ${org} --guid)
+org_guid=$(cf org ${org} --guid)
 ORG_GUID=\"$(cf org ${org} --guid)\"
 org_quoted=\"$org\"
 curl -X PUT \
