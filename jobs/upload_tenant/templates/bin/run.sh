@@ -19,6 +19,7 @@ cf api "<%= api %>"
 cf auth "<%= username %>" "<%= password %>"
 
 for org in `cf orgs| tail -n +4`; do
+org_guid= $(cf org ${org} --guid)
 ORG_GUID=\"$(cf org ${org} --guid)\"
 org_quoted=\"$org\"
 curl -X PUT \
@@ -26,7 +27,7 @@ curl -X PUT \
   -s https://localhost:9200/_plugins/_security/api/tenants/${org} \
   -H 'Content-Type: application/json' -d'{ "description": "A tenant for the ${org} team." }'
 
-index="logs-app-${org}-*"
+index="logs-app-${org_guid}-*"
 curl -X PUT \
   ${CA} ${CERT} ${KEY} \
   -s https://localhost:9200/_plugins/_security/api/roles/${org}-tenant \
