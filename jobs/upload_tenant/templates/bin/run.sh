@@ -25,10 +25,13 @@ curl -X PUT \
   ${CA} ${CERT} ${KEY} \
   -s https://localhost:9200/_plugins/_security/api/tenants/${org} \
   -H 'Content-Type: application/json' -d'{ "description": "A tenant for the ${org} team." }'
+
+index="logs-app-${org}-*"
 curl -X PUT \
   ${CA} ${CERT} ${KEY} \
   -s https://localhost:9200/_plugins/_security/api/roles/${org}-tenant \
-  -H 'Content-Type: application/json' -d'{"tenant_permissions":[{"tenant_patterns": ['"${org_quoted}"'],"allowed_actions": ["kibana_all_write"]}]}'
+  -H 'Content-Type: application/json' -d'{"index_permissions":[{"index_patterns":["${index}"],"dls":"{\"bool\":/ {\"should\": [{\"terms\": { \"@cf.space_id\": [${attr.proxy.spaceids}] }}, {\"terms\": {\"@cf.org_id\": [${attr.proxy.orgids}]}}]}}","allowed_actions":["read"]}],"tenant_permissions":[{"tenant_patterns": ['"${org_quoted}"'],"allowed_actions": ["kibana_all_write"]}]}'
+
 
 curl -X PUT \
   ${CA} ${CERT} ${KEY} \
