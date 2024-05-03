@@ -53,7 +53,7 @@ opensearchDashboards.defaultAppId: <%= p('opensearch_dashboards.defaultAppId') %
 opensearch.username: <%= p('opensearch_dashboards.username') %>
 <% end %>
 <% if_p('opensearch_dashboards.password') do %>
-opensearch.password: <%= p('opensearch_dashboards.password') %>
+opensearch.password: <%= p('opensearch_idashboards.password') %>
 <% end %>
 
 <% if_p('opensearch_dashboards.opensearch.ssl.certificate') do %>
@@ -94,8 +94,6 @@ opensearch_security.proxycache.roles_header: "x-proxy-roles"
 <% end %>
 
 opensearch_security.multitenancy.enabled: true
-opensearch_security.multitenancy.tenants.enable_global: false
-opensearch_security.multitenancy.tenants.enable_private: true
 opensearch_security.multitenancy.enable_filter: false
 
 <% if_p('opensearch_dashboards.config_options') do p("opensearch_dashboards.config_options", {}).each do | k, v | %>
