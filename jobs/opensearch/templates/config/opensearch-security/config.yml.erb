@@ -5,6 +5,10 @@ _meta:
 
 config:
   dynamic:
+    kibana:
+      multitenancy_enabled: true
+      default_tenant: ""
+      index: ".opensearch_dashboards"
     <% if p('opensearch.enable_proxy_auth') %>
     http:
       xff:
