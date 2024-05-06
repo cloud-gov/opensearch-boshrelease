@@ -71,3 +71,8 @@ kibana_server:
   - "kibanaserver"
   # Give permission for Dashboards to access Opensearch
   - "dashboard.opensearch.internal"
+
+kibana_read_indexs:
+  reserved: true
+  users:
+  - "dashboard.opensearch.internal"
