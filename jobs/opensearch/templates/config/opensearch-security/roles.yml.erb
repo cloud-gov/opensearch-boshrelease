@@ -387,3 +387,20 @@ cf_user:
     - "read"
   tenant_permissions: []
   static: false
+
+  kibana_server:
+  reserved: false
+  hidden: false
+  cluster_permissions:
+  - "cluster_monitor"
+  - "cluster_composite_ops"
+  - "manage_point_in_time"
+  - "indices:admin/template*"
+  - "indices:admin/index_template*"
+  - "indices:data/read/scroll*"
+  index_permissions:
+  - index_patterns:
+    - "*"
+    allowed_actions:
+    - "indices_all"
+  static: false
