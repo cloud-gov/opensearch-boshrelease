@@ -177,3 +177,5 @@ properties:
   opensearch.discovery.single_node:
     description: True to run cluster as a single node
     default: false
+  opensearch_dashboards.username:
+    description: username for dashboard
