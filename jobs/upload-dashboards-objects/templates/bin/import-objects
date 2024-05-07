@@ -27,7 +27,8 @@ if __name__ == "__main__":
 
     logs_url = 'https://<%= p('opensearch_dashboards.host') %>:<%= dashboards_link.p('opensearch_dashboards.port') %>'
     os.system('cf api <%= api %>')
-    os.system('cf auth <%= username %> <%= password %>')
+    os.system('cf auth "<%= username %>" "<%= password %>"')
+    orgs = os.popen("cf orgs| tail -n +4| tr '\n' ' ' ").read().split(" ")
     for tenant in os.system('cf orgs| tail -n +4'):
       headers = {
         'content-type': 'application/json',
@@ -35,7 +36,7 @@ if __name__ == "__main__":
         'x-proxy-roles': 'admin',
         'x-proxy-user': 'admin',
         'x-forwarded-for': '127.0.0.1',
-        'securitytenant:': tenant,
+        'securitytenant': tenant,
       }
 
       <% p("dashboards_objects.upload_patterns").each do |pattern| %>
