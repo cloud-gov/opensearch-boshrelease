@@ -45,6 +45,7 @@ provides:
   - opensearch.node.ssl.ca
   - opensearch.node.ssl.certificate
   - opensearch.node.ssl.private_key
+  - opensearch_dashboards.username
 
 consumes:
 - name: opensearch
