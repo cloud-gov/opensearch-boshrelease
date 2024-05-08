@@ -8,7 +8,7 @@ config:
     kibana:
       multitenancy_enabled: true
       default_tenant: ""
-      server_username: <%= p('opensearch.dashboard_username','') %>
+      server_username: <%= p('opensearch.dashboard_username') %>
       index: ".opensearch_dashboards"
     <% if p('opensearch.enable_proxy_auth') %>
     http:
