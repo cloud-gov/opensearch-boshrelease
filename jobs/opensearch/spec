@@ -45,7 +45,7 @@ provides:
   - opensearch.node.ssl.ca
   - opensearch.node.ssl.certificate
   - opensearch.node.ssl.private_key
-  - opensearch_dashboards.username
+  - opensearch.dashboard_username
 
 consumes:
 - name: opensearch
@@ -178,5 +178,5 @@ properties:
   opensearch.discovery.single_node:
     description: True to run cluster as a single node
     default: false
-  opensearch_dashboards.username:
+  opensearch.dashboard_username:
     description: username for dashboard
