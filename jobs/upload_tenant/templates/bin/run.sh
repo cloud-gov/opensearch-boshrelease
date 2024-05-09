@@ -15,7 +15,7 @@ KEY="--key ${JOB_DIR}/config/ssl/opensearch-admin.key"
   client = p("upload_tenant.cf.client_id")
   password = p("upload_tenant.cf.client_password")
 %>
-cf target "<%= api %>"
+cf api "<%= api %>"
 cf auth "<%= client %>" "<%= password %>"
 
 for org in `cf orgs| tail -n +4`; do

@@ -5,6 +5,6 @@ set -eu
   client = p("cloudfoundry.client_id")
   password = p("cloudfoundry.client_password")
 %>
-cf target "<%= api %>"
+cf api "<%= api %>"
 cf auth "<%= client %>" "<%= password %>" --client-credentials
 tenant_list=$(cf orgs| tail -n +4 >> org-tenants.txt)
