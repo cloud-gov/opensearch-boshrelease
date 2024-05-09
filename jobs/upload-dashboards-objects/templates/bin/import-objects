@@ -23,7 +23,6 @@ if __name__ == "__main__":
     key = '<%= job_dir %>/config/ssl/dashboard-web.key'
 
     logs_url = 'https://<%= p('opensearch_dashboards.host') %>:<%= dashboards_link.p('opensearch_dashboards.port') %>'
-    orgs = os.popen("cf orgs| tail -n +4| tr '\n' ' ' ").read().split(" ")
     with open('org-tenants.txt') as orgs:
       for tenant in orgs:
         headers = {
@@ -32,7 +31,7 @@ if __name__ == "__main__":
           'x-proxy-roles': 'admin',
           'x-proxy-user': 'admin',
           'x-forwarded-for': '127.0.0.1',
-          'securitytenant': tenant,
+          'securitytenant': tenant.strip(),
         }
 
         <% p("dashboards_objects.upload_patterns").each do |pattern| %>
