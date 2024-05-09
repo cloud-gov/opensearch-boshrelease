@@ -16,7 +16,7 @@ KEY="--key ${JOB_DIR}/config/ssl/opensearch-admin.key"
   password = p("upload_tenant.cf.client_password")
 %>
 cf api "<%= api %>"
-cf auth "<%= client %>" "<%= password %>"
+cf auth "<%= client %>" "<%= password %>" --client-credentials
 
 for org in `cf orgs| tail -n +4`; do
 ORG_GUID=\"$(cf org ${org} --guid)\"
