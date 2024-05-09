@@ -26,6 +26,7 @@ consumes:
 
 templates:
   bin/generate-objects: bin/generate-objects
+  bin/generate-tenants: bin/generate-tenants
   bin/import-objects: bin/import-objects
   bin/run: bin/run
   bin/pre-start.erb: bin/pre-start
