@@ -23,8 +23,8 @@ properties:
   opensearch_config.opensearch.ssl.private_key:
     description: Private key for communication between Opensearch Dashboards and Opensearch
   upload_tenant.cf.domain:
-    description: domain of cf
-  upload_tenant.cf.username:
-    description: username of cf
-  upload_tenant.cf.password:
-    description: password of cf
+    description: domain of the api for cf
+  upload_tenant.cf.client_id:
+    description: username of the cf client
+  upload_tenant.cf.client_password:
+    description: password of cf client

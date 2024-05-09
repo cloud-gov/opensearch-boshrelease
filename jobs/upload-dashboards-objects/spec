@@ -134,10 +134,10 @@ properties:
   cloudfoundry.skip_ssl_validation:
     description: "Set to true to skip SSL validation (defaults to false)"
     default: false
-  cloudfoundry.user:
-    description: The Cloud Foundry API user.
-  cloudfoundry.password:
-    description: The Cloud Foundry API user's password.
+  cloudfoundry.client_id:
+    description: The Cloud Foundry client id.
+  cloudfoundry.client_password:
+    description: The Cloud Foundry client's password.
 
   opensearch_config.index_prefix:
     description: |

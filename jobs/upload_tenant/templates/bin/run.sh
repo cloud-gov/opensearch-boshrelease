@@ -12,11 +12,11 @@ CERT="--cert ${JOB_DIR}/config/ssl/opensearch-admin.crt"
 KEY="--key ${JOB_DIR}/config/ssl/opensearch-admin.key"
 <%
   api = p("upload_tenant.cf.domain")
-  username = p("upload_tenant.cf.username")
-  password = p("upload_tenant.cf.password")
+  client = p("upload_tenant.cf.client_id")
+  password = p("upload_tenant.cf.client_password")
 %>
-cf api "<%= api %>"
-cf auth "<%= username %>" "<%= password %>"
+cf target "<%= api %>"
+cf auth "<%= client %>" "<%= password %>"
 
 for org in `cf orgs| tail -n +4`; do
 ORG_GUID=\"$(cf org ${org} --guid)\"
