@@ -13,6 +13,9 @@ export REQUESTS_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt"
 echo "[$(date)] Calling 'generate-objects'..."
 $(dirname $0)/generate-objects
 
+echo "[$(date)] Calling 'generate-tenants'..."
+$(dirname $0)/generate-tenants
+
 echo "[$(date)] Calling 'import-objects'..."
 $(dirname $0)/import-objects
 

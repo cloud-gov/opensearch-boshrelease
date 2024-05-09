@@ -24,59 +24,60 @@ if __name__ == "__main__":
 
     logs_url = 'https://<%= p('opensearch_dashboards.host') %>:<%= dashboards_link.p('opensearch_dashboards.port') %>'
     orgs = os.popen("cf orgs| tail -n +4| tr '\n' ' ' ").read().split(" ")
-    for tenant in orgs:
-      headers = {
-        'content-type': 'application/json',
-        'osd-xsrf': 'true',
-        'x-proxy-roles': 'admin',
-        'x-proxy-user': 'admin',
-        'x-forwarded-for': '127.0.0.1',
-        'securitytenant': tenant,
-      }
+    with open('org-tenants.txt') as orgs:
+      for tenant in orgs:
+        headers = {
+          'content-type': 'application/json',
+          'osd-xsrf': 'true',
+          'x-proxy-roles': 'admin',
+          'x-proxy-user': 'admin',
+          'x-forwarded-for': '127.0.0.1',
+          'securitytenant': tenant,
+        }
 
-      <% p("dashboards_objects.upload_patterns").each do |pattern| %>
-      for filename in glob.iglob("<%= pattern.fetch("pattern") %>", recursive=True):
-          r = session.post(
-            '{}/api/saved_objects/{}/{}'.format(
-              logs_url,
-              os.path.basename(os.path.dirname(filename)),
-              os.path.basename(os.path.splitext(filename)[0])
-            ),
-            data=open(filename, 'rb'),
-            headers=headers,
-            cert=(cert, key),
-            verify=ca
-          )
-          if r.status_code == 409:
-              put = session.put(
-                '{}/api/saved_objects/{}/{}'.format(
-                  logs_url,
-                  os.path.basename(os.path.dirname(filename)),
-                  os.path.basename(os.path.splitext(filename)[0])
-                ),
-                data=open(filename, 'rb'),
-                headers=headers,
-                cert=(cert, key),
-                verify=ca
-              )
-              if put.status_code == 200:
-                  logging.info('Object %s Uploaded Successfully', filename)
-              else:
-                  logging.info('Object %s Failed to Upload', filename)
-          elif r.status_code == 200:
-              logging.info('Object %s Uploaded Successfully', filename)
-          else:
-              logging.info('Object %s Failed to Upload', filename)
-      <% end %>
+        <% p("dashboards_objects.upload_patterns").each do |pattern| %>
+        for filename in glob.iglob("<%= pattern.fetch("pattern") %>", recursive=True):
+            r = session.post(
+              '{}/api/saved_objects/{}/{}'.format(
+                logs_url,
+                os.path.basename(os.path.dirname(filename)),
+                os.path.basename(os.path.splitext(filename)[0])
+              ),
+              data=open(filename, 'rb'),
+              headers=headers,
+              cert=(cert, key),
+              verify=ca
+            )
+            if r.status_code == 409:
+                put = session.put(
+                  '{}/api/saved_objects/{}/{}'.format(
+                    logs_url,
+                    os.path.basename(os.path.dirname(filename)),
+                    os.path.basename(os.path.splitext(filename)[0])
+                  ),
+                  data=open(filename, 'rb'),
+                  headers=headers,
+                  cert=(cert, key),
+                  verify=ca
+                )
+                if put.status_code == 200:
+                    logging.info('Object %s Uploaded Successfully', filename)
+                else:
+                    logging.info('Object %s Failed to Upload', filename)
+            elif r.status_code == 200:
+                logging.info('Object %s Uploaded Successfully', filename)
+            else:
+                logging.info('Object %s Failed to Upload', filename)
+        <% end %>
 
-      r = session.post(
-        '{}/api/opensearch-dashboards/settings'.format(logs_url),
-        data='{"changes":{"defaultIndex":"<%= p('dashboards_objects.default_index') %>"}}',
-        headers=headers,
-        cert=(cert, key),
-        verify=ca
-      )
-      if r.status_code == 200:
-          logging.info('Successfully Set <%= p('dashboards_objects.default_index') %> as Default Index')
-      else:
-          logging.info('Failed to Set <%= p('dashboards_objects.default_index') %> as Default Index')
+        r = session.post(
+          '{}/api/opensearch-dashboards/settings'.format(logs_url),
+          data='{"changes":{"defaultIndex":"<%= p('dashboards_objects.default_index') %>"}}',
+          headers=headers,
+          cert=(cert, key),
+          verify=ca
+        )
+        if r.status_code == 200:
+            logging.info('Successfully Set <%= p('dashboards_objects.default_index') %> as Default Index')
+        else:
+            logging.info('Failed to Set <%= p('dashboards_objects.default_index') %> as Default Index')
