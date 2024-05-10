@@ -1,0 +1,13 @@
+set -eu
+
+export JOB_NAME="upload-dashboards-objects"
+export STORE_DIR="/var/vcap/store/$JOB_NAME"
+<%
+  api = p("cloudfoundry.system_domain")
+  client = p("cloudfoundry.client_id")
+  password = p("cloudfoundry.client_password")
+%>
+cf api "<%= api %>"
+cf auth "<%= client %>" "<%= password %>" --client-credentials
+mkdir -p $STORE_DIR
+cf orgs| tail -n +4 > "$STORE_DIR/org-tenants.txt"
