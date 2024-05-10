@@ -180,3 +180,4 @@ properties:
     default: false
   opensearch.dashboard_username:
     description: username for dashboard
+    default: "dashboard.opensearch.internal"
