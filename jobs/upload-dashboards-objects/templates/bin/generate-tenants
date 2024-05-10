@@ -7,4 +7,4 @@ set -eu
 %>
 cf api "<%= api %>"
 cf auth "<%= client %>" "<%= password %>" --client-credentials
-tenant_list=$(cf orgs| tail -n +4 >> org-tenants.txt)
+cf orgs| tail -n +4 > "$STORE_DIR/org-tenants.txt"
