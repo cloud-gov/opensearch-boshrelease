@@ -3,7 +3,7 @@
 <%
 
   job_dir = "/var/vcap/jobs/upload-dashboards-objects"
-  store_dir = "/var/vcap/store/upload-dashboard-objects"
+  store_dir = "/var/vcap/store/upload-dashboards-objects"
   dashboards_link = link('opensearch_dashboards')
 %>
 
