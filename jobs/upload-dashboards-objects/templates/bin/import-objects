@@ -3,7 +3,7 @@
 <%
 
   job_dir = "/var/vcap/jobs/upload-dashboards-objects"
-
+  store_dir = "/var/vcap/store/upload-dashboard-objects"
   dashboards_link = link('opensearch_dashboards')
 %>
 
@@ -23,7 +23,7 @@ if __name__ == "__main__":
     key = '<%= job_dir %>/config/ssl/dashboard-web.key'
 
     logs_url = 'https://<%= p('opensearch_dashboards.host') %>:<%= dashboards_link.p('opensearch_dashboards.port') %>'
-    with open('org-tenants.txt') as orgs:
+    with open('<%= store_dir %>/org-tenants.txt') as orgs:
       for tenant in orgs:
         headers = {
           'content-type': 'application/json',
