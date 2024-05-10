@@ -1,5 +1,7 @@
 set -eu
 
+export JOB_NAME="upload-dashboards-objects"
+export STORE_DIR="/var/vcap/store/$JOB_NAME"
 <%
   api = p("cloudfoundry.system_domain")
   client = p("cloudfoundry.client_id")
