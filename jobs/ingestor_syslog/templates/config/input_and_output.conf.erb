@@ -73,7 +73,7 @@ output {
     <% end %>
 
     <% p('logstash_parser.outputs').each do | output | %>
-      if [@index_type] == "app" {
+    if [@index_type] == "app" {
         <%= output['plugin'] %> {
         <% if 'opensearch' == output['plugin'] %>
             <%
@@ -102,7 +102,7 @@ output {
         <% output['options'].each do | k, v | %>
           <%= k %> => <%= v.inspect %>
         <% end %>
+          }
         }
-      }
     <% end %>
 }
