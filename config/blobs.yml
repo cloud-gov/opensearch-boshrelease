@@ -82,6 +82,10 @@ auth-proxy/packaging-23.2-py3-none-any.whl:
   size: 53011
   object_id: da491191-dbf5-43f8-4ed8-d421f15eb44b
   sha: sha256:8c491190033a9af7e1d931d0b5dacc2ef47509b34dd0de67ed209b5203fc88c7
+auth-proxy/pycparser-2.22-py3-none-any.whl:
+  size: 117552
+  object_id: 0f54bbf7-0f2c-4be3-44f4-7a49db2ef018
+  sha: sha256:c3702b6d3dd8c7abc1afa565d7e63d53a1d0bd86cdc24edd75470f4de499cfcc
 auth-proxy/python_dotenv-1.0.1-py3-none-any.whl:
   size: 19863
   object_id: 43f30bec-ded7-47ed-525d-9a67058bed82
