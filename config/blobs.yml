@@ -18,6 +18,10 @@ auth-proxy/certifi-2024.2.2-py3-none-any.whl:
   size: 163774
   object_id: 4247a681-66fd-4fc6-4779-0c0b54d348df
   sha: sha256:dc383c07b76109f368f6106eee2b593b04a011ea4d55f652c6ca24a754d1cdd1
+auth-proxy/cffi-1.16.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl:
+  size: 477578
+  object_id: a721d918-212d-4868-61a8-e32fe07a851f
+  sha: sha256:e715596e683d2ce000574bae5d07bd522c781a822866c20495e52520564f0969
 auth-proxy/charset_normalizer-3.3.2-py3-none-any.whl:
   size: 48543
   object_id: 5aa8b3c6-14ae-457e-56ef-397036a5db03
