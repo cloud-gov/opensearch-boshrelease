@@ -102,6 +102,10 @@ auth-proxy/setuptools-69.0.3.tar.gz:
   size: 2219609
   object_id: 82547212-6589-4e56-775e-fe8131f1f3c9
   sha: sha256:be1af57fc409f93647f2e8e4573a142ed38724b8cdd389706a867bb4efcf1e78
+auth-proxy/typing_extensions-4.12.1-py3-none-any.whl:
+  size: 37250
+  object_id: f85dc3dd-38ff-4155-61ab-0a57a931b82f
+  sha: sha256:6024b58b69089e5a89c347397254e35f1bf02a907728ec7fee9bf0fe837d203a
 auth-proxy/urllib3-2.2.0-py3-none-any.whl:
   size: 120877
   object_id: f70d2028-e0b8-4a4a-4989-abde29b5517e
