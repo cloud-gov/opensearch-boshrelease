@@ -26,6 +26,10 @@ auth-proxy/click-8.1.7-py3-none-any.whl:
   size: 97941
   object_id: fcbee8e4-d45f-4ae5-5200-4aa80094dc92
   sha: sha256:ae74fb96c20a0277a1d615f1e4d73c8414f5a98db8b799a7931d1582f3390c28
+auth-proxy/cryptography-42.0.8-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl:
+  size: 3841968
+  object_id: 1d39487e-a109-41cf-622a-2ab91dcdfdac
+  sha: sha256:a0608251135d0e03111152e41f0cc2392d1e74e35703960d4190b2e0f4ca9c70
 auth-proxy/dnspython-2.5.0-py3-none-any.whl:
   size: 305444
   object_id: 2aae293c-7efa-440a-42fa-fe792f48cdaa
