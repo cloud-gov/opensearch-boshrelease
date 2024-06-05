@@ -58,6 +58,8 @@ properties:
     description: the client ID of your uaa clinet
   opensearch-dashboards-cf-auth-proxy.uaa.client.secret:
     description: the client secret for your uaa client
+  opensearch-dashboards-cf-auth-proxy.uaa.jwks:
+    description: the jwks token
   opensearch-dashboards-cf-auth-proxy.log_level:
     descrition: "Log level for auth proxy"
     default: "info"

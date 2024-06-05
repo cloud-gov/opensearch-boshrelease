@@ -18,6 +18,10 @@ auth-proxy/certifi-2024.2.2-py3-none-any.whl:
   size: 163774
   object_id: 4247a681-66fd-4fc6-4779-0c0b54d348df
   sha: sha256:dc383c07b76109f368f6106eee2b593b04a011ea4d55f652c6ca24a754d1cdd1
+auth-proxy/cffi-1.16.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl:
+  size: 477578
+  object_id: a721d918-212d-4868-61a8-e32fe07a851f
+  sha: sha256:e715596e683d2ce000574bae5d07bd522c781a822866c20495e52520564f0969
 auth-proxy/charset_normalizer-3.3.2-py3-none-any.whl:
   size: 48543
   object_id: 5aa8b3c6-14ae-457e-56ef-397036a5db03
@@ -26,6 +30,10 @@ auth-proxy/click-8.1.7-py3-none-any.whl:
   size: 97941
   object_id: fcbee8e4-d45f-4ae5-5200-4aa80094dc92
   sha: sha256:ae74fb96c20a0277a1d615f1e4d73c8414f5a98db8b799a7931d1582f3390c28
+auth-proxy/cryptography-42.0.8-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl:
+  size: 3841968
+  object_id: 1d39487e-a109-41cf-622a-2ab91dcdfdac
+  sha: sha256:a0608251135d0e03111152e41f0cc2392d1e74e35703960d4190b2e0f4ca9c70
 auth-proxy/dnspython-2.5.0-py3-none-any.whl:
   size: 305444
   object_id: 2aae293c-7efa-440a-42fa-fe792f48cdaa
@@ -62,6 +70,10 @@ auth-proxy/itsdangerous-2.1.2-py3-none-any.whl:
   size: 15749
   object_id: 13fd23ce-6017-4954-5d8f-9d73a9f473ac
   sha: sha256:2c2349112351b88699d8d4b6b075022c0808887cb7ad10069318a8b0bc88db44
+auth-proxy/jwcrypto-1.5.6-py3-none-any.whl:
+  size: 92520
+  object_id: ac77e328-5f51-4150-651b-413ed55f8f0e
+  sha: sha256:150d2b0ebbdb8f40b77f543fb44ffd2baeff48788be71f67f03566692fd55789
 auth-proxy/marshmallow-3.20.2-py3-none-any.whl:
   size: 49449
   object_id: 8edc748b-c0f9-4a67-7c20-c4881496d065
@@ -70,6 +82,10 @@ auth-proxy/packaging-23.2-py3-none-any.whl:
   size: 53011
   object_id: da491191-dbf5-43f8-4ed8-d421f15eb44b
   sha: sha256:8c491190033a9af7e1d931d0b5dacc2ef47509b34dd0de67ed209b5203fc88c7
+auth-proxy/pycparser-2.22-py3-none-any.whl:
+  size: 117552
+  object_id: 0f54bbf7-0f2c-4be3-44f4-7a49db2ef018
+  sha: sha256:c3702b6d3dd8c7abc1afa565d7e63d53a1d0bd86cdc24edd75470f4de499cfcc
 auth-proxy/python_dotenv-1.0.1-py3-none-any.whl:
   size: 19863
   object_id: 43f30bec-ded7-47ed-525d-9a67058bed82
@@ -86,6 +102,10 @@ auth-proxy/setuptools-69.0.3.tar.gz:
   size: 2219609
   object_id: 82547212-6589-4e56-775e-fe8131f1f3c9
   sha: sha256:be1af57fc409f93647f2e8e4573a142ed38724b8cdd389706a867bb4efcf1e78
+auth-proxy/typing_extensions-4.12.1-py3-none-any.whl:
+  size: 37250
+  object_id: f85dc3dd-38ff-4155-61ab-0a57a931b82f
+  sha: sha256:6024b58b69089e5a89c347397254e35f1bf02a907728ec7fee9bf0fe837d203a
 auth-proxy/urllib3-2.2.0-py3-none-any.whl:
   size: 120877
   object_id: f70d2028-e0b8-4a4a-4989-abde29b5517e
@@ -230,14 +250,10 @@ opensearch-dashboards-2.14.0-linux-x64.tar.gz:
   size: 325443834
   object_id: b5d01738-082f-4a0f-71b1-13c0f08cf6a0
   sha: sha256:7c02e9d9aef41326a1a71bf5aed7a7f6ab8533a8691cab92b5a6ecb92ed5c492
-opensearch-dashboards-cf-auth-proxy-0.0.1.tar.gz:
-  size: 27642
-  object_id: 16aa1823-bc8b-481c-49c0-36b14888e120
-  sha: sha256:f994e0f3e8902331e9f97d0b1183c33108ffbf4a667f44d11a2ee30876251a63
 opensearch-dashboards-cf-auth-proxy-0.0.2.tar.gz:
-  size: 468741
-  object_id: 940882da-d5dc-45ed-4fa8-eaed97c55d2d
-  sha: sha256:9c6c5d94755984f2b037285b3df795c2602287b959b015d5962c66c20c72feb4
+  size: 508651
+  object_id: b627e98a-eb60-401b-4317-4ec71e98e6d7
+  sha: sha256:1b60152bdcbaa7806485162306e32746ff137189dc4a1f9b233b6784faa72f9c
 requests/certifi-2023.11.17-py3-none-any.whl:
   size: 162530
   object_id: f2afff72-e415-4390-61c1-eb8010ed4e4a
