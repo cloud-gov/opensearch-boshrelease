@@ -62,6 +62,10 @@ auth-proxy/itsdangerous-2.1.2-py3-none-any.whl:
   size: 15749
   object_id: 13fd23ce-6017-4954-5d8f-9d73a9f473ac
   sha: sha256:2c2349112351b88699d8d4b6b075022c0808887cb7ad10069318a8b0bc88db44
+auth-proxy/jwcrypto-1.5.6-py3-none-any.whl:
+  size: 92520
+  object_id: ac77e328-5f51-4150-651b-413ed55f8f0e
+  sha: sha256:150d2b0ebbdb8f40b77f543fb44ffd2baeff48788be71f67f03566692fd55789
 auth-proxy/marshmallow-3.20.2-py3-none-any.whl:
   size: 49449
   object_id: 8edc748b-c0f9-4a67-7c20-c4881496d065
