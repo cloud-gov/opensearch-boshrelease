@@ -118,10 +118,6 @@ auth-proxy/wheel-0.41.2.tar.gz:
   size: 98050
   object_id: 418dced9-9c61-4579-5744-23f6d1221554
   sha: sha256:0c5ac5ff2afb79ac23ab82bab027a0be7b5dbcf2e54dc50efe4bf507de1f7985
-curator-opensearch-0.0.11.tar.gz:
-  size: 247372
-  object_id: 3cb859ae-895b-4e55-4119-f3dd963e4b00
-  sha: sha256:a1626a3464ad5575c00c0540adda78c62185bf0e0c52ced5dc181a0a81070ff9
 curator/vendor/Cython-0.29.36.tar.gz:
   size: 2097760
   object_id: 278ed8dc-40f8-4c8a-7877-8cb1329a4474
