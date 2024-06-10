@@ -210,6 +210,10 @@ curator/vendor/wheel-0.41.2.tar.gz:
   size: 98050
   object_id: 418dced9-9c61-4579-5744-23f6d1221554
   sha: sha256:0c5ac5ff2afb79ac23ab82bab027a0be7b5dbcf2e54dc50efe4bf507de1f7985
+curator_opensearch-0.0.12-py2.py3-none-any.whl:
+  size: 107475
+  object_id: 83d3ff51-9d41-4252-49a5-8f152ad36d8f
+  sha: sha256:a284addcb616e2257f8042d764195917c22c046ae930011150717040412f890a
 logstash/logstash-8.9.2-linux-x86_64.tar.gz:
   size: 346522558
   object_id: 61bc773e-e0a2-4cf5-416e-0964a3d83978
