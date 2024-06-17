@@ -12,7 +12,7 @@ keyword_default = { "type": "keyword", "index": true }.to_json
 {
   "template" : {
     "aliases": {
-      "app-logs-aliases-jason": {}
+      "app-logs-aliases-tester": {}
     },
     "settings": <%= p('opensearch_config.app_index_settings', {}).to_json %>,
     "mappings" : {
