@@ -99,9 +99,11 @@ echo "--- Component Templates"
 echo "--- Index Templates"
 <%= put_to_es('_index_template', p('opensearch_config.index_templates')) %>
 
-
 echo "--- Documents"
 <%= put_to_es('', p('opensearch_config.docs')) %>
+
+echo "--- starting index"
+curl -s -XPUT ${CA} ${CERT} ${KEY} ${URL}/logs-app-jason-0000
 
 echo "--- License"
 <% if_p("opensearch_config.license") do |license| %>
