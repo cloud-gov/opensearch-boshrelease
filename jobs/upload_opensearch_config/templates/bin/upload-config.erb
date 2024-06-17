@@ -11,6 +11,7 @@ opensearch_port = p("opensearch_config.opensearch.port")
 
 # Delete existing templates before uploading
 URL=https://<%= opensearch_host %>:<%= opensearch_port %>
+BASEURL=https://<%= opensearch_host %>:<%= opensearch_port %>
 CA="--cacert ${JOB_DIR}/config/ssl/opensearch.ca"
 CERT="--cert ${JOB_DIR}/config/ssl/opensearch-admin.crt"
 KEY="--key ${JOB_DIR}/config/ssl/opensearch-admin.key"
@@ -103,7 +104,7 @@ echo "--- Documents"
 <%= put_to_es('', p('opensearch_config.docs')) %>
 
 echo "--- starting index"
-curl -s -XPUT ${CA} ${CERT} ${KEY} ${URL}/logs-app-jason-0000
+curl -s -XPUT ${CA} ${CERT} ${KEY} ${BASEURL}/logs-app-jason-0000
 
 echo "--- License"
 <% if_p("opensearch_config.license") do |license| %>
