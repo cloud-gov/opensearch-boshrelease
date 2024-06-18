@@ -49,6 +49,8 @@ properties:
   smoke_tests.count_test.run:
     description: Whether to run the count test
     default: false
+  smoke_tests.index:
+    description: Index to send smoke_tests to.
   smoke_tests.count_test.index_pattern:
     description: Index pattern to run the count test against (e.g. logs-* )
   smoke_tests.count_test.time_field:
