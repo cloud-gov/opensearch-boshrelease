@@ -117,4 +117,4 @@ echo "--- License"
 
 echo "--- Starting Index"
 curl -XPUT ${CA} ${CERT} ${KEY} ${BASEURL}/_plugins/_ism/policies/logs-app-rollover_policy -H 'Content-Type: application/json' -d'{"policy":{"description":"Rollover to a new index when age or size becomes our target","default_state":"Rollover","states":[{"name":"Rollover","actions":[{"retry":{"count":3,"backoff":"exponential","delay":"1m"},"rollover":{"min_index_age":"'${INDEX_AGE}'","min_primary_shard_size":"'${DOCUMENT_SIZE}'","copy_alias":false}}],"transitions":[]}],"ism_template":[{"index_patterns":["logs-app-*"],"priority":100}]}}'
-curl -XPUT ${CA} ${CERT} ${KEY} ${BASEURL}/%3Clogs-app-%7Bnow%2Fd%7D-000001%3E -H 'Content-Type: application/json' -d'{"aliases": {"'${ALIAS}'": {}}}'
+curl -XPUT ${CA} ${CERT} ${KEY} ${BASEURL}/%3Clogs-app-%7Bnow%2Fd%7D-01%3E -H 'Content-Type: application/json' -d'{"aliases": {"'${ALIAS}'": {}}}'
