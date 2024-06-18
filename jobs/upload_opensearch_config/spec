@@ -52,3 +52,7 @@ properties:
     default: []
   opensearch_config.license:
     description: "The openSearch License string"
+  opensearch_config.rollover_document_size:
+    description: size of a shard before the index will rollover
+  opensearch_config.rollover_index_age:
+    description: age of index before the index will rollover
