@@ -10,3 +10,5 @@ releases-dir-opensearch.tgz
 .DS_Store
 .vscode
 .zip
+
+src/*/vendor/logstash*

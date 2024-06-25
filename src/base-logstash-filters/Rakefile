@@ -58,7 +58,7 @@ task :compile_templates => :clean_templates do
 
   FileList.new("spec/logstash-templates/*/compile.yml").each do |compile_file|
     template = YAML.load_file(compile_file)['template'];
-    
+
     template['testcase'].each do |template_testcase|
       compile_bosh_template '../../' + template['path'], 'spec/logstash-templates/' + template_testcase['config'], 'spec/logstash-templates/' + template_testcase['destination']
     end
