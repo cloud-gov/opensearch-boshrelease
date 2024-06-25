@@ -21,32 +21,8 @@ def build_erb(source_erb_file, target_file)
   puts `find target`
 end
 
-# Test tasks
-desc "Runs unit tests against filters"
-task :unit, [:rspec_files] => :build do |t, args|
-  args.with_defaults(:rspec_files => "$(find spec -name *_spec.rb | grep -v integration)")
-  puts "===> Testing ..."
-  sh %Q[ bundle exec rspec #{args[:rspec_files]} --colour ]
-end
-
-desc "Runs integration tests against filters"
-task :integration, [:rspec_files] => :build do |t, args|
-  args.with_defaults(:rspec_files => "$(find spec -name *_spec.rb | grep integration)")
-  puts "===> Integration Testing ..."
-  sh %Q[ bundle exec rspec #{args[:rspec_files]} --colour ]
-end
-
-desc "Runs YAML validation tests"
-task :yaml, [:yaml_files] => :build do |t, args|
-  args.with_defaults(:yaml_files => "$(find ../.. -path ../../src -prune -o -name '*.yml' -print)")
-  puts "===> Validating YAML data ..."
-  sh %Q[ bundle exec yaml-lint #{args[:yaml_files]} ]
-end
-
 task default: [
-  :unit,
-  :integration,
-  :yaml
+  :build
 ]
 
 def unescape_embedded_doublequote(str)
