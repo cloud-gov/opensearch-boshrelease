@@ -1,5 +1,5 @@
 check process opensearch-dashboards-cf-auth-proxy
   with pidfile /var/vcap/sys/run/bpm/opensearch-dashboards-cf-auth-proxy/opensearch-dashboards-cf-auth-proxy.pid
-  start program "/var/vcap/jobs/bpm/bin/bpm start opensearch-dashboards-cf-auth-proxy" with timeout 300 seconds
+  start program "/var/vcap/jobs/bpm/bin/bpm start opensearch-dashboards-cf-auth-proxy"
   stop program "/var/vcap/jobs/bpm/bin/bpm stop opensearch-dashboards-cf-auth-proxy"
   group vcap
