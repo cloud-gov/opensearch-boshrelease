@@ -9,7 +9,7 @@ config:
       multitenancy_enabled: true
       default_tenant: ""
       server_username: <%= p('opensearch.dashboard_username') %>
-      index: ".opensearch_dashboards"
+      index: <%= p('opensearch.index') %>
     <% if p('opensearch.enable_proxy_auth') %>
     http:
       xff:
