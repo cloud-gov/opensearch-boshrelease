@@ -1,0 +1,5 @@
+check process ingestor_cloudwatch
+  with pidfile /var/vcap/sys/run/bpm/ingestor_cloudwatch/ingestor_cloudwatch.pid
+  start program "/var/vcap/jobs/bpm/bin/bpm start ingestor_cloudwatch"
+  stop program "/var/vcap/jobs/bpm/bin/bpm stop ingestor_cloudwatch"
+  group vcap

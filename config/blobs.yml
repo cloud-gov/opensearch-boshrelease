@@ -234,6 +234,10 @@ logstash/logstash-input-tcp-6.4.1.zip:
   size: 14501935
   object_id: 77443abb-adce-433c-4789-bc507504e596
   sha: sha256:ca440f035617138c53dc40450802ff058187a4734e177d3f68944bade68acdd4
+logstash/logstash-integration-aws-7.1.6.zip:
+  size: 2143813
+  object_id: da9212f7-36ef-46b6-5480-8f5eaeb9fa9b
+  sha: sha256:b80e9f5812aa07c472782193e61ce402b30fa965440e25f002a5af2cf10261b1
 logstash/logstash-output-opensearch-2.0.2.zip:
   size: 24204545
   object_id: f15ae09c-ac8c-4dba-51ce-952917dedad6
