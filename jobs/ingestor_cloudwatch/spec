@@ -208,5 +208,7 @@ properties:
     default: ["index_template"]
   logstash_cloudwatch.key_id:
     description: "AWS Access key"
+    default: ""
   logstash_cloudwatch.access_key:
     description: "AWS Secret key"
+    default: ""
