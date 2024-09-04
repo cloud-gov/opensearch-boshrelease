@@ -2,12 +2,10 @@ input
 {
   cloudwatch
   {
-    namespace => "loki"
+    namespace => "AWS/RDS"
     region => "us-gov-west-1"
-    filters =>  {
-            InstanceId => "i-xxxxxxxxxxx"
-            objectname => "Memory"
-        }
+    metrics => ["CPUUtilization", "CPUCreditUsage"]
+    filters => { "DBInstanceIdentifier" => "cg-aws-broker-devqf502ruqr2oz47r" }
   }
 }
 
