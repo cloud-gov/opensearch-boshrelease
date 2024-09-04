@@ -10,19 +10,19 @@ packages:
 - openjdk-17
 
 templates:
-  bin/ingestor_syslog: bin/ingestor_syslog.sh
+  bin/ingestor_cloudwatch: bin/ingestor_cloudwatch.sh
   bin/pre-start: bin/pre-start
-  bin/post-start.erb: bin/post-start
-  config/bpm.yml.erb: config/bpm.yml
+  # bin/post-start.erb: bin/post-start
+  # config/bpm.yml.erb: config/bpm.yml
   config/aws_cred.yml.erb: config/aws_cred.yml
   config/input_and_output.conf.erb: config/input_and_output.conf
-  config/filters_pre.conf.erb: config/filters_pre.conf
-  config/filters_post.conf.erb: config/filters_post.conf
-  config/filters_override.conf.erb: config/filters_override.conf
-  config/syslog_tls.crt.erb: config/syslog_tls.crt
-  config/syslog_tls.key.erb: config/syslog_tls.key
-  config/logstash.yml.erb: config/logstash.yml
-  config/jvm.options.erb: config/jvm.options
+  # config/filters_pre.conf.erb: config/filters_pre.conf
+  # config/filters_post.conf.erb: config/filters_post.conf
+  # config/filters_override.conf.erb: config/filters_override.conf
+  # config/cloudwatch_tls.crt.erb: config/cloudwatch_tls.crt
+  # config/cloudwatch_tls.key.erb: config/cloudwatch_tls.key
+  # config/logstash.yml.erb: config/logstash.yml
+  # config/jvm.options.erb: config/jvm.options
   config/ingestor-crt.erb: config/ssl/ingestor.crt
   config/ingestor-pem.erb: config/ssl/ingestor.pem
   config/ca.erb: config/ssl/opensearch.ca
@@ -31,14 +31,14 @@ provides:
 - name: ingestor
   type: ingestor
   properties:
-  - logstash_ingestor.syslog.port
-  - logstash_ingestor.syslog.transport
-  - logstash_ingestor.syslog_tls.port
+  - logstash_ingestor.cloudwatch.port
+  - logstash_ingestor.cloudwatch.transport
+  - logstash_ingestor.cloudwatch_tls.port
   - logstash_ingestor.relp.port
-- name: syslog_forwarder
-  type: syslog_forwarder
+- name: cloudwatch_forwarder
+  type: cloudwatch_forwarder
   properties:
-  - logstash_ingestor.syslog.port
+  - logstash_ingestor.cloudwatch.port
 - name: ingestor_inputs
   type: ingestor_inputs
   properties:
@@ -106,34 +106,34 @@ properties:
     description: Filters to execute on the ingestors
     default: ""
 
-  logstash_ingestor.syslog.port:
-    description: Port to listen for syslog messages
-  logstash_ingestor.syslog.transport:
+  logstash_ingestor.cloudwatch.port:
+    description: Port to listen for cloudwatch messages
+  logstash_ingestor.cloudwatch.transport:
     description: Transport protocol to use
     default: "tcp"
-  logstash_ingestor.syslog.use_keepalive:
+  logstash_ingestor.cloudwatch.use_keepalive:
     description: Instruct the socket to use TCP keep alives
 
   logstash_ingestor.health.disable_post_start:
     description: Skip post-start health checks?
     default: false
   logstash_ingestor.health.interval:
-    description: Logstash syslog health check interval (seconds)
+    description: Logstash cloudwatch health check interval (seconds)
     default: 5
   logstash_ingestor.health.timeout:
-    description: Logstash syslog health check number of attempts (seconds)
+    description: Logstash cloudwatch health check number of attempts (seconds)
     default: 300
 
-  logstash_ingestor.syslog_tls.port:
-    description: Port to listen for syslog-TLS messages (omit to disable)
-  logstash_ingestor.syslog_tls.ssl_cert:
-    description: Syslog-TLS SSL certificate (file contents, not a path) - required if logstash_ingestor.syslog_tls.port set
-  logstash_ingestor.syslog_tls.ssl_key:
-    description: Syslog-TLS SSL key (file contents, not a path) - required if logstash_ingestor.syslog_tls.port set
-  logstash_ingestor.syslog_tls.skip_ssl_validation:
+  logstash_ingestor.cloudwatch_tls.port:
+    description: Port to listen for cloudwatch-TLS messages (omit to disable)
+  logstash_ingestor.cloudwatch_tls.ssl_cert:
+    description: cloudwatch-TLS SSL certificate (file contents, not a path) - required if logstash_ingestor.cloudwatch_tls.port set
+  logstash_ingestor.cloudwatch_tls.ssl_key:
+    description: cloudwatch-TLS SSL key (file contents, not a path) - required if logstash_ingestor.cloudwatch_tls.port set
+  logstash_ingestor.cloudwatch_tls.skip_ssl_validation:
     description: Verify the identity of the other end of the SSL connection against the CA.
     default: false
-  logstash_ingestor.syslog_tls.use_keepalive:
+  logstash_ingestor.cloudwatch_tls.use_keepalive:
     description: Instruct the socket to use TCP keep alives
 
   logstash_ingestor.relp.port:
