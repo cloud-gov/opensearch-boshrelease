@@ -28,8 +28,8 @@ templates:
   config/ca.erb: config/ssl/opensearch.ca
 
 provides:
-- name: ingestor
-  type: ingestor
+- name: ingestor-cloudwatch
+  type: ingestor-cloudwatch
   properties:
   - logstash_ingestor.cloudwatch.port
   - logstash_ingestor.cloudwatch.transport
@@ -39,10 +39,6 @@ provides:
   type: cloudwatch_forwarder
   properties:
   - logstash_ingestor.cloudwatch.port
-- name: ingestor_inputs
-  type: ingestor_inputs
-  properties:
-  - logstash_parser.inputs
 consumes:
 - name: opensearch
   type: opensearch
