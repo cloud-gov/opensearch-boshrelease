@@ -2,7 +2,7 @@ processes:
   - name: ingestor_cloudwatch
     hooks:
       pre_start: /var/vcap/jobs/ingestor_cloudwatch/bin/pre-start
-    executable: /var/vcap/jobs/ingestor_cloudwatch/bin/ingestor-cloudwatch.sh
+    executable: /var/vcap/jobs/ingestor_cloudwatch/bin/ingestor_cloudwatch.sh
     ephemeral_disk: true
     persistent_disk: true
     additional_volumes:
