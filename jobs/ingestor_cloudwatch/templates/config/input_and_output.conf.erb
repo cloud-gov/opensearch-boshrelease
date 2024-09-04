@@ -4,6 +4,10 @@ input
   {
     namespace => "loki"
     region => "us-gov-west-1"
+    filters =>  {
+            InstanceId => "i-xxxxxxxxxxx"
+            objectname => "Memory"
+        }
   }
 }
 
