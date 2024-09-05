@@ -34,10 +34,10 @@ output {
                 "index" => p('logstash_parser.opensearch.index'),
                 "manage_template" => false,
                 "ssl_certificate_verification" => true,
-                "tls_certificate" => "/var/vcap/jobs/ingestor-cloudwatch/config/ssl/ingestor.crt",
-                "tls_key" => "/var/vcap/jobs/ingestor-cloudwatch/config/ssl/ingestor.key",
+                "tls_certificate" => "/var/vcap/jobs/ingestor_cloudwatch/config/ssl/ingestor.crt",
+                "tls_key" => "/var/vcap/jobs/ingestor_cloudwatch/config/ssl/ingestor.key",
                 "ssl" => true,
-                "cacert" => "/var/vcap/jobs/ingestor-cloudwatch/config/ssl/opensearch.ca"
+                "cacert" => "/var/vcap/jobs/ingestor_cloudwatch/config/ssl/opensearch.ca"
               }
               if p('logstash_parser.opensearch.idle_flush_time', nil)
                 options['idle_flush_time'] = p('logstash_parser.opensearch.idle_flush_time')
