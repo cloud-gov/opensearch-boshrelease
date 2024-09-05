@@ -21,7 +21,7 @@ templates:
   # config/filters_override.conf.erb: config/filters_override.conf
   # config/cloudwatch_tls.crt.erb: config/cloudwatch_tls.crt
   # config/cloudwatch_tls.key.erb: config/cloudwatch_tls.key
-  # config/logstash.yml.erb: config/logstash.yml
+  config/logstash.yml.erb: config/logstash.yml
   # config/jvm.options.erb: config/jvm.options
   config/ingestor-crt.erb: config/ssl/ingestor.crt
   config/ingestor-pem.erb: config/ssl/ingestor.pem
@@ -212,3 +212,5 @@ properties:
   logstash_cloudwatch.access_key:
     description: "AWS Secret key"
     default: ""
+  logstash_cloudwatch.instance:
+    description: "put an instance in input output"
