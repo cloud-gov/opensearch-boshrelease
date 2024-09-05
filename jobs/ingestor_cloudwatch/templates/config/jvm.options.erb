@@ -87,10 +87,10 @@
 17-:--add-opens java.base/sun.nio.ch=ALL-UNNAMED
 17-:--add-opens java.base/java.io=ALL-UNNAMED
 ################################################################
-# end logstash base config. 
+# end logstash base config.
 # everything after this is our customizations
 ################################################################
 
--Djava.io.tmpdir=/var/vcap/sys/tmp/ingestor_syslog
+-Djava.io.tmpdir=/var/vcap/sys/tmp/ingestor_cloudwatch
 
 <% p('logstash.jvm_options').each do |opt| %><%= opt %><% end %>
