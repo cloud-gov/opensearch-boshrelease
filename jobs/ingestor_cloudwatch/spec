@@ -22,7 +22,7 @@ templates:
   # config/cloudwatch_tls.crt.erb: config/cloudwatch_tls.crt
   # config/cloudwatch_tls.key.erb: config/cloudwatch_tls.key
   config/logstash.yml.erb: config/logstash.yml
-  # config/jvm.options.erb: config/jvm.options
+  config/jvm.options.erb: config/jvm.options
   config/ingestor-crt.erb: config/ssl/ingestor.crt
   config/ingestor-pem.erb: config/ssl/ingestor.pem
   config/ca.erb: config/ssl/opensearch.ca
