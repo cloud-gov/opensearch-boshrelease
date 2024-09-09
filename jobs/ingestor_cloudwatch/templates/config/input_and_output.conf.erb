@@ -1,11 +1,9 @@
 input
 {
-  cloudwatch
+  cloudwatch_logs
   {
-    namespace => "AWS/RDS"
+    log_group => [ "/aws/rds/instance/test/postgresql"]
     region => "us-gov-west-1"
-    metrics => ["CPUUtilization", "CPUCreditUsage"]
-    filters => { "DBInstanceIdentifier" => "cg-aws-broker-devsyhafaj" }
   }
 }
 
