@@ -258,6 +258,10 @@ logstash/test.zip:
   size: 96512221
   object_id: 85441ffe-4da8-4d89-7c5b-9f6ecc8dcfed
   sha: sha256:4b3946df0f253d34f644734e2f5cd15e4a72f6b7e0f0b5a0b159b52a247c0e4f
+logstash/test2.zip:
+  size: 96512280
+  object_id: 82f05796-7e90-4f02-7e08-fc21eabed78c
+  sha: sha256:c0233b39ecd34f76df4f54aa36aaf8b451bc556c2fcc84bdc55549347f3beb18
 opensearch-2.14.0-linux-x64.tar.gz:
   size: 887872915
   object_id: 46c6a9e0-7ae0-4bf0-4bbb-524ddaed1941
