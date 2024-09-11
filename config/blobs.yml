@@ -256,7 +256,7 @@ logstash/logstash-output-syslog-3.0.5.zip:
   sha: sha256:80a2b08f2b58ae81c823cc0bb1dd7956fbc173037fc621bfa31af34140724e02
 logstash/test.zip:
   size: 96512221
-  object_id: 78ca8a17-2d0d-4f9c-7bce-3ef335a75472
+  object_id: 85441ffe-4da8-4d89-7c5b-9f6ecc8dcfed
   sha: sha256:4b3946df0f253d34f644734e2f5cd15e4a72f6b7e0f0b5a0b159b52a247c0e4f
 opensearch-2.14.0-linux-x64.tar.gz:
   size: 887872915
