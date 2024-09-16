@@ -222,14 +222,6 @@ logstash/logstash-filter-translate-3.4.2.zip:
   size: 649362
   object_id: e9b87119-265c-43ce-788d-5592aabffcb3
   sha: sha256:f465635431b474abaf61c6673d7c91cb5f62b09a193d45a5622342f5a5b967c6
-logstash/logstash-input-cloudwatch-logs-1.0.5.zip:
-  size: 821832
-  object_id: 6aff4a9c-d601-40ed-7ffb-69012c23880f
-  sha: sha256:2005c6a59fd23e6443d0c298fd21078c07293fba3c6a7d9a03b2d7243ef22d21
-logstash/logstash-input-cloudwatch_logs-1.0.4.zip:
-  size: 821832
-  object_id: 95090985-097d-4e14-6614-5d4fdb9858e7
-  sha: sha256:86ff0e519038cfe7b24ed4b735bb8c32bf11d279723aec42580a5103f8ce0903
 logstash/logstash-input-relp-3.0.4.zip:
   size: 44725
   object_id: 2e183484-97da-4e51-4311-51e024d0665b
@@ -254,15 +246,7 @@ logstash/logstash-output-syslog-3.0.5.zip:
   size: 41727
   object_id: 21474ee6-824a-4547-7f45-b236864358ab
   sha: sha256:80a2b08f2b58ae81c823cc0bb1dd7956fbc173037fc621bfa31af34140724e02
-logstash/test.zip:
-  size: 96512221
-  object_id: 85441ffe-4da8-4d89-7c5b-9f6ecc8dcfed
-  sha: sha256:4b3946df0f253d34f644734e2f5cd15e4a72f6b7e0f0b5a0b159b52a247c0e4f
-logstash/test2.zip:
-  size: 96512290
-  object_id: 74bb6c91-74fe-4892-4ec8-8e06b11a39ea
-  sha: sha256:610d2203bc562d00b87e26be02d35971f9a83e16ce18826fc7ab8b327bded893
-logstash/test3.zip:
+logstash/logstash-input-cloudwatch_logs-1.0.4.zip:
   size: 73273631
   object_id: 6f80a2b6-c3bf-4c2e-6c4e-5b99eee310b3
   sha: sha256:2d80363ae50bbec723d6424f23f722b887105d4aded09189f5cbe3fef85b8a8a

@@ -131,6 +131,9 @@ properties:
     default: false
   logstash_ingestor.cloudwatch_tls.use_keepalive:
     description: Instruct the socket to use TCP keep alives
+  logstash_ingestor.cloudwatch.prefix:
+    description: "What prefix in cloudwatch you want to pull in"
+    default: ["/aws/rds/instance/"]
 
   logstash_ingestor.relp.port:
     description: Port to listen for RELP messages
@@ -206,11 +209,3 @@ properties:
   logstash_parser.wait_for_templates:
     description: "A list of index templates that need to be present in opensearch before the process starts"
     default: ["index_template"]
-  logstash_cloudwatch.key_id:
-    description: "AWS Access key"
-    default: ""
-  logstash_cloudwatch.access_key:
-    description: "AWS Secret key"
-    default: ""
-  logstash_cloudwatch.instance:
-    description: "put an instance in input output"

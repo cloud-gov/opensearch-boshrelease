@@ -2,18 +2,12 @@ input
 {
   cloudwatch_logs
   {
-    log_group => [ "/aws/rds/instance/test/postgresql"]
+    log_group_prefix => true
+    log_group => p('logstash_ingestor.cloudwatch.prefix')
     region => "us-gov-west-1"
   }
 }
 
-<%
-  es_output_hosts = nil
-  if_p("logstash_parser.opensearch.data_hosts") { |hosts| es_output_hosts = hosts.map { |ip| "https://#{ip}:9200" }.join(',') }
-  unless es_output_hosts
-    es_output_hosts =  link("opensearch").address
-  end
-%>
 
 output {
     <% if p("logstash_parser.debug") %>
@@ -23,7 +17,6 @@ output {
     <% end %>
 
     <% p('logstash_parser.outputs').each do | output | %>
-    if [@index_type] == "app" {
         <%= output['plugin'] %> {
         <% if 'opensearch' == output['plugin'] %>
             <%
@@ -49,10 +42,6 @@ output {
               output['options'] = options.merge(output['options'])
             %>
         <% end %>
-        <% output['options'].each do | k, v | %>
-          <%= k %> => <%= v.inspect %>
-        <% end %>
-          }
         }
     <% end %>
 }
