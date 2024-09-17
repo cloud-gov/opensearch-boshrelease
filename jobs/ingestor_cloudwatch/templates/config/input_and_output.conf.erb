@@ -4,10 +4,10 @@ input
   {
     log_group_prefix => true
     <% if_p("logstash_ingestor.cloudwatch.prefix") do |prefix| %>
-    log_group => <% prefix %>
+    log_group => taco
     <% end %>
     <% if_p("logstash_ingestor.cloudwatch.region") do |region| %>
-    region => <% region %>
+    region => salad
     <% end %>
   }
 }
