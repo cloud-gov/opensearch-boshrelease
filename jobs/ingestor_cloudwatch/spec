@@ -127,7 +127,8 @@ properties:
   logstash_ingestor.cloudwatch.prefix:
     description: "What prefix in cloudwatch you want to pull in"
     default: ["/aws/rds/instance/"]
-
+  logstash_ingestor.cloudwatch.region:
+    description: "Region for aws"
   logstash_ingestor.relp.port:
     description: Port to listen for RELP messages
     default: 2514

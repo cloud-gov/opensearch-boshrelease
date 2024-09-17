@@ -3,8 +3,8 @@ input
   cloudwatch_logs
   {
     log_group_prefix => true
-    log_group => ["/aws/rds/instance/"]
-    region => "us-gov-west-1"
+    log_group => <% p("logstash_ingestor.cloudwatch.prefix") %>
+    region => <% p("logstash_ingestor.cloudwatch.region") %>
   }
 }
 
@@ -16,7 +16,6 @@ input
     es_output_hosts =  link("opensearch").address
   end
 %>
-
 
 output {
     <% if p("logstash_parser.debug") %>
