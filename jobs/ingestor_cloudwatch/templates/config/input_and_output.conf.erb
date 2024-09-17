@@ -1,6 +1,8 @@
 <%
 log_group = p('logstash_ingestor.cloudwatch.prefix')
 %>
+
+<%
 input
 {
   cloudwatch_logs
@@ -10,6 +12,7 @@ input
     region => "us-gov-west-1"
   }
 }
+%>
 
 <%
   es_output_hosts = nil
