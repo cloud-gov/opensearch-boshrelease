@@ -12,14 +12,8 @@ packages:
 templates:
   bin/ingestor_cloudwatch: bin/ingestor_cloudwatch.sh
   bin/pre-start: bin/pre-start
-  # bin/post-start.erb: bin/post-start
   config/bpm.yml.erb: config/bpm.yml
   config/input_and_output.conf.erb: config/input_and_output.conf
-  # config/filters_pre.conf.erb: config/filters_pre.conf
-  # config/filters_post.conf.erb: config/filters_post.conf
-  # config/filters_override.conf.erb: config/filters_override.conf
-  # config/cloudwatch_tls.crt.erb: config/cloudwatch_tls.crt
-  # config/cloudwatch_tls.key.erb: config/cloudwatch_tls.key
   config/logstash.yml.erb: config/logstash.yml
   config/jvm.options.erb: config/jvm.options
   config/ingestor-crt.erb: config/ssl/ingestor.crt
