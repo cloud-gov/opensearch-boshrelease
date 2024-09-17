@@ -1,0 +1,62 @@
+input
+{
+  cloudwatch_logs
+  {
+    log_group_prefix => true
+    <% if_p("logstash_ingestor.cloudwatch.prefix") do |prefix_list| %>
+    log_group => <%= prefix_list %>
+    <% end %>
+    <% if_p("logstash_ingestor.cloudwatch.region") do |region_zone| %>
+    region => <%= region_zone %>
+    <% end %>
+  }
+}
+
+
+<%
+  es_output_hosts = nil
+  if_p("logstash_parser.opensearch.data_hosts") { |hosts| es_output_hosts = hosts.map { |ip| "https://#{ip}:9200" }.join(',') }
+  unless es_output_hosts
+    es_output_hosts =  link("opensearch").address
+  end
+%>
+
+output {
+    <% if p("logstash_parser.debug") %>
+        stdout {
+            codec => "json"
+        }
+    <% end %>
+
+    <% p('logstash_parser.outputs').each do | output | %>
+        <%= output['plugin'] %> {
+        <% if 'opensearch' == output['plugin'] %>
+            <%
+              options = {
+                "hosts" => [ es_output_hosts ],
+                "index" => p('logstash_parser.opensearch.index'),
+                "manage_template" => false,
+                "ssl_certificate_verification" => true,
+                "tls_certificate" => "/var/vcap/jobs/ingestor_cloudwatch/config/ssl/ingestor.crt",
+                "tls_key" => "/var/vcap/jobs/ingestor_cloudwatch/config/ssl/ingestor.key",
+                "ssl" => true,
+                "cacert" => "/var/vcap/jobs/ingestor_cloudwatch/config/ssl/opensearch.ca"
+              }
+              if p('logstash_parser.opensearch.idle_flush_time', nil)
+                options['idle_flush_time'] = p('logstash_parser.opensearch.idle_flush_time')
+              end
+              if p('logstash_parser.opensearch.document_id', nil)
+                options['document_id'] = p('logstash_parser.opensearch.document_id')
+              end
+              if p('logstash_parser.opensearch.routing', nil)
+                options['routing'] = p('logstash_parser.opensearch.routing')
+              end
+              output['options'] = options.merge(output['options'])
+            %>
+        <% end %>
+        <% output['options'].each do | k, v | %>
+          <%= k %> => <%= v.inspect %>
+        <% end %>
+          }
+    <% end %>
+}
