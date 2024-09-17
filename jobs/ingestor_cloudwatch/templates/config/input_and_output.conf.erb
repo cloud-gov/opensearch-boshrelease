@@ -8,6 +8,14 @@ input
   }
 }
 
+<%
+  es_output_hosts = nil
+  if_p("logstash_parser.opensearch.data_hosts") { |hosts| es_output_hosts = hosts.map { |ip| "https://#{ip}:9200" }.join(',') }
+  unless es_output_hosts
+    es_output_hosts =  link("opensearch").address
+  end
+%>
+
 
 output {
     <% if p("logstash_parser.debug") %>
