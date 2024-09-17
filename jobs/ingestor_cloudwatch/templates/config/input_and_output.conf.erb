@@ -3,8 +3,12 @@ input
   cloudwatch_logs
   {
     log_group_prefix => true
-    log_group => <% p('logstash_ingestor.cloudwatch.prefix') %>
-    region => <% p('logstash_ingestor.cloudwatch.region') %>
+    <% if_p("logstash_ingestor.cloudwatch.prefix") do |prefix| %>
+    log_group => <% prefix %>
+    <% end %>
+    <% if_p("logstash_ingestor.cloudwatch.region") do |region| %>
+    region => <% region %>
+    <% end %>
   }
 }
 
