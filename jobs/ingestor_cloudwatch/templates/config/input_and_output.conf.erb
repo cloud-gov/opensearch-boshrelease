@@ -1,9 +1,12 @@
+<%
+log_group = p('logstash_ingestor.cloudwatch.prefix')
+%>
 input
 {
   cloudwatch_logs
   {
     log_group_prefix => true
-    log_group => p('logstash_ingestor.cloudwatch.prefix')
+    log_group => log_group
     region => "us-gov-west-1"
   }
 }
@@ -50,6 +53,10 @@ output {
               output['options'] = options.merge(output['options'])
             %>
         <% end %>
+        <% output['options'].each do | k, v | %>
+          <%= k %> => <%= v.inspect %>
+        <% end %>
+          }
         }
     <% end %>
 }
