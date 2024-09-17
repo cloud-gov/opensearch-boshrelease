@@ -1,14 +1,10 @@
 <%
-log_group = p('logstash_ingestor.cloudwatch.prefix')
-%>
-
-<%
 input
 {
   cloudwatch_logs
   {
     log_group_prefix => true
-    log_group => log_group
+    log_group => p('logstash_ingestor.cloudwatch.prefix')
     region => "us-gov-west-1"
   }
 }
