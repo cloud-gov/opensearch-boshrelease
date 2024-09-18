@@ -21,9 +21,9 @@ filter
         rename => {"[cloudwatch_logs][tags][Organizationname]"=>"[@cf][org]"}
         remove_field => ["[cloudwatch_logs][tags][Createdat]"]
         remove_field => ["[cloudwatch_logs][tags][Updatedat]"]
-        rename => {"[cloudwatch_logs][tags][InstanceGUID]"=>"service_instance_id"}
-        rename => {"[cloudwatch_logs][tags][Serviceofferingname]"=>"service_offering"}
-        rename => {"[cloudwatch_logs][tags][Serviceplanname]"=>"service_plan"}
+        rename => {"[cloudwatch_logs][tags][InstanceGUID]"=>"[@cf][service_instance_id]"}
+        rename => {"[cloudwatch_logs][tags][Serviceofferingname]"=>"[@cf][service_offering]"}
+        rename => {"[cloudwatch_logs][tags][Serviceplanname]"=>"[@cf][service_plan]"}
         rename => {"[cloudwatch_logs][tags][broker]"=>"broker"}
         rename => {"[cloudwatch_logs][tags][client]"=>"client"}
 
