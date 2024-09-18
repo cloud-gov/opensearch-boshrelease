@@ -25,7 +25,7 @@ filter
         rename => {"[cloudwatch_logs][tags][Serviceofferingname]"=>"[@cf][service_offering]"}
         rename => {"[cloudwatch_logs][tags][Serviceplanname]"=>"[@cf][service_plan]"}
         rename => {"[cloudwatch_logs][tags][broker]"=>"broker"}
-        rename => {"[cloudwatch_logs][tags][client]"=>"client"}
+        remove_field => ["[cloudwatch_logs][tags][client]"]
 
     }
 }
