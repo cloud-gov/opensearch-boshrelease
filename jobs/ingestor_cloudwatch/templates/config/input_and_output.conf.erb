@@ -7,7 +7,7 @@ input
     log_group => <%= prefix_list %>
     <% end %>
     <% if_p("logstash_ingestor.cloudwatch.region") do |region_zone| %>
-    region => <%= region_zone %>
+    region => "<%= region_zone %>"
     <% end %>
   }
 }
