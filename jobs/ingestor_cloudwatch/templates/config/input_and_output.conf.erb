@@ -22,7 +22,7 @@ filter
         rename => {"[cloudwatch_logs][tags][Createdat]"=>"Created_at"}
         rename => {"[cloudwatch_logs][tags][InstanceGUID]"=>"instance_id"}
         rename => {"[cloudwatch_logs][tags][Serviceofferingname]"=>"service"}
-        rename => {"[cloudwatch_logs][tags][Serviceplanname]"=>"plan"}
+        rename => {"[cloudwatch_logs][tags][Serviceplanname]"=>"service_plan"}
         rename => {"[cloudwatch_logs][tags][broker]"=>"broker"}
         rename => {"[cloudwatch_logs][tags][client]"=>"client"}
 
