@@ -19,17 +19,17 @@ templates:
   config/ca.erb: config/ssl/opensearch.ca
 
 consumes:
-- name: opensearch
-  type: opensearch
-  optional: true
+  - name: opensearch
+    type: opensearch
+    optional: true
 
 provides:
-- name: opensearch_dashboards
-  type: opensearch_dashboards
-  properties:
-  - opensearch_dashboards.port
-  - opensearch_dashboards.server.ssl.certificate
-  - opensearch_dashboards.server.ssl.private_key
+  - name: opensearch_dashboards
+    type: opensearch_dashboards
+    properties:
+      - opensearch_dashboards.port
+      - opensearch_dashboards.server.ssl.certificate
+      - opensearch_dashboards.server.ssl.private_key
 
 properties:
   opensearch_dashboards.username:
@@ -101,3 +101,15 @@ properties:
   opensearch_dashboards.health.timeout:
     description: opensearch_dashboards health check number of attempts (seconds)
     default: 300
+  opensearch_dashboards.multitenancy.enabled:
+    description: "whether multitenancy is enabled for OpenSearch Dashboards"
+    default: true
+  opensearch_dashboards.multitenancy.enable_filter:
+    description: "whether a search bar appears for searching enabled tenants"
+    default: true
+  opensearch_dashboards.multitenancy.tenants.enable_global:
+    description: "whether the global tenant is available on OpenSearch Dashboards"
+    default: false
+  opensearch_dashboards.multitenancy.tenants.enable_private:
+    description: "whether the private tenant is available on OpenSearch Dashboards"
+    default: false
