@@ -12,7 +12,7 @@ packages:
 - openjdk-17
 
 templates:
-  bin/ingestor_syslog: bin/ingestor_syslog.sh
+  bin/ingestor_logsearch: bin/ingestor_logsearch.sh
   bin/pre-start: bin/pre-start
   bin/post-start.erb: bin/post-start
   config/bpm.yml.erb: config/bpm.yml

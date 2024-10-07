@@ -10,7 +10,7 @@ export JOB_DIR=/var/vcap/jobs/$JOB_NAME
   <%= plugin["name"] %>
 <% end %>
 
-<% if_link('opensearch') do |ingestor_syslog| %>
+<% if_link('opensearch') do |ingestor_logsearch| %>
 openssl pkcs8 -v1 "PBE-SHA1-3DES" \
 -in "${JOB_DIR}/config/ssl/ingestor.pem" -topk8 \
 -out "${JOB_DIR}/config/ssl/ingestor.key" -nocrypt

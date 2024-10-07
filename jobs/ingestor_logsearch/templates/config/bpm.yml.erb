@@ -1,14 +1,14 @@
 processes:
-  - name: ingestor_syslog
+  - name: ingestor_logsearch
     hooks:
-      pre_start: /var/vcap/jobs/ingestor_syslog/bin/pre-start
-    executable: /var/vcap/jobs/ingestor_syslog/bin/ingestor_syslog.sh
+      pre_start: /var/vcap/jobs/ingestor_logsearch/bin/pre-start
+    executable: /var/vcap/jobs/ingestor_logsearch/bin/ingestor_logsearch.sh
     ephemeral_disk: true
     persistent_disk: true
     additional_volumes:
-    - path: /var/vcap/sys/tmp/ingestor_syslog
+    - path: /var/vcap/sys/tmp/ingestor_logsearch
       writable: true
       allow_executions: true
-    - path: /var/vcap/jobs/ingestor_syslog/config
+    - path: /var/vcap/jobs/ingestor_logsearch/config
       writable: true
     - path: /var/vcap/jobs/deployment_lookup_config/config
