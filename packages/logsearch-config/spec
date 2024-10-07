@@ -1,0 +1,9 @@
+---
+name: logsearch-config
+
+dependencies:
+  - ruby-3.1
+
+files:
+  - logsearch-config/**/*
+  - ruby/rake-12.3.2.gem
