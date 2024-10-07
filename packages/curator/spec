@@ -5,7 +5,7 @@ dependencies:
   - python3
 
 files:
-   - curator-opensearch-0.0.11.tar.gz
+   - curator_opensearch-0.0.12-py2.py3-none-any.whl
    - curator/vendor/charset_normalizer-3.2.0-py3-none-any.whl
    - curator/vendor/PyYAML-6.0.1.tar.gz
    - curator/vendor/boto3-1.28.40-py3-none-any.whl

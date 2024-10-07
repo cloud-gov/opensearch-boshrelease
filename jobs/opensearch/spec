@@ -145,6 +145,9 @@ properties:
   opensearch.config_options:
     description: "Additional options to append to opensearch's config.yml (YAML format)."
     default: ~
+  opensearch.index:
+    description: "OpenSearch index used to store saved searches, visualizations and dashboards"
+    default: ".kibana"
   opensearch.logging_options:
     description: "Additional options to append to opensearch's logging.yml (YAML format)."
     default: ~

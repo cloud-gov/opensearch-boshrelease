@@ -118,10 +118,6 @@ auth-proxy/wheel-0.41.2.tar.gz:
   size: 98050
   object_id: 418dced9-9c61-4579-5744-23f6d1221554
   sha: sha256:0c5ac5ff2afb79ac23ab82bab027a0be7b5dbcf2e54dc50efe4bf507de1f7985
-curator-opensearch-0.0.11.tar.gz:
-  size: 247372
-  object_id: 3cb859ae-895b-4e55-4119-f3dd963e4b00
-  sha: sha256:a1626a3464ad5575c00c0540adda78c62185bf0e0c52ced5dc181a0a81070ff9
 curator/vendor/Cython-0.29.36.tar.gz:
   size: 2097760
   object_id: 278ed8dc-40f8-4c8a-7877-8cb1329a4474
@@ -210,6 +206,10 @@ curator/vendor/wheel-0.41.2.tar.gz:
   size: 98050
   object_id: 418dced9-9c61-4579-5744-23f6d1221554
   sha: sha256:0c5ac5ff2afb79ac23ab82bab027a0be7b5dbcf2e54dc50efe4bf507de1f7985
+curator_opensearch-0.0.12-py2.py3-none-any.whl:
+  size: 107475
+  object_id: 83d3ff51-9d41-4252-49a5-8f152ad36d8f
+  sha: sha256:a284addcb616e2257f8042d764195917c22c046ae930011150717040412f890a
 logstash/logstash-8.9.2-linux-x86_64.tar.gz:
   size: 346522558
   object_id: 61bc773e-e0a2-4cf5-416e-0964a3d83978
@@ -234,6 +234,10 @@ logstash/logstash-input-tcp-6.4.1.zip:
   size: 14501935
   object_id: 77443abb-adce-433c-4789-bc507504e596
   sha: sha256:ca440f035617138c53dc40450802ff058187a4734e177d3f68944bade68acdd4
+logstash/logstash-integration-aws-7.1.6.zip:
+  size: 2143813
+  object_id: da9212f7-36ef-46b6-5480-8f5eaeb9fa9b
+  sha: sha256:b80e9f5812aa07c472782193e61ce402b30fa965440e25f002a5af2cf10261b1
 logstash/logstash-output-opensearch-2.0.2.zip:
   size: 24204545
   object_id: f15ae09c-ac8c-4dba-51ce-952917dedad6
@@ -242,6 +246,10 @@ logstash/logstash-output-syslog-3.0.5.zip:
   size: 41727
   object_id: 21474ee6-824a-4547-7f45-b236864358ab
   sha: sha256:80a2b08f2b58ae81c823cc0bb1dd7956fbc173037fc621bfa31af34140724e02
+logstash/logstash-input-cloudwatch_logs-1.0.4.zip:
+  size: 73273631
+  object_id: 6f80a2b6-c3bf-4c2e-6c4e-5b99eee310b3
+  sha: sha256:2d80363ae50bbec723d6424f23f722b887105d4aded09189f5cbe3fef85b8a8a
 opensearch-2.14.0-linux-x64.tar.gz:
   size: 887872915
   object_id: 46c6a9e0-7ae0-4bf0-4bbb-524ddaed1941
@@ -250,10 +258,10 @@ opensearch-dashboards-2.14.0-linux-x64.tar.gz:
   size: 325443834
   object_id: b5d01738-082f-4a0f-71b1-13c0f08cf6a0
   sha: sha256:7c02e9d9aef41326a1a71bf5aed7a7f6ab8533a8691cab92b5a6ecb92ed5c492
-opensearch-dashboards-cf-auth-proxy-0.0.2.tar.gz:
-  size: 508651
-  object_id: b627e98a-eb60-401b-4317-4ec71e98e6d7
-  sha: sha256:1b60152bdcbaa7806485162306e32746ff137189dc4a1f9b233b6784faa72f9c
+opensearch-dashboards-cf-auth-proxy-0.0.3.tar.gz:
+  size: 33370
+  object_id: 14b67a0f-63f5-4a11-400a-eddf55837e40
+  sha: sha256:1d31d7e16484d8b56fa6fa279788473d7bdb08d0cc0a0723baf54b03e48458e3
 requests/certifi-2023.11.17-py3-none-any.whl:
   size: 162530
   object_id: f2afff72-e415-4390-61c1-eb8010ed4e4a

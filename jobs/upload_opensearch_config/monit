@@ -1,5 +1,5 @@
 check process upload_opensearch_config
   with pidfile /var/vcap/sys/run/bpm/upload_opensearch_config/upload_opensearch_config.pid
-  start program "/var/vcap/jobs/bpm/bin/bpm start upload_opensearch_config" with timeout 300 seconds
+  start program "/var/vcap/jobs/bpm/bin/bpm start upload_opensearch_config"
   stop program "/var/vcap/jobs/bpm/bin/bpm stop upload_opensearch_config"
   group vcap

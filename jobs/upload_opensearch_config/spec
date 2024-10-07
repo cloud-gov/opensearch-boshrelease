@@ -30,6 +30,11 @@ properties:
     description: Node certificate for communication between Opensearch Dashboards and Opensearch
   opensearch_config.opensearch.ssl.private_key:
     description: Private key for communication between Opensearch Dashboards and Opensearch
+  opensearch_config.shard_count:
+    description: shard count for environment, should match the amount of data nodes.
+    default: 3
+  opensearch_config.alias:
+    description: alias of index
   opensearch_config.index_prefix:
     description: |
       Name prefix of your log indices that can uniquely distinguish them among other ES indices if apply pattern '*' to it, e.g. 'logs-*'.
@@ -47,3 +52,7 @@ properties:
     default: []
   opensearch_config.license:
     description: "The openSearch License string"
+  opensearch_config.rollover_document_size:
+    description: size of a shard before the index will rollover
+  opensearch_config.rollover_index_age:
+    description: age of index before the index will rollover
