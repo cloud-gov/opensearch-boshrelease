@@ -29,21 +29,13 @@ templates:
   config/ca.erb: config/ssl/opensearch.ca
 
 provides:
-- name: ingestor
-  type: ingestor
+- name: ingestor_logsearch
+  type: ingestor_logsearch
   properties:
   - logstash_ingestor.syslog.port
   - logstash_ingestor.syslog.transport
   - logstash_ingestor.syslog_tls.port
   - logstash_ingestor.relp.port
-- name: syslog_forwarder
-  type: syslog_forwarder
-  properties:
-  - logstash_ingestor.syslog.port
-- name: ingestor_inputs
-  type: ingestor_inputs
-  properties:
-  - logstash_parser.inputs
 consumes:
 - name: opensearch
   type: opensearch
