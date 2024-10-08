@@ -7,7 +7,7 @@ RAKE_VERSION=$(find ruby -maxdepth 1 -name 'rake-*' | sed 's/ruby\/rake-\(.*\)\.
 # shellcheck disable=1090
 source "${BOSH_PACKAGES_DIR:-/var/vcap/packages}/ruby-3.1/bosh/compile.env"
 
-gem install "ruby/rake-${RAKE_VERSION}.gem" --local --no-ri --no-rdoc
+gem install "ruby/rake-${RAKE_VERSION}.gem" --local
 
 logsearch-filters/bin/build
 
