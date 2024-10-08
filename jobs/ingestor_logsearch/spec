@@ -8,7 +8,7 @@ description: |
 packages:
 - logstash
 - logsearch-config
-- cf-logstash-filters
+- logsearch-filters
 - openjdk-17
 
 templates:

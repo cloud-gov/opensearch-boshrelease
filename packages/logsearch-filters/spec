@@ -1,0 +1,11 @@
+---
+name: logsearch-filters
+
+dependencies:
+  - ruby-2.4-r5
+
+files:
+  - logsearch-filters/*
+  - logsearch-filters/bin/*
+  - logsearch-filters/src/logstash-filters/**/*
+  - ruby/rake-12.3.2.gem
