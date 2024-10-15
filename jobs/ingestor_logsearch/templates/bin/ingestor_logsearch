@@ -37,7 +37,7 @@ function wait_for_template {
   echo "Found $template_name"
 }
 
-export PORT=${PORT:-5000}
+export PORT=${PORT:-4900}
 export LANG=en_US.UTF-8
 <% if 'auto' == p('logstash_parser.workers') %>
 # 1 logstash worker / CPU core
