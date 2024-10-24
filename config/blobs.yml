@@ -166,10 +166,6 @@ curator/vendor/jmespath-1.0.1-py3-none-any.whl:
   size: 20256
   object_id: ba0684fc-a3ca-4110-407a-0faed339ec8f
   sha: sha256:02e2e4cc71b5bcab88332eebf907519190dd9e6e82107fa7f83b1003a6252980
-curator/vendor/opensearch_py-2.3.1-py2.py3-none-any.whl:
-  size: 327343
-  object_id: 9b95f6ca-f3ae-4575-6e9d-0a50ca95bf06
-  sha: sha256:eafbc5d56a7ca696afba7d77bcda1bbb849050cbf9265d57d8476576cb576395
 curator/vendor/opensearch_py-2.7.1-py3-none-any.whl:
   size: 325380
   object_id: fcc85559-b310-4c86-51dc-2bf713f01295
