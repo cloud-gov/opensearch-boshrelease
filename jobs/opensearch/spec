@@ -29,28 +29,28 @@ templates:
   config/opensearch-security/roles.yml.erb: config/opensearch-security/roles.yml
   config/opensearch-security/config.yml.erb: config/opensearch-security/config.yml
   config/opensearch-security/roles_mapping.yml.erb: config/opensearch-security/roles_mapping.yml
-  config/opensearch-notifications/notifications.erb : config/opensearch-notifications/notifications.yml
-  config/opensearch-notifications-core/notifications-core.erb : config/opensearch-notifications-core/notifications-core.yml
+  config/opensearch-notifications/notifications.erb: config/opensearch-notifications/notifications.yml
+  config/opensearch-notifications-core/notifications-core.erb: config/opensearch-notifications-core/notifications-core.yml
   config/opensearch-observability/observability.erb: config/opensearch-observability/observability.yml
   config/opensearch-reports-scheduler/reports-scheduler.erb: config/opensearch-reports-scheduler/reports-scheduler.yml
 
 provides:
-- name: opensearch
-  type: opensearch
-  properties:
-  - opensearch.port
-  - opensearch.cluster_name
-  - opensearch.admin.certificate
-  - opensearch.admin.private_key
-  - opensearch.node.ssl.ca
-  - opensearch.node.ssl.certificate
-  - opensearch.node.ssl.private_key
-  - opensearch.dashboard_username
+  - name: opensearch
+    type: opensearch
+    properties:
+      - opensearch.port
+      - opensearch.cluster_name
+      - opensearch.admin.certificate
+      - opensearch.admin.private_key
+      - opensearch.node.ssl.ca
+      - opensearch.node.ssl.certificate
+      - opensearch.node.ssl.private_key
+      - opensearch.dashboard_username
 
 consumes:
-- name: opensearch
-  type: opensearch
-  optional: true
+  - name: opensearch
+    type: opensearch
+    optional: true
 
 properties:
   opensearch.username:
@@ -83,7 +83,7 @@ properties:
       In order to register the shared file system repository it is
       necessary to mount the same shared filesystem to the same location
       on all manager and data nodes.
-    default: ''
+    default: ""
   opensearch.manager_hosts:
     description: Manually specify the host names for the manager nodes
     default: []
@@ -174,13 +174,16 @@ properties:
     default: 50s
   opensearch.repository.s3.bucket:
     description: Bucket name on S3 where to keep snapshots
-    default: ''
+    default: ""
   opensearch.repository.name:
     description: Repository name for automatic snapshots
-    default: ''
+    default: ""
   opensearch.discovery.single_node:
     description: True to run cluster as a single node
     default: false
   opensearch.dashboard_username:
     description: username for dashboard
     default: "dashboard.opensearch.internal"
+  opensearch.multitenancy.private_tenant_enabled:
+    description: True to enable private tenant
+    default: false
