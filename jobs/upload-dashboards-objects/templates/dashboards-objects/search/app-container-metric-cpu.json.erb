@@ -37,7 +37,7 @@
                 "type": "exists",
                 "key": "containermetric.cpu_percentage",
                 "value": "exists",
-                "indexRefName": "kibanaSavedObjectMeta.searchSourceJSON.filter[1].meta.index"
+                "index": "#{p('opensearch_config.app_index_prefix')}*"
             },
             "exists": {
                 "field": "containermetric.cpu_percentage"

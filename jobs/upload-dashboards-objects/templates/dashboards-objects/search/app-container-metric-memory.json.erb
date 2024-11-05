@@ -38,7 +38,7 @@
           "type": "exists",
           "key": "containermetric.memory_bytes",
           "value": "exists",
-          "indexRefName": "kibanaSavedObjectMeta.searchSourceJSON.filter[1].meta.index"
+          "index": "#{p('opensearch_config.app_index_prefix')}*"
       },
       "exists": {
           "field": "containermetric.memory_bytes"
