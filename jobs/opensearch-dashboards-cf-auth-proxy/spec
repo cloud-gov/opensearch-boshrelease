@@ -72,3 +72,7 @@ properties:
   opensearch-dashboards-cf-auth-proxy.gunicorn.worker_class:
     descrition: "gunicorn worker class to use. See https://docs.gunicorn.org/en/stable/settings.html#worker-class"
     default: "eventlet"
+  opensearch-dashboards-cf-auth-proxy.redis.host:
+    descrition: "Host of Redis backend used for session data storage"
+  opensearch-dashboards-cf-auth-proxy.redis.password:
+    descrition: "Password to access Redis backend used for session data storage"
