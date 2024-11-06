@@ -1,103 +1,82 @@
-auth-proxy/Jinja2-3.1.3-py3-none-any.whl:
-  size: 133236
-  object_id: 2a7e8da4-a944-42c8-4af4-6089dcf7c668
-  sha: sha256:7d6d50dd97d52cbc355597bd845fabfbac3f551e1f99619e39a35ce8c370b5fa
-? auth-proxy/MarkupSafe-2.1.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-: size: 28462
-  object_id: e1188548-8f03-4579-6b7d-17c8dc9c1ccb
-  sha: sha256:f5dfb42c4604dddc8e4305050aa6deb084540643ed5804d7455b5df8fe16f5e5
+? auth-proxy/MarkupSafe-3.0.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+: size: 23118
+  sha: sha256:e17c96c14e19278594aa4841ec148115f9c7615a47382ecb6b82bd8fea3ab0c8
 auth-proxy/PyJWT-2.8.0-py3-none-any.whl:
   size: 22591
   object_id: 99f0c18e-55f7-4299-6a57-6341f3c2e07d
   sha: sha256:59127c392cc44c2da5bb3192169a91f429924e17aff6534d70fdc02ab3e04320
-auth-proxy/blinker-1.7.0-py3-none-any.whl:
-  size: 13068
-  object_id: 8cd39ae7-bac2-41b8-72cf-cdaea0041241
-  sha: sha256:c3f865d4d54db7abc53758a01601cf343fe55b84c1de4e3fa910e420b438d5b9
-auth-proxy/certifi-2024.2.2-py3-none-any.whl:
-  size: 163774
-  object_id: 4247a681-66fd-4fc6-4779-0c0b54d348df
-  sha: sha256:dc383c07b76109f368f6106eee2b593b04a011ea4d55f652c6ca24a754d1cdd1
+auth-proxy/async_timeout-5.0.1-py3-none-any.whl:
+  size: 6233
+  sha: sha256:39e3809566ff85354557ec2398b55e096c8364bacac9405a7a1fa429e77fe76c
+auth-proxy/blinker-1.8.2-py3-none-any.whl:
+  size: 9456
+  sha: sha256:1779309f71bf239144b9399d06ae925637cf6634cf6bd131104184531bf67c01
+auth-proxy/certifi-2024.8.30-py3-none-any.whl:
+  size: 167321
+  sha: sha256:922820b53db7a7257ffbda3f597266d435245903d80737e34f8a45ff3e3230d8
 ? auth-proxy/cffi-1.16.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
 : size: 477578
   object_id: a721d918-212d-4868-61a8-e32fe07a851f
   sha: sha256:e715596e683d2ce000574bae5d07bd522c781a822866c20495e52520564f0969
-auth-proxy/charset_normalizer-3.3.2-py3-none-any.whl:
-  size: 48543
-  object_id: 5aa8b3c6-14ae-457e-56ef-397036a5db03
-  sha: sha256:3e4d1f6587322d2788836a99c69062fbb091331ec940e02d12d179c1d53e25fc
+auth-proxy/charset_normalizer-3.4.0-py3-none-any.whl:
+  size: 49446
+  sha: sha256:fe9f97feb71aa9896b81973a7bbada8c49501dc73e58a10fcef6663af95e5079
 auth-proxy/click-8.1.7-py3-none-any.whl:
   size: 97941
-  object_id: fcbee8e4-d45f-4ae5-5200-4aa80094dc92
   sha: sha256:ae74fb96c20a0277a1d615f1e4d73c8414f5a98db8b799a7931d1582f3390c28
-? auth-proxy/cryptography-42.0.8-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-: size: 3841968
-  object_id: 1d39487e-a109-41cf-622a-2ab91dcdfdac
-  sha: sha256:a0608251135d0e03111152e41f0cc2392d1e74e35703960d4190b2e0f4ca9c70
-auth-proxy/dnspython-2.5.0-py3-none-any.whl:
-  size: 305444
-  object_id: 2aae293c-7efa-440a-42fa-fe792f48cdaa
-  sha: sha256:6facdf76b73c742ccf2d07add296f178e629da60be23ce4b0a9c927b1e02c3a6
-auth-proxy/environs-10.3.0-py3-none-any.whl:
-  size: 12565
-  object_id: c68b0756-866c-4cc1-5c79-a19551b6e365
-  sha: sha256:feeaf28f17fd0499f9cd7c0fcf408c6d82c308e69e335eb92d09322fc9ed8138
-auth-proxy/eventlet-0.35.1-py3-none-any.whl:
-  size: 359772
-  object_id: d2742fca-9594-4045-4710-0e4d7f1f9e32
-  sha: sha256:7ed9493b26e02f575f4804ef263190839e9651989523f6f8f9c2866a05c12c83
-auth-proxy/flask-3.0.2-py3-none-any.whl:
-  size: 101300
-  object_id: 7f7db14a-8ac2-458e-5e1d-dce9566f5764
-  sha: sha256:3232e0e9c850d781933cf0207523d1ece087eb8d87b23777ae38456e2fbe7c6e
-auth-proxy/flit_core-3.8.0.tar.gz:
-  size: 41224
-  object_id: 940bcba2-17b3-4d77-5153-89d703f40ff8
-  sha: sha256:b305b30c99526df5e63d6022dd2310a0a941a187bd3884f4c8ef0418df6c39f3
-? auth-proxy/greenlet-3.0.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-: size: 670455
-  object_id: 4ad2a93a-a23c-4b5e-7bec-8e46bbefc9e3
-  sha: sha256:881b7db1ebff4ba09aaaeae6aa491daeb226c8150fc20e836ad00041bcb11230
-auth-proxy/gunicorn-21.2.0-py3-none-any.whl:
-  size: 80176
-  object_id: f46035a5-d5cc-4984-5cdd-b8a30271c68c
-  sha: sha256:3213aa5e8c24949e792bcacfc176fef362e7aac80b76c56f6b5122bf350722f0
-auth-proxy/idna-3.6-py3-none-any.whl:
-  size: 61567
-  object_id: 3a7b0a23-888a-4b77-7e8a-14a065a7e6e4
-  sha: sha256:c05567e9c24a6b9faaa835c4821bad0590fbb9d5779e7caa6e1cc4978e7eb24f
+auth-proxy/dnspython-2.7.0-py3-none-any.whl:
+  size: 313632
+  sha: sha256:b4c34b7d10b51bcc3a5071e7b8dee77939f1e878477eeecc965e9835f63c6c86
+auth-proxy/environs-11.0.0-py3-none-any.whl:
+  size: 12216
+  sha: sha256:e0bcfd41c718c07a7db422f9109e490746450da38793fe4ee197f397b9343435
+auth-proxy/eventlet-0.37.0-py3-none-any.whl:
+  size: 361621
+  sha: sha256:801ac231401e41f33a799457c78fdbfabc1c2f28bf9346d4ec4188e9aebc2067
+auth-proxy/flask-3.0.3-py3-none-any.whl:
+  size: 101735
+  sha: sha256:34e815dfaa43340d1d15a5c3a02b8476004037eb4840b34910c6e21679d288f3
+? auth-proxy/greenlet-3.1.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+: size: 660105
+  sha: sha256:99cfaa2110534e2cf3ba31a7abcac9d328d1d9f1b95beede58294a60348fba36
+auth-proxy/gunicorn-23.0.0-py3-none-any.whl:
+  size: 85029
+  sha: sha256:ec400d38950de4dfd418cff8328b2c8faed0edb0d517d3394e457c317908ca4d
+auth-proxy/idna-3.10-py3-none-any.whl:
+  size: 70442
+  sha: sha256:946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3
 auth-proxy/itsdangerous-2.1.2-py3-none-any.whl:
   size: 15749
   object_id: 13fd23ce-6017-4954-5d8f-9d73a9f473ac
   sha: sha256:2c2349112351b88699d8d4b6b075022c0808887cb7ad10069318a8b0bc88db44
-auth-proxy/jwcrypto-1.5.6-py3-none-any.whl:
-  size: 92520
-  object_id: ac77e328-5f51-4150-651b-413ed55f8f0e
-  sha: sha256:150d2b0ebbdb8f40b77f543fb44ffd2baeff48788be71f67f03566692fd55789
-auth-proxy/marshmallow-3.20.2-py3-none-any.whl:
-  size: 49449
-  object_id: 8edc748b-c0f9-4a67-7c20-c4881496d065
-  sha: sha256:c21d4b98fee747c130e6bc8f45c4b3199ea66bc00c12ee1f639f0aeca034d5e9
-auth-proxy/packaging-23.2-py3-none-any.whl:
-  size: 53011
-  object_id: da491191-dbf5-43f8-4ed8-d421f15eb44b
-  sha: sha256:8c491190033a9af7e1d931d0b5dacc2ef47509b34dd0de67ed209b5203fc88c7
+auth-proxy/itsdangerous-2.2.0-py3-none-any.whl:
+  size: 16234
+  sha: sha256:c6242fc49e35958c8b15141343aa660db5fc54d4f13a1db01a3f5891b98700ef
+auth-proxy/jinja2-3.1.4-py3-none-any.whl:
+  size: 133271
+  sha: sha256:bc5dd2abb727a5319567b7a813e6a2e7318c39f4f487cfe6c89c6f9c7d25197d
+auth-proxy/jwcrypto-0.3.1-py2.py3-none-any.whl:
+  size: 63956
+  sha: sha256:dbf07d56ae0e0d46ac282196acefb5c949abc1f4afccd8784a07142573c147db
+auth-proxy/marshmallow-3.23.1-py3-none-any.whl:
+  size: 49488
+  sha: sha256:fece2eb2c941180ea1b7fcbd4a83c51bfdd50093fdd3ad2585ee5e1df2508491
+auth-proxy/packaging-24.1-py3-none-any.whl:
+  size: 53985
+  sha: sha256:5b8f2217dbdbd2f7f384c41c628544e6d52f2d0f53c6d0c3ea61aa5d1d7ff124
 auth-proxy/pycparser-2.22-py3-none-any.whl:
   size: 117552
   object_id: 0f54bbf7-0f2c-4be3-44f4-7a49db2ef018
   sha: sha256:c3702b6d3dd8c7abc1afa565d7e63d53a1d0bd86cdc24edd75470f4de499cfcc
 auth-proxy/python_dotenv-1.0.1-py3-none-any.whl:
   size: 19863
-  object_id: 43f30bec-ded7-47ed-525d-9a67058bed82
   sha: sha256:f7b63ef50f1b690dddf550d03497b66d609393b40b564ed0d674909a68ebf16a
-auth-proxy/redis-5.0.1-py3-none-any.whl:
-  size: 250272
-  object_id: d39c56c8-0be6-4e01-6e8f-a96061ca6049
-  sha: sha256:ed4802971884ae19d640775ba3b03aa2e7bd5e8fb8dfaed2decce4d0fc48391f
-auth-proxy/requests-2.31.0-py3-none-any.whl:
-  size: 62574
-  object_id: 2fe7f3fd-9584-46b8-7818-15209968529e
-  sha: sha256:58cd2187c01e70e6e26505bca751777aa9f2ee0b7f4300988b709f44e013003f
+auth-proxy/redis-5.2.0-py3-none-any.whl:
+  size: 261428
+  sha: sha256:ae174f2bb3b1bf2b09d54bf3e51fbc1469cf6c10aa03e21141f51969801a7897
+auth-proxy/requests-2.32.3-py3-none-any.whl:
+  size: 64928
+  sha: sha256:70761cfe03c773ceb22aa2f671b4757976145175cdfca038c02654d061d6dcc6
 auth-proxy/setuptools-69.0.3.tar.gz:
   size: 2219609
   object_id: 82547212-6589-4e56-775e-fe8131f1f3c9
@@ -106,18 +85,12 @@ auth-proxy/typing_extensions-4.12.1-py3-none-any.whl:
   size: 37250
   object_id: f85dc3dd-38ff-4155-61ab-0a57a931b82f
   sha: sha256:6024b58b69089e5a89c347397254e35f1bf02a907728ec7fee9bf0fe837d203a
-auth-proxy/urllib3-2.2.0-py3-none-any.whl:
-  size: 120877
-  object_id: f70d2028-e0b8-4a4a-4989-abde29b5517e
-  sha: sha256:ce3711610ddce217e6d113a2732fafad960a03fd0318c91faa79481e35c11224
-auth-proxy/werkzeug-3.0.1-py3-none-any.whl:
-  size: 226669
-  object_id: 32960d9f-e34a-4fcc-4619-ec1455cf9386
-  sha: sha256:90a285dc0e42ad56b34e696398b8122ee4c681833fb35b8334a095d82c56da10
-auth-proxy/wheel-0.41.2.tar.gz:
-  size: 98050
-  object_id: 418dced9-9c61-4579-5744-23f6d1221554
-  sha: sha256:0c5ac5ff2afb79ac23ab82bab027a0be7b5dbcf2e54dc50efe4bf507de1f7985
+auth-proxy/urllib3-2.2.3-py3-none-any.whl:
+  size: 126338
+  sha: sha256:ca899ca043dcb1bafa3e262d73aa25c465bfb49e0bd9dd5d59f1d0acba2f8fac
+auth-proxy/werkzeug-3.1.2-py3-none-any.whl:
+  size: 224352
+  sha: sha256:4f7d1a5de312c810a8a2c6f0b47e9f6a7cffb7c8322def35e4d4d9841ff85597
 curator/vendor/Cython-0.29.36.tar.gz:
   size: 2097760
   object_id: 278ed8dc-40f8-4c8a-7877-8cb1329a4474
