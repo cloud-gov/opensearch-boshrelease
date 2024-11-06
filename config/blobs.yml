@@ -91,98 +91,64 @@ auth-proxy/urllib3-2.2.3-py3-none-any.whl:
 auth-proxy/werkzeug-3.1.2-py3-none-any.whl:
   size: 224352
   sha: sha256:4f7d1a5de312c810a8a2c6f0b47e9f6a7cffb7c8322def35e4d4d9841ff85597
-curator/vendor/Cython-0.29.36.tar.gz:
-  size: 2097760
-  object_id: 278ed8dc-40f8-4c8a-7877-8cb1329a4474
-  sha: sha256:41c0cfd2d754e383c9eeb95effc9aa4ab847d0c9747077ddd7c0dcb68c3bc01f
-curator/vendor/PyYAML-6.0.1.tar.gz:
-  size: 125201
-  object_id: 340f3b7f-2bd6-42e0-7f78-28596c4163df
-  sha: sha256:bfdf460b1736c775f2ba9f6a92bca30bc2095067b8a9d77876d1fad6cc3b4a43
-curator/vendor/boto3-1.28.40-py3-none-any.whl:
-  size: 135762
-  object_id: 07717c77-dae6-44de-42fd-742a1c9b894d
-  sha: sha256:bd7c760afb195eaeaab907dc6b2c21fa64ddbba3fed4a869e80d820ddbd6cc70
-curator/vendor/botocore-1.31.40-py3-none-any.whl:
-  size: 11164205
-  object_id: 6cb3aa24-2c37-49e1-7fe2-247959772e7b
-  sha: sha256:df766969f0d9ef9eda1a9c9946e0e173c10199f37a9e4c92861f11ddb5c9e702
-curator/vendor/certifi-2023.7.22-py3-none-any.whl:
-  size: 158334
-  object_id: 3e70cca5-28f6-4d8b-6c73-b77ecab3b62b
-  sha: sha256:92d6037539857d8206b8f6ae472e8b77db8058fec5937a1ef3f54304089edbb9
-curator/vendor/chardet-5.2.0-py3-none-any.whl:
-  size: 199385
-  object_id: df02eabc-7ff7-4424-55bc-24aa29640147
-  sha: sha256:e1cf59446890a00105fe7b7912492ea04b6e6f06d4b742b2c788469e34c82970
-curator/vendor/charset_normalizer-3.2.0-py3-none-any.whl:
-  size: 46668
-  object_id: 1459959c-d724-4aff-7f52-adc6b6e16124
-  sha: sha256:8e098148dd37b4ce3baca71fb394c81dc5d9c7728c95df695d2dca218edf40e6
-curator/vendor/click-7.1.2-py2.py3-none-any.whl:
-  size: 82780
-  object_id: 7030b9c2-a5a7-444a-6b7e-ff4049562b3a
-  sha: sha256:dacca89f4bfadd5de3d7489b7c8a566eee0d3676333fbb50030263894c38c0dc
-curator/vendor/docutils-0.20.1-py3-none-any.whl:
-  size: 572666
-  object_id: 86bf09ce-07c6-419f-5c00-4ab9acc2cc8d
-  sha: sha256:96f387a2c5562db4476f09f13bbab2192e764cac08ebbf3a34a95d9b1e4a59d6
-curator/vendor/flit_core-3.8.0.tar.gz:
-  size: 41224
-  object_id: 940bcba2-17b3-4d77-5153-89d703f40ff8
-  sha: sha256:b305b30c99526df5e63d6022dd2310a0a941a187bd3884f4c8ef0418df6c39f3
-curator/vendor/idna-3.4-py3-none-any.whl:
-  size: 61538
-  object_id: 7116348d-1840-43da-6f92-29b2839c0780
-  sha: sha256:90b77e79eaa3eba6de819a0c442c0b4ceefc341a7a2ab77d7562bf49f425c5c2
-curator/vendor/jmespath-1.0.1-py3-none-any.whl:
-  size: 20256
-  object_id: ba0684fc-a3ca-4110-407a-0faed339ec8f
-  sha: sha256:02e2e4cc71b5bcab88332eebf907519190dd9e6e82107fa7f83b1003a6252980
-curator/vendor/opensearch_py-2.7.1-py3-none-any.whl:
-  size: 325380
-  object_id: fcc85559-b310-4c86-51dc-2bf713f01295
-  sha: sha256:5417650eba98a1c7648e502207cebf3a12beab623ffe0ebbf55f9b1b4b6e44e9
-curator/vendor/python_dateutil-2.8.2-py2.py3-none-any.whl:
-  size: 247702
-  object_id: cb990ba6-15c7-4edc-657c-677a26119d77
-  sha: sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9
-curator/vendor/requests-2.31.0-py3-none-any.whl:
-  size: 62574
-  object_id: fa836242-28ce-4bac-6481-7569704dcd43
-  sha: sha256:58cd2187c01e70e6e26505bca751777aa9f2ee0b7f4300988b709f44e013003f
-curator/vendor/requests_aws4auth-1.2.3-py2.py3-none-any.whl:
-  size: 24708
-  object_id: 74438842-148f-4745-48cd-0ca0d5df72b6
-  sha: sha256:8070a5207e95fa5fe88e87d9a75f34e768cbab35bb3557ef20cbbf9426dee4d5
-curator/vendor/s3transfer-0.6.2-py3-none-any.whl:
-  size: 79765
-  object_id: aaed6545-d8ba-45c4-4219-48b1d0868206
-  sha: sha256:b014be3a8a2aab98cfe1abc7229cc5a9a0cf05eb9c1f2b86b230fd8df3f78084
-curator/vendor/setuptools-69.0.3.tar.gz:
-  size: 2219609
-  object_id: 82547212-6589-4e56-775e-fe8131f1f3c9
-  sha: sha256:be1af57fc409f93647f2e8e4573a142ed38724b8cdd389706a867bb4efcf1e78
-curator/vendor/six-1.16.0-py2.py3-none-any.whl:
-  size: 11053
-  object_id: 23f63c14-a88f-452d-66f9-3d0ce44cc4e3
-  sha: sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254
-curator/vendor/urllib3-1.26.5-py2.py3-none-any.whl:
-  size: 138144
-  object_id: 38253a32-ae62-422c-52ef-c20a71843760
-  sha: sha256:753a0374df26658f99d826cfe40394a686d05985786d946fbe4165b5148f5a7c
-curator/vendor/voluptuous-0.13.1-py3-none-any.whl:
-  size: 29790
-  object_id: dd2c1d70-b9c7-431e-5285-1ff9e0c7fc26
-  sha: sha256:4b838b185f5951f2d6e8752b68fcf18bd7a9c26ded8f143f92d6d28f3921a3e6
-curator/vendor/wheel-0.41.2.tar.gz:
-  size: 98050
-  object_id: 418dced9-9c61-4579-5744-23f6d1221554
-  sha: sha256:0c5ac5ff2afb79ac23ab82bab027a0be7b5dbcf2e54dc50efe4bf507de1f7985
 curator_opensearch-0.0.13.tar.gz:
   size: 236782
   object_id: 9c602cc3-eb88-4279-57b4-eded33d1338f
   sha: sha256:c97f45a038e19c71227f0d88baa370d737f2b3a18fe1416d448c21c3a1bf2714
+curator_opensearch/vendor/Events-0.5-py3-none-any.whl:
+  size: 6758
+  sha: sha256:a7286af378ba3e46640ac9825156c93bdba7502174dd696090fdfcd4d80a1abd
+? curator_opensearch/vendor/PyYAML-6.0.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+: size: 762952
+  sha: sha256:3ad2a3decf9aaba3d29c8f537ac4b243e36bef957511b4766cb0057d32b0be85
+curator_opensearch/vendor/boto3-1.35.54-py3-none-any.whl:
+  size: 139158
+  sha: sha256:2d5e160b614db55fbee7981001c54476cb827c441cef65b2fcb2c52a62019909
+curator_opensearch/vendor/botocore-1.35.54-py3-none-any.whl:
+  size: 12708560
+  sha: sha256:9cca1811094b6cdc144c2c063a3ec2db6d7c88194b04d4277cd34fc8e3473aff
+curator_opensearch/vendor/certifi-2024.8.30-py3-none-any.whl:
+  size: 167321
+  sha: sha256:922820b53db7a7257ffbda3f597266d435245903d80737e34f8a45ff3e3230d8
+? curator_opensearch/vendor/charset_normalizer-3.4.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+: size: 142585
+  sha: sha256:3710a9751938947e6327ea9f3ea6332a09bf0ba0c09cae9cb1f250bd1f1549bc
+curator_opensearch/vendor/click-7.1.2-py2.py3-none-any.whl:
+  size: 82780
+  sha: sha256:dacca89f4bfadd5de3d7489b7c8a566eee0d3676333fbb50030263894c38c0dc
+curator_opensearch/vendor/curator_opensearch-0.0.12-py2.py3-none-any.whl:
+  size: 107475
+  sha: sha256:a284addcb616e2257f8042d764195917c22c046ae930011150717040412f890a
+curator_opensearch/vendor/idna-3.10-py3-none-any.whl:
+  size: 70442
+  sha: sha256:946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3
+curator_opensearch/vendor/jmespath-1.0.1-py3-none-any.whl:
+  size: 20256
+  sha: sha256:02e2e4cc71b5bcab88332eebf907519190dd9e6e82107fa7f83b1003a6252980
+curator_opensearch/vendor/opensearch_py-2.7.1-py3-none-any.whl:
+  size: 325380
+  sha: sha256:5417650eba98a1c7648e502207cebf3a12beab623ffe0ebbf55f9b1b4b6e44e9
+curator_opensearch/vendor/python_dateutil-2.9.0.post0-py2.py3-none-any.whl:
+  size: 229892
+  sha: sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427
+curator_opensearch/vendor/requests-2.32.3-py3-none-any.whl:
+  size: 64928
+  sha: sha256:70761cfe03c773ceb22aa2f671b4757976145175cdfca038c02654d061d6dcc6
+curator_opensearch/vendor/requests_aws4auth-1.3.1-py3-none-any.whl:
+  size: 24584
+  sha: sha256:2969b5379ae6e60ee666638caf6cb94a32d67033f6bfcf0d50c95cd5474f2419
+curator_opensearch/vendor/s3transfer-0.10.3-py3-none-any.whl:
+  size: 82625
+  sha: sha256:263ed587a5803c6c708d3ce44dc4dfedaab4c1a32e8329bab818933d79ddcf5d
+curator_opensearch/vendor/six-1.16.0-py2.py3-none-any.whl:
+  size: 11053
+  sha: sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254
+curator_opensearch/vendor/urllib3-1.26.20-py2.py3-none-any.whl:
+  size: 144225
+  sha: sha256:0ed14ccfbf1c30a9072c7ca157e4319b70d65f623e91e7b32fadb2853431016e
+curator_opensearch/vendor/voluptuous-0.15.2-py3-none-any.whl:
+  size: 31349
+  sha: sha256:016348bc7788a9af9520b1764ebd4de0df41fe2138ebe9e06fa036bf86a65566
 logstash/logstash-8.9.2-linux-x86_64.tar.gz:
   size: 346522558
   object_id: 61bc773e-e0a2-4cf5-416e-0964a3d83978
