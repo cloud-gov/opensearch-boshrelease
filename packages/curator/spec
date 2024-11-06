@@ -6,28 +6,33 @@ dependencies:
 
 files:
    - curator_opensearch-0.0.13.tar.gz
-   - curator/vendor/charset_normalizer-3.2.0-py3-none-any.whl
-   - curator/vendor/PyYAML-6.0.1.tar.gz
-   - curator/vendor/boto3-1.28.40-py3-none-any.whl
-   - curator/vendor/botocore-1.31.40-py3-none-any.whl
-   - curator/vendor/click-7.1.2-py2.py3-none-any.whl
-   - curator/vendor/docutils-0.20.1-py3-none-any.whl
-   - curator/vendor/jmespath-1.0.1-py3-none-any.whl
-   - curator/vendor/opensearch_py-2.7.1-py3-none-any.whl
-   - curator/vendor/python_dateutil-2.8.2-py2.py3-none-any.whl
-   - curator/vendor/requests_aws4auth-1.2.3-py2.py3-none-any.whl
-   - curator/vendor/s3transfer-0.6.2-py3-none-any.whl
-   - curator/vendor/six-1.16.0-py2.py3-none-any.whl
-   - curator/vendor/voluptuous-0.13.1-py3-none-any.whl
+   - curator_opensearch/vendor/Events-0.5-py3-none-any.whl
+   - curator_opensearch/vendor/PyYAML-6.0.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+   - curator_opensearch/vendor/boto3-1.35.54-py3-none-any.whl
+   - curator_opensearch/vendor/botocore-1.35.54-py3-none-any.whl
+   - curator_opensearch/vendor/certifi-2024.8.30-py3-none-any.whl
+   - curator_opensearch/vendor/charset_normalizer-3.4.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+   - curator_opensearch/vendor/click-7.1.2-py2.py3-none-any.whl
+   - curator_opensearch/vendor/curator_opensearch-0.0.12-py2.py3-none-any.whl
+   - curator_opensearch/vendor/idna-3.10-py3-none-any.whl
+   - curator_opensearch/vendor/jmespath-1.0.1-py3-none-any.whl
+   - curator_opensearch/vendor/opensearch_py-2.7.1-py3-none-any.whl
+   - curator_opensearch/vendor/python_dateutil-2.9.0.post0-py2.py3-none-any.whl
+   - curator_opensearch/vendor/requests-2.32.3-py3-none-any.whl
+   - curator_opensearch/vendor/requests_aws4auth-1.3.1-py3-none-any.whl
+   - curator_opensearch/vendor/s3transfer-0.10.3-py3-none-any.whl
+   - curator_opensearch/vendor/six-1.16.0-py2.py3-none-any.whl
+   - curator_opensearch/vendor/urllib3-1.26.20-py2.py3-none-any.whl
+   - curator_opensearch/vendor/voluptuous-0.15.2-py3-none-any.whl
    # CLOUD.GOV: DO NOT REMOVE THE ELEMENTS BELOW THIS COMMENT!!!
    # These files are necessary because we vendor python. The upstream
    # release includes these in the python package.
-   - curator/vendor/certifi-2023.7.22-py3-none-any.whl
-   - curator/vendor/chardet-5.2.0-py3-none-any.whl
-   - curator/vendor/idna-3.4-py3-none-any.whl
-   - curator/vendor/requests-2.31.0-py3-none-any.whl
-   - curator/vendor/urllib3-1.26.5-py2.py3-none-any.whl
-   - curator/vendor/flit_core-3.8.0.tar.gz
-   - curator/vendor/wheel-0.41.2.tar.gz
-   - curator/vendor/setuptools-69.0.3.tar.gz
-   - curator/vendor/Cython-0.29.36.tar.gz
+   # - curator/vendor/certifi-2023.7.22-py3-none-any.whl
+   # - curator/vendor/chardet-5.2.0-py3-none-any.whl
+   # - curator/vendor/idna-3.4-py3-none-any.whl
+   # - curator/vendor/requests-2.31.0-py3-none-any.whl
+   # - curator/vendor/urllib3-1.26.5-py2.py3-none-any.whl
+   # - curator/vendor/flit_core-3.8.0.tar.gz
+   # - curator/vendor/wheel-0.41.2.tar.gz
+   # - curator/vendor/setuptools-69.0.3.tar.gz
+   # - curator/vendor/Cython-0.29.36.tar.gz
