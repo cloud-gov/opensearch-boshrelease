@@ -2,10 +2,10 @@
 name: curator
 
 dependencies:
-  - python3
+   - python3
 
 files:
-   - curator_opensearch-0.0.12-py2.py3-none-any.whl
+   - curator_opensearch-0.0.13.tar.gz
    - curator/vendor/charset_normalizer-3.2.0-py3-none-any.whl
    - curator/vendor/PyYAML-6.0.1.tar.gz
    - curator/vendor/boto3-1.28.40-py3-none-any.whl
@@ -19,9 +19,9 @@ files:
    - curator/vendor/s3transfer-0.6.2-py3-none-any.whl
    - curator/vendor/six-1.16.0-py2.py3-none-any.whl
    - curator/vendor/voluptuous-0.13.1-py3-none-any.whl
-# CLOUD.GOV: DO NOT REMOVE THE ELEMENTS BELOW THIS COMMENT!!!
-# These files are necessary because we vendor python. The upstream
-# release includes these in the python package.
+   # CLOUD.GOV: DO NOT REMOVE THE ELEMENTS BELOW THIS COMMENT!!!
+   # These files are necessary because we vendor python. The upstream
+   # release includes these in the python package.
    - curator/vendor/certifi-2023.7.22-py3-none-any.whl
    - curator/vendor/chardet-5.2.0-py3-none-any.whl
    - curator/vendor/idna-3.4-py3-none-any.whl
