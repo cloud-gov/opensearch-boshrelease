@@ -4,7 +4,9 @@
 #
 # To update this run:
 #  - Run bin/download-wheels.sh from https://github.com/cloud-gov/opensearch-dashboards-cf-auth-proxy to download wheels
-#  - Run bin/add-auth-proxy-blobs.sh from this repo
+#  - Run bin/add-wheel-blobs.sh from this repo like so:
+#
+#      ./bin/add-wheel-blobs.sh /path/to/proxy/repo auth-proxy
 #
 # Use the version of Python specified in the python3 package. See https://github.com/cloud-gov/cg-python3-boshrelease
 name: opensearch_dashboards_cf_auth_proxy
