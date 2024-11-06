@@ -10,6 +10,7 @@ fi
 
 pip download "$PACKAGE_NAME" \
  --platform manylinux_2_17_x86_64 \
- --platform linux_x86_64 --only-binary=:all: \
+ --platform linux_x86_64 \
+ --only-binary=:all: \
  --python-version "$PYTHON_VERSION" \
  --dest "vendor/$PACKAGE_NAME"
