@@ -86,7 +86,7 @@ ENDOFFJSON
 ENDOFFJSON
   %>",
     "description": "",
-    "savedSearchRefName": "search_0",
+    "savedSearchRefName": "index_pattern",
     "version": 1,
     "kibanaSavedObjectMeta": {
       "searchSourceJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/"/) { '\"' }
@@ -101,9 +101,9 @@ ENDOFFJSON
   },
   "references": [
     {
-      "id": "app-logs",
-      "name": "search_0",
-      "type": "search"
+      "id": "logs-app*",
+      "name": "index_pattern,
+      "type": "index-pattern"
     }
   ]
 }
