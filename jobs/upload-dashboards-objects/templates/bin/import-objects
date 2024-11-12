@@ -44,8 +44,8 @@ if __name__ == "__main__":
             cert=(cert, key),
             verify=ca
           )
-          if r .status_code == 200:
-            logging.info(f'NDJSON FILE {ndjson_output_path} updated sucessfully')
+          if r.status_code == 200:
+            logging.info(f'NDJSON FILE {ndjson_output_path} updated sucessfully1')
           elif r.status_code == 409:
             put = session.put(
                   '{}/api/saved_objects/_import?overwrite=true'.format(
@@ -57,11 +57,11 @@ if __name__ == "__main__":
             verify=ca
             )
             if put.status_code == 200:
-                logging.info(f'NDJSON FILE {ndjson_output_path} Uploaded Successfully')
+                logging.info(f'NDJSON FILE {ndjson_output_path} Uploaded Successfully2')
             else:
-                logging.info(f'NDJSON FILE {ndjson_output_path} Failed to Upload')
+                logging.info(f'NDJSON FILE {ndjson_output_path} Failed to Upload2')
           else:
-              logging.info(f'NDJSON FILE {ndjson_output_path} Failed to Upload')
+              logging.info(f'NDJSON FILE {ndjson_output_path} Failed to Upload2')
 
         index_headers = {
           'content-type': 'application/json',
