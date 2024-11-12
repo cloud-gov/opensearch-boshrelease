@@ -5,6 +5,7 @@
   job_dir = "/var/vcap/jobs/upload-dashboards-objects"
   store_dir = "/var/vcap/store/upload-dashboards-objects"
   dashboards_link = link('opensearch_dashboards')
+  ndjson_output_path = "/var/vcap/jobs/upload-dashboards-objects/dashboard.ndjson"
 %>
 
 import glob
@@ -34,40 +35,35 @@ if __name__ == "__main__":
           'securitytenant': tenant.strip(),
         }
 
-        <% p("dashboards_objects.upload_patterns").each do |pattern| %>
-        for filename in glob.iglob("<%= pattern.fetch("pattern") %>", recursive=True):
-            r = session.post(
-              '{}/api/saved_objects/{}/{}'.format(
-                logs_url,
-                os.path.basename(os.path.dirname(filename)),
-                os.path.basename(os.path.splitext(filename)[0])
-              ),
-              data=open(filename, 'rb'),
-              headers=headers,
-              cert=(cert, key),
-              verify=ca
-            )
-            if r.status_code == 409:
-                put = session.put(
+        with open(ndjson_output_path, 'rb') as ndjson_file:
+          r = session.post(
+            '{}/api/saved_objects/{}/{}'.format(
+              logs_url,
+              os.path.basename(os.path.dirname(ndjson_file))
+            ),
+            data=ndjson_file,
+            headers=headers,
+            cert=(cert, key),
+            verify=ca
+          )
+          if r .status_code == 200:
+            logging.info(f'NDJSON FILE {ndjson_output_path} updated sucessfully')
+          elif r.status_code == 409:
+            put = session.put(
                   '{}/api/saved_objects/{}/{}'.format(
-                    logs_url,
-                    os.path.basename(os.path.dirname(filename)),
-                    os.path.basename(os.path.splitext(filename)[0])
-                  ),
-                  data=open(filename, 'rb'),
-                  headers=headers,
-                  cert=(cert, key),
-                  verify=ca
-                )
-                if put.status_code == 200:
-                    logging.info('Object %s Uploaded Successfully', filename)
-                else:
-                    logging.info('Object %s Failed to Upload', filename)
-            elif r.status_code == 200:
-                logging.info('Object %s Uploaded Successfully', filename)
+              logs_url,
+              os.path.basename(ndjson_file)),
+            data=ndjson_file,
+            headers=headers,
+            cert=(cert, key),
+            verify=ca
+            )
+            if put.status_code == 200:
+                logging.info(f'NDJSON FILE {ndjson_output_path} Uploaded Successfully')
             else:
-                logging.info('Object %s Failed to Upload', filename)
-        <% end %>
+                logging.info(f'NDJSON FILE {ndjson_output_path} Failed to Upload')
+          else:
+              logging.info(f'NDJSON FILE {ndjson_output_path} Failed to Upload')
 
         r = session.post(
           '{}/api/opensearch-dashboards/settings'.format(logs_url),
