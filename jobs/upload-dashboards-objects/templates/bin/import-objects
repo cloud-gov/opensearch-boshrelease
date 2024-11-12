@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
         with open(ndjson_output_path, 'rb') as ndjson_file:
           r = session.post(
-            '{}/api/saved_objects/_import?'.format(
+            '{}/api/saved_objects/_import?overwrite=true'.format(
               logs_url
             ),
             data=ndjson_file,
@@ -48,7 +48,7 @@ if __name__ == "__main__":
             logging.info(f'NDJSON FILE {ndjson_output_path} updated sucessfully')
           elif r.status_code == 409:
             put = session.put(
-                  '{}/api/saved_objects/_import?'.format(
+                  '{}/api/saved_objects/_import?overwrite=true'.format(
               logs_url
               ),
             data=ndjson_file,
@@ -63,10 +63,18 @@ if __name__ == "__main__":
           else:
               logging.info(f'NDJSON FILE {ndjson_output_path} Failed to Upload')
 
+        index_headers = {
+          'content-type': 'application/json',
+          'osd-xsrf': 'true',
+          'x-proxy-roles': 'admin',
+          'x-proxy-user': 'admin',
+          'x-forwarded-for': '127.0.0.1',
+          'securitytenant': tenant.strip(),
+        }
         r = session.post(
           '{}/api/opensearch-dashboards/settings'.format(logs_url),
           data='{"changes":{"defaultIndex":"<%= p('dashboards_objects.default_index') %>"}}',
-          headers=headers,
+          headers=index_headers,
           cert=(cert, key),
           verify=ca
         )
