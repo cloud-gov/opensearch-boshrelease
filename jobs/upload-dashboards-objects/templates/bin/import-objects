@@ -26,7 +26,7 @@ if __name__ == "__main__":
     with open('<%= store_dir %>/org-tenants.txt') as orgs:
       for tenant in orgs:
         headers = {
-          'content-type': 'application/json',
+          'content-type': 'application/x-ndjson',
           'osd-xsrf': 'true',
           'x-proxy-roles': 'admin',
           'x-proxy-user': 'admin',
