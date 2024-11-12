@@ -38,7 +38,7 @@ if __name__ == "__main__":
           r = session.post(
             '{}/api/saved_objects/{}/{}'.format(
               logs_url,
-              os.path.basename(os.path.dirname(ndjson_file))
+              os.path.basename(ndjson_file)
             ),
             data=ndjson_file,
             headers=headers,
