@@ -19,7 +19,7 @@
       {
         "index": "#{p('opensearch_config.app_index_prefix')}*",
         "filter": [
-          
+
         ],
         "highlight": {
           "pre_tags": [
@@ -30,7 +30,7 @@
           ],
           "fields": {
             "*": {
-              
+
             }
           },
           "require_field_match": false,
@@ -46,5 +46,8 @@
   ).to_json.gsub(/"/) { '\"' }
   %>"
     }
-  }
+  },
+  "id": "app-all-messages",
+  "references": [],
+  "type": "search"
 }
