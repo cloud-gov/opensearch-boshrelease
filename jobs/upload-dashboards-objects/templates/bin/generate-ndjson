@@ -24,14 +24,14 @@ with open(output_file, 'w') as output:
         while stack:
           current, parent_key = stack.pop()
           # if dictionary
-          if isinstance(current,dict):
+          if isinstance(current, dict):
             for k,v in current.items():
               new_key = f"{parent_key}_{k}" if parent_key else k
               stack.append((v,new_key))
               print("dict")
           # if list
           elif isinstance(current,list):
-            for i,v in current.items():
+            for i,v in enumerate(current):
               new_key = f"{parent_key}_{i}" if parent_key else str(i)
               stack.append((v,new_key))
               print("list")
