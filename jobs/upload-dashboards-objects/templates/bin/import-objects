@@ -17,7 +17,6 @@ logging.basicConfig(level=logging.INFO)
 if __name__ == "__main__":
     session = requests.Session()
     ndjson_output_path = "/var/vcap/jobs/upload-dashboards-objects/dashboard.ndjson"
-    file_name=os.path.basename(ndjson_output_path)
     # set CA
     ca =  '<%= job_dir %>/config/ssl/opensearch.ca'
     cert = '<%= job_dir %>/config/ssl/dashboard-web.crt'
@@ -37,9 +36,8 @@ if __name__ == "__main__":
 
         with open(ndjson_output_path, 'rb') as ndjson_file:
           r = session.post(
-            '{}/api/saved_objects/{}/{}'.format(
-              logs_url,
-              file_name
+            '{}/api/saved_objects/_import?'.format(
+              logs_url
             ),
             data=ndjson_file,
             headers=headers,
@@ -50,9 +48,9 @@ if __name__ == "__main__":
             logging.info(f'NDJSON FILE {ndjson_output_path} updated sucessfully')
           elif r.status_code == 409:
             put = session.put(
-                  '{}/api/saved_objects/{}/{}'.format(
-              logs_url,
-              file_name),
+                  '{}/api/saved_objects/_import?'.format(
+              logs_url
+              ),
             data=ndjson_file,
             headers=headers,
             cert=(cert, key),
