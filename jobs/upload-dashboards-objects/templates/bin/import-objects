@@ -59,8 +59,20 @@ if __name__ == "__main__":
             if put.status_code == 200:
                 logging.info(f'NDJSON FILE {ndjson_output_path} Uploaded Successfully2')
             else:
-                logging.info(f'NDJSON FILE {ndjson_output_path} Failed to Upload2')
+                logging.error(f"Failed to upload file {ndjson_output_path}, status code: {put.status_code}")
+                try:
+                   error_response = put.json()
+                   logging.error(f"Error detils: {error_response}")
+                except ValueError:
+                   logging.error(f"raw response: {put.text}")
+                logging.info(f'NDJSON FILE {ndjson_output_path} Failed to Upload1')
           else:
+              logging.error(f"Failed to upload file {ndjson_output_path}, status code: {r.status_code}")
+              try:
+                  error_response = r.json()
+                  logging.error(f"Error detils: {error_response}")
+              except ValueError:
+                  logging.error(f"raw response: {r.text}")
               logging.info(f'NDJSON FILE {ndjson_output_path} Failed to Upload2')
 
         index_headers = {
