@@ -2,7 +2,7 @@
 import os
 import json
 
-folder = "/var/vcap/jobs/upload-dashboards-objects/dashboard-objects/dashboard"
+folder = "/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/dashboard"
 output_file = "/var/vcap/jobs/upload-dashboards-objects/dashboard.ndjson"
 
 with open(output_file, 'w') as output:
