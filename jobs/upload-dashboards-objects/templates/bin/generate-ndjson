@@ -2,42 +2,51 @@
 import os
 import json
 
-folder = "/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/dashboard"
+folders = [
+"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/dashboard",
+"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/index-pattern",
+"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/search",
+"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/visualization"
+]
 output_file = "/var/vcap/jobs/upload-dashboards-objects/dashboard.ndjson"
 
 with open(output_file, 'w') as output:
 
-  for files in os.listdir(folder):
-    if files.endswith(".json"):
-      filepath = os.path.join(folder,files)
+  for folder in folders:
+    if not os.path.exists(folder):
+      print(f"Folder not found: {folder}")
+      continue
+    for files in os.listdir(folder):
+      if files.endswith(".json"):
+        filepath = os.path.join(folder,files)
 
-      with open(filepath, 'r') as json_file:
-        try:
-          data = json.load(json_file)
-        except json.JSONDecodeError as e:
-          print(f"Error with file{files}: {e}")
-          continue
+        with open(filepath, 'r') as json_file:
+          try:
+            data = json.load(json_file)
+          except json.JSONDecodeError as e:
+            print(f"Error with file{files}: {e}")
+            continue
 
-        flat_data = {}
-        stack = [(data, '')]
+          flat_data = {}
+          stack = [(data, '')]
 
-        while stack:
-          current, parent_key = stack.pop()
-          # if dictionary
-          if isinstance(current, dict):
-            for k,v in current.items():
-              new_key = f"{parent_key}_{k}" if parent_key else k
-              stack.append((v,new_key))
-              print("dict")
-          # if list
-          elif isinstance(current,list):
-            for i,v in enumerate(current):
-              new_key = f"{parent_key}_{i}" if parent_key else str(i)
-              stack.append((v,new_key))
-              print("list")
-          else:
-            flat_data[parent_key] = current
-        json.dump(flat_data,output)
-        output.write("\n")
+          while stack:
+            current, parent_key = stack.pop()
+            # if dictionary
+            if isinstance(current, dict):
+              for k,v in current.items():
+                new_key = f"{parent_key}_{k}" if parent_key else k
+                stack.append((v,new_key))
+                print("dict")
+            # if list
+            elif isinstance(current,list):
+              for i,v in enumerate(current):
+                new_key = f"{parent_key}_{i}" if parent_key else str(i)
+                stack.append((v,new_key))
+                print("list")
+            else:
+              flat_data[parent_key] = current
+          json.dump(flat_data,output)
+          output.write("\n")
 
 
