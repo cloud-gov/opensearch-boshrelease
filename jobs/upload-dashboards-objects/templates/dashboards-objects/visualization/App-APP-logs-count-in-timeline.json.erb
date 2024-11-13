@@ -3,6 +3,18 @@
 {
   "attributes": {
     "title": "App APP: logs count in timeline",
+    "kibanaSavedObjectMeta": {
+            "searchSourceJSON": {
+                "query": {
+                    "query": "",
+                    "language": "kuery"
+                },
+                "filter": []
+            }
+        },
+        "savedSearchRefName": "search_0",
+
+
     "visState": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/"/) { '\"' }
       {
         "type": "area",
@@ -23,63 +35,56 @@
         "aggs": [
           {
             "id": "1",
+            "enabled": true,
             "type": "count",
-            "schema": "metric",
-            "params": {}
+            "params": {},
+            "schema": "metric"
           },
           {
             "id": "2",
+            "enabled": true,
             "type": "date_histogram",
-            "schema": "segment",
             "params": {
               "field": "@timestamp",
+              "useNormalizedOpenSearchInterval": true,
+              "scaleMetricValues": false,
               "interval": "auto",
-              "customInterval": "2h",
+              "drop_partials": false,
               "min_doc_count": 1,
               "extended_bounds": {}
-            }
+                    },
+              "schema": "segment"
           },
           {
             "id": "3",
+            "enabled": true,
             "type": "filters",
-            "schema": "group",
             "params": {
               "filters": [
                 {
                   "input": {
-                    "query": {
-                      "query_string": {
                         "query": "@level:ERROR",
-                        "analyze_wildcard": true
-                      }
-                    }
+                        "language": "kuery"
                   },
                   "label": "error"
                 },
                 {
                   "input": {
-                    "query": {
-                      "query_string": {
                         "query": "@level:DEBUG",
-                        "analyze_wildcard": true
-                      }
-                    }
+                        "language": "kuery"
                   },
                   "label": "debug"
                 },
                 {
                   "input": {
-                    "query": {
-                      "query_string": {
                         "query": "*",
-                        "analyze_wildcard": true
-                      }
-                    }
+                        "language": "kuery"
                   },
                   "label": "all"
                 }
               ]
-            }
+            },
+            "schema": "group"
           }
         ],
         "listeners": {}
@@ -105,17 +110,9 @@ ENDOFFJSON
     "description": "",
     "savedSearchRefName": "search_0",
     "version": 1,
-    "kibanaSavedObjectMeta": {
-      "searchSourceJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/"/) { '\"' }
-      {
-        "filter": [
-
-        ]
-      }
-ENDOFFJSON
-  %>"
-    }
   },
+  "title": "App APP: logs count in timeline",
+  "id": "App-APP-logs-count-in-timeline",
   "references": [
     {
       "id": "app-logs",
@@ -123,5 +120,6 @@ ENDOFFJSON
       "type": "search"
     }
   ]
+  "type": "visualization"
 }
 <% end %>
