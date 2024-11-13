@@ -15,7 +15,7 @@ $(dirname $0)/generate-objects
 
 echo "[$(date)] Calling 'generate-tenants'..."
 $(dirname $0)/generate-tenants
-$(dirname $0)/generate-ndjson
+
 echo "[$(date)] Calling 'import-objects'..."
 $(dirname $0)/import-objects
 

@@ -8,7 +8,7 @@ folders = [
 output_file = "/var/vcap/jobs/upload-dashboards-objects/dashboard.ndjson"
 
 
-with open(output_file, 'w') as output:
+with open(output_file, 'w', encoding='utf-8') as output:
   for folder in folders:
     if not os.path.exists(folder):
       print(f"Folder not found: {folder}")
