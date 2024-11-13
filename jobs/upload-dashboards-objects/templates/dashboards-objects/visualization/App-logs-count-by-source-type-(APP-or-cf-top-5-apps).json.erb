@@ -21,51 +21,50 @@
         "aggs": [
           {
             "id": "1",
+            "enabled": true,
             "type": "count",
-            "schema": "metric",
-            "params": {}
+            "params": {},
+            "schema": "metric"
           },
           {
             "id": "2",
+                    "enabled": true,
             "type": "terms",
-            "schema": "segment",
             "params": {
               "field": "@cf.app",
-              "size": 5,
+              "orderBy": "1",
               "order": "desc",
-              "orderBy": "1"
-            }
+                        "size": 5,
+                        "otherBucket": false,
+                        "otherBucketLabel": "Other",
+                        "missingBucket": false,
+                        "missingBucketLabel": "Missing"
+                    },
+                    "schema": "segment"
           },
           {
             "id": "3",
+                    "enabled": true,
             "type": "filters",
-            "schema": "group",
             "params": {
               "filters": [
                 {
                   "input": {
-                    "query": {
-                      "query_string": {
                         "query": "@source.type:APP",
-                        "analyze_wildcard": true
-                      }
-                    }
+                                    "language": "kuery"
                   },
                   "label": "APP"
                 },
                 {
                   "input": {
-                    "query": {
-                      "query_string": {
                         "query": "NOT @source.type:APP",
-                        "analyze_wildcard": true
-                      }
-                    }
+                                    "language": "kuery"
                   },
                   "label": "cf"
                 }
               ]
-            }
+                    },
+                    "schema": "group"
           }
         ],
         "listeners": {}
@@ -88,11 +87,13 @@ ENDOFFJSON
     "description": "",
     "savedSearchRefName": "index_pattern",
     "version": 1,
-    "kibanaSavedObjectMeta": {
-      "searchSourceJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/"/) { '\"' }
+    "searchSourceJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/"/) { '\"' }
       {
-        "filter": [
-        ]
+        "query": {
+                  "query": "",
+                  "language": "kuery"
+              },
+        "filter": []
       }
 ENDOFFJSON
   %>"
@@ -103,9 +104,9 @@ ENDOFFJSON
   "type": "visualization",
   "references": [
     {
-      "id": "logs-app*",
-      "name": "index_pattern",
-      "type": "index-pattern"
+      "id": "app-logs",
+      "name": "search_0",
+      "type": "search"
     }
   ]
 }
