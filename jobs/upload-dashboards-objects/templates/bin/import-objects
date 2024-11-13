@@ -30,15 +30,16 @@ if __name__ == "__main__":
           'x-proxy-roles': 'admin',
           'x-proxy-user': 'admin',
           'x-forwarded-for': '127.0.0.1',
-          'securitytenant': tenant.strip(),
+          'securitytenant': tenant.strip()
         }
 
         with open(ndjson_output_path, 'rb') as ndjson_file:
+          ndjson_files= {'file':(ndjson_output_path, ndjson_file, 'application/x-ndjson')}
           r = session.post(
             '{}/api/saved_objects/_import?overwrite=true'.format(
               logs_url
             ),
-            data=ndjson_file,
+            files=ndjson_files,
             headers=headers,
             cert=(cert, key),
             verify=ca
@@ -93,3 +94,4 @@ if __name__ == "__main__":
             logging.info('Successfully Set <%= p('dashboards_objects.default_index') %> as Default Index')
         else:
             logging.info('Failed to Set <%= p('dashboards_objects.default_index') %> as Default Index')
+
