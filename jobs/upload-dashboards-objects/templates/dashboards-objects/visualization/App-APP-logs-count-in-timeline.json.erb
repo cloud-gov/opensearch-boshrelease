@@ -3,17 +3,17 @@
 {
   "attributes": {
     "title": "App APP: logs count in timeline",
-    "kibanaSavedObjectMeta":  {
-            "searchSourceJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/"/)
-            {
-              "query": {
+    "kibanaSavedObjectMeta": {
+      "searchSourceJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/"/) { '\"' }
+      {
+        "query": {
                   "query": "",
                   "language": "kuery"
               },
-              "filter": []
-            }
-            ENDOFFJSON
-            %>"
+        "filter": []
+      }
+ENDOFFJSON
+  %>"
     },
     "savedSearchRefName": "search_0",
     "visState": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/"/) { '\"' }
