@@ -24,7 +24,6 @@ with open(output_file, 'w', encoding='utf-8') as output:
             print(f"Error with file {files}: {e}")
             continue
 
-          output.write("{ \"create\":{} }\n")
           json.dump(data,output)
           output.write("\n")
 
