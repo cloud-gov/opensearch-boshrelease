@@ -21,7 +21,7 @@ gunicorn \
   --certfile $JOB_DIR/config/ssl/auth-proxy.crt \
   --ca-certs $JOB_DIR/config/ssl/opensearch.ca \
   --access-logfile $LOG_DIR/$JOB_NAME.access.log \
-  --error-logfile $LOG_DIR/$JOB_NAME.error.log \
+  --error-logfile - \
   --log-level "<%= p('opensearch-dashboards-cf-auth-proxy.log_level') %>" \
   --timeout <%= p('opensearch-dashboards-cf-auth-proxy.gunicorn.timeout') %> \
   --workers <%= p('opensearch-dashboards-cf-auth-proxy.gunicorn.num_workers') %> \
