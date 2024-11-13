@@ -3,14 +3,17 @@
 {
   "attributes": {
     "title": "App APP: logs count in timeline",
-    "kibanaSavedObjectMeta": {
-            "searchSourceJSON": {
+    "kibanaSavedObjectMeta":  {
+            "searchSourceJSON":"<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/"/) { '\"' }
+             {
                 "query": {
                     "query": "",
                     "language": "kuery"
                 },
                 "filter": []
             }
+            ENDOFFJSON
+  %>"
         },
         "savedSearchRefName": "search_0",
 
