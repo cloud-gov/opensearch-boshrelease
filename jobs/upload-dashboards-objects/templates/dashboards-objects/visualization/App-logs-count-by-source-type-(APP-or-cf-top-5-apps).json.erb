@@ -87,7 +87,8 @@ ENDOFFJSON
     "description": "",
     "savedSearchRefName": "search_0",
     "version": 1,
-    "searchSourceJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/"/) { '\"' }
+    "kibanaSavedObjectMeta": {
+       "searchSourceJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/"/) { '\"' }
       {
         "query": {
                   "query": "",
