@@ -26,7 +26,6 @@ if __name__ == "__main__":
     with open('<%= store_dir %>/org-tenants.txt') as orgs:
       for tenant in orgs:
         headers = {
-          'content-type': 'application/x-ndjson',
           'osd-xsrf': 'true',
           'x-proxy-roles': 'admin',
           'x-proxy-user': 'admin',
@@ -34,7 +33,7 @@ if __name__ == "__main__":
           'securitytenant': tenant.strip(),
         }
 
-        with open(ndjson_output_path, 'rb', encoding='utf-8') as ndjson_file:
+        with open(ndjson_output_path, 'rb') as ndjson_file:
           r = session.post(
             '{}/api/saved_objects/_import?overwrite=true'.format(
               logs_url
