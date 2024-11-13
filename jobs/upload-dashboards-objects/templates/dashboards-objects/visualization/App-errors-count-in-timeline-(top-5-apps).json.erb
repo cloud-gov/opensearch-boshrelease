@@ -23,57 +23,68 @@
         "aggs": [
           {
             "id": "1",
+            "enabled": true,
             "type": "count",
-            "schema": "metric",
-            "params": {}
+            "params": {},
+            "schema": "metric"
           },
           {
             "id": "2",
+                    "enabled": true,
             "type": "date_histogram",
-            "schema": "segment",
             "params": {
               "field": "@timestamp",
+
+              "useNormalizedOpenSearchInterval": true,
+              "scaleMetricValues": false,
               "interval": "auto",
-              "customInterval": "2h",
+              "drop_partials": false,
               "min_doc_count": 1,
               "extended_bounds": {}
-            }
+                    },
+                    "schema": "segment"
           },
           {
             "id": "3",
+                    "enabled": true,
             "type": "filters",
-            "schema": "group",
             "params": {
               "filters": [
                 {
                   "input": {
-                    "query": {
-                      "query_string": {
                         "query": "@level:ERROR",
-                        "analyze_wildcard": true
-                      }
-                    }
+                                    "language": "kuery"
                   },
                   "label": "ERROR"
                 },
                 {
                   "input": {
-                    "query": {
-                      "query_string": {
                         "query": "NOT @level:ERROR",
-                        "analyze_wildcard": true
-                      }
-                    }
+                                    "language": "kuery"
                   },
-                  "label": "other"
+                                "label": "Other"
                 }
               ]
-            }
+                    },
+                    "schema": "group"
           },
           {
             "id": "4",
+                    "enabled": true,
             "type": "terms",
-            "schema": "split",
+                    "params": {
+                        "field": "@cf.app",
+                        "orderBy": "1",
+                        "order": "desc",
+                        "size": 5,
+                        "otherBucket": false,
+                        "otherBucketLabel": "Other",
+                        "missingBucket": false,
+                        "missingBucketLabel": "Missing"
+                    },
+                    "schema": "split"
+                }
+            ],
             "params": {
               "field": "@cf.app",
               "size": 5,
@@ -104,6 +115,10 @@ ENDOFFJSON
     "kibanaSavedObjectMeta": {
       "searchSourceJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/"/) { '\"' }
       {
+        "query": {
+                  "query": "",
+                  "language": "kuery"
+              },
         "filter": []
       }
 ENDOFFJSON
