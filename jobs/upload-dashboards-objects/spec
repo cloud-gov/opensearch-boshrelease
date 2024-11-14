@@ -51,8 +51,11 @@ templates:
   dashboards-objects/search/app-container-metric-cpu.json.erb:        dashboards-objects/search/app-container-metric-cpu.json
   dashboards-objects/search/app-container-metric-disk.json.erb:            dashboards-objects/search/app-container-metric-disk.json
   dashboards-objects/search/app-container-metric-memory.json.erb:            dashboards-objects/search/app-container-metric-memory.json
+  dashboards-objects/search/app-counter.json.erb:                     dashboards-objects/search/app-counter.json
+  dashboards-objects/search/app-http.json.erb:                        dashboards-objects/search/app-http.json
   dashboards-objects/search/app-rtr.json.erb:                         dashboards-objects/search/app-rtr.json
   dashboards-objects/search/app-rtr-long-response.json.erb:           dashboards-objects/search/app-rtr-long-response.json
+  dashboards-objects/search/app-value-metric.json.erb:                dashboards-objects/search/app-value-metric.json
 
   dashboards-objects/dashboard/App-Errors.json.erb:          dashboards-objects/dashboard/App-Errors.json
   dashboards-objects/dashboard/App-Location.json.erb:        dashboards-objects/dashboard/App-Location.json
