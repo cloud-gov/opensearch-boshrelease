@@ -1,0 +1,32 @@
+#!/var/vcap/packages/python3-requests/venv/bin/python3
+import os
+import json
+
+folders = [
+"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/dashboard",
+"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/search",
+"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/visualization"
+]
+output_file = "/var/vcap/jobs/upload-dashboards-objects/dashboard.ndjson"
+
+
+with open(output_file, 'w', encoding='utf-8') as output:
+  for folder in folders:
+    if not os.path.exists(folder):
+      print(f"Folder not found: {folder}")
+      continue
+    for files in os.listdir(folder):
+      if files.endswith(".json"):
+        filepath = os.path.join(folder,files)
+
+        with open(filepath, 'r') as json_file:
+          try:
+            data = json.load(json_file)
+          except json.JSONDecodeError as e:
+            print(f"Error with file {files}: {e}")
+            continue
+
+          json.dump(data,output)
+          output.write("\n")
+
+

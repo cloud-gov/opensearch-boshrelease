@@ -22,26 +22,6 @@
       {
         "index": "#{p('opensearch_config.app_index_prefix')}*",
         "filter": [
-          {
-            "meta": {
-              "negate": false,
-              "index": "#{p('opensearch_config.app_index_prefix')}*",
-              "key": "@source.type",
-              "value": "APP",
-              "disabled": false
-            },
-            "query": {
-              "match": {
-                "@source.type": {
-                  "query": "APP",
-                  "type": "phrase"
-                }
-              }
-            },
-            "$state": {
-              "store": "appState"
-            }
-          }
         ],
         "highlight": {
           "pre_tags": [
@@ -68,6 +48,10 @@
   ).to_json.gsub(/"/) { '\"' }
   %>"
     }
-  }
+  },
+  "id": "app-logs",
+  "references": [],
+  "title": "[app] APP Logs",
+  "type": "search"
 }
 <% end %>
