@@ -45,7 +45,7 @@ if __name__ == "__main__":
             verify=ca
           )
           if r.status_code == 200:
-            logging.info(f'NDJSON FILE {ndjson_output_path} updated sucessfully1')
+            logging.info(f'NDJSON FILE {ndjson_output_path} uploaded sucessfully')
           elif r.status_code == 409:
             put = session.put(
                   '{}/api/saved_objects/_import?overwrite=true'.format(
@@ -65,7 +65,7 @@ if __name__ == "__main__":
                    logging.error(f"Error detils: {error_response}")
                 except ValueError:
                    logging.error(f"raw response: {put.text}")
-                logging.info(f'NDJSON FILE {ndjson_output_path} Failed to Upload1')
+                logging.info(f'Failed to upload NDJSON FILE {ndjson_output_path}')
           else:
               logging.error(f"Failed to upload file {ndjson_output_path}, status code: {r.status_code}")
               try:
@@ -73,7 +73,7 @@ if __name__ == "__main__":
                   logging.error(f"Error detils: {error_response}")
               except ValueError:
                   logging.error(f"raw response: {r.text}")
-              logging.info(f'NDJSON FILE {ndjson_output_path} Failed to Upload2')
+              logging.info(f'Failed to upload NDJSON FILE {ndjson_output_path}')
 
         index_headers = {
           'content-type': 'application/json',
