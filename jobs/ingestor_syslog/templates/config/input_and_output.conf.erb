@@ -1,6 +1,7 @@
 input
 {
 
+  <% if_p("logstash_ingestor.cf-enabled") %>
   <% if_p("logstash_ingestor.syslog.port") do |port| %>
   tcp
   {
@@ -46,6 +47,7 @@ input
     host => "0.0.0.0"
     port => "<%= port %>"
   }
+  <% end %>
   <% end %>
 
   <% p("logstash_parser.inputs", []).each do | input | %>

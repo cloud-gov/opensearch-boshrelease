@@ -1,5 +1,0 @@
-check process ingestor_opensearch
-  with pidfile /var/vcap/sys/run/bpm/ingestor_opensearch/ingestor_opensearch.pid
-  start program "/var/vcap/jobs/bpm/bin/bpm start ingestor_opensearch"
-  stop program "/var/vcap/jobs/bpm/bin/bpm stop ingestor_opensearch"
-  group vcap

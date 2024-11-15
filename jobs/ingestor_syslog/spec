@@ -103,6 +103,9 @@ properties:
     description: The interval in milliseconds when a checkpoint is forced on the head page.
     default: 1000
 
+  logstash_ingestor.cf-enabled:
+    description: are cf logs being ingested.
+    default: false
   logstash_ingestor.filters:
     description: Filters to execute on the ingestors
     default: ""
