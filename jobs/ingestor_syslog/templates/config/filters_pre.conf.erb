@@ -31,7 +31,7 @@
     <% filter['options'].each do | k, v | %>
        <%= k %> => <%= v.inspect %>
     <% end %>
-
+    <% end %>
 
     <% if 'DEBUG' == p('logstash.metadata_level') %>
         mutate {
