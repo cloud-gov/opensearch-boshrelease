@@ -1,7 +1,7 @@
 input
 {
 
-  <% if p("logstash_ingestor.cf-enabled") %>
+  <% if p("logstash_ingestor.ingest_syslog_enabled") %>
   <% if_p("logstash_ingestor.syslog.port") do |port| %>
   tcp
   {
