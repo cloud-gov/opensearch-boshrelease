@@ -103,6 +103,9 @@ properties:
     description: The interval in milliseconds when a checkpoint is forced on the head page.
     default: 1000
 
+  logstash_ingestor.ingest_syslog_enabled:
+    description: if True, logs are ingested from syslog
+    default: true
   logstash_ingestor.filters:
     description: Filters to execute on the ingestors
     default: ""
