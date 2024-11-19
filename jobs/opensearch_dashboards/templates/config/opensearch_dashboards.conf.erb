@@ -45,6 +45,20 @@ opensearchDashboards.index: <%= p('opensearch_dashboards.index') %>
 # opensearchDashboards.defaultAppId: "discover"
 opensearchDashboards.defaultAppId: <%= p('opensearch_dashboards.defaultAppId') %>
 
+# Branding for opensearch
+opensearchDashboards.branding:
+  logo:
+    defaultUrl: ""
+    darkModeUrl: ""
+  mark:
+    defaultUrl: ""
+    darkModeUrl: ""
+  loadingLogo:
+    defaultUrl: ""
+    darkModeUrl: ""
+  faviconUrl: ""
+  applicationTitle: "Cloud.gov Logging System"
+
 # If your opensearch is protected with basic auth, these are the user credentials
 # used by the opensearch_dashboards server to perform maintenance on the opensearchDashboards.index at startup. Your opensearch_dashboards
 # users will still need to authenticate with opensearch (which is proxied through
