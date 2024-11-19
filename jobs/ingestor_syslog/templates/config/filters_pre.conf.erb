@@ -26,13 +26,13 @@
     # Injected custom filters below from logstash_inject.filters manifest property
     #
 
-    <% p("logstash_ingestor.filters", []).each do | filter | %>
-    <%= filter["pattern"] %>
-    {
-        <% filter["options"].each do | k, v | %>
-          <%= k %> => <%= v.inspect %>
-        <% end %>
-    }
+    # <% p("logstash_ingestor.filters", []).each do | filter | %>
+    # <%= filter["pattern"] %>
+    # {
+    #     <% filter["options"].each do | k, v | %>
+    #       <%= k %> => <%= v.inspect %>
+    #     <% end %>
+    # }
 
     <% if p('logstash_ingestor.cf-enabled') %>
     grok {
