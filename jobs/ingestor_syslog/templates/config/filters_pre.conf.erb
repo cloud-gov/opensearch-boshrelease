@@ -32,6 +32,9 @@
         match => { "message" => "^%{TIMESTAMP_ISO8601:timestamp}%{SPACE}%{SYSLOGPROG:program}%{SPACE}%{GREEDYDATA:message}$" }
         tag_on_failure => ["fail/s3-start/_grokparsefailure"]
     }
+    mutate {
+        remove_field => ["timestamp","program"]
+    }
     <% end %>
 
     <% if 'DEBUG' == p('logstash.metadata_level') %>
