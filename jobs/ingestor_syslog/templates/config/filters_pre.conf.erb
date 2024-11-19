@@ -26,19 +26,11 @@
     # Injected custom filters below from logstash_inject.filters manifest property
     #
 
-    # <% p("logstash_ingestor.filters", []).each do | filter | %>
-    # <%= filter["pattern"] %>
-    # {
-    #     <% filter["options"].each do | k, v | %>
-    #       <%= k %> => <%= v.inspect %>
-    #     <% end %>
-    # }
-    # <% end %>
 
     <% if p('logstash_ingestor.cf-enabled') %>
     grok {
         match: { "@message" => "%{TIMESTAMP_ISO8601}%{SPACE}%{SYSLOGPROG}%{GREEDYDATA:@message}$" }
-442     tag_on_failure: ["fail/s3-start/_grokparsefailure"]
+        tag_on_failure: ["fail/s3-start/_grokparsefailure"]
     }
     <% end %>
 
