@@ -29,8 +29,8 @@
 
     <% if p('logstash_ingestor.cf-enabled') %>
     grok {
-        match: { "@message" => "%{TIMESTAMP_ISO8601}%{SPACE}%{SYSLOGPROG}%{GREEDYDATA:@message}$" }
-        tag_on_failure: ["fail/s3-start/_grokparsefailure"]
+        match => { "@message" => "^%{TIMESTAMP_ISO8601}%{SPACE}%{SYSLOGPROG}%{GREEDYDATA:@message}$" }
+        tag_on_failure => ["fail/s3-start/_grokparsefailure"]
     }
     <% end %>
 
