@@ -25,8 +25,18 @@
     #
     # Injected custom filters below from logstash_inject.filters manifest property
     #
-    <%= p('logstash_ingestor.filters') %>
 
+
+    <% if !p('logstash_ingestor.ingest_syslog_enabled') %>
+    grok {
+        match => { "message" => "^%{TIMESTAMP_ISO8601:timestamp}%{SPACE}%{SYSLOGPROG:program}%{SPACE}%{GREEDYDATA:newmessage}$" }
+        tag_on_failure => ["fail/s3-start/_grokparsefailure"]
+    }
+    mutate {
+        remove_field => ["timestamp","program"]
+        replace => {"message" => "%{newmessage}" }
+    }
+    <% end %>
 
     <% if 'DEBUG' == p('logstash.metadata_level') %>
         mutate {
