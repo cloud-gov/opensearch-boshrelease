@@ -92,7 +92,7 @@ cat ${JOB_DIR}/config/filters_post.conf >> ${JOB_DIR}/config/logstash.conf
   cat /var/vcap/packages/base-logstash-filters/if_it_looks_like_json.conf >> ${JOB_DIR}/config/logstash.conf
 <% end %>
 
-<% if p('logstash_ingestor.cf-enabled') %>
+<% if p('logstash_ingestor.ingest_syslog_enabled') %>
 cat /var/vcap/packages/base-logstash-filters/timecop.conf >> ${JOB_DIR}/config/logstash.conf
 <% end %>
 
