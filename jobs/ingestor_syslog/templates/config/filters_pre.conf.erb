@@ -29,12 +29,12 @@
 
     <% if !p('logstash_ingestor.cf-enabled') %>
     grok {
-        match => { "message" => "^%{TIMESTAMP_ISO8601:timestamp}%{SPACE}%{SYSLOGPROG:program}%{SPACE}%{GREEDYDATA:message}$" }
-        overwrite => ["message"]
+        match => { "message" => "^%{TIMESTAMP_ISO8601:timestamp}%{SPACE}%{SYSLOGPROG:program}%{SPACE}%{GREEDYDATA:newmessage}$" }
         tag_on_failure => ["fail/s3-start/_grokparsefailure"]
     }
     mutate {
         remove_field => ["timestamp","program"]
+        replace => {"message" => "%{newmessage}" }
     }
     <% end %>
 
