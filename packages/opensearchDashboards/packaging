@@ -1,5 +1,5 @@
 set -e
 
 tar xzf opensearch-dashboards-2.18.0-linux-x64.tar.gz -C $BOSH_INSTALL_TARGET --strip-components 1
-cp images/cloud.gov-horizontal.png $BOSH_INSTALL_TARGET/
-cp images/cloud.gov-horizontal.png $BOSH_INSTALL_TARGET/assets
+mkdir $BOSH_INSTALL_TARGET/assets/ui
+cp images/cloud.gov-horizontal.png $BOSH_INSTALL_TARGET/assets/ui/
