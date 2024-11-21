@@ -33,8 +33,8 @@
         tag_on_failure => ["fail/s3-start/_grokparsefailure"]
     }
     mutate {
-        remove_field => ["timestamp","program"]
         replace => {"message" => "%{newmessage}" }
+        remove_field => ["timestamp","program","newmessage"]
     }
     <% end %>
 
