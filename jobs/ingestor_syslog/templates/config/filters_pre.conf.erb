@@ -36,6 +36,9 @@
         remove_field => ["timestamp","program"]
         replace => {"message" => "%{newmessage}" }
     }
+    mutate {
+       remove_field=> ["newmessage"]
+    }
     <% end %>
 
     <% if 'DEBUG' == p('logstash.metadata_level') %>
