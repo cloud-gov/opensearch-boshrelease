@@ -6,10 +6,10 @@ description: |
   then forward it to opensearch cluster
 
 packages:
-- logstash
-- base-logstash-filters
-- cf-logstash-filters
-- openjdk-17
+  - logstash
+  - base-logstash-filters
+  - cf-logstash-filters
+  - openjdk-17
 
 templates:
   bin/ingestor_syslog: bin/ingestor_syslog.sh
@@ -29,25 +29,25 @@ templates:
   config/ca.erb: config/ssl/opensearch.ca
 
 provides:
-- name: ingestor
-  type: ingestor
-  properties:
-  - logstash_ingestor.syslog.port
-  - logstash_ingestor.syslog.transport
-  - logstash_ingestor.syslog_tls.port
-  - logstash_ingestor.relp.port
-- name: syslog_forwarder
-  type: syslog_forwarder
-  properties:
-  - logstash_ingestor.syslog.port
-- name: ingestor_inputs
-  type: ingestor_inputs
-  properties:
-  - logstash_parser.inputs
+  - name: ingestor
+    type: ingestor
+    properties:
+      - logstash_ingestor.syslog.port
+      - logstash_ingestor.syslog.transport
+      - logstash_ingestor.syslog_tls.port
+      - logstash_ingestor.relp.port
+  - name: syslog_forwarder
+    type: syslog_forwarder
+    properties:
+      - logstash_ingestor.syslog.port
+  - name: ingestor_inputs
+    type: ingestor_inputs
+    properties:
+      - logstash_parser.inputs
 consumes:
-- name: opensearch
-  type: opensearch
-  optional: true
+  - name: opensearch
+    type: opensearch
+    optional: true
 
 properties:
   logstash.ssl_client_authentication:
@@ -70,7 +70,7 @@ properties:
   logstash.plugins:
     description: "Array of hashes describing logstash plugins to install"
     example:
-    - {name: logstash-output-cloudwatchlogs, version: 2.0.0}
+      - { name: logstash-output-cloudwatchlogs, version: 2.0.0 }
     default: []
 
   logstash.ecs_compatibility:
@@ -149,13 +149,13 @@ properties:
     default: false
   logstash_parser.message_max_size:
     description: "Maximum log message length.  Anything larger is truncated (TODO: move this to ingestor?)"
-    default: 1048576
+    default: 32765
   logstash_parser.filters:
     description: "The configuration to embed into the logstash filters section. Can either be a set of parsing rules as a string or a list of hashes in the form of [{name: path_to_parsing_rules.conf}]"
-    default: ''
+    default: ""
   logstash_parser.deployment_dictionary:
     description: "A list of files concatenated into one deployment dictionary file. Each file contains a hash of job name-deployment name keypairs for @source.deployment lookup."
-    default: [ "/var/vcap/packages/base-logstash-filters/deployment_lookup.yml" ]
+    default: ["/var/vcap/packages/base-logstash-filters/deployment_lookup.yml"]
   logstash_parser.inputs:
     description: |
       A list of input plugins, with a hash of options for each of them. Please refer to example below.
@@ -176,7 +176,7 @@ properties:
             uri: 192.168.1.1
             database: logsearch
             collection: logs
-    default: [ { plugin: "opensearch", options: {} } ]
+    default: [{ plugin: "opensearch", options: {} }]
   logstash_parser.workers:
     description: "The number of worker threads that logstash should use (default: auto = one per CPU)"
     default: auto
