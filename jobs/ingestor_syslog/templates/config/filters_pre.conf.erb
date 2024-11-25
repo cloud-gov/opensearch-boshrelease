@@ -106,18 +106,10 @@
     #
     # trim excessively long messages
     #
-
-    ruby {
-        code => '
-            max_line_length = <%= p("logstash_parser.message_max_size") %>
-            message = event.get("@message")
-            if message && message.length > max_line_length
-                event.set("@message", message[0, max_line_length])
-                tags = event.get("tags")
-                tags ||= [] << "_groktrimmed"
-                event.set("tags", tags)
-            end
-        '
+    truncate {
+            fields => ["@message"]
+            add_tag => [ "_logtrimmed" ]
+            length_bytes => <%= p("logstash_parser.message_max_size") %>
     }
 
     #
