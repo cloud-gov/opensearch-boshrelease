@@ -18,6 +18,7 @@ filter
         rename => {"[cloudwatch_logs][tags][environment]"=>"environment"}
         rename => {"[cloudwatch_logs][tags][OrganizationGUID]"=>"[@cf][org_id]"}
         rename => {"[cloudwatch_logs][tags][SpaceGUID]"=>"[@cf][space_id]"}
+        rename => {"[cloudwatch_logs][tags][Spacename]"=>"[@cf][space]"}
         rename => {"[cloudwatch_logs][tags][Organizationname]"=>"[@cf][org]"}
         remove_field => ["[cloudwatch_logs][tags][Createdat]"]
         remove_field => ["[cloudwatch_logs][tags][Updatedat]"]
