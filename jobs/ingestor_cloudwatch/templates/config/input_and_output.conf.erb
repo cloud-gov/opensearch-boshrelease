@@ -3,6 +3,7 @@ input
   cloudwatch_logs
   {
     log_group_prefix => true
+    interval => 1
     <% if_p("logstash_ingestor.cloudwatch.prefix") do |prefix_list| %>
     log_group => "<%= prefix_list %>"
     <% end %>
