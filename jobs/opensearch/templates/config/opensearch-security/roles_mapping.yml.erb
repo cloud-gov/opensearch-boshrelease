@@ -36,12 +36,18 @@ logstash:
   backend_roles:
   - "logstash"
 
+kibana_user:
+  reserved: false
+  backend_roles:
+  - "kibanauser"
+  - "user"
+  description: "Maps kibanauser to kibana_user"
+
 cf_user:
   reserved: true
   hidden: false
   backend_roles:
   - "user"
-  - "reports_instances_read_access"
   hosts: []
   users: []
   and_backend_roles: []
