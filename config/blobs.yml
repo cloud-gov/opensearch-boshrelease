@@ -210,10 +210,6 @@ logstash/logstash-filter-translate-3.4.2.zip:
   size: 649362
   object_id: e9b87119-265c-43ce-788d-5592aabffcb3
   sha: sha256:f465635431b474abaf61c6673d7c91cb5f62b09a193d45a5622342f5a5b967c6
-logstash/logstash-input-cloudwatch_logs-1.0.5.zip:
-  size: 2153640
-  object_id: e9c13261-22d0-4cfb-6aa7-43e7414f898e
-  sha: sha256:de74e619fcb2a4d46126dd0981023bf5810ca7625580a433628abfaa68a91046
 logstash/logstash-input-cloudwatch_logs-1.0.6.zip:
   size: 2153736
   object_id: f2ba9082-05ed-489f-7416-66fa2c0e9ad2
