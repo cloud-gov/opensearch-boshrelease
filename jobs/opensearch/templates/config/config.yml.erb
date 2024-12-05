@@ -21,6 +21,7 @@ plugins.security.nodes_dn:
 <% end %>
 <% end %>
 
+plugins.security.restapi.roles_enabled: ["all_access"]
 <% if_p('opensearch.node.ssl.certificate') do %>
 plugins.security.ssl.transport.enforce_hostname_verification: false
 plugins.security.ssl.transport.pemkey_filepath: ssl/opensearch-node.key
