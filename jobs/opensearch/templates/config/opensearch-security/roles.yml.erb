@@ -380,8 +380,8 @@ cf_user:
     - "create"
   - index_patterns:
     - ".kibana*"
-    - ".opensearch_dashboards"
-    alllowed_actions
+    - ".opensearch_dashboards*"
+    alllowed_actions:
     - "indices:data/read/get"
     - "indices:data/read/mget"
     - "indices:data/read/search"
@@ -393,6 +393,6 @@ cf_user:
     - "indices:admin/get"
     - "indices:admin/refresh"
     - "indices:admin/aliases/get"
-		- "indices:admin/create"
+    - "indices:admin/create"
   tenant_permissions: []
   static: false
