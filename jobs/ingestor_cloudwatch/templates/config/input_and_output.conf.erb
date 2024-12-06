@@ -33,6 +33,11 @@ filter
         remove_field => ["[cloudwatch_logs][tags][PlanGUID]"]
         remove_field => ["[cloudwatch_logs][tags][ServiceGUID]"]
     }
+    truncate {
+            fields => ["message"]
+            add_tag => [ "_logtrimmed" ]
+            length_bytes => 32765
+    }
 }
 
 <%
