@@ -214,6 +214,10 @@ logstash/logstash-input-cloudwatch_logs-1.1.1.zip:
   size: 2153775
   object_id: 71087ba5-ad1d-4584-7d85-2b6f8401e34b
   sha: sha256:95098d9fba01cb060f2c8b41107d232c74ac160ef584d4ddb0b719940b6bfa6a
+logstash/logstash-input-cloudwatch_logs-1.1.2.zip:
+  size: 2469347
+  object_id: 5720579d-1dd8-46c6-788a-be59c1f31e79
+  sha: sha256:bf3755dc83de19ff35ee30cd0caa9d6372764e6de6930c0323a7efacc6b41970
 logstash/logstash-input-relp-3.0.4.zip:
   size: 44725
   object_id: 2e183484-97da-4e51-4311-51e024d0665b
