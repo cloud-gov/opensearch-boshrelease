@@ -121,3 +121,8 @@ HTTP_CODE=$(curl -s -o /dev/null -s -w "%{http_code}\n" -I  ${CA} ${CERT} ${KEY}
 if [ "$HTTP_CODE" -ge "201" ]; then
   curl -XPUT ${CA} ${CERT} ${KEY} ${BASEURL}/%3Clogs-app-%7Bnow%2Fd%7D-01%3E -H 'Content-Type: application/json' -d'{"aliases": {"'${ALIAS}'": {}}}'
 fi
+
+echo "--- Creating Reporting indexs"
+
+curl -XPUT  ${CA} ${CERT} ${KEY} ${BASEURL}/_plugins/_reports/definitions
+curl -XPUT  ${CA} ${CERT} ${KEY} ${BASEURL}/_plugins/_reports/instances
