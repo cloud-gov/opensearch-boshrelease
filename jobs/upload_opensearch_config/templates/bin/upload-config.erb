@@ -124,5 +124,5 @@ fi
 
 echo "--- Creating Reporting indexs"
 
-curl -XPUT  ${CA} ${CERT} ${KEY} ${BASEURL}/_plugins/_reports/definitions
-curl -XPUT  ${CA} ${CERT} ${KEY} ${BASEURL}/_plugins/_reports/instances
+curl -XGET ${CA} ${CERT} ${KEY} ${BASEURL}/_plugins/_reports/definitions
+curl -XGET  ${CA} ${CERT} ${KEY} ${BASEURL}/_plugins/_reports/instances
