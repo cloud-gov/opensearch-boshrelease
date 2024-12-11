@@ -85,7 +85,7 @@ if __name__ == "__main__":
         }
         r = session.post(
           '{}/api/opensearch-dashboards/settings'.format(logs_url),
-          data='{"changes":{"defaultIndex":"<%= p('dashboards_objects.default_index') %>"}}',
+          data='{"changes":{"defaultIndex":"<%= p('dashboards_objects.default_index') %>", "timeline:es.default_index": "<%= p('dashboards_objects.default_index') %>"}}',
           headers=index_headers,
           cert=(cert, key),
           verify=ca
