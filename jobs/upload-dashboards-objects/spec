@@ -25,7 +25,6 @@ consumes:
   optional: true
 
 templates:
-  bin/generate-objects: bin/generate-objects
   bin/generate-tenants: bin/generate-tenants
   bin/generate-ndjson: bin/generate-ndjson
   bin/import-objects: bin/import-objects
@@ -38,8 +37,6 @@ templates:
 
   # OpenSearch Dashboards objects (defaults).
   dashboards-objects/index-pattern/logs-app.json.erb:       dashboards-objects/index-pattern/logs-app*.json
-  dashboards-objects/index-pattern/logs.json.erb:           dashboards-objects/index-pattern/logs-*.json
-  dashboards-objects/index-pattern/logs-platform.json.erb:  dashboards-objects/index-pattern/logs-platform*.json
 
   dashboards-objects/search/app-all.json.erb:                         dashboards-objects/search/app-all.json
   dashboards-objects/search/app-all-messages.json.erb:                dashboards-objects/search/app-all-messages.json

@@ -175,5 +175,7 @@ end
     "title": "<%= p('opensearch_config.app_index_prefix') %>*",
     "timeFieldName": "@timestamp",
     "fields": "<%= fields_json.to_json.gsub(/"/) { '\"' } %>"
-  }
+  },
+  "id": "<%= p('opensearch_config.app_index_prefix') %>*",
+  "type":"index-pattern"
 }
