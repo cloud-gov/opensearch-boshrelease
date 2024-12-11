@@ -11,3 +11,4 @@ cf api "<%= api %>"
 cf auth "<%= client %>" "<%= password %>" --client-credentials
 mkdir -p $STORE_DIR
 cf orgs| tail -n +4 > "$STORE_DIR/org-tenants.txt"
+"admin_tenant"

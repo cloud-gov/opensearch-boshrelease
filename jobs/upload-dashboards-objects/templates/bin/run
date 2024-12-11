@@ -10,9 +10,6 @@ export PYTHONPATH="/var/vcap/packages/python3/lib/python3.12/site-packages${PYTH
 export LD_LIBRARY_PATH="/var/vcap/packages/python3/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 export REQUESTS_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt"
 
-echo "[$(date)] Calling 'generate-objects'..."
-$(dirname $0)/generate-objects
-
 echo "[$(date)] Calling 'generate-tenants'..."
 $(dirname $0)/generate-tenants
 
