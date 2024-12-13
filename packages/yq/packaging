@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-tar xzf yq_linux_amd64.tar.gz-4.44.6.tar.gz -C "$BOSH_INSTALL_TARGET" --strip-components 1
+tar xzf yq_linux_amd64-4.44.6.tar.gz -C "$BOSH_INSTALL_TARGET" --strip-components 1
 mkdir "$BOSH_INSTALL_TARGET/bin"
 cp "$BOSH_INSTALL_TARGET/yq_linux_amd64" "$BOSH_INSTALL_TARGET/bin/yq"
