@@ -1,7 +1,7 @@
 ---
 name: opensearch
 
-description: This job runs opensearch node (master or data)
+description: This job runs opensearch node (manager or data)
 
 packages:
   - opensearch
