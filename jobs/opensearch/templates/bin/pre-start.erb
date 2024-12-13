@@ -17,6 +17,16 @@ source /var/vcap/packages/openjdk-17/bosh/runtime.env
 # Have to copy files that don't exist otherwise securityadmin.sh invocation will fail
 cp -u ${OPENSEARCH_HOME}/config/opensearch-security/*.yml ${OPENSEARCH_PATH_CONF}/opensearch-security
 
+<%
+  api = p("opensearch.cf.domain")
+  client = p("opensearch.cf.client_id")
+  password = p("opensearch.cf.client_password")
+%>
+cf api "<%= api %>"
+cf auth "<%= client %>" "<%= password %>" --client-credentials
+cf orgs | tail -n +4 | xargs -I {} yq -i '."{}"={"description":"tenant for {}"}' ${OPENSEARCH_PATH_CONF}/opensearch-security
+/tenants.yml
+
 cd ${OPENSEARCH_HOME}
 chown -R vcap:vcap config plugins
 chown -R vcap:vcap ${OPENSEARCH_PATH_CONF}/opensearch-security

@@ -187,3 +187,9 @@ properties:
   opensearch.multitenancy.private_tenant_enabled:
     description: True to enable private tenant
     default: false
+  opensearch.cf.domain:
+    description: domain of the api for cf
+  opensearch.cf.client_id:
+    description: username of the cf client
+  opensearch.cf.client_password:
+    description: password of cf client    
