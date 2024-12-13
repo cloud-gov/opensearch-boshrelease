@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+tar xzf yq_darwin_amd64-4.4.6.tar.gz -C "$BOSH_INSTALL_TARGET" --strip-components 1
+mkdir "$BOSH_INSTALL_TARGET/bin"
+cp "$BOSH_INSTALL_TARGET/yq_darwin_amd64" "$BOSH_INSTALL_TARGET/bin/yq"

@@ -1,0 +1,5 @@
+---
+name: yq
+
+files:
+  - yq_darwin_amd64-4.4.6.tar.gz

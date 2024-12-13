@@ -1,11 +1,12 @@
 ---
 name: opensearch
 
-description: This job runs opensearch node (master or data)
+description: This job runs opensearch node (manager or data)
 
 packages:
   - opensearch
   - openjdk-17
+  - jq
 
 templates:
   # bin/drain.erb: bin/drain
@@ -187,3 +188,9 @@ properties:
   opensearch.multitenancy.private_tenant_enabled:
     description: True to enable private tenant
     default: false
+  opensearch.cf.domain:
+    description: domain of the api for cf
+  opensearch.cf.client_id:
+    description: username of the cf client
+  opensearch.cf.client_password:
+    description: password of cf client    

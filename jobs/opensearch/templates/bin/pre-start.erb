@@ -4,6 +4,9 @@ export JOB_NAME=opensearch
 export OPENSEARCH_HOME=/var/vcap/packages/opensearch
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
+export YQ_PACKAGE_DIR=/var/vcap/packages/yq
+export PATH=$YQ_PACKAGE_DIR/bin:$PATH
+export OPENSEARCH_SECURITY_CONFIG_PATH=${OPENSEARCH_PATH_CONF}/opensearch-security
 
 sysctl -q -w vm.max_map_count=262144
 mkdir -p ${OPENSEARCH_HOME}/plugins
@@ -14,12 +17,31 @@ fi
 source /var/vcap/packages/openjdk-17/bosh/runtime.env
 
 # Copy default security config if it doesn't already exist
-# TODO: Should this be necessary?
-cp -u ${OPENSEARCH_HOME}/config/opensearch-security/*.yml ${OPENSEARCH_PATH_CONF}/opensearch-security
+# Have to copy files that don't exist otherwise securityadmin.sh invocation will fail
+cp -u ${OPENSEARCH_HOME}/config/opensearch-security/*.yml "$OPENSEARCH_SECURITY_CONFIG_PATH"
+
+<%
+  api = p("opensearch.cf.domain")
+  client = p("opensearch.cf.client_id")
+  password = p("opensearch.cf.client_password")
+%>
+cf api "<%= api %>"
+cf auth "<%= client %>" "<%= password %>" --client-credentials
 
 cd ${OPENSEARCH_HOME}
 chown -R vcap:vcap config plugins
-chown -R vcap:vcap ${OPENSEARCH_PATH_CONF}/opensearch-security
+chown -R vcap:vcap "$OPENSEARCH_SECURITY_CONFIG_PATH"
+
+# Prepare tenants, roles, and role mappings so that they don't get overridden by securityadmin.sh
+# script invocation in post-start
+for org in $(cf orgs | tail -n +4); do
+  ORG_GUID=$(cf org "$org" --guid)
+  ROLE_NAME="$org-tenant"
+
+  yq -i ".\"$org\"={\"description\":\"tenant for $org\"}" "$OPENSEARCH_SECURITY_CONFIG_PATH/tenants.yml"
+  yq -i ".\"$ROLE_NAME\"={\"tenant_permissions\":[{\"tenant_patterns\": [\"$org\"],\"allowed_actions\": [\"kibana_all_write\"]}]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles.yml"
+  yq -i ".\"$ROLE_NAME\"={\"backend_roles\": [\"$ORG_GUID\"]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles_mapping.yml"
+done
 
 # leaving all plugin files and plugins installed for now
 # can revisit https://opensearch.org/docs/latest/install-and-configure/plugins/ for how to
