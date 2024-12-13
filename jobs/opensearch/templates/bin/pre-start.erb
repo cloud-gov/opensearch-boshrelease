@@ -14,7 +14,7 @@ fi
 source /var/vcap/packages/openjdk-17/bosh/runtime.env
 
 # Copy default security config if it doesn't already exist
-# TODO: Should this be necessary?
+# Have to copy files that don't exist otherwise securityadmin.sh invocation will fail
 cp -u ${OPENSEARCH_HOME}/config/opensearch-security/*.yml ${OPENSEARCH_PATH_CONF}/opensearch-security
 
 cd ${OPENSEARCH_HOME}
