@@ -24,7 +24,7 @@ org_quoted=\"$org\"
 curl -X PUT \
   ${CA} ${CERT} ${KEY} \
   -s https://localhost:9200/_plugins/_security/api/tenants/${org} \
-  -H 'Content-Type: application/json' -d "{ \"description\": \"A tenant for the ${org} team.\" }"
+  -H 'Content-Type: application/json' -d "{\"description\": \"A tenant for the ${org} team.\"}"
   
 curl -X PUT \
   ${CA} ${CERT} ${KEY} \
