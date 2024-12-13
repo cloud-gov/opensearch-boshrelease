@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 set -e
 
-tar xzf opensearch-2.18.0-linux-x64.tar.gz -C $BOSH_INSTALL_TARGET --strip-components 1
+tar xzf opensearch-2.18.0-linux-x64.tar.gz -C "$BOSH_INSTALL_TARGET" --strip-components 1
