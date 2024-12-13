@@ -6,7 +6,7 @@ description: This job runs opensearch node (manager or data)
 packages:
   - opensearch
   - openjdk-17
-  - jq
+  - yq
 
 templates:
   # bin/drain.erb: bin/drain
