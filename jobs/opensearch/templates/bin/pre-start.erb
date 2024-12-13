@@ -20,6 +20,7 @@ source /var/vcap/packages/openjdk-17/bosh/runtime.env
 # Have to copy files that don't exist otherwise securityadmin.sh invocation will fail
 cp -u ${OPENSEARCH_HOME}/config/opensearch-security/*.yml "$OPENSEARCH_SECURITY_CONFIG_PATH"
 
+<% if p("opensearch.node.allow_data") %>
 <%
   api = p("opensearch.cf.domain")
   client = p("opensearch.cf.client_id")
@@ -42,6 +43,7 @@ for org in $(cf orgs | tail -n +4); do
   yq -i ".\"$ROLE_NAME\"={\"tenant_permissions\":[{\"tenant_patterns\": [\"$org\"],\"allowed_actions\": [\"kibana_all_write\"]}]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles.yml"
   yq -i ".\"$ROLE_NAME\"={\"backend_roles\": [\"$ORG_GUID\"]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles_mapping.yml"
 done
+<% end %>
 
 # leaving all plugin files and plugins installed for now
 # can revisit https://opensearch.org/docs/latest/install-and-configure/plugins/ for how to
