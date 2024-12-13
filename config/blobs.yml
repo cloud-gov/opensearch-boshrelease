@@ -274,7 +274,7 @@ ruby/rake-13.0.6.gem:
   size: 84992
   object_id: ae89e0d2-b8d0-454f-6eff-6673b2956ada
   sha: sha256:5ce4bf5037b4196c24ac62834d8db1ce175470391026bd9e557d669beeb19097
-yq_darwin_amd64-4.4.6.tar.gz:
-  size: 4257765
-  object_id: 612e4c6a-d3e3-4031-5bcd-fbe5ce8ddb58
-  sha: sha256:88a2d9075c4f59f5e9cf6e6d1a5ec8b84fa7f094566829c76d1e80fd61da274a
+yq_linux_amd64-4.44.6.tar.gz:
+  size: 4196529
+  object_id: cc6157b3-5ba0-4996-60e3-d90c8a150110
+  sha: sha256:09ea7643cba1cfde4c57abbadbf7fa242d7425db8ee93c0b184d68661cf3b1bd
