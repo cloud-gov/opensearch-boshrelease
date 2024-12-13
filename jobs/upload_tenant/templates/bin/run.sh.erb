@@ -10,6 +10,7 @@ export CF_COLOR=false
 CA="--cacert ${JOB_DIR}/config/ssl/opensearch.ca"
 CERT="--cert ${JOB_DIR}/config/ssl/opensearch-admin.crt"
 KEY="--key ${JOB_DIR}/config/ssl/opensearch-admin.key"
+
 <%
   api = p("upload_tenant.cf.domain")
   client = p("upload_tenant.cf.client_id")
