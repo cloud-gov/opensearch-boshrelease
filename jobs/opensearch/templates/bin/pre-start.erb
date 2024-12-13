@@ -20,8 +20,12 @@ source /var/vcap/packages/openjdk-17/bosh/runtime.env
 # Have to copy files that don't exist otherwise securityadmin.sh invocation will fail
 cp -u ${OPENSEARCH_HOME}/config/opensearch-security/*.yml "$OPENSEARCH_SECURITY_CONFIG_PATH"
 
-<% if p("opensearch.node.allow_data") %>
+cd ${OPENSEARCH_HOME}
+chown -R vcap:vcap config plugins
+chown -R vcap:vcap "$OPENSEARCH_SECURITY_CONFIG_PATH"
+
 <% if_p('opensearch.cf.domain', 'opensearch.cf.client_id', 'opensearch.cf.client_password') do %>
+<% if p("opensearch.node.allow_data") %>
 <%
   api = p("opensearch.cf.domain")
   client = p("opensearch.cf.client_id")
@@ -29,10 +33,6 @@ cp -u ${OPENSEARCH_HOME}/config/opensearch-security/*.yml "$OPENSEARCH_SECURITY_
 %>
 cf api "<%= api %>"
 cf auth "<%= client %>" "<%= password %>" --client-credentials
-
-cd ${OPENSEARCH_HOME}
-chown -R vcap:vcap config plugins
-chown -R vcap:vcap "$OPENSEARCH_SECURITY_CONFIG_PATH"
 
 # Prepare tenants, roles, and role mappings so that they don't get overridden by securityadmin.sh
 # script invocation in post-start
