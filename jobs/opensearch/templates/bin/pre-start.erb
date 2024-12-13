@@ -4,6 +4,8 @@ export JOB_NAME=opensearch
 export OPENSEARCH_HOME=/var/vcap/packages/opensearch
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
+export YQ_PACKAGE_DIR=/var/vcap/packages/yq
+export PATH=$YQ_PACKAGE_DIR/bin:$PATH
 
 sysctl -q -w vm.max_map_count=262144
 mkdir -p ${OPENSEARCH_HOME}/plugins
