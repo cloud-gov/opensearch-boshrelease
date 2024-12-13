@@ -2,4 +2,4 @@
 name: yq
 
 files:
-  - yq_darwin_amd64-4.4.6.tar.gz
+  - yq_linux_amd64.tar.gz-4.44.6.tar.gz
