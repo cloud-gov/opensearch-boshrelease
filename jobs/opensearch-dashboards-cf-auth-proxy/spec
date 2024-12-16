@@ -36,7 +36,7 @@ properties:
     description: the key used for cookie signing
   opensearch-dashboards-cf-auth-proxy.session_lifetime:
     description: the lifetime of the session
-    default: 3600
+    default: 43200
   opensearch-dashboards-cf-auth-proxy.opensearch_dashboards.url:
     description: this is the url of the proxied Opensearch dashboards instance
     default: "localhost"
