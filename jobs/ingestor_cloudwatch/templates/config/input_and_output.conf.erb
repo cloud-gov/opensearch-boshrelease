@@ -57,7 +57,7 @@ filter
         rename => [ "message" => "@message" ]
     }
     truncate {
-      fields => ["message"]
+      fields => ["@message"]
       add_tag => [ "_logtrimmed" ]
       length_bytes => 32765
     }
