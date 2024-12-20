@@ -34,12 +34,14 @@ filter
         rename => {"[cloudwatch_logs][tags][InstanceGUID]"=>"[@cf][service_instance_id]"}
         rename => {"[cloudwatch_logs][tags][Instance GUID]"=>"[@cf][service_instance_id]"}
 
+        rename => {"[cloudwatch_logs][tags][Instancename]"=>"[@cf][service]"}
         rename => {"[cloudwatch_logs][tags][Instance name]"=>"[@cf][service]"}
 
         rename => {"[cloudwatch_logs][tags][Serviceofferingname]"=>"[@cf][service_offering]"}
         rename => {"[cloudwatch_logs][tags][Service offering name]"=>"[@cf][service_offering]"}
 
         rename => {"[cloudwatch_logs][tags][Service plan name]"=>"[@cf][service_plan]"}
+        rename => {"[cloudwatch_logs][tags][Serviceplanname]"=>"[@cf][service_plan]"}
 
         rename => {"[cloudwatch_logs][tags][service]"=>"broker"}
         rename => {"[cloudwatch_logs][tags][broker]"=>"broker"}
