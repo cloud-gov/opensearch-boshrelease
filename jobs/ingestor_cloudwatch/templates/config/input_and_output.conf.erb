@@ -21,15 +21,13 @@ filter
 
         rename => {"[cloudwatch_logs][tags][OrganizationGUID]"=>"[@cf][org_id]"}
         rename => {"[cloudwatch_logs][tags][Organization GUID]"=>"[@cf][org_id]"}
+        rename => {"[cloudwatch_logs][tags][Organizationname]"=>"[@cf][org]"}
+        rename => {"[cloudwatch_logs][tags][Organization name]"=>"[@cf][org]"}
 
         rename => {"[cloudwatch_logs][tags][SpaceGUID]"=>"[@cf][space_id]"}
         rename => {"[cloudwatch_logs][tags][Space GUID]"=>"[@cf][space_id]"}
-
         rename => {"[cloudwatch_logs][tags][Spacename]"=>"[@cf][space]"}
         rename => {"[cloudwatch_logs][tags][Space name]"=>"[@cf][space]"}
-
-        rename => {"[cloudwatch_logs][tags][Organizationname]"=>"[@cf][org]"}
-        rename => {"[cloudwatch_logs][tags][Organization name]"=>"[@cf][org]"}
 
         rename => {"[cloudwatch_logs][tags][InstanceGUID]"=>"[@cf][service_instance_id]"}
         rename => {"[cloudwatch_logs][tags][Instance GUID]"=>"[@cf][service_instance_id]"}
@@ -39,12 +37,14 @@ filter
 
         rename => {"[cloudwatch_logs][tags][Serviceofferingname]"=>"[@cf][service_offering]"}
         rename => {"[cloudwatch_logs][tags][Service offering name]"=>"[@cf][service_offering]"}
-
+        
         rename => {"[cloudwatch_logs][tags][Service plan name]"=>"[@cf][service_plan]"}
         rename => {"[cloudwatch_logs][tags][Serviceplanname]"=>"[@cf][service_plan]"}
 
         rename => {"[cloudwatch_logs][tags][service]"=>"broker"}
+
         rename => {"[cloudwatch_logs][tags][broker]"=>"broker"}
+        rename => {"message" => "@message" }
 
         remove_field => ["[cloudwatch_logs][tags][Createdat]"]
         remove_field => ["[cloudwatch_logs][tags][Created at]"]
@@ -56,7 +56,6 @@ filter
         remove_field => ["[cloudwatch_logs][tags][ServiceGUID]"]
         remove_field => ["[cloudwatch_logs][tags][Service GUID]"]
 
-        rename => [ "message" => "@message" ]
     }
     truncate {
       fields => ["@message"]
