@@ -46,20 +46,12 @@ export LOGSTASH_WORKERS=`grep -c ^processor /proc/cpuinfo`
 <% else %>
 export LOGSTASH_WORKERS=<%= p('logstash_parser.workers') %>
 <% end %>
-export TIMECOP_REJECT_GREATER_THAN_HOURS=<%= p('logstash_parser.timecop.reject_greater_than_hours') %>
-export TIMECOP_REJECT_LESS_THAN_HOURS=<%= p('logstash_parser.timecop.reject_less_than_hours') %>
 export HEAP_SIZE=$((( $( cat /proc/meminfo | grep MemTotal | awk '{ print $2 }' ) * <%= p("logstash.heap_percentage") %> ) / 100 ))K
 <% if_p('logstash.heap_size') do |heap_size| %>
 HEAP_SIZE=<%= heap_size %>
 <% end %>
 <% p("logstash.env").each do |env| %>
 export <%= env.keys[0] %>="<%= env.values[0] %>"
-<% end %>
-
-
-# These are what changes between ingestors
-<% p("logstash_parser.wait_for_templates").each do |template| %>
-wait_for_template "<%= template %>"
 <% end %>
 
 export LS_JAVA_OPTS="-Xms$HEAP_SIZE -Xmx$HEAP_SIZE -DPID=$$"
