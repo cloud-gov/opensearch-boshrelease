@@ -95,7 +95,7 @@ echo "Disable post start script property is set to <%= p("opensearch.health.disa
   <% end %>
 <% end %>
 
-<% if_p("opensearch.notification.username" do ) %>
+<% if_p("opensearch.notification.username") do %>
   OS="/var/vcap/packages/opensearch"
   source /var/vcap/packages/openjdk-17/bosh/runtime.env
   OKS="${OS}/bin/opensearch-keystore"
