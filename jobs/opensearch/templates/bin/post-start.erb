@@ -94,15 +94,3 @@ echo "Disable post start script property is set to <%= p("opensearch.health.disa
     -icl -nhnv
   <% end %>
 <% end %>
-
-<% if_p("opensearch.notification.username") do %>
-  OS="/var/vcap/packages/opensearch"
-  source /var/vcap/packages/openjdk-17/bosh/runtime.env
-  OKS="${OS}/bin/opensearch-keystore"
-  <% if_p('opensearch.notification.username') do |username| %>
-   ${OKS} add opensearch.notifications.core.email.cloud-gov.username "<%= username %>"
-  <% end %>
-  <% if_p('opensearch.notification.password') do |password| %>
-   ${OKS} add opensearch.notifications.core.email.cloud-gov.password "<%= password %>"
-  <% end %>
-<% end %>
