@@ -101,7 +101,7 @@ s3.client.default.region: <%= region %>
 plugins.security.system_indices.enabled: true
 
 plugins.notifications.email:
-  cloud_gov_smtp:
+  smtp_account:
     host: <%= p('opensearch.notification.host') %>
     port: <%= p('opensearch.notification.port') %>
     from: <%= p('opensearch.notification.from') %>
