@@ -27,7 +27,7 @@ curl -X PUT \
 <% end %>
 
 <% if p('opensearch.notification.host') != '' %>
-curl -X PUT \
+curl -X POST \
   --key ${JOB_DIR}/config/ssl/opensearch-admin.key \
   --cert ${JOB_DIR}/config/ssl/opensearch-admin.crt  \
   --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
