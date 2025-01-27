@@ -8,9 +8,9 @@ export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 
 <% if p('opensearch.repository.s3.bucket') != '' and p('opensearch.node.allow_cluster_manager') and spec.bootstrap %>
 curl -X PUT \
-  --key ${JOB_DIR}/ssl/opensearch-admin.key \
-  --cert ${JOB_DIR}/ssl/opensearch-admin.crt  \
-  --cacert ${JOB_DIR}/ssl/opensearch.ca \
+  --key ${JOB_DIR}/config/ssl/opensearch-admin.key \
+  --cert ${JOB_DIR}/config/ssl/opensearch-admin.crt  \
+  --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
   -s https://localhost:9200/_snapshot/<%= p('opensearch.repository.name') %> \
   -H 'Content-Type: application/json' \
   -d '{"type": "s3", "settings": {"bucket": "<%= p('opensearch.repository.s3.bucket') %>"}}'
@@ -18,9 +18,9 @@ curl -X PUT \
 
 <% if p('opensearch.path_repo') != '' and p('opensearch.node.allow_cluster_manager') and spec.bootstrap %>
 curl -X PUT \
-  --key ${JOB_DIR}/ssl/opensearch-admin.key \
-  --cert ${JOB_DIR}/ssl/opensearch-admin.crt  \
-  --cacert ${JOB_DIR}/ssl/opensearch.ca \
+  --key ${JOB_DIR}/config/ssl/opensearch-admin.key \
+  --cert ${JOB_DIR}/config/ssl/opensearch-admin.crt  \
+  --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
   -s https://localhost:9200/_snapshot/<%= p('opensearch.repository.name') %> \
   -H 'Content-Type: application/json' \
   -d '{"type": "fs", "settings": {"location": "<%= p('opensearch.path_repo') %>/<%= p('opensearch.repository.name') %>", "compress": true}}'
@@ -28,9 +28,9 @@ curl -X PUT \
 
 <% if p('opensearch.notification.host') != '' %>
 curl -X PUT \
-  --key ${JOB_DIR}/ssl/opensearch-admin.key \
-  --cert ${JOB_DIR}/ssl/opensearch-admin.crt  \
-  --cacert ${JOB_DIR}/ssl/opensearch.ca \
+  --key ${JOB_DIR}/config/ssl/opensearch-admin.key \
+  --cert ${JOB_DIR}/config/ssl/opensearch-admin.crt  \
+  --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
   https://localhost:9200/_plugins/_alerting/destinations \
   -H 'Content-Type: application/json' \
   -d '{"name": "cloudgov Email","type": "email", "email":{"host": <%= p('opensearch.notification.host') %>,"port": <%= p('opensearch.notification.port') %>,"from": <%= p('opensearch.notification.from') %>,"username": <%= p('opensearch.notification.username') %>,"password": <%= p('opensearch.notification.password') %>} }'
