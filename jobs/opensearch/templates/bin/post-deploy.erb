@@ -25,3 +25,13 @@ curl -X PUT \
   -H 'Content-Type: application/json' \
   -d '{"type": "fs", "settings": {"location": "<%= p('opensearch.path_repo') %>/<%= p('opensearch.repository.name') %>", "compress": true}}'
 <% end %>
+
+<% if p('opensearch.notification.host') != '' %>
+curl -X PUT \
+  --key ${JOB_DIR}/ssl/opensearch-admin.key \
+  --cert ${JOB_DIR}/ssl/opensearch-admin.crt  \
+  --cacert ${JOB_DIR}/ssl/opensearch.ca \
+  -s https://localhost:9200/_plugins/_alerting/destinations \
+  -H 'Content-Type: application/json' \
+  -d '{"name": "cloudgov Email","type": "email", "email":{"host: <%= p('opensearch.notification.host') %>,"port": <%= p('opensearch.notification.port') %>,"from": <%= p('opensearch.notification.from') %>,"username": <%= p('opensearch.notification.username') %>,"password": <%= p('opensearch.notification.password') %>} }'
+<% end %>
