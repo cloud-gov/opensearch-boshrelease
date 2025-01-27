@@ -100,11 +100,8 @@ s3.client.default.region: <%= region %>
 
 plugins.security.system_indices.enabled: true
 
-plugins.notifications.email:
-  smtp_account:
-    host: <%= p('opensearch.notification.host') %>
-    port: <%= p('opensearch.notification.port') %>
-    from: <%= p('opensearch.notification.from') %>
-    auth:
-      username: <%= p('opensearch.notification.username') %>
-      password: <%= p('opensearch.notification.password') %>
+plugins.alerting.destination.email.host: <%= p('opensearch.notification.host') %>
+plugins.alerting.destination.email.port: <%= p('opensearch.notification.port') %>
+plugins.alerting.destination.email.from: <%= p('opensearch.notification.from') %>
+plugins.alerting.destination.email.username: <%= p('opensearch.notification.username') %>
+plugins.alerting.destination.email.password: <%= p('opensearch.notification.password') %>
