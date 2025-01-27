@@ -33,5 +33,5 @@ curl -X POST \
   --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
   https://localhost:9200/_plugins/_notifications/configs \
   -H 'Content-Type: application/json' \
-  -d '{"config_type": "smtp_account","name": "cloudgov Email","description":"SMTP account default for cloud.gov","feature_list": ["alerting"],"is_enabled": true,"smtp_account":{"host": "<%= p('opensearch.notification.host') %>","port": <%= p('opensearch.notification.port') %>,"method":"ssl","from_address": "<%= p('opensearch.notification.from') %>","username": "<%= p('opensearch.notification.username') %>","password": "<%= p('opensearch.notification.password') %>"}}'
+  -d '{"config_id": "cloudgov-smtp-id","name": "cloud-gov-smtp","config":{"config_type": "smtp_account","name": "cloudgov Email","description":"SMTP account default for cloud.gov","feature_list": ["alerting"],"is_enabled": true,"smtp_account":{"host": "<%= p('opensearch.notification.host') %>","port": <%= p('opensearch.notification.port') %>,"method":"ssl","from_address": "<%= p('opensearch.notification.from') %>","username": "<%= p('opensearch.notification.username') %>","password": "<%= p('opensearch.notification.password') %>"}}}'
 <% end %>
