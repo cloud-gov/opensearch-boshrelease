@@ -27,7 +27,6 @@ curl -X PUT \
 <% end %>
 
 <% if p('opensearch.notification.host') != '' %>
-keytool -import -trustcacerts -file ${JOB_DIR}/config/ssl/smtp.crt -keystore $JAVA_HOME/lib/security/cacerts -alias smtp_cert
 curl -X POST \
   --key ${JOB_DIR}/config/ssl/opensearch-admin.key \
   --cert ${JOB_DIR}/config/ssl/opensearch-admin.crt  \
