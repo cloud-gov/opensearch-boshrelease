@@ -18,6 +18,7 @@ templates:
   config/bpm.yml.erb: config/bpm.yml
   config/config.yml.erb: config/opensearch.yml
   config/ca.erb: config/ssl/opensearch.ca
+  config/smtp_ca.erb: config/ssl/smtp.crt
   config/http-crt.erb: config/ssl/opensearch-http.crt
   config/http-pem.erb: config/ssl/opensearch-http.pem
   config/node-crt.erb: config/ssl/opensearch-node.crt
@@ -53,6 +54,7 @@ provides:
       - opensearch.notification.host
       - opensearch.notification.port
       - opensearch.notification.from
+      - opensearch.notification.ca
 
 consumes:
   - name: opensearch
@@ -210,3 +212,5 @@ properties:
     description: port for SMTP
   opensearch.notification.from:
     description: sender for SMT
+  opensearch.notification.ca:
+    description: CA for SMTP
