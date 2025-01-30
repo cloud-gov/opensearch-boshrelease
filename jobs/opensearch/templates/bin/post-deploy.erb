@@ -5,6 +5,7 @@ set -x
 
 export JOB_NAME=opensearch
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
+export REQUESTS_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt"
 
 <% if p('opensearch.repository.s3.bucket') != '' and p('opensearch.node.allow_cluster_manager') and spec.bootstrap %>
 curl -X PUT \
@@ -25,6 +26,9 @@ curl -X PUT \
   -H 'Content-Type: application/json' \
   -d '{"type": "fs", "settings": {"location": "<%= p('opensearch.path_repo') %>/<%= p('opensearch.repository.name') %>", "compress": true}}'
 <% end %>
+
+cp ${JOB_DIR}/config/ssl/smtp.ca /etc/ssl/certs/smtp.ca
+update-ca-certificates
 
 <% if p('opensearch.notification.host') != '' %>
 curl -X POST \
