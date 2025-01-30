@@ -58,7 +58,7 @@ provides:
       - opensearch.notification.from
       - opensearch.notification.ca
       - opensearch.notification.certificate
-      - opensearch.notification.private_key
+      - opensearch.notification.privatekey
 
 consumes:
   - name: opensearch
@@ -220,5 +220,5 @@ properties:
     description: CA for SMTP
   opensearch.notification.certificate:
     description: Certificate for SMTP
-  opensearch.notification.private_key:
+  opensearch.notification.privatekey:
     description: private key for SMTP
