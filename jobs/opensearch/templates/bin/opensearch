@@ -68,7 +68,8 @@ fi
 
 openssl pkcs12 -export -in ${JOB_DIR}/config/ssl/smtp.crt -inkey ${JOB_DIR}/config/ssl/smtp.key -out ${JOB_DIR}/config/ssl/notification.p12 -name "smtp-cert" -CAfile ${JOB_DIR}/config/ssl/smtp.ca -caname "ca-cert" -password pass:changeit
 chmod 600 ${JOB_DIR}/config/ssl/notification.p12
-/var/vcap/packages/openjdk-17/bin/keytool -importkeystore -destkeystore smtp.jks -srckeystore ${JOB_DIR}/config/ssl/notification.p12 -srcstoretype PKCS12 -alias smtp-cert -deststorepass changeit -srcstorepass changeit
+/var/vcap/packages/openjdk-17/bin/keytool -importkeystore -destkeystore ${JOB_DIR}/config/ssl/smtp.jks -srckeystore ${JOB_DIR}/config/ssl/notification.p12 -srcstoretype PKCS12 -alias smtp-cert -deststorepass changeit -srcstorepass changeit
+chmod 600 ${JOB_DIR}/config/ssl/smtp.jks
 
 ${OPENSEARCH_HOME}/bin/opensearch \
   <%= p("opensearch.exec.options", []).join(' ') %>
