@@ -19,6 +19,8 @@ templates:
   config/config.yml.erb: config/opensearch.yml
   config/ca.erb: config/ssl/opensearch.ca
   config/smtp_ca.erb: config/ssl/smtp.ca
+  config/smtp-crt.erb: config/ssl/smtp.crt
+  config/smtp-pem.erb: config/ssl/smtp.pem
   config/http-crt.erb: config/ssl/opensearch-http.crt
   config/http-pem.erb: config/ssl/opensearch-http.pem
   config/node-crt.erb: config/ssl/opensearch-node.crt
@@ -55,6 +57,8 @@ provides:
       - opensearch.notification.port
       - opensearch.notification.from
       - opensearch.notification.ca
+      - opensearch.notification.certificate
+      - opensearch.notification.private_key
 
 consumes:
   - name: opensearch
@@ -214,3 +218,7 @@ properties:
     description: sender for SMT
   opensearch.notification.ca:
     description: CA for SMTP
+  opensearch.notification.certificate:
+    description: Certificate for SMTP
+  opensearch.notification.private_key:
+    description: private key for SMTP
