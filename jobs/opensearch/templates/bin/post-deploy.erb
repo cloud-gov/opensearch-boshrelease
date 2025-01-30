@@ -30,7 +30,7 @@ curl -X PUT \
 cp ${JOB_DIR}/config/ssl/smtp.ca /etc/ssl/certs/smtp.ca
 update-ca-certificates
 
-openssl pkcs12 -export -in ${JOB_DIR}/config/ssl/notification.crt -inkey ${JOB_DIR}/config/ssl/notification.key -out notification.p12 -name "smtp-cert" -CAfile ${JOB_DIR}/config/ssl/notification.ca -caname "ca-cert"
+openssl pkcs12 -export -in ${JOB_DIR}/config/ssl/smtp.crt -inkey ${JOB_DIR}/config/ssl/smtp.key -out notification.p12 -name "smtp-cert" -CAfile ${JOB_DIR}/config/ssl/smtp.ca -caname "ca-cert"
 /var/vcap/packages/openjdk-17/bin/keytool -importkeystore -srckeystore notification.p12 -srcstoretype PKCS12 -alias smtp-cert
 <% if p('opensearch.notification.host') != '' %>
 curl -X POST \

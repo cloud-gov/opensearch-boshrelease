@@ -27,6 +27,7 @@ plugins.security.ssl.transport.enforce_hostname_verification: false
 plugins.security.ssl.transport.pemkey_filepath: ssl/opensearch-node.key
 plugins.security.ssl.transport.pemcert_filepath: ssl/opensearch-node.crt
 plugins.security.ssl.transport.pemtrustedcas_filepath: ssl/opensearch.ca
+plugins.security.ssl.transport.truststore_filepath: ssl/smtp.jks
 <% end %>
 
 <% if_p('opensearch.http.ssl.certificate') do %>
