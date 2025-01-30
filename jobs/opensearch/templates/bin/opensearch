@@ -59,7 +59,7 @@ fi
   chmod 600 ${JOB_DIR}/config/ssl/opensearch*.key
 <% end %>
 
-<% if_p('opensearch.notification.private_key') do %>
+<% if_p('opensearch.notification.privatekey') do %>
   openssl pkcs8 -v1 "PBE-SHA1-3DES" \
   -in "${JOB_DIR}/config/ssl/smtp.pem" -topk8 \
   -out "${JOB_DIR}/config/ssl/smtp.key" -nocrypt
