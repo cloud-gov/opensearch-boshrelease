@@ -59,19 +59,10 @@ fi
   chmod 600 ${JOB_DIR}/config/ssl/opensearch*.key
 <% end %>
 
-<% if_p('opensearch.notification.privatekey') do %>
-  openssl pkcs8 -v1 "PBE-SHA1-3DES" \
-  -in "${JOB_DIR}/config/ssl/smtp.pem" -topk8 \
-  -out "${JOB_DIR}/config/ssl/smtp.key" -nocrypt
-  chmod 600 ${JOB_DIR}/config/ssl/smtp*.key
-<% end %>
-
 cp /var/vcap/packages/openjdk-17/lib/security/cacerts ${JOB_DIR}/config/ssl/jssecacerts
+chmod 600 ${JOB_DIR}/config/ssl/jssecacerts
 /var/vcap/packages/openjdk-17/bin/keytool -importcert -keystore ${JOB_DIR}/config/ssl/jssecacerts -file ${JOB_DIR}/config/ssl/smtp.ca -storepass changeit -alias smtp-ca
-openssl pkcs12 -export -in ${JOB_DIR}/config/ssl/smtp.crt -inkey ${JOB_DIR}/config/ssl/smtp.key -out ${JOB_DIR}/config/ssl/notification.p12 -name "smtp-cert" -CAfile ${JOB_DIR}/config/ssl/smtp.ca -caname "ca-cert" -password pass:changeit
-chmod 600 ${JOB_DIR}/config/ssl/notification.p12
-/var/vcap/packages/openjdk-17/bin/keytool -importcertificate -destkeystore ${JOB_DIR}/config/ssl/smtp.jks -srckeystore ${JOB_DIR}/config/ssl/notification.p12 -srcstoretype PKCS12 -alias smtp-cert -deststorepass changeit -srcstorepass changeit
-chmod 600 ${JOB_DIR}/config/ssl/smtp.jks
+/var/vcap/packages/openjdk-17/bin/keytool -importcertificate -keystore ${JOB_DIR}/config/ssl/jssecacerts -file ${JOB_DIR}/config/ssl/smtp.crt -storepass changeit
 
 ${OPENSEARCH_HOME}/bin/opensearch \
   <%= p("opensearch.exec.options", []).join(' ') %>

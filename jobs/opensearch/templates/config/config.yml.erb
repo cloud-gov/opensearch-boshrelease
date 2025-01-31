@@ -27,7 +27,7 @@ plugins.security.ssl.transport.enforce_hostname_verification: false
 plugins.security.ssl.transport.pemkey_filepath: ssl/opensearch-node.key
 plugins.security.ssl.transport.pemcert_filepath: ssl/opensearch-node.crt
 plugins.security.ssl.transport.pemtrustedcas_filepath: ssl/opensearch.ca
-plugins.security.ssl.transport.truststore_filepath: ssl/smtp.jks
+plugins.security.ssl.transport.truststore_filepath: ssl/jssecacerts
 plugins.security.ssl.transport.truststore_password: changeit
 <% end %>
 
@@ -37,7 +37,7 @@ plugins.security.ssl.http.clientauth_mode: OPTIONAL
 plugins.security.ssl.http.pemkey_filepath: ssl/opensearch-http.key
 plugins.security.ssl.http.pemcert_filepath: ssl/opensearch-http.crt
 plugins.security.ssl.http.pemtrustedcas_filepath: ssl/opensearch.ca
-plugins.security.ssl.http.truststore_filepath: ssl/smtp.jks
+plugins.security.ssl.http.truststore_filepath: ssl/jssecacerts
 plugins.security.ssl.http.truststore_password: changeit
 <% end %>
 
