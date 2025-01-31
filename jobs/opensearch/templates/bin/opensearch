@@ -62,7 +62,7 @@ fi
 cp /var/vcap/packages/openjdk-17/lib/security/cacerts ${JOB_DIR}/config/ssl/jssecacerts
 chmod 600 ${JOB_DIR}/config/ssl/jssecacerts
 /var/vcap/packages/openjdk-17/bin/keytool -importcert -keystore ${JOB_DIR}/config/ssl/jssecacerts -file ${JOB_DIR}/config/ssl/smtp.ca -storepass changeit -alias smtp-ca
-/var/vcap/packages/openjdk-17/bin/keytool -importcertificate -keystore ${JOB_DIR}/config/ssl/jssecacerts -file ${JOB_DIR}/config/ssl/smtp.crt -storepass changeit
+/var/vcap/packages/openjdk-17/bin/keytool -importcert -keystore ${JOB_DIR}/config/ssl/jssecacerts -file ${JOB_DIR}/config/ssl/smtp.crt -storepass changeit
 
 ${OPENSEARCH_HOME}/bin/opensearch \
   <%= p("opensearch.exec.options", []).join(' ') %>
