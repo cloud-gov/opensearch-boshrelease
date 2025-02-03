@@ -10,6 +10,7 @@ opensearch.notifications.core:
     host: <%= p('opensearch.notification.host') %>
     port: <%= p('opensearch.notification.port') %>
     from: <%= p('opensearch.notification.from') %>
+    sasl_mechanism: "LOGIN"
     auth:
       username: <%= p('opensearch.notification.username') %>
       password: <%= p('opensearch.notification.password') %>
