@@ -27,7 +27,7 @@ curl -X PUT \
   -d '{"type": "fs", "settings": {"location": "<%= p('opensearch.path_repo') %>/<%= p('opensearch.repository.name') %>", "compress": true}}'
 <% end %>
 
-cp ${JOB_DIR}/config/ssl/smtp.ca /etc/ssl/certs/smtp.ca
+cp ${JOB_DIR}/config/ssl/smtp_ca.pem /etc/ssl/certs/smtp_ca.pem
 update-ca-certificates
 
 <% if p('opensearch.notification.host') != '' %>

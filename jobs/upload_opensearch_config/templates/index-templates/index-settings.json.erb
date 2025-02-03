@@ -4,6 +4,9 @@
       "index": {
         "codec": "best_compression",
         "search": {
+          "translog": {
+            "flush_threshold_size": "1024MB"
+          },
           "slowlog": {
             "threshold": {
               "query": {
