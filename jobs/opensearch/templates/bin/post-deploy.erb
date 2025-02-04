@@ -29,8 +29,8 @@ curl -X PUT \
 
 
 <% if p('opensearch.notification.host') != '' %>
-BASE64_USERNAME=$(echo -n "<%= p('opensearch.notification.username') %>" | base64)
-BASE64_PASSWORD=$(echo -n "<%= p('opensearch.notification.password') %>" | base64)
+BASE64_USERNAME="<%= p('opensearch.notification.username') %>"
+BASE64_PASSWORD="<%= p('opensearch.notification.password') %>"
 echo -n ${BASE64_USERNAME} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add opensearch.notifications.core.email.cloudgovemail.username
 echo -n ${BASE64_PASSWORD} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add opensearch.notifications.core.email.cloudgovemail.password
 curl -X POST \
