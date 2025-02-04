@@ -27,12 +27,17 @@ curl -X PUT \
   -d '{"type": "fs", "settings": {"location": "<%= p('opensearch.path_repo') %>/<%= p('opensearch.repository.name') %>", "compress": true}}'
 <% end %>
 
+
 <% if p('opensearch.notification.host') != '' %>
+BASE64_USERNAME=$(echo -n "<%= p('opensearch.notification.username') %>" | base64)
+BASE64_PASSWORD=$(echo -n "<%= p('opensearch.notification.password') %>" | base64)
+echo -n ${BASE64_USERNAME} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add plugins.alerting.destination.email.cloudgovemail.username
+echo -n ${BASE64_PASSWORD} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add plugins.alerting.destination.email.cloudgovemail.password
 curl -X POST \
   --key ${JOB_DIR}/config/ssl/opensearch-admin.key \
   --cert ${JOB_DIR}/config/ssl/opensearch-admin.crt  \
   --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
   https://localhost:9200/_plugins/_notifications/configs \
   -H 'Content-Type: application/json' \
-  -d '{"config_id": "cloudgov-smtp-id","name": "cloud-gov-smtp","config":{"config_type": "smtp_account","name": "cloudgov Email","description":"SMTP account default for cloud.gov","feature_list": ["alerting"],"is_enabled": true,"smtp_account":{"host": "<%= p('opensearch.notification.host') %>","port": <%= p('opensearch.notification.port') %>,"method":"start_tls","from_address": "<%= p('opensearch.notification.from') %>","username": "<%= p('opensearch.notification.username') %>","password": "<%= p('opensearch.notification.password') %>"}}}'
+  -d '{"config_id": "cloudgov-smtp-id","name": "cloud-gov-smtp","config":{"config_type": "smtp_account","name": "cloudgov Email","description":"SMTP account default for cloud.gov","feature_list": ["alerting"],"is_enabled": true,"smtp_account":{"host": "<%= p('opensearch.notification.host') %>","port": <%= p('opensearch.notification.port') %>,"method":"start_tls","from_address": "<%= p('opensearch.notification.from') %>"}}}'
 <% end %>
