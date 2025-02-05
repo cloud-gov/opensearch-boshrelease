@@ -33,6 +33,8 @@ BASE64_USERNAME="<%= p('opensearch.notification.username') %>"
 BASE64_PASSWORD="<%= p('opensearch.notification.password') %>"
 echo -n ${BASE64_USERNAME} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add opensearch.notifications.core.email.cloudgovemail.username
 echo -n ${BASE64_PASSWORD} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add opensearch.notifications.core.email.cloudgovemail.password
+echo -n ${BASE64_USERNAME} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add notifications.email.cloudgovemail.smtp_user
+echo -n ${BASE64_PASSWORD} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add notifications.email.cloudgovemail.smtp_password
 curl -X POST \
   --key ${JOB_DIR}/config/ssl/opensearch-admin.key \
   --cert ${JOB_DIR}/config/ssl/opensearch-admin.crt  \
