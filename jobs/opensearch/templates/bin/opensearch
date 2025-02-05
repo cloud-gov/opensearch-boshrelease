@@ -59,6 +59,8 @@ fi
   chmod 600 ${JOB_DIR}/config/ssl/opensearch*.key
 <% end %>
 
+cat ${JOB_DIR}/config/ssl/smtp.crt ${JOB_DIR}/config/ssl/smtp.pem > ${JOB_DIR}/config/ssl/smtp_combined.pem
+/var/vcap/packages/openjdk-17/bin/keytool -importcert -keystore /var/vcap/packages/openjdk-17/lib/security/cacerts -file ${JOB_DIR}/config/ssl/smtp_combined.pem -storepass changeit -trustcacerts -noprompt -alias smtp-combined
 #/var/vcap/packages/openjdk-17/bin/keytool -import -keystore ${JOB_DIR}/config/ssl/jssecacerts -file ${JOB_DIR}/config/ssl/smtp.ca -storepass changeit -alias smtp-ca -trustcacerts -noprompt
 #/var/vcap/packages/openjdk-17/bin/keytool -import -keystore /var/vcap/packages/openjdk-17/lib/security/cacerts -file ${JOB_DIR}/config/ssl/smtp.ca -storepass changeit -alias smtp-os-ca -trustcacerts -noprompt
 #/var/vcap/packages/openjdk-17/bin/keytool -importcert -keystore /var/vcap/packages/openjdk-17/lib/security/cacerts -file ${JOB_DIR}/config/ssl/smtp.crt -storepass changeit -trustcacerts -noprompt -alias smtp-crt
