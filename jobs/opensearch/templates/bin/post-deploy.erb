@@ -31,6 +31,10 @@ curl -X PUT \
 <% if p('opensearch.notification.host') != '' %>
 BASE64_USERNAME="<%= p('opensearch.notification.username') %>" | base64
 BASE64_PASSWORD="<%= p('opensearch.notification.password') %>" | base64
+/var/vcap/packages/opensearch/bin/opensearch-keystore remove opensearch.notifications.core.email.cloudgovemail.username
+/var/vcap/packages/opensearch/bin/opensearch-keystore remove opensearch.notifications.core.email.cloudgovemail.password
+/var/vcap/packages/opensearch/bin/opensearch-keystore remove notifications.email.cloudgovemail.smtp_user
+/var/vcap/packages/opensearch/bin/opensearch-keystore remove notifications.email.cloudgovemail.smtp_password
 echo -n ${BASE64_USERNAME} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add opensearch.notifications.core.email.cloudgovemail.username
 echo -n ${BASE64_PASSWORD} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add opensearch.notifications.core.email.cloudgovemail.password
 echo -n ${BASE64_USERNAME} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add notifications.email.cloudgovemail.smtp_user
