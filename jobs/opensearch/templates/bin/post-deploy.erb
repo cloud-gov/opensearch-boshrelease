@@ -37,6 +37,10 @@ BASE64_PASSWORD="<%= p('opensearch.notification.password') %>" | base64
 /var/vcap/packages/opensearch/bin/opensearch-keystore remove notifications.email.cloudgovemail.smtp_password
 echo -n ${BASE64_USERNAME} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add opensearch.notifications.core.email.cloudgovemail.username
 echo -n ${BASE64_PASSWORD} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add opensearch.notifications.core.email.cloudgovemail.password
+echo -n ${BASE64_USERNAME} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add opensearch.notifications.core.email.username
+echo -n ${BASE64_PASSWORD} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add opensearch.notifications.core.email.password
+echo -n ${BASE64_USERNAME} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add opensearch.notifications.core.username
+echo -n ${BASE64_PASSWORD} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add opensearch.notifications.core.password
 echo -n ${BASE64_USERNAME} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add notifications.email.cloudgovemail.smtp_user
 echo -n ${BASE64_PASSWORD} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add notifications.email.cloudgovemail.smtp_password
 echo -n ${BASE64_USERNAME} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add smtp.username
