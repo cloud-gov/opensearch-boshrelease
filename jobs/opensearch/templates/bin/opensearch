@@ -74,8 +74,8 @@ echo ${BASE64_USERNAME} | /var/vcap/packages/opensearch/bin/opensearch-keystore 
 echo ${BASE64_PASSWORD} | /var/vcap/packages/opensearch/bin/opensearch-keystore add opensearch.notifications.core.password --stdin
 #echo ${BASE64_USERNAME} | /var/vcap/packages/opensearch/bin/opensearch-keystore add notifications.email.cloudgovemail.smtp_user --stdin
 #echo ${BASE64_PASSWORD} | /var/vcap/packages/opensearch/bin/opensearch-keystore add notifications.email.cloudgovemail.smtp_password --stdin
-echo ${BASE64_USERNAME} | /var/vcap/packages/opensearch/bin/opensearch-keystore add smtp.username --stdin
-echo ${BASE64_PASSWORD} | /var/vcap/packages/opensearch/bin/opensearch-keystore add smtp.password --stdin
+#echo ${BASE64_USERNAME} | /var/vcap/packages/opensearch/bin/opensearch-keystore add smtp.username --stdin
+#echo ${BASE64_PASSWORD} | /var/vcap/packages/opensearch/bin/opensearch-keystore add smtp.password --stdin
 chmod 600 /var/vcap/jobs/opensearch/config/opensearch.keystore
 /var/vcap/packages/opensearch/bin/opensearch-keystore list
 ${OPENSEARCH_HOME}/bin/opensearch \
