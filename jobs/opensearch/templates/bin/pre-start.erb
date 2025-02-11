@@ -82,19 +82,3 @@ fi
 if [[ ! -a ${log_dir} ]]; then
   ln -s /var/vcap/sys/log/opensearch ${log_dir}
 fi
-
-BASE64_USERNAME="<%= p('opensearch.notification.username') %>" | base64
-BASE64_PASSWORD="<%= p('opensearch.notification.password') %>" | base64
-/var/vcap/packages/opensearch/bin/opensearch-keystore create
-echo -n ${BASE64_USERNAME} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add opensearch.notifications.core.email.cloudgovemail.username
-echo -n ${BASE64_PASSWORD} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add opensearch.notifications.core.email.cloudgovemail.password
-echo -n ${BASE64_USERNAME} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add opensearch.notifications.core.email.username
-echo -n ${BASE64_PASSWORD} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add opensearch.notifications.core.email.password
-echo -n ${BASE64_USERNAME} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add opensearch.notifications.core.username
-echo -n ${BASE64_PASSWORD} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add opensearch.notifications.core.password
-echo -n ${BASE64_USERNAME} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add notifications.email.cloudgovemail.smtp_user
-echo -n ${BASE64_PASSWORD} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add notifications.email.cloudgovemail.smtp_password
-echo -n ${BASE64_USERNAME} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add smtp.username
-echo -n ${BASE64_PASSWORD} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add smtp.password
-echo -n ${BASE64_USERNAME} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add cloudgovemail.username
-echo -n ${BASE64_PASSWORD} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add cloudgovemail.password
