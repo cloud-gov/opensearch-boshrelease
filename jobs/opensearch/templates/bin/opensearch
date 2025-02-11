@@ -76,5 +76,7 @@ echo -n ${BASE64_USERNAME} | yes | /var/vcap/packages/opensearch/bin/opensearch-
 echo -n ${BASE64_PASSWORD} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add notifications.email.cloudgovemail.smtp_password
 echo -n ${BASE64_USERNAME} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add smtp.username
 echo -n ${BASE64_PASSWORD} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add smtp.password
+cp /var/vcap/packages/opensearch/config/opensearch.keystore /var/vcap/jobs/opensearch/config/opensearch.keystore
+chmod 600 /var/vcap/jobs/opensearch/config/opensearch.keystore
 ${OPENSEARCH_HOME}/bin/opensearch \
   <%= p("opensearch.exec.options", []).join(' ') %>
