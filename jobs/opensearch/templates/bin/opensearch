@@ -63,7 +63,7 @@ cat ${JOB_DIR}/config/ssl/smtp.crt ${JOB_DIR}/config/ssl/smtp.pem > ${JOB_DIR}/c
 
 BASE64_USERNAME="dummy"
 BASE64_PASSWORD="test"
-/var/vcap/packages/opensearch/bin/opensearch-keystore create
+echo y | /var/vcap/packages/opensearch/bin/opensearch-keystore create
 echo -n ${BASE64_USERNAME} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add cloudgovemail.username
 echo -n ${BASE64_PASSWORD} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add cloudgovemail.password
 echo -n ${BASE64_USERNAME} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add opensearch.notifications.core.email.cloudgovemail.username
@@ -76,7 +76,7 @@ echo -n ${BASE64_USERNAME} | yes | /var/vcap/packages/opensearch/bin/opensearch-
 echo -n ${BASE64_PASSWORD} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add notifications.email.cloudgovemail.smtp_password
 echo -n ${BASE64_USERNAME} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add smtp.username
 echo -n ${BASE64_PASSWORD} | yes | /var/vcap/packages/opensearch/bin/opensearch-keystore add smtp.password
-cp /var/vcap/packages/opensearch/config/opensearch.keystore /var/vcap/jobs/opensearch/config/opensearch.keystore
 chmod 600 /var/vcap/jobs/opensearch/config/opensearch.keystore
+/var/vcap/packages/opensearch/bin/opensearch-keystore list
 ${OPENSEARCH_HOME}/bin/opensearch \
   <%= p("opensearch.exec.options", []).join(' ') %>
