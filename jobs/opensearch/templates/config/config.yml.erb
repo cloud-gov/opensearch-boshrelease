@@ -27,8 +27,7 @@ plugins.security.ssl.transport.enforce_hostname_verification: false
 plugins.security.ssl.transport.pemkey_filepath: ssl/opensearch-node.key
 plugins.security.ssl.transport.pemcert_filepath: ssl/opensearch-node.crt
 plugins.security.ssl.transport.pemtrustedcas_filepath: ssl/opensearch.ca
-plugins.security.ssl.transport.truststore_filepath: ssl/jssecacerts
-plugins.security.ssl.transport.truststore_password: changeit
+
 <% end %>
 
 <% if_p('opensearch.http.ssl.certificate') do %>
@@ -37,8 +36,6 @@ plugins.security.ssl.http.clientauth_mode: OPTIONAL
 plugins.security.ssl.http.pemkey_filepath: ssl/opensearch-http.key
 plugins.security.ssl.http.pemcert_filepath: ssl/opensearch-http.crt
 plugins.security.ssl.http.pemtrustedcas_filepath: ssl/opensearch.ca
-plugins.security.ssl.http.truststore_filepath: ssl/jssecacerts
-plugins.security.ssl.http.truststore_password: changeit
 <% end %>
 
 <%
@@ -103,3 +100,16 @@ s3.client.default.region: <%= region %>
 <% end %>
 
 plugins.security.system_indices.enabled: true
+
+opensearch.notifications.core.email.cloudgovemail.username: ${opensearch.notifications.core.email.cloudgovemail.username}
+opensearch.notifications.core.email.cloudgovemail.password: ${opensearch.notifications.core.email.cloudgovemail.password}
+opensearch.notifications.core.email.username: ${opensearch.notifications.core.email.username}
+opensearch.notifications.core.email.password: ${opensearch.notifications.core.email.password}
+opensearch.notifications.core.username: ${opensearch.notifications.core.username}
+opensearch.notifications.core.password: ${opensearch.notifications.core.password}
+notifications.email.cloudgovemail.smtp_user: ${notifications.email.cloudgovemail.smtp_user}
+notifications.email.cloudgovemail.smtp_password: ${	notifications.email.cloudgovemail.smtp_password}
+smtp.username: ${smtp.username}
+smtp.password: ${smtp.password}
+cloudgovemail.username: ${cloudgovemail.username}
+cloudgovemail.password: ${cloudgovemail.password}
