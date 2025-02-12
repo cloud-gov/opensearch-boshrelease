@@ -117,5 +117,3 @@ opensearch_security.multitenancy.enable_filter: <%= p('opensearch_dashboards.mul
 <% if_p('opensearch_dashboards.config_options') do p("opensearch_dashboards.config_options", {}).each do | k, v | %>
 <%= k %>: <%= v %><% end %>
 <% end %>
-
-opensearch_dashboards.plugins.observability.enabled: false
