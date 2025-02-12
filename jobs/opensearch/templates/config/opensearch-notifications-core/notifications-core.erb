@@ -6,14 +6,6 @@
 
 # configuration file for the notifications-core plugin
 opensearch.notifications.core:
-  smtp:
-    host: <%= p('opensearch.notification.host') %>
-    port: <%= p('opensearch.notification.port') %>
-    from: <%= p('opensearch.notification.from') %>
-    sasl_mechanism: "LOGIN"
-    auth:
-      username: <%= p('opensearch.notification.username') %>
-      password: <%= p('opensearch.notification.password') %>
   email:
     size_limit: 10000000
     minimum_header_length: 160
