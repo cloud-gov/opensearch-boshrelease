@@ -5,7 +5,6 @@ set -x
 
 export JOB_NAME=opensearch
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
-export REQUESTS_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt"
 
 <% if p('opensearch.repository.s3.bucket') != '' and p('opensearch.node.allow_cluster_manager') and spec.bootstrap %>
 curl -X PUT \

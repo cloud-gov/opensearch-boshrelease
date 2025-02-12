@@ -59,8 +59,6 @@ fi
   chmod 600 ${JOB_DIR}/config/ssl/opensearch*.key
 <% end %>
 
-cat ${JOB_DIR}/config/ssl/smtp.crt ${JOB_DIR}/config/ssl/smtp.pem > ${JOB_DIR}/config/ssl/smtp_combined.pem
-
 BASE64_USERNAME="<%= p('opensearch.notification.username') %>"
 BASE64_PASSWORD="<%= p('opensearch.notification.password') %>"
 echo y | /var/vcap/packages/opensearch/bin/opensearch-keystore create
