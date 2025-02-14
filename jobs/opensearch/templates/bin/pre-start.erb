@@ -42,11 +42,10 @@ cf auth "<%= client %>" "<%= password %>" --client-credentials
 for org in $(cf orgs | tail -n +4); do
   ORG_GUID=$(cf org "$org" --guid)
   ROLE_NAME="$org-tenant"
-
+  echo ${ORG_GUID}\n >> ${STORE_DIR}/jason.txt
   yq -i ".\"$org\"={\"description\":\"tenant for $org\"}" "$OPENSEARCH_SECURITY_CONFIG_PATH/tenants.yml"
   yq -i ".\"$ROLE_NAME\"={\"tenant_permissions\":[{\"tenant_patterns\": [\"$org\"],\"allowed_actions\": [\"kibana_all_write\"]}]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles.yml"
   yq -i ".\"$ROLE_NAME\"={\"backend_roles\": [\"$ORG_GUID\"]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles_mapping.yml"
-  echo "${ORG_GUID}\n" >> ${STORE_DIR}/jason.txt
 done
 <% end %>
 <% end %>
