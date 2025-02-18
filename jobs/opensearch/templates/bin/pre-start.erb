@@ -24,7 +24,7 @@ cp -u ${OPENSEARCH_HOME}/config/opensearch-security/*.yml "$OPENSEARCH_SECURITY_
 
 cd ${OPENSEARCH_HOME}
 mkdir -p $STORE_DIR
-touch ${STORE_DIR}/jason.txt
+touch jason.txt
 chown -R vcap:vcap config plugins
 chown -R vcap:vcap "$OPENSEARCH_SECURITY_CONFIG_PATH"
 
@@ -42,7 +42,7 @@ cf auth "<%= client %>" "<%= password %>" --client-credentials
 for org in $(cf orgs | tail -n +4); do
   ORG_GUID=$(cf org "$org" --guid)
   ROLE_NAME="$org-tenant"
-  echo "${ORG_GUID}" >> ${STORE_DIR}/jason.txt
+  echo "${ORG_GUID}" >> jason.txt
   yq -i ".\"$org\"={\"description\":\"tenant for $org\"}" "$OPENSEARCH_SECURITY_CONFIG_PATH/tenants.yml"
   yq -i ".\"$ROLE_NAME\"={\"tenant_permissions\":[{\"tenant_patterns\": [\"$org\"],\"allowed_actions\": [\"kibana_all_write\"]}]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles.yml"
   yq -i ".\"$ROLE_NAME\"={\"backend_roles\": [\"$ORG_GUID\"]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles_mapping.yml"
