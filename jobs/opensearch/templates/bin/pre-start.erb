@@ -40,14 +40,17 @@ cf api "<%= api %>"
 cf auth "<%= client %>" "<%= password %>" --client-credentials
 # Prepare tenants, roles, and role mappings so that they don't get overridden by securityadmin.sh
 # script invocation in post-start
+ORG_GUID_LIST=()
 for org in $(cf orgs | tail -n +4); do
   ORG_GUID=$(cf org "$org" --guid)
   ROLE_NAME="$org-tenant"
-  echo "${ORG_GUID}" >> ${STORE_DIR}/jason.txt
+  ORG_GUID_LIST+=("\"$ORG_GUID\"")
   yq -i ".\"$org\"={\"description\":\"tenant for $org\"}" "$OPENSEARCH_SECURITY_CONFIG_PATH/tenants.yml"
   yq -i ".\"$ROLE_NAME\"={\"tenant_permissions\":[{\"tenant_patterns\": [\"$org\"],\"allowed_actions\": [\"kibana_all_write\"]}]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles.yml"
   yq -i ".\"$ROLE_NAME\"={\"backend_roles\": [\"$ORG_GUID\"]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles_mapping.yml"
 done
+ORG_GUID_ROLE_LIST=$(IFS=,; echo "${ORG_GUID_LIST[*]}")
+yq -i ".cf_user={\"backend_roles\": [$ORG_GUID_ROLE_LIST]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles_mapping.yml"
 <% end %>
 <% end %>
 
