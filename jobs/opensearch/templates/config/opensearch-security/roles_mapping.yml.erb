@@ -5,7 +5,7 @@
 <%
 # Load roles from file
 role_file = "/var/vcap/store/opensearch/jason.txt"
-roles = File.exist?(role_file) ? File.read(role_file).split("\n": [])
+roles = File.exist?(role_file) ? File.read(role_file).split("\n") : []
 %>
 
 _meta:
