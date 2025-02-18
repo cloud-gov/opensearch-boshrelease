@@ -2,6 +2,12 @@
 # In this file users, backendroles and hosts can be mapped to Security roles.
 # Permissions for OpenSearch roles are configured in roles.yml
 
+<%
+# Load roles from file
+role_file = "/var/vcap/store/opensearch/jason.txt"
+roles = File.exist?(role_file) ? File.read(role_file).split("\n": [])
+%>
+
 _meta:
   type: "rolesmapping"
   config_version: 2
@@ -47,7 +53,9 @@ cf_user:
   reserved: true
   hidden: false
   backend_roles:
-  - "*"
+  <% roles.each do |role| %>
+    - <%= role.to_json %>
+  <% end %>
   hosts: []
   users: []
   and_backend_roles: []
