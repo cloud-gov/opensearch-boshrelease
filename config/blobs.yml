@@ -175,9 +175,9 @@ opensearch-dashboards-2.18.0-linux-x64.tar.gz:
   object_id: 7b156363-808b-45a9-782f-fea9f90f640f
   sha: sha256:124649dfcd658c78e788bef0f62e3aebe25eeffb431241fe6e8c9f175e405292
 opensearch-dashboards-2.19.0-linux-x64.tar.gz:
-  size: 355860981
-  object_id: 1a42d460-12b3-40fc-419e-b07cb4ce6b60
-  sha: sha256:cd2d9420aba23f6af7aee7e411dbd3e379e8b93d35e1b796dd1baf814e841873
+  size: 355860999
+  object_id: 9c788ba0-ec59-416b-7c64-5b763e7502ab
+  sha: sha256:16428ef09487512b23dcfed0929fd8e416972233cbd95fd8d550eddef2235544
 opensearch-dashboards-cf-auth-proxy-0.0.6.tar.gz:
   size: 34833
   object_id: 37a98740-0342-49f3-5bb0-547ff13d1bd3
