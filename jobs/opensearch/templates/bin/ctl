@@ -6,5 +6,5 @@ export KEYSTORE="/var/vcap/packages/openjdk-17/lib/security/cacerts"
 export JOB_NAME=opensearch
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 
-/var/vcap/packages/openjdk-17/bin/keytool -importcert -keystore ${KEYSTORE} -file ${JOB_DIR}/config/ssl/smtp_ca.pem -storepass changeit -alias smtp-ca -trustcacerts -noprompt
-/var/vcap/packages/openjdk-17/bin/keytool -importcert -keystore ${KEYSTORE} -file ${JOB_DIR}/config/ssl/smtp_crt.pem -storepass changeit -trustcacerts -noprompt
+/var/vcap/packages/openjdk-17/bin/keytool -importcert -keystore ${KEYSTORE} -file ${JOB_DIR}/config/ssl/smtp.ca -storepass changeit -alias smtp-ca -trustcacerts -noprompt
+/var/vcap/packages/openjdk-17/bin/keytool -importcert -keystore ${KEYSTORE} -file ${JOB_DIR}/config/ssl/smtp.cert -storepass changeit -trustcacerts -noprompt
