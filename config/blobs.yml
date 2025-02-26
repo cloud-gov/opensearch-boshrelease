@@ -167,9 +167,9 @@ opensearch-2.18.0-linux-x64.tar.gz:
   object_id: c91171d1-238f-4c8e-6df0-630a4df0d215
   sha: sha256:ae3cb4107b2e0cdbb9b98bb4e5f2f019b736b68e995442c718e459d39ff01df1
 opensearch-2.19.0-linux-x64.tar.gz:
-  size: 965622521
-  object_id: 7877b1d3-a052-4d3b-4967-c3ac3417733d
-  sha: sha256:a15b73c4f6e0d2c846aedae1f83c968d9ec065f6baefdb4078cfd09cbe834fc0
+  size: 964198305
+  object_id: a2c6996b-1b60-4383-5743-79abd5825872
+  sha: sha256:455b900182ef2a7193d443d96aaea55f534ec0f91b1bad6d2eacdbaea601f16e
 opensearch-dashboards-2.18.0-linux-x64.tar.gz:
   size: 333831421
   object_id: 7b156363-808b-45a9-782f-fea9f90f640f
