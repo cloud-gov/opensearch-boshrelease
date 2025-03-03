@@ -162,14 +162,14 @@ logstash/logstash-output-syslog-3.0.5.zip:
   size: 41727
   object_id: 21474ee6-824a-4547-7f45-b236864358ab
   sha: sha256:80a2b08f2b58ae81c823cc0bb1dd7956fbc173037fc621bfa31af34140724e02
-opensearch-2.18.0-linux-x64.tar.gz:
-  size: 919480265
-  object_id: c91171d1-238f-4c8e-6df0-630a4df0d215
-  sha: sha256:ae3cb4107b2e0cdbb9b98bb4e5f2f019b736b68e995442c718e459d39ff01df1
-opensearch-dashboards-2.18.0-linux-x64.tar.gz:
-  size: 333831421
-  object_id: 7b156363-808b-45a9-782f-fea9f90f640f
-  sha: sha256:124649dfcd658c78e788bef0f62e3aebe25eeffb431241fe6e8c9f175e405292
+opensearch-2.19.0-linux-x64.tar.gz:
+  size: 964198305
+  object_id: 1335ff78-5c90-4f74-4ee9-2eb240e2cd41
+  sha: sha256:455b900182ef2a7193d443d96aaea55f534ec0f91b1bad6d2eacdbaea601f16e
+opensearch-dashboards-2.19.0-linux-x64.tar.gz:
+  size: 347052339
+  object_id: f95b764d-6060-4de7-7753-e3ab618bf06a
+  sha: sha256:290b60b9fbcd654d8b0f4fe92d5fc60d3a9e049df826fbfd6e4eacdd733fc770
 opensearch-dashboards-cf-auth-proxy-0.0.6.tar.gz:
   size: 34833
   object_id: 37a98740-0342-49f3-5bb0-547ff13d1bd3

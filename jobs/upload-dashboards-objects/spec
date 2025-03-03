@@ -73,6 +73,9 @@ templates:
   dashboards-objects/visualization/App-METRIC-CPU-usage.json.erb: dashboards-objects/visualization/App-METRIC-CPU-usage.json
   dashboards-objects/visualization/App-METRIC-disk-usage.json.erb: dashboards-objects/visualization/App-METRIC-disk-usage.json
   dashboards-objects/visualization/App-METRIC-memory-usage.json.erb: dashboards-objects/visualization/App-METRIC-memory-usage.json
+  dashboards-objects/visualization/App-instance-METRIC-CPU-usage.json.erb: dashboards-objects/visualization/App-instance-METRIC-CPU-usage.json
+  dashboards-objects/visualization/App-instance-METRIC-disk-usage.json.erb: dashboards-objects/visualization/App-instance-METRIC-disk-usage.json
+  dashboards-objects/visualization/App-instance-METRIC-memory-usage.json.erb: dashboards-objects/visualization/App-instance-METRIC-memory-usage.json
   dashboards-objects/visualization/App-names.json.erb: dashboards-objects/visualization/App-names.json
   dashboards-objects/visualization/App-RTR-request-count-(top-10-apps).json.erb: dashboards-objects/visualization/App-RTR-request-count-(top-10-apps).json
   dashboards-objects/visualization/App-RTR-request-count-by-timezone-(top-5).json.erb: dashboards-objects/visualization/App-RTR-request-count-by-timezone-(top-5).json
