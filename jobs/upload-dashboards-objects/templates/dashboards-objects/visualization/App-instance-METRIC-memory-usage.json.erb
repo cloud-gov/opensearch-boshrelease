@@ -2,7 +2,7 @@
 <% if(p('cloudfoundry.event_types').include? 'ContainerMetric') %>
 {
   "attributes": {
-    "title": "App METRIC: memory usage",
+    "title": "App Instance METRIC: memory usage",
     "visState": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/"/) { '\"' }
       {
         "type": "line",
