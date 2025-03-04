@@ -8,4 +8,4 @@ check device os-ephemeral_disk with path /var/vcap/data
   if SPACE usage > 80% then alert
 
 check device os-persistent_disk with path /var/vcap/store
-  if SPACE usage > 80% then alert
+  if SPACE usage > 87% then alert
