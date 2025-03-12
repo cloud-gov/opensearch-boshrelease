@@ -187,13 +187,13 @@ opensearch-dashboards-cf-auth-proxy-0.0.7.tar.gz:
   object_id: 2b516391-d713-43dd-63fb-5753a517a111
   sha: sha256:f728dc5260f89f9567b6f3eb37a5a5e74950b6b1a83603aa072a55c05c527c7f
 opensearch/opensearch-alerting-2.19.0.0.zip:
-  size: 9484470
-  object_id: 87de868c-0617-4df5-53d4-7523819cbef1
-  sha: sha256:e7ba6fcfb898055003bc243c360ccc5fe9814be729013793174bbd48319abcbd
-opensearch/opensearch-notifications-2.19.0.0.zip:
   size: 9484415
-  object_id: ebe2490f-5a10-4ac1-7211-78cd4df9acb0
+  object_id: 68dd71bd-0b49-436e-4ce5-3f7dae03ddb6
   sha: sha256:e55054e0046c23b5951784af35e012c50b0d4bbe3d53ad39574e15cfc61e9d43
+opensearch/opensearch-notifications-2.19.0.0.zip:
+  size: 2754805
+  object_id: 65e2fe64-5a75-4695-4bac-5f449c3b1fd2
+  sha: sha256:b13dc11d5cf44ea66a733fcdeebdde65796d20e3369bf4bc807fb69ef82a9511
 requests/certifi-2023.11.17-py3-none-any.whl:
   size: 162530
   object_id: f2afff72-e415-4390-61c1-eb8010ed4e4a
