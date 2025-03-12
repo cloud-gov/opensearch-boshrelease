@@ -7,6 +7,7 @@ tar xzf opensearch-2.19.0-linux-x64.tar.gz -C "$BOSH_INSTALL_TARGET" --strip-com
 export PATH="${BOSH_INSTALL_TARGET}/bin:${PATH}"
 opensearch-plugin remove opensearch-notifications
 opensearch-plugin remove opensearch-security-analytics
+opensearch-plugin remove opensearch-alerting
 echo y | opensearch-plugin install "file://${PWD}/opensearch/opensearch-notifications-2.19.0.0.zip"
 opensearch-plugin remove opensearch-alerting
 #echo y | opensearch-plugin install "file://${PWD}/opensearch/opensearch-alerting-2.19.0.0.zip"
