@@ -9,4 +9,4 @@ opensearch-plugin remove opensearch-notifications
 opensearch-plugin remove opensearch-security-analytics
 echo y | opensearch-plugin install "file://${PWD}/opensearch/opensearch-notifications-2.19.0.0.zip"
 opensearch-plugin remove opensearch-alerting
-echo y | opensearch-plugin install "file://${PWD}/opensearch/opensearch-alerting-2.19.0.0.zip"
+#echo y | opensearch-plugin install "file://${PWD}/opensearch/opensearch-alerting-2.19.0.0.zip"
