@@ -21,11 +21,6 @@ source /var/vcap/packages/openjdk-17/bosh/runtime.env
 # Copy default security config if it doesn't already exist
 # Have to copy files that don't exist otherwise securityadmin.sh invocation will fail
 cp -u ${OPENSEARCH_HOME}/config/opensearch-security/*.yml "$OPENSEARCH_SECURITY_CONFIG_PATH"
-
-cd ${OPENSEARCH_HOME}
-mkdir -p $STORE_DIR
-touch ${STORE_DIR}/jason.txt
-> ${STORE_DIR}/jason.txt
 chown -R vcap:vcap config plugins
 chown -R vcap:vcap "$OPENSEARCH_SECURITY_CONFIG_PATH"
 
