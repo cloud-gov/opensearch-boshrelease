@@ -41,7 +41,7 @@ for org in $(cf orgs | tail -n +4); do
   ROLE_NAME="$org-tenant"
   ORG_GUID_LIST+=("\"$ORG_GUID\"")
   yq -i ".\"$org\"={\"description\":\"tenant for $org\"}" "$OPENSEARCH_SECURITY_CONFIG_PATH/tenants.yml"
-  yq -i ".\"$ROLE_NAME\"={\"cluster_permissions\":[\"read\",\"cluster:monitor/nodes/stats\",\"cluster:monitor/task/get\"],\"index_permissions\":[{\"index_patterns\":[\"logs-app-*\"],\"dls\":\"{\\\"bool\\\":{\\\"should\\\":[{\\\"terms\\\":{\\\"@cf.space_id\\\":[\\"${attr.proxy.spaceids}\\"]}},{\\\"terms\\\":{\\\"@cf.org_id\\\":[\\"${attr.proxy.orgids}\\"]}}]}}\",\"allowed_actions\":[\"read\",\"indices:monitor/settings/get\"]}],\"tenant_permissions\":[{\"tenant_patterns\":[\"$org\"],\"allowed_actions\":[\"kibana_all_write\"]}]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles.yml"
+  yq -i ".\"$ROLE_NAME\"={\"cluster_permissions\":[\"read\",\"cluster:monitor/nodes/stats\",\"cluster:monitor/task/get\"],\"index_permissions\":[{\"index_patterns\":[\"logs-app-*\"],\"dls\":\"{\\\"bool\\\":{\\\"should\\\":[{\\\"terms\\\":{\\\"@cf.space_id\\\":[\"\${attr.proxy.spaceids}\"]}},{\\\"terms\\\":{\\\"@cf.org_id\\\":[\"\${attr.proxy.orgids}\"]}}]}}\",\"allowed_actions\":[\"read\",\"indices:monitor/settings/get\"]}],\"tenant_permissions\":[{\"tenant_patterns\":[\"$org\"],\"allowed_actions\":[\"kibana_all_write\"]}]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles.yml"
   yq -i ".\"$ROLE_NAME\"={\"backend_roles\": [\"$ORG_GUID\"]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles_mapping.yml"
 done
 ORG_GUID_ROLE_LIST=$(IFS=,; echo "${ORG_GUID_LIST[*]}")
