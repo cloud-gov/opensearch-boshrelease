@@ -5,8 +5,15 @@ set -u # report the usage of uninitialized variables
 export KEYSTORE="/var/vcap/packages/openjdk-17/lib/security/cacerts"
 export JOB_NAME=opensearch
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
+STOREPASS="changeit"
 
-/var/vcap/packages/openjdk-17/bin/keytool -delete -alias smtp-ca -keystore ${KEYSTORE}
+delete_alias_if_exists(){
+    local alias=$1
+    if /var/vcap/packages/openjdk-17/bin/keytool -list -keystore "$KEYSTORE" -storepass "$STOREPASS" | grep -q "$alias";then
+       /var/vcap/packages/openjdk-17/bin/keytool -delete -alias "$alias" -keystore ${KEYSTORE} -storepass "$STOREPASS"
+    fi
+}
+delete_alias_if_exists "smtp-ca"
 /var/vcap/packages/openjdk-17/bin/keytool -importcert -keystore ${KEYSTORE} -file ${JOB_DIR}/config/ssl/smtp.ca -storepass changeit -alias smtp-ca -trustcacerts -noprompt
-/var/vcap/packages/openjdk-17/bin/keytool -delete -alias smtp-crt -keystore ${KEYSTORE}
+delete_alias_if_exists "smtp-crt"
 /var/vcap/packages/openjdk-17/bin/keytool -importcert -keystore ${KEYSTORE} -file ${JOB_DIR}/config/ssl/smtp.crt -storepass changeit -alias smtp-crt -trustcacerts -noprompt
