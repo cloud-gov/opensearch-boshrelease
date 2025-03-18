@@ -48,6 +48,8 @@ properties:
     description: ca for opensearch_dashboards
   opensearch-dashboards-cf-auth-proxy.cf.admin_group:
     default: the admin group of cf
+  opensearch-dashboards-cf-auth-proxy.cf.auditor_group:
+    default: the admin group of cf
   opensearch-dashboards-cf-auth-proxy.cf.api_url:
     description: api url of cf
   opensearch-dashboards-cf-auth-proxy.uaa.auth_url:
