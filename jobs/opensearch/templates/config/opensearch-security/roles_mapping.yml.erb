@@ -59,6 +59,12 @@ readall:
   - "smoketest.opensearch.internal"
   backend_roles:
   - "readall"
+  - "auditor"
+
+auditor_access:
+  reserved: false
+  backend_roles:
+  - "auditor"
 
 manage_snapshots:
   reserved: false

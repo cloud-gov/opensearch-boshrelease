@@ -380,3 +380,14 @@ cf_user:
     - "indices:monitor/settings/get"
   tenant_permissions: []
   static: false
+
+
+auditor_access:
+  reserved: false
+  hidden: false
+  tenant_permissions:
+  - tenant_patterns:
+    - "admin_tenant"
+    allowed_actions:
+    - "kibana_all_read"
+  static: false
