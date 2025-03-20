@@ -59,5 +59,11 @@ fi
   chmod 600 ${JOB_DIR}/config/ssl/opensearch*.key
 <% end %>
 
+BASE64_USERNAME="<%= p('opensearch.notification.username') %>"
+BASE64_PASSWORD="<%= p('opensearch.notification.password') %>"
+echo y | /var/vcap/packages/opensearch/bin/opensearch-keystore create
+echo ${BASE64_USERNAME} | /var/vcap/packages/opensearch/bin/opensearch-keystore add opensearch.notifications.core.email.cloudgovemail.username  --stdin
+echo ${BASE64_PASSWORD} | /var/vcap/packages/opensearch/bin/opensearch-keystore add opensearch.notifications.core.email.cloudgovemail.password --stdin
+chmod 600 /var/vcap/jobs/opensearch/config/opensearch.keystore
 ${OPENSEARCH_HOME}/bin/opensearch \
   <%= p("opensearch.exec.options", []).join(' ') %>

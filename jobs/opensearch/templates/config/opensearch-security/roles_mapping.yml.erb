@@ -43,16 +43,6 @@ kibana_user:
   - "user"
   description: "Maps kibanauser to kibana_user"
 
-cf_user:
-  reserved: true
-  hidden: false
-  backend_roles:
-  - "user"
-  hosts: []
-  users: []
-  and_backend_roles: []
-  description: "CF users with privileges to their own spaces"
-
 reports_full_access:
   reserved: true
   hidden: false
@@ -69,6 +59,12 @@ readall:
   - "smoketest.opensearch.internal"
   backend_roles:
   - "readall"
+  - "auditor"
+
+auditor_access:
+  reserved: false
+  backend_roles:
+  - "auditor"
 
 manage_snapshots:
   reserved: false

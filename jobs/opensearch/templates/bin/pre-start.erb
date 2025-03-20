@@ -5,7 +5,6 @@ export OPENSEARCH_HOME=/var/vcap/packages/opensearch
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
 export OPENSEARCH_SECURITY_CONFIG_PATH=${OPENSEARCH_PATH_CONF}/opensearch-security
-
 export YQ_PACKAGE_DIR=/var/vcap/packages/yq
 export PATH=$YQ_PACKAGE_DIR/bin:$PATH
 export PATH=/var/vcap/packages/cf-cli-8-linux/bin:$PATH
@@ -35,17 +34,24 @@ chown -R vcap:vcap "$OPENSEARCH_SECURITY_CONFIG_PATH"
 %>
 cf api "<%= api %>"
 cf auth "<%= client %>" "<%= password %>" --client-credentials
-
 # Prepare tenants, roles, and role mappings so that they don't get overridden by securityadmin.sh
 # script invocation in post-start
+ORG_GUID_LIST=()
 for org in $(cf orgs | tail -n +4); do
   ORG_GUID=$(cf org "$org" --guid)
   ROLE_NAME="$org-tenant"
-
+  ORG_GUID_LIST+=("\"$ORG_GUID\"")
   yq -i ".\"$org\"={\"description\":\"tenant for $org\"}" "$OPENSEARCH_SECURITY_CONFIG_PATH/tenants.yml"
-  yq -i ".\"$ROLE_NAME\"={\"tenant_permissions\":[{\"tenant_patterns\": [\"$org\"],\"allowed_actions\": [\"kibana_all_write\"]}]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles.yml"
+  yq -i ".\"$ROLE_NAME\"={\"tenant_permissions\":[{\"tenant_patterns\":[\"$org\"],\"allowed_actions\":[\"kibana_all_write\"]}]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles.yml"
   yq -i ".\"$ROLE_NAME\"={\"backend_roles\": [\"$ORG_GUID\"]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles_mapping.yml"
 done
+
+# this makes a list of cf org guids and assigns them to roles, making users with a org have access to the following roles.
+ORG_GUID_ROLE_LIST=$(IFS=,; echo "${ORG_GUID_LIST[*]}")
+yq -i ".cf_user={\"backend_roles\": [$ORG_GUID_ROLE_LIST]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles_mapping.yml"
+yq -i ".reports_full_access={\"backend_roles\": [$ORG_GUID_ROLE_LIST]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles_mapping.yml"
+yq -i ".alerting_full_access={\"backend_roles\": [$ORG_GUID_ROLE_LIST]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles_mapping.yml"
+yq -i ".notifications_full_access={\"backend_roles\": [$ORG_GUID_ROLE_LIST]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles_mapping.yml"
 <% end %>
 <% end %>
 
