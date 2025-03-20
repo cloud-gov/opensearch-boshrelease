@@ -225,3 +225,4 @@ properties:
     description: private key for SMTP
   opensearch.notificaiton.keystorepass:
     description: password for keystore
+    default: "pickles"
