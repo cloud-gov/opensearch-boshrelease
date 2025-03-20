@@ -26,7 +26,7 @@ curl -X PUT \
   -d '{"type": "fs", "settings": {"location": "<%= p('opensearch.path_repo') %>/<%= p('opensearch.repository.name') %>", "compress": true}}'
 <% end %>
 
-# making the smtp cloud-gov account.
+# Adding the cloud.gov SMTP configuration to OpenSearch
 <% if p('opensearch.notification.host') != '' %>
 curl -X POST \
   --key ${JOB_DIR}/config/ssl/opensearch-admin.key \
