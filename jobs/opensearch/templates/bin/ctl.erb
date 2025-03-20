@@ -6,8 +6,8 @@ export KEYSTORE="/var/vcap/packages/openjdk-17/lib/security/cacerts"
 export JOB_NAME=opensearch
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 STOREPASS=<%= p("opensearch.notificaiton.keystorepass") %>
-
-/var/vcap/packages/openjdk-17/bin/keytool -storepasswd -new $STOREPASS -keystore "$KEYSTORE" -storepass "changeit"
+DEFAULTPASS=<%= p("defaultkeystorepass") %>
+/var/vcap/packages/openjdk-17/bin/keytool -storepasswd -new $STOREPASS -keystore "$KEYSTORE" -storepass "$DEFAULTPASS"
 
 delete_alias_if_exists(){
     local alias=$1

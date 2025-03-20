@@ -225,3 +225,5 @@ properties:
     description: private key for SMTP
   opensearch.notificaiton.keystorepass:
     description: password for keystore
+  opensearch.notificaiton.defaultkeystorepass:
+    description: default password for keystore
