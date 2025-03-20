@@ -11,7 +11,7 @@ packages:
 
 templates:
   # bin/drain.erb: bin/drain
-  bin/ctl: bin/ctl
+  bin/ctl.erb: bin/ctl
   bin/opensearch: bin/opensearch.sh
   bin/pre-start.erb: bin/pre-start
   bin/post-deploy.erb: bin/post-deploy
@@ -223,3 +223,5 @@ properties:
     description: Certificate for SMTP
   opensearch.notification.privatekey:
     description: private key for SMTP
+  opensearch.notificaiton.keystorepass:
+    description: password for keystore

@@ -5,7 +5,9 @@ set -u # report the usage of uninitialized variables
 export KEYSTORE="/var/vcap/packages/openjdk-17/lib/security/cacerts"
 export JOB_NAME=opensearch
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
-STOREPASS="changeit"
+STOREPASS=<%= p("opensearch.notificaiton.keystorepass") %>
+
+/var/vcap/packages/openjdk-17/bin/keytool -storepasswd -new $STOREPASS -keystore "$KEYSTORE" -storepass "changeit"
 
 delete_alias_if_exists(){
     local alias=$1
