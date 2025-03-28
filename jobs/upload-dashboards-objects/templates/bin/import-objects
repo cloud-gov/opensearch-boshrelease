@@ -45,7 +45,7 @@ if __name__ == "__main__":
             verify=ca
           )
           if r.status_code == 200:
-            logging.info(f'NDJSON FILE {ndjson_output_path} uploaded sucessfully')
+            logging.info(f'NDJSON FILE {ndjson_output_path} uploaded sucessfully for tenant {tenant}')
           elif r.status_code == 409:
             put = session.put(
                   '{}/api/saved_objects/_import?overwrite=true'.format(
@@ -57,7 +57,7 @@ if __name__ == "__main__":
             verify=ca
             )
             if put.status_code == 200:
-                logging.info(f'NDJSON FILE {ndjson_output_path} uploaded successfully')
+                logging.info(f'NDJSON FILE {ndjson_output_path} uploaded sucessfully for tenant {tenant}')
             else:
                 logging.error(f"Failed to upload file {ndjson_output_path}, status code: {put.status_code}")
                 try:
