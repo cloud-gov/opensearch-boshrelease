@@ -223,7 +223,7 @@ properties:
     description: Certificate for SMTP
   opensearch.notification.privatekey:
     description: private key for SMTP
-  opensearch.notificaiton.keystorepass:
+  opensearch.notification.keystorepass:
     description: password for keystore
-  opensearch.notificaiton.defaultkeystorepass:
+  opensearch.notification.defaultkeystorepass:
     description: default password for keystore
