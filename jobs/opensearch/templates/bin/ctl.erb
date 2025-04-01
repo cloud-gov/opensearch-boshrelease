@@ -16,6 +16,6 @@ delete_alias_if_exists(){
     fi
 }
 delete_alias_if_exists "smtp-ca"
-/var/vcap/packages/openjdk-17/bin/keytool -importcert -keystore ${KEYSTORE} -file ${JOB_DIR}/config/ssl/smtp.ca -storepass "$STOREPASS" -alias smtp-ca -trustcacerts -noprompt
+/var/vcap/packages/openjdk-17/bin/keytool -importcert -keystore ${KEYSTORE} -file ${JOB_DIR}/config/ssl/smtp.ca -storepass "$STOREPASS" -alias smtp-ca -trustcacerts -cacerts -noprompt
 delete_alias_if_exists "smtp-crt"
-/var/vcap/packages/openjdk-17/bin/keytool -importcert -keystore ${KEYSTORE} -file ${JOB_DIR}/config/ssl/smtp.crt -storepass "$STOREPASS" -alias smtp-crt -trustcacerts -noprompt
+/var/vcap/packages/openjdk-17/bin/keytool -importcert -keystore ${KEYSTORE} -file ${JOB_DIR}/config/ssl/smtp.crt -storepass "$STOREPASS" -alias smtp-crt -trustcacerts -cacerts -noprompt
