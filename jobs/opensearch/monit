@@ -1,6 +1,6 @@
 check process opensearch
   with pidfile /var/vcap/sys/run/bpm/opensearch/opensearch.pid
-  start program "/var/vcap/jobs/nessus-agent/bin/ctl /var/vcap/jobs/bpm/bin/bpm start opensearch"
+  start program "/var/vcap/jobs/nessus-agent/bin/ctl && /var/vcap/jobs/bpm/bin/bpm start opensearch"
   stop program "/var/vcap/jobs/bpm/bin/bpm stop opensearch"
   group vcap
 
