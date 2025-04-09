@@ -1,21 +1,21 @@
 #!/bin/bash
 
-set -e # exit immediately if a simple command exits with a non-zero status
 set -u # report the usage of uninitialized variables
 export KEYSTORE="/var/vcap/packages/openjdk-17/lib/security/cacerts"
 export JOB_NAME=opensearch
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 STOREPASS=<%= p("opensearch.notification.keystorepass") %>
 DEFAULTPASS=<%= p("opensearch.notification.defaultkeystorepass") %>
-/var/vcap/packages/openjdk-17/bin/keytool -storepasswd -new $STOREPASS -keystore "$KEYSTORE" -storepass "$DEFAULTPASS"
+
+/var/vcap/packages/openjdk-17/bin/keytool -storepasswd -new $STOREPASS -cacerts -storepass "$DEFAULTPASS" > /dev/null 2>&1;
 
 delete_alias_if_exists(){
     local alias=$1
-    if /var/vcap/packages/openjdk-17/bin/keytool -list -keystore "$KEYSTORE" -storepass "$STOREPASS" | grep -q "$alias";then
-       /var/vcap/packages/openjdk-17/bin/keytool -delete -alias "$alias" -keystore ${KEYSTORE} -storepass "$STOREPASS"
+    if /var/vcap/packages/openjdk-17/bin/keytool -list -cacerts -storepass "$STOREPASS" | grep -q "$alias";then
+       /var/vcap/packages/openjdk-17/bin/keytool -delete -alias "$alias" -cacerts -storepass "$STOREPASS"
     fi
 }
 delete_alias_if_exists "smtp-ca"
-/var/vcap/packages/openjdk-17/bin/keytool -importcert -keystore ${KEYSTORE} -file ${JOB_DIR}/config/ssl/smtp.ca -storepass "$STOREPASS" -alias smtp-ca -trustcacerts -cacerts -noprompt
+/var/vcap/packages/openjdk-17/bin/keytool -importcert -file ${JOB_DIR}/config/ssl/smtp.ca -storepass "$STOREPASS" -alias smtp-ca -trustcacerts -cacerts -noprompt
 delete_alias_if_exists "smtp-crt"
-/var/vcap/packages/openjdk-17/bin/keytool -importcert -keystore ${KEYSTORE} -file ${JOB_DIR}/config/ssl/smtp.crt -storepass "$STOREPASS" -alias smtp-crt -trustcacerts -cacerts -noprompt
+/var/vcap/packages/openjdk-17/bin/keytool -importcert -file ${JOB_DIR}/config/ssl/smtp.crt -storepass "$STOREPASS" -alias smtp-crt -trustcacerts -cacerts -noprompt
