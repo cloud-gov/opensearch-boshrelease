@@ -1,7 +1,7 @@
 input
 {
   s3 {
-    <% if_p("logstash_ingestor.s3.bucket) do |bucket| %>
+    <% if_p("logstash_ingestor.s3.bucket") do |bucket| %>
       bucket => "<%= bucket %>"
     <% end %>
     <% if_p("logstash_ingestor.s3.region") do |region_zone| %>
@@ -27,6 +27,7 @@ filter
       remove_field => ["guid"]
       remove_field => ["links"]
     }
+
     truncate {
       fields => ["@message"]
       add_tag => [ "_logtrimmed" ]
