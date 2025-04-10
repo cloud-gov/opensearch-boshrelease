@@ -13,9 +13,13 @@ input
 
 filter
 {
+    json{
+      source=> "message"
+      target=> "parsemessage"
+    }
     # Change many json in one list into multiple json
     split{
-      field => "message"
+      field => "[parsedmessage]"
     }
 
     #rename fields
