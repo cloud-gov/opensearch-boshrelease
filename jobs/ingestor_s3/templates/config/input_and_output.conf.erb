@@ -32,7 +32,7 @@ filter
 output {
 
     file {
-      file => "/var/vcap/sys/log/ingestor_s3/ingestor_s3.stdout.log"
+      path => "/var/vcap/sys/log/ingestor_s3/ingestor_s3.stdout.log"
       codec => "rubydebug"
     }
 
