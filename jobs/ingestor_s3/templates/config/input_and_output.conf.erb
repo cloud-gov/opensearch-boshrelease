@@ -13,7 +13,15 @@ input
 
 filter
 {
-
+    mutate {
+      gsub => ["message", '^\\"|\\"$','']
+    }
+    grok{
+      match => { "message" => "\[%{DATA:items}\]"}
+    }
+    mutate{
+      split => ["items",","]
+    }
     truncate {
       fields => ["@message"]
       add_tag => [ "_logtrimmed" ]
