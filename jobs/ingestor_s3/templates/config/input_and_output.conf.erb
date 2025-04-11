@@ -31,8 +31,9 @@ filter
 
 output {
 
-    stdout {
-            codec => "rubydebug"
+    file {
+      file => "/var/vcap/sys/log/ingestor_s3/ingestor_s3.stdout.log"
+      codec => "rubydebug"
     }
 
     # <% p('logstash_parser.outputs').each do | output | %>
