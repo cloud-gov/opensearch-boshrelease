@@ -13,15 +13,20 @@ input
 
 filter
 {
-    mutate {
-      gsub => ["message", '^\\"|\\"$','']
+  json{
+    source => "message"
     }
-    grok{
-      match => { "message" => "\[%{DATA:items}\]"}
-    }
-    mutate{
-      split => ["items",","]
-    }
+    date{
+   match => ["created_at", "ISO8601"]
+   target => "@timestamp"
+   }
+   mutate {
+   rename => {"[organization][guid]"=>"[@cf][org_id]"}
+   rename => {"[space][guid]"=>"[@cf][space_id]"}
+   rename => {"[organization_name]"=>"[@cf][org]"}
+   rename => {"[space_name]"=>"[@cf][space]"}
+   remove_field => ["message","updated_at","space","organization"]
+   }
     truncate {
       fields => ["@message"]
       add_tag => [ "_logtrimmed" ]
