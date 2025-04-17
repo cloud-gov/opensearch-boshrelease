@@ -1,6 +1,0 @@
-vendor/logstash
-vendor/logstash*
-target/*.conf
-target/*.html
-target/parsing_rules.html
-spec/logstash-templates/target
