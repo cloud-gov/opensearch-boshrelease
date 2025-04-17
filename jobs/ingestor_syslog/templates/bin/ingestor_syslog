@@ -8,7 +8,7 @@ set -u # report the usage of uninitialized variables
 JOB_NAME=ingestor_syslog
 export LOG_DIR=/var/vcap/sys/log/$JOB_NAME
 export STORE_DIR=/var/vcap/store/$JOB_NAME
-export JOB_DIR=/$JOB_NAME
+export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 source /var/vcap/packages/openjdk-17/bosh/runtime.env
 
 <%
