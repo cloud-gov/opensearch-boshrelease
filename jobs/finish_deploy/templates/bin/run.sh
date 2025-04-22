@@ -13,10 +13,10 @@ MASTER_URL="https://<%= opensearch_host %>:<%= opensearch_port %>"
 url="$MASTER_URL/_cluster/settings?pretty"
 query_body='{
     "persistent": {
-        "cluster.routing.allocation.enable": "all",
+        "cluster.routing.allocation.enable": "all"
     },
     "transient": {
-      "cluster.routing.allocation.enable": "all",
+      "cluster.routing.allocation.enable": "all"
     }
 }'
 result=$(curl -XPUT --key ${JOB_DIR}/config/ssl/opensearch-admin.key \
