@@ -13,7 +13,7 @@ MASTER_URL="https://<%= opensearch_host %>:<%= opensearch_port %>"
 url="$MASTER_URL/_cluster/settings?pretty"
 
 result=$(curl  --key ${JOB_DIR}/config/ssl/admin.key \
-    --cert ${JOB_DIR}/config/ssl/admin.crt  \
+    --cert ${JOB_DIR}/config/ssl/opensearch-admin.crt  \
     --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
     $url )
 
