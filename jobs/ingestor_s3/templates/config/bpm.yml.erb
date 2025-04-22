@@ -1,0 +1,13 @@
+processes:
+  - name: ingestor_s3
+    hooks:
+      pre_start: /var/vcap/jobs/ingestor_s3/bin/pre-start
+    executable: /var/vcap/jobs/ingestor_s3/bin/ingestor_s3.sh
+    ephemeral_disk: true
+    persistent_disk: true
+    additional_volumes:
+    - path: /var/vcap/sys/tmp/ingestor_s3
+      writable: true
+      allow_executions: true
+    - path: /var/vcap/jobs/ingestor_s3/config
+      writable: true
