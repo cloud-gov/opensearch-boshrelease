@@ -8,8 +8,8 @@ packages: []
 templates:
   bin/pre-start.erb: bin/pre-start
   bin/run.sh: bin/run
-  config/smoketest-crt.erb: config/ssl/smoketest.crt
-  config/smoketest-pem.erb: config/ssl/smoketest.pem
+  config/admin-crt.erb: config/ssl/opensearch-admin.crt
+  config/admin-pem.erb: config/ssl/opensearch-admin.pem
   config/ca.erb: config/ssl/opensearch.ca
 
 
