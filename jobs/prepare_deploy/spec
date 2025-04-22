@@ -1,0 +1,61 @@
+---
+name: prepare_deploy
+
+description: This job runs Smoke tests to make sure the cluster is configured properly
+
+packages: []
+
+templates:
+  bin/pre-start.erb: bin/pre-start
+  bin/run.sh: bin/run
+  config/smoketest-crt.erb: config/ssl/smoketest.crt
+  config/smoketest-pem.erb: config/ssl/smoketest.pem
+  config/ingestor-crt.erb: config/ssl/ingestor.crt
+  config/ingestor-pem.erb: config/ssl/ingestor.pem
+  config/ca.erb: config/ssl/opensearch.ca
+
+
+consumes:
+- name: opensearch
+  type: opensearch
+  optional: true
+- name: ingestor
+  type: ingestor
+  optional: true
+
+properties:
+  prepare_deploy.opensearch.ssl.private_key:
+    description: opensearch private key
+  prepare_deploy.opensearch.ssl.certificate:
+    description: opensearch certifcate
+  prepare_deploy.syslog_ingestor.host:
+    description: 'IP of the syslog ingestor'
+  prepare_deploy.syslog_ingestor.port:
+    description: 'Port of the syslog ingestor'
+    default: 5514
+  prepare_deploy.opensearch_manager.host:
+    description: 'IP of the opensearch master node'
+    default: localhost
+  prepare_deploy.opensearch_manager.port:
+    description: 'Port of the opensearch master node'
+    default: 9200
+  prepare_deploy.tls.use_tls:
+    description: Set it to true if the ingestor or the ls-router expects TCP-TLS traffic
+    default: false
+  prepare_deploy.tls.certificate:
+    description: ingestor server certificate
+  prepare_deploy.tls.private_key:
+    description: ingestor server key
+  prepare_deploy.count_test.run:
+    description: Whether to run the count test
+    default: false
+  prepare_deploy.index:
+    description: Index to send prepare_deploy to.
+  prepare_deploy.count_test.index_pattern:
+    description: Index pattern to run the count test against (e.g. logs-* )
+  prepare_deploy.count_test.time_field:
+    description: Name of the time field in your index
+  prepare_deploy.count_test.minimum:
+    description: Minimum expected documents in the given time window
+  prepare_deploy.count_test.time_interval:
+    description: 'How far back to look in time for the count. e.g. "15m", "1h", "2d" see https://www.open.co/guide/en/opensearch/reference/current/common-options.html#date-math for more'

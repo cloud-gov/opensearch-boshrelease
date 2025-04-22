@@ -1,0 +1,22 @@
+#!/bin/bash
+
+export JOB_NAME=prepare_deploy
+export JOB_DIR=/var/vcap/jobs/$JOB_NAME
+
+<% if_p('prepare_deploy.opensearch.ssl.private_key') do %>
+  openssl pkcs8 -v1 "PBE-SHA1-3DES" \
+  -in "${JOB_DIR}/config/ssl/smoketest.pem" -topk8 \
+  -out "${JOB_DIR}/config/ssl/smoketest.key" -nocrypt
+  chmod 600 ${JOB_DIR}/config/ssl/smoketest*.key
+<% end %>
+
+<% if_p('prepare_deploy.tls.private_key') do %>
+  openssl pkcs8 -v1 "PBE-SHA1-3DES" \
+  -in "${JOB_DIR}/config/ssl/ingestor.pem" -topk8 \
+  -out "${JOB_DIR}/config/ssl/ingestor.key" -nocrypt
+  chmod 600 ${JOB_DIR}/config/ssl/ingestor*.key
+<% end %>
+
+if [ -d ${JOB_DIR}/config/ssl ]; then
+	chown -R vcap:vcap ${JOB_DIR}/config/ssl
+fi
