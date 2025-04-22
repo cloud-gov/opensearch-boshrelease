@@ -166,22 +166,22 @@ opensearch-2.19.0-linux-x64.tar.gz:
   size: 964198305
   object_id: a2c6996b-1b60-4383-5743-79abd5825872
   sha: sha256:455b900182ef2a7193d443d96aaea55f534ec0f91b1bad6d2eacdbaea601f16e
+opensearch-3.0.0-alpha1-linux-x64.tar.gz:
+  size: 952258077
+  object_id: 07201095-9c55-4122-7c84-54e0fde69be8
+  sha: sha256:4f84cdbce5434b6f11ee2feadc0b8d6b58740a049b759563e13496304518a1c7
 opensearch-dashboards-2.19.0-linux-x64.tar.gz:
   size: 347915942
   object_id: 7909712a-1098-4df1-59bb-321d0f032930
   sha: sha256:ed3734cec031c28c7a59ca938a9319233e032def33a855e4f003d657f0982b94
+opensearch-dashboards-3.0.0-alpha1-linux-x64.tar.gz:
+  size: 375083065
+  object_id: 239ac489-c729-48b9-4ece-8b529efc5961
+  sha: sha256:3659eb475fa0402f89fb4ac0fa26b355572635f8087eecd86631a12b4769b76c
 opensearch-dashboards-cf-auth-proxy-0.0.7.tar.gz:
   size: 35056
   object_id: ea4bbc49-356f-4935-696f-b00ec3da6e6e
   sha: sha256:c73877ea46ceb878877afb01ce9ef73a4edd81a6356867250c00e78752d8c35a
-opensearch/opensearch-alerting-2.19.0.0.zip:
-  size: 9484415
-  object_id: 68dd71bd-0b49-436e-4ce5-3f7dae03ddb6
-  sha: sha256:e55054e0046c23b5951784af35e012c50b0d4bbe3d53ad39574e15cfc61e9d43
-opensearch/opensearch-notifications-2.19.0.0.zip:
-  size: 2754805
-  object_id: 65e2fe64-5a75-4695-4bac-5f449c3b1fd2
-  sha: sha256:b13dc11d5cf44ea66a733fcdeebdde65796d20e3369bf4bc807fb69ef82a9511
 requests/certifi-2023.11.17-py3-none-any.whl:
   size: 162530
   object_id: f2afff72-e415-4390-61c1-eb8010ed4e4a

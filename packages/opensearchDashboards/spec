@@ -6,4 +6,4 @@ dependencies:
 - openjdk-17
 
 files:
-- opensearch-dashboards-2.19.0-linux-x64.tar.gz
+- opensearch-dashboards-3.0.0-alpha1-linux-x64.tar.gz
