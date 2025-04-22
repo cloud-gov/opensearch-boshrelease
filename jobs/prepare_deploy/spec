@@ -10,8 +10,6 @@ templates:
   bin/run.sh: bin/run
   config/smoketest-crt.erb: config/ssl/smoketest.crt
   config/smoketest-pem.erb: config/ssl/smoketest.pem
-  config/ingestor-crt.erb: config/ssl/ingestor.crt
-  config/ingestor-pem.erb: config/ssl/ingestor.pem
   config/ca.erb: config/ssl/opensearch.ca
 
 
