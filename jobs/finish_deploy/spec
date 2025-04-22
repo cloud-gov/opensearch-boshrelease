@@ -1,7 +1,7 @@
 ---
 name: finish_deploy
 
-description: This job runs Smoke tests to make sure the cluster is configured properly
+description: This job runs a post-deploy job to make sure the cluster is configured properly for deploying
 
 packages: []
 
