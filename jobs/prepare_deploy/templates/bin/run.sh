@@ -10,7 +10,7 @@ export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 %>
 
 MASTER_URL="https://<%= opensearch_host %>:<%= opensearch_port %>"
-url="$MASTER_URL/<%= p('prepare_deploy.count_test.index_pattern') %>/_cluster/settings?pretty"
+url="$MASTER_URL/_cluster/settings?pretty"
 
 result=$(curl  --key ${JOB_DIR}/config/ssl/smoketest.key \
     --cert ${JOB_DIR}/config/ssl/smoketest.crt  \
