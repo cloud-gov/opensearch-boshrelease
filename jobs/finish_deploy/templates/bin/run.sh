@@ -19,7 +19,7 @@ query_body='{
       "cluster.routing.allocation.enable": "all",
     }
 }'
-result=$(curl  --key ${JOB_DIR}/config/ssl/opensearch-admin.key \
+result=$(curl -XPUT --key ${JOB_DIR}/config/ssl/opensearch-admin.key \
     --cert ${JOB_DIR}/config/ssl/opensearch-admin.crt  \
     --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
     $url -H "content-type: application/json" -d "$query_body")
