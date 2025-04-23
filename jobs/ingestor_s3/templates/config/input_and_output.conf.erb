@@ -25,7 +25,7 @@ filter
    rename => {"[space][guid]"=>"[@cf][space_id]"}
    rename => {"[organization_name]"=>"[@cf][org]"}
    rename => {"[space_name]"=>"[@cf][space]"}
-   remove_field => ["message","updated_at","space","organization"]
+   remove_field => ["space","organization"]
    }
     truncate {
       fields => ["@message"]
