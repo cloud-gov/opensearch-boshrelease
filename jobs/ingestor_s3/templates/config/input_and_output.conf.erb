@@ -8,6 +8,7 @@ input
     region => "<%= region_zone %>"
     <% end %>
     codec => "plain"
+    prefix => "20"
   }
 }
 
@@ -15,18 +16,17 @@ filter
 {
   json{
     source => "message"
-    target => "log_info"
     tag_on_failure => ["_jsonparsefailure"]
   }
    date{
-   match => ["[logs_info][created_at]", "ISO8601"]
+   match => ["created_at", "ISO8601"]
    target => "@timestamp"
    }
    mutate {
-   rename => {"[logs_info][organization][guid]"=>"[@cf][org_id]"}
-   rename => {"[logs_info][space][guid]"=>"[@cf][space_id]"}
-   rename => {"[logs_info][organization_name]"=>"[@cf][org]"}
-   rename => {"[logs_info][space_name]"=>"[@cf][space]"}
+   rename => {"[organization][guid]"=>"[@cf][org_id]"}
+   rename => {"[space][guid]"=>"[@cf][space_id]"}
+   rename => {"[organization_name]"=>"[@cf][org]"}
+   rename => {"[space_name]"=>"[@cf][space]"}
    remove_field => ["space","organization","logs_info"]
    }
     truncate {
