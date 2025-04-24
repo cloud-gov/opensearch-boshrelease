@@ -1,2 +1,3 @@
+target/audit_event.conf
 target/logstash-filters-default.conf
 target/logs-template.json

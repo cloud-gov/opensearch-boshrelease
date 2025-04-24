@@ -11,6 +11,7 @@ end
 desc "Builds Logstash filters"
 task :build => :clean do
   build_erb 'src/logstash-filters/default.conf.erb', 'target/logstash-filters-default.conf'
+  build_erb 'src/logstash-filters/audit_event.conf.erb', 'target/audit_event.conf'
 end
 
 def build_erb(source_erb_file, target_file)
