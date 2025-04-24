@@ -17,9 +17,9 @@ filter
     source => "message"
     target => "log_info"
     tag_on_failure => ["_jsonparsefailure"]
-    }
+  }
    date{
-   match => [["logs_info"]["created_at"], "ISO8601"]
+   match => ["[logs_info][created_at]", "ISO8601"]
    target => "@timestamp"
    }
    mutate {
