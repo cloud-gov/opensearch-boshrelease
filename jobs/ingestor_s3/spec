@@ -44,6 +44,8 @@ properties:
     example:
     - {name: logstash-output-s3logs, version: 2.0.0}
     default: []
+  logstash.type:
+    description: "type of logs being pulled from s3, Valid types are [audit]"
 
   logstash.ecs_compatibility:
     description: Whether to enable ECS compatibility for geoip filters. See https://www.elastic.co/guide/en/logstash/current/plugins-filters-geoip.html#plugins-filters-geoip-ecs_compatibility

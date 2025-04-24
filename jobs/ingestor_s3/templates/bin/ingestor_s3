@@ -34,7 +34,9 @@ cat ${JOB_DIR}/config/input_and_output.conf > ${JOB_DIR}/config/logstash.conf
 
 echo "filter {" >> ${JOB_DIR}/config/logstash.conf
 
+<% if 'audit' == p('logstash.type') %>
 cat /var/vcap/packages/cf-logstash-filters/audit_event.conf >> ${JOB_DIR}/config/logstash.conf
+<% end %>
 
 echo "} #close filters" >> ${JOB_DIR}/config/logstash.conf
 
