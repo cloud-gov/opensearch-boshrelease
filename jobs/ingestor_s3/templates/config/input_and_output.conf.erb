@@ -12,30 +12,6 @@ input
   }
 }
 
-filter
-{
-  json{
-    source => "message"
-    tag_on_failure => ["_jsonparsefailure"]
-  }
-   date{
-   match => ["created_at", "ISO8601"]
-   target => "@timestamp"
-   }
-   mutate {
-   rename => {"[organization][guid]"=>"[@cf][org_id]"}
-   rename => {"[space][guid]"=>"[@cf][space_id]"}
-   rename => {"[organization_name]"=>"[@cf][org]"}
-   rename => {"[space_name]"=>"[@cf][space]"}
-   remove_field => ["space","organization","logs_info"]
-   }
-    truncate {
-      fields => ["@message"]
-      add_tag => [ "_logtrimmed" ]
-      length_bytes => 32765
-    }
-}
-
 <%
   es_output_hosts = nil
   if_p("logstash_parser.opensearch.data_hosts") { |hosts| es_output_hosts = hosts.map { |ip| "https://#{ip}:9200" }.join(',') }
