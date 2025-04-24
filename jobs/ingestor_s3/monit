@@ -1,0 +1,5 @@
+check process ingestor_s3
+  with pidfile /var/vcap/sys/run/bpm/ingestor_s3/ingestor_s3.pid
+  start program "/var/vcap/jobs/bpm/bin/bpm start ingestor_s3"
+  stop program "/var/vcap/jobs/bpm/bin/bpm stop ingestor_s3"
+  group vcap
