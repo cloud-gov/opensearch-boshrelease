@@ -29,13 +29,15 @@ export <%= env.keys[0] %>="<%= env.values[0] %>"
 
 export LS_JAVA_OPTS="-Xms$HEAP_SIZE -Xmx$HEAP_SIZE -DPID=$$"
 
+# construct a complete config file from all the fragments
+cat ${JOB_DIR}/config/input_and_output.conf > ${JOB_DIR}/config/logstash.conf
+
 echo "filter {" >> ${JOB_DIR}/config/logstash.conf
 
 cat /var/vcap/packages/cf-logstash-filters/audit_event.conf >> ${JOB_DIR}/config/logstash.conf
 
 echo "} #close filters" >> ${JOB_DIR}/config/logstash.conf
-# construct a complete config file from all the fragments
-cat ${JOB_DIR}/config/input_and_output.conf > ${JOB_DIR}/config/logstash.conf
+
 
 # # clear persistent queue if the upgrade failed last run
 if cat $LOG_DIR/$JOB_NAME.stdout.log | grep -a 'QueueUpgrade - Logstash was unable to upgrade your persistent queue data' >/dev/null ; then
