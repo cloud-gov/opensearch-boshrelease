@@ -10,7 +10,7 @@ export TMP_DIR=/var/vcap/sys/tmp/$JOB_NAME
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 export LOG_DIR=/var/vcap/sys/log/$JOB_NAME
 
-source /var/vcap/packages/openjdk-17/bosh/runtime.env
+source /var/vcap/packages/openjdk-21/bosh/runtime.env
 
 <% p("opensearch.exec.environment", {}).each do |k, v| %>
 export <%= k %>=<%= v %>

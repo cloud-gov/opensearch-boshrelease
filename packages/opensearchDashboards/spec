@@ -3,7 +3,9 @@
 name: opensearch_dashboards
 
 dependencies:
-- openjdk-17
+
+- openjdk-21
 
 files:
-- opensearch-dashboards-3.0.0-alpha1-linux-x64.tar.gz
+
+- opensearch-dashboards-3.0.0-beta1-linux-x64.tar.gz
