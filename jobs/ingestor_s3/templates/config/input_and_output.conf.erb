@@ -8,30 +8,8 @@ input
     region => "<%= region_zone %>"
     <% end %>
     codec => "plain"
+    prefix => "20"
   }
-}
-
-filter
-{
-  json{
-    source => "message"
-    }
-    date{
-   match => ["created_at", "ISO8601"]
-   target => "@timestamp"
-   }
-   mutate {
-   rename => {"[organization][guid]"=>"[@cf][org_id]"}
-   rename => {"[space][guid]"=>"[@cf][space_id]"}
-   rename => {"[organization_name]"=>"[@cf][org]"}
-   rename => {"[space_name]"=>"[@cf][space]"}
-   remove_field => ["message","updated_at","space","organization"]
-   }
-    truncate {
-      fields => ["@message"]
-      add_tag => [ "_logtrimmed" ]
-      length_bytes => 32765
-    }
 }
 
 <%
