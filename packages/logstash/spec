@@ -2,7 +2,7 @@
 name: logstash
 
 dependencies:
-  - openjdk-17
+  - openjdk-21
 
 files:
   - logstash/logstash-8.16.1-linux-x86_64.tar.gz
