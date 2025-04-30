@@ -123,9 +123,9 @@ auth-proxy/werkzeug-3.1.2-py3-none-any.whl:
   object_id: 45af49a7-9728-4fdb-5576-6627b8e4fbb7
   sha: sha256:4f7d1a5de312c810a8a2c6f0b47e9f6a7cffb7c8322def35e4d4d9841ff85597
 jdk-21.0.7_linux-x64_bin.tar.gz:
-  size: 207622118
-  object_id: 8f13011f-b486-4506-6176-91c51922b0ce
-  sha: sha256:9c107a5cfb7aaab5271e91099141fa868b43c0d15d2643d4fbb4b39735dbb211
+  size: 197755939
+  object_id: 23f844d3-02eb-4ea7-6a13-a8b82e7cb61f
+  sha: sha256:332636375b234e56f0198fdea409f896afcc3ce627f9d0b7924cc7b51d50a295
 logstash/logstash-8.16.1-linux-x86_64.tar.gz:
   size: 428558276
   object_id: 6448195b-fb5b-4a22-5f16-759c29296cf6
