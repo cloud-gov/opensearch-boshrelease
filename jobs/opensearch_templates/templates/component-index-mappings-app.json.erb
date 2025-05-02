@@ -110,8 +110,8 @@ keyword_default = { "type": "keyword", "index": true }.to_json
             "timezone": <%= keyword_default %>
           }
         },
-        "guid":  { <%= keyword_default %> },
-        "type":  { <%= keyword_default %> },
+        "guid":  <%= keyword_default %>,
+        "type":  <%= keyword_default %>,
         "containermetric": {
           "type": "object",
           "properties": {
