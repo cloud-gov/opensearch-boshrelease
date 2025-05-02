@@ -1,0 +1,5 @@
+check process ingestor_metrics
+  with pidfile /var/vcap/sys/run/bpm/ingestor_metrics/ingestor_metrics.pid
+  start program "/var/vcap/jobs/bpm/bin/bpm start ingestor_metrics"
+  stop program "/var/vcap/jobs/bpm/bin/bpm stop ingestor_metrics"
+  group vcap

@@ -47,6 +47,7 @@ valuemetric_enabled = p('cloudfoundry.event_types').include? 'ValueMetric'
 counterevent_enabled = p('cloudfoundry.event_types').include? 'CounterEvent'
 error_enabled = p('cloudfoundry.event_types').include? 'Error'
 http_enabled = p('cloudfoundry.event_types').include? 'HttpStartStop'
+audit_enabled = p('cloudfoundry.event_types').include? 'Audit'
 
 # Only LogMessage, ContainerMetric, Http* events contain `app_id` field so other app-related `@cf.*` fields are set for them too. See protocol definition https://github.com/cloudfoundry/dropsonde-protocol/blob/master/events/README.md.
 if(logmessage_enabled == true or containermetric_enabled == true or http_enabled == true)
@@ -146,6 +147,23 @@ if(error_enabled == true)
     [
       {"name":"error.source","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
       {"name":"error.code","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true}
+    ]
+  )
+end
+
+if(audit_enabled == true)
+  fields_json.concat(
+    [
+      {"name":"actor.guid","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"actor.name","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"actor.type","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"target.guid","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"target.name","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"target.type","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"created_at","type":"date","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"updated_at","type":"date","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"type","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"guid","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true}
     ]
   )
 end
