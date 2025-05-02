@@ -83,7 +83,7 @@ properties:
     description: Port to listen for RELP messages
     default: 2514
   logstash_ingestor.cloudwatch.namespace:
-  description: namespace for cloudwatch metric
+    description: namespace for cloudwatch metric
   logstash_ingestor.cloudwatch.metrics:
     description: metric for cloudwatch metric
   logstash_ingestor.cloudwatch.dimensions:
