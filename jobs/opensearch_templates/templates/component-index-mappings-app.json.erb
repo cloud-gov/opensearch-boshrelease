@@ -34,7 +34,19 @@ keyword_default = { "type": "keyword", "index": true }.to_json
             "service_plan": <%= keyword_default %>
           }
         },
+        "actor": {
+          "type": "object",
+            "dynamic": true,
+            "properties": {
+              "guid":      <%= keyword_default %>,
+              "name":      <%= keyword_default %>,
+              "type":      <%= keyword_default %>
+            }
+        },
         "app": {
+          "type": "flat_object"
+        },
+        "data": {
           "type": "flat_object"
         },
         "logmessage": {
@@ -89,6 +101,7 @@ keyword_default = { "type": "keyword", "index": true }.to_json
             }
           }
         },
+        "created_at":  { "type": "date" },
         "geoip"  : {
           "type" : "object",
           "dynamic": true,
@@ -97,6 +110,8 @@ keyword_default = { "type": "keyword", "index": true }.to_json
             "timezone": <%= keyword_default %>
           }
         },
+        "guid":  <%= keyword_default %>,
+        "type":  <%= keyword_default %>,
         "containermetric": {
           "type": "object",
           "properties": {
@@ -110,6 +125,16 @@ keyword_default = { "type": "keyword", "index": true }.to_json
             "value": <%= keyword_default %>
           }
         },
+        "target": {
+          "type": "object",
+            "dynamic": true,
+            "properties": {
+              "guid":        <%= keyword_default %>,
+              "name":        <%= keyword_default %>,
+              "type":        <%= keyword_default %>
+            }
+        },
+        "updated_at":  { "type": "date" },
         "valuemetric": {
           "type": "object",
           "dynamic": true,
