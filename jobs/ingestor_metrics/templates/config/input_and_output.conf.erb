@@ -11,11 +11,13 @@ input
     <% end %>
 
     <% if_p("logstash_ingestor.cloudwatch.dimensions") do |filters| %>
-    filters => <%= filters.inspect %>
+    filters => <%= Hash[filters.map { |f| [f["name"], f["value"]] }].inspect %>
     <% end %>
+
     <% if_p("logstash_ingestor.cloudwatch.statistics") do |statistics| %>
     statistics => <%= statistics.inspect %>
     <% end %>
+
     <% if_p("logstash_ingestor.cloudwatch.period") do |period| %>
     period => <%= period %>
     <% end %>
