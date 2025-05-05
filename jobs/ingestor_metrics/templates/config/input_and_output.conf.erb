@@ -1,21 +1,23 @@
 input
 {
-  cloudwatch_logs
+  cloudwatch_metrics
   {
     <% if_p("logstash_ingestor.cloudwatch.namespace") do |namespace| %>
       namespace => "<%= namespace %>"
     <% end %>
+
     <% if_p("logstash_ingestor.cloudwatch.metrics") do |metrics| %>
-      metrics => "<%= metrics %>"
+      metrics => <%= metrics.inspect %>
     <% end %>
+
     <% if_p("logstash_ingestor.cloudwatch.dimensions") do |filters| %>
-    filters = "<%= filters %>"
+    filters => <%= filters.inspect %>
     <% end %>
     <% if_p("logstash_ingestor.cloudwatch.statistics") do |statistics| %>
-    statistics = "<%= statistics %>"
+    statistics => <%= statistics.inspect %>
     <% end %>
     <% if_p("logstash_ingestor.cloudwatch.period") do |period| %>
-    period = "<%= period %>"
+    period => <%= period %>
     <% end %>
 
     <% if_p("logstash_ingestor.cloudwatch.region") do |region_zone| %>
