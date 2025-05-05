@@ -1,6 +1,6 @@
 input
 {
-  cloudwatch_metrics
+  cloudwatch
   {
     <% if_p("logstash_ingestor.cloudwatch.namespace") do |namespace| %>
       namespace => "<%= namespace %>"
