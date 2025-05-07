@@ -1,0 +1,41 @@
+<% require 'json' %>
+<% if(p('cloudfoundry.event_types').include? 'Audit') %>
+{
+    "attributes": {
+        "columns": [
+            "@cf.org",
+            "@cf.space",
+            "type",
+            "actor.type",
+            "actor.name",
+            "target.type",
+            "target.name"
+        ],
+        "description": "",
+        "hits": 0,
+        "kibanaSavedObjectMeta": {
+            "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"kuery\"},\"highlightAll\":true,\"version\":true,\"aggs\":{\"2\":{\"date_histogram\":{\"field\":\"@timestamp\",\"fixed_interval\":\"30s\",\"time_zone\":\"America/New_York\",\"min_doc_count\":1}}},\"filter\":[{\"meta\":{\"alias\":null,\"negate\":false,\"disabled\":false,\"type\":\"phrase\",\"key\":\"@type\",\"params\":{\"query\":\"audit_event\"},\"indexRefName\":\"kibanaSavedObjectMeta.searchSourceJSON.filter[0].meta.index\"},\"query\":{\"match_phrase\":{\"@type\":\"audit_event\"}},\"$state\":{\"store\":\"appState\"}}],\"indexRefName\":\"kibanaSavedObjectMeta.searchSourceJSON.index\"}"
+        },
+        "sort": [],
+        "title": "Audit Logs",
+        "version": 1
+    },
+    "id": "audit-logs",
+    "migrationVersion": {
+        "search": "7.9.3"
+    },
+    "references": [
+        {
+            "id": "logs-app*",
+            "name": "kibanaSavedObjectMeta.searchSourceJSON.index",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-app*",
+            "name": "kibanaSavedObjectMeta.searchSourceJSON.filter[0].meta.index",
+            "type": "index-pattern"
+        }
+    ],
+    "type": "search"
+}
+<% end %>
