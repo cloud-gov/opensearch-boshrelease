@@ -92,6 +92,17 @@ properties:
     description: statistics for cloudwatch metric
   logstash_ingestor.cloudwatch.period:
     description: period for cloudwatch metric
+  logstash_ingestor.cloudwatch:
+    description: |
+      A list of inputs from cloudwatch. Please refer to example below.
+    example:
+      inputs:
+        - namespace: "namespace"
+          metrics: "metrics"
+          dimensions: []
+          statistics: "statistics"
+          period: "period"
+          region: "us-east"
 
   logstash_parser.debug:
     description: Debug level logging

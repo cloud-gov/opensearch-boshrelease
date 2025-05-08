@@ -1,31 +1,33 @@
 input
 {
+  <% Array(fetch("logstash_ingestor.cloudwatch", [])).each do |cw| %>
   cloudwatch
   {
-    <% if_p("logstash_ingestor.cloudwatch.namespace") do |namespace| %>
-      namespace => "<%= namespace %>"
+    <% if cw["namespace"] %>
+      namespace => "<%= cw[namespace] %>"
     <% end %>
 
-    <% if_p("logstash_ingestor.cloudwatch.metrics") do |metrics| %>
-      metrics => <%= metrics.inspect %>
+    <% if cw["metrics"]%>
+      metrics => <%= cw["metrics"].inspect %>
     <% end %>
 
-    <% if_p("logstash_ingestor.cloudwatch.dimensions") do |filters| %>
-    filters => <%= Hash[filters.map { |f| [f["Name"], f["Value"]] }].inspect %>
+    <% if cw["dimensions"] %>
+    filters => <%= Hash[cw["dimensions"].map { |f| [f["Name"], f["Value"]] }].inspect %>
     <% end %>
 
-    <% if_p("logstash_ingestor.cloudwatch.statistics") do |statistics| %>
-    statistics => <%= statistics.inspect %>
+    <% if cw["statistics"] %>
+    statistics => <%= ["statistics"].inspect %>
     <% end %>
 
-    <% if_p("logstash_ingestor.cloudwatch.period") do |period| %>
-    period => <%= period %>
+    <% if cw["period"]%>
+    period => <%= cw["period"] %>
     <% end %>
 
-    <% if_p("logstash_ingestor.cloudwatch.region") do |region_zone| %>
-    region => "<%= region_zone %>"
+    <% if cw["region"] %>
+    region => "<%= cw["region"] %>"
     <% end %>
   }
+  <% end %>
 }
 
 filter
