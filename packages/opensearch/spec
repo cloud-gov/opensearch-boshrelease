@@ -2,7 +2,7 @@
 name: opensearch
 
 dependencies:
-  - openjdk-21
+- openjdk-21
 
 files:
-  - opensearch-3.0.0-beta1-linux-x64.tar.gz
+- opensearch-3.0.0-linux-x64.tar.gz

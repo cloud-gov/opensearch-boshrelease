@@ -126,10 +126,10 @@ jdk-21.0.7_linux-x64_bin.tar.gz:
   size: 197755939
   object_id: 23f844d3-02eb-4ea7-6a13-a8b82e7cb61f
   sha: sha256:332636375b234e56f0198fdea409f896afcc3ce627f9d0b7924cc7b51d50a295
-logstash/logstash-8.16.1-linux-x86_64.tar.gz:
-  size: 428558276
-  object_id: 6448195b-fb5b-4a22-5f16-759c29296cf6
-  sha: sha256:1245b05b83443c204f355ad8463cf9c9a0e2d6052d51578aeaaaadb7eb6ca214
+logstash/logstash-9.0.1-linux-x86_64.tar.gz:
+  size: 433736531
+  object_id: 57ca5a19-af4f-49c1-7877-53d345123dfb
+  sha: sha256:5e781f06ede47952014119801e79d904970a9b870bcb70c1add62a7f14c3b0e8
 logstash/logstash-filter-alter-3.0.3.zip:
   size: 7655
   object_id: 552763c7-779b-4ac3-5993-04a06d967c93
@@ -146,10 +146,10 @@ logstash/logstash-input-relp-3.0.4.zip:
   size: 44725
   object_id: 2e183484-97da-4e51-4311-51e024d0665b
   sha: sha256:96bb5c75fb0f945b44d23d8da29cd4a7ba235b86d7ad26f3d77d333a8da34163
-logstash/logstash-input-syslog-3.6.0.zip:
-  size: 605224
-  object_id: 8ed631eb-eb7c-47fa-631c-904061ef6412
-  sha: sha256:db06d886e62a8718f33cbfd23ab8eabec80c9673fa9346995518e43989d0bbaf
+logstash/logstash-input-syslog-3.7.1.zip:
+  size: 25834
+  object_id: af2e1320-cf3c-48f9-77fe-4dcf960eb10a
+  sha: sha256:854d63b0d03eee07b298646af58a4fc3cfa45e25f624bc7140b161a0dd254754
 logstash/logstash-input-tcp-6.4.1.zip:
   size: 14501935
   object_id: 77443abb-adce-433c-4789-bc507504e596
@@ -158,30 +158,22 @@ logstash/logstash-integration-aws-7.1.6.zip:
   size: 2143813
   object_id: da9212f7-36ef-46b6-5480-8f5eaeb9fa9b
   sha: sha256:b80e9f5812aa07c472782193e61ce402b30fa965440e25f002a5af2cf10261b1
-logstash/logstash-output-opensearch-2.0.2.zip:
-  size: 24204545
-  object_id: f15ae09c-ac8c-4dba-51ce-952917dedad6
-  sha: sha256:11d471575afb3cf5d6ef26fa112e7c42e38f24d0a02b0a5d9405a5c8d8bb157c
+logstash/logstash-output-opensearch-2.0.3.zip:
+  size: 188556
+  object_id: 68ea8d52-a96f-4762-7451-c2e12602f4b5
+  sha: sha256:bd409648c0f8c42b62c07e471893f809ea71fa6f9ad7fc8a702928bbbc41875f
 logstash/logstash-output-syslog-3.0.5.zip:
   size: 41727
   object_id: 21474ee6-824a-4547-7f45-b236864358ab
   sha: sha256:80a2b08f2b58ae81c823cc0bb1dd7956fbc173037fc621bfa31af34140724e02
-opensearch-3.0.0-alpha1-linux-x64.tar.gz:
-  size: 952258077
-  object_id: 07201095-9c55-4122-7c84-54e0fde69be8
-  sha: sha256:4f84cdbce5434b6f11ee2feadc0b8d6b58740a049b759563e13496304518a1c7
-opensearch-3.0.0-beta1-linux-x64.tar.gz:
-  size: 979829775
-  object_id: 1186f723-1d16-4e04-56ab-ee6f05b3fcda
-  sha: sha256:073ab1a3e9035f902c10b0b6354114b626021a6d80a0f2a8aba0a01c9ea91a73
-opensearch-dashboards-3.0.0-alpha1-linux-x64.tar.gz:
-  size: 375083065
-  object_id: 239ac489-c729-48b9-4ece-8b529efc5961
-  sha: sha256:3659eb475fa0402f89fb4ac0fa26b355572635f8087eecd86631a12b4769b76c
-opensearch-dashboards-3.0.0-beta1-linux-x64.tar.gz:
-  size: 382051265
-  object_id: eb8a6f30-a2fe-41c9-4c3c-f579d5000f5b
-  sha: sha256:4528f4d71a00098523e9e864dcf5fd225d598abb1788df6cdf7e9df2a560e855
+opensearch-3.0.0-linux-x64.tar.gz:
+  size: 978590132
+  object_id: 06b6fa71-91f1-482d-7b87-4fd25f01f026
+  sha: sha256:d98c60bf7d75b8b4257b2421dd22b89155e87be4b509da6a4e1136cf62e0b155
+opensearch-dashboards-3.0.0-linux-x64.tar.gz:
+  size: 382012461
+  object_id: d040027a-52b6-4743-4def-87e060f3c7cb
+  sha: sha256:8d4e826961e1d01501f7eb5f4851894d249b046c17b331018e57521f404bbe9e
 opensearch-dashboards-cf-auth-proxy-0.0.7.tar.gz:
   size: 35056
   object_id: ea4bbc49-356f-4935-696f-b00ec3da6e6e
