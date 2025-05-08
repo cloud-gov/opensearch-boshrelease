@@ -146,6 +146,10 @@ logstash/logstash-input-relp-3.0.4.zip:
   size: 44725
   object_id: 2e183484-97da-4e51-4311-51e024d0665b
   sha: sha256:96bb5c75fb0f945b44d23d8da29cd4a7ba235b86d7ad26f3d77d333a8da34163
+logstash/logstash-input-syslog-3.6.0.zip:
+  size: 605224
+  object_id: 8ed631eb-eb7c-47fa-631c-904061ef6412
+  sha: sha256:db06d886e62a8718f33cbfd23ab8eabec80c9673fa9346995518e43989d0bbaf
 logstash/logstash-input-syslog-3.7.1.zip:
   size: 25834
   object_id: af2e1320-cf3c-48f9-77fe-4dcf960eb10a
@@ -158,6 +162,10 @@ logstash/logstash-integration-aws-7.1.6.zip:
   size: 2143813
   object_id: da9212f7-36ef-46b6-5480-8f5eaeb9fa9b
   sha: sha256:b80e9f5812aa07c472782193e61ce402b30fa965440e25f002a5af2cf10261b1
+logstash/logstash-output-opensearch-2.0.2.zip:
+  size: 24204545
+  object_id: f15ae09c-ac8c-4dba-51ce-952917dedad6
+  sha: sha256:11d471575afb3cf5d6ef26fa112e7c42e38f24d0a02b0a5d9405a5c8d8bb157c
 logstash/logstash-output-opensearch-2.0.3.zip:
   size: 188556
   object_id: 68ea8d52-a96f-4762-7451-c2e12602f4b5

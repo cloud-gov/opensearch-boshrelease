@@ -9,8 +9,8 @@ files:
   - logstash/logstash-filter-alter-3.0.3.zip
   - logstash/logstash-filter-translate-3.4.2.zip
   - logstash/logstash-input-relp-3.0.4.zip
-  - logstash/logstash-input-syslog-3.7.1.zip
+  - logstash/logstash-input-syslog-3.6.0.zip
   - logstash/logstash-input-tcp-6.4.1.zip
   - logstash/logstash-output-syslog-3.0.5.zip
-  - logstash/logstash-output-opensearch-2.0.3.zip
+  - logstash/logstash-output-opensearch-2.0.2.zip
   - logstash/logstash-input-cloudwatch_logs-1.1.4.zip
