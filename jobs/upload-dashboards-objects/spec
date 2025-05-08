@@ -53,6 +53,7 @@ templates:
   dashboards-objects/search/app-rtr.json.erb:                         dashboards-objects/search/app-rtr.json
   dashboards-objects/search/app-rtr-long-response.json.erb:           dashboards-objects/search/app-rtr-long-response.json
   dashboards-objects/search/app-value-metric.json.erb:                dashboards-objects/search/app-value-metric.json
+  dashboards-objects/search/audit-logs.json.erb:                dashboards-objects/search/audit-logs.json
 
   dashboards-objects/dashboard/App-Errors.json.erb:          dashboards-objects/dashboard/App-Errors.json
   dashboards-objects/dashboard/App-Location.json.erb:        dashboards-objects/dashboard/App-Location.json
@@ -60,6 +61,7 @@ templates:
   dashboards-objects/dashboard/App-Metrics.json.erb:         dashboards-objects/dashboard/App-Metrics.json
   dashboards-objects/dashboard/App-Overview.json.erb:        dashboards-objects/dashboard/App-Overview.json
   dashboards-objects/dashboard/App-Performance.json.erb:     dashboards-objects/dashboard/App-Performance.json
+  dashboards-objects/dashboard/Audit-Overview.json.erb:     dashboards-objects/dashboard/Audit-Overview.json
 
   dashboards-objects/visualization/App-APP-logs-count-(top-10-apps).json.erb: dashboards-objects/visualization/App-APP-logs-count-(top-10-apps).json
   dashboards-objects/visualization/App-APP-logs-count-by-level-(top-5-apps).json.erb: dashboards-objects/visualization/App-APP-logs-count-by-level-(top-5-apps).json
@@ -83,6 +85,8 @@ templates:
   dashboards-objects/visualization/App-RTR-response-times-(50th-and-95th-first-10-apps).json.erb: dashboards-objects/visualization/App-RTR-response-times-(50th-and-95th-first-10-apps).json
   dashboards-objects/visualization/App-RTR-response-times.json.erb: dashboards-objects/visualization/App-RTR-response-times.json
   dashboards-objects/visualization/App-RTR-traffic-by-response_time_ms-(first-10-apps).json.erb: dashboards-objects/visualization/App-RTR-traffic-by-response_time_ms-(first-10-apps).json
+  dashboards-objects/visualization/Audit-logs-count.json.erb: dashboards-objects/visualization/Audit-logs-count.json
+  dashboards-objects/visualization/Audit-target-names.json.erb: dashboards-objects/visualization/Audit-target-names.json
 
 properties:
   dashboards_objects.upload_patterns:

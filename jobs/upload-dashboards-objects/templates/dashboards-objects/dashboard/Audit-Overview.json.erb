@@ -1,0 +1,39 @@
+<% require 'json' %>
+<% if(p('cloudfoundry.event_types').include? 'Audit') %>
+{
+    "attributes": {
+        "description": "",
+        "hits": 0,
+        "kibanaSavedObjectMeta": {
+            "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"kuery\"},\"filter\":[]}"
+        },
+        "optionsJSON": "{\"useMargins\":true,\"hidePanelTitles\":false}",
+        "panelsJSON": "[{\"version\":\"2.19.0\",\"gridData\":{\"x\":37,\"y\":0,\"w\":11,\"h\":13,\"i\":\"39e36251-f49a-418b-9276-c144603efc67\"},\"panelIndex\":\"39e36251-f49a-418b-9276-c144603efc67\",\"embeddableConfig\":{},\"panelRefName\":\"panel_0\"},{\"version\":\"2.19.0\",\"gridData\":{\"x\":0,\"y\":0,\"w\":37,\"h\":13,\"i\":\"12afd0ff-460d-465b-a00a-4ba7f83d1d19\"},\"panelIndex\":\"12afd0ff-460d-465b-a00a-4ba7f83d1d19\",\"embeddableConfig\":{},\"panelRefName\":\"panel_1\"},{\"version\":\"2.19.0\",\"gridData\":{\"x\":0,\"y\":13,\"w\":48,\"h\":22,\"i\":\"c2cd4aa5-5dcb-4f62-a2e8-21e7fa270a51\"},\"panelIndex\":\"c2cd4aa5-5dcb-4f62-a2e8-21e7fa270a51\",\"embeddableConfig\":{},\"panelRefName\":\"panel_2\"}]",
+        "timeRestore": false,
+        "title": "Audit - Overview",
+        "version": 1
+    },
+    "id": "audit-overview",
+    "migrationVersion": {
+        "dashboard": "7.9.3"
+    },
+    "references": [
+        {
+            "id": "Audit-target-names",
+            "name": "panel_0",
+            "type": "visualization"
+        },
+        {
+            "id": "Audit-logs-count",
+            "name": "panel_1",
+            "type": "visualization"
+        },
+        {
+            "id": "audit-logs",
+            "name": "panel_2",
+            "type": "search"
+        }
+    ],
+    "type": "dashboard"
+}
+<% end %>
