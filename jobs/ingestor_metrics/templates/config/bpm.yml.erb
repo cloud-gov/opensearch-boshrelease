@@ -1,0 +1,13 @@
+processes:
+  - name: ingestor_metrics
+    hooks:
+      pre_start: /var/vcap/jobs/ingestor_metrics/bin/pre-start
+    executable: /var/vcap/jobs/ingestor_metrics/bin/ingestor_metrics.sh
+    ephemeral_disk: true
+    persistent_disk: true
+    additional_volumes:
+    - path: /var/vcap/sys/tmp/ingestor_metrics
+      writable: true
+      allow_executions: true
+    - path: /var/vcap/jobs/ingestor_metrics/config
+      writable: true
