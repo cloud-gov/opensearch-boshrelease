@@ -126,10 +126,10 @@ jdk-21.0.7_linux-x64_bin.tar.gz:
   size: 197755939
   object_id: 23f844d3-02eb-4ea7-6a13-a8b82e7cb61f
   sha: sha256:332636375b234e56f0198fdea409f896afcc3ce627f9d0b7924cc7b51d50a295
-logstash/logstash-9.0.1-linux-x86_64.tar.gz:
-  size: 433736531
-  object_id: 57ca5a19-af4f-49c1-7877-53d345123dfb
-  sha: sha256:5e781f06ede47952014119801e79d904970a9b870bcb70c1add62a7f14c3b0e8
+logstash/logstash-8.16.1-linux-x86_64.tar.gz:
+  size: 428558276
+  object_id: 6448195b-fb5b-4a22-5f16-759c29296cf6
+  sha: sha256:1245b05b83443c204f355ad8463cf9c9a0e2d6052d51578aeaaaadb7eb6ca214
 logstash/logstash-filter-alter-3.0.3.zip:
   size: 7655
   object_id: 552763c7-779b-4ac3-5993-04a06d967c93
