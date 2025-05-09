@@ -186,6 +186,10 @@ opensearch-dashboards-cf-auth-proxy-0.0.7.tar.gz:
   size: 35056
   object_id: ea4bbc49-356f-4935-696f-b00ec3da6e6e
   sha: sha256:c73877ea46ceb878877afb01ce9ef73a4edd81a6356867250c00e78752d8c35a
+opensearch/opensearch-security-3.0.0.0.zip:
+  size: 47267143
+  object_id: 5dc1b58c-b0d5-4105-632f-74550c7b7aa7
+  sha: sha256:dc872e953826b25a9389084ce68032e3052bad694a99c9edf485e7c3ea4d3206
 requests/certifi-2023.11.17-py3-none-any.whl:
   size: 162530
   object_id: f2afff72-e415-4390-61c1-eb8010ed4e4a
