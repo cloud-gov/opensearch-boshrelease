@@ -1,5 +1,5 @@
 #!/bin/bash
-source /var/vcap/packages/openjdk-17/bosh/runtime.env
+source /var/vcap/packages/openjdk-21/bosh/runtime.env
 
 export JOB_NAME=ingestor_cloudwatch
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME

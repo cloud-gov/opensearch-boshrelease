@@ -9,7 +9,7 @@ JOB_NAME=ingestor_s3
 export LOG_DIR=/var/vcap/sys/log/$JOB_NAME
 export STORE_DIR=/var/vcap/store/$JOB_NAME
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
-source /var/vcap/packages/openjdk-17/bosh/runtime.env
+source /var/vcap/packages/openjdk-21/bosh/runtime.env
 
 export PORT=${PORT:-5000}
 export LANG=en_US.UTF-8

@@ -7,7 +7,7 @@ description: |
 packages:
 - logstash
 - base-logstash-filters
-- openjdk-17
+- openjdk-21
 
 templates:
   bin/ingestor_cloudwatch: bin/ingestor_cloudwatch.sh
