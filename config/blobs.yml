@@ -122,6 +122,10 @@ auth-proxy/werkzeug-3.1.2-py3-none-any.whl:
   size: 224352
   object_id: 45af49a7-9728-4fdb-5576-6627b8e4fbb7
   sha: sha256:4f7d1a5de312c810a8a2c6f0b47e9f6a7cffb7c8322def35e4d4d9841ff85597
+jdk-21.0.7_linux-x64_bin.tar.gz:
+  size: 197755939
+  object_id: 23f844d3-02eb-4ea7-6a13-a8b82e7cb61f
+  sha: sha256:332636375b234e56f0198fdea409f896afcc3ce627f9d0b7924cc7b51d50a295
 logstash/logstash-8.16.1-linux-x86_64.tar.gz:
   size: 428558276
   object_id: 6448195b-fb5b-4a22-5f16-759c29296cf6
@@ -162,26 +166,18 @@ logstash/logstash-output-syslog-3.0.5.zip:
   size: 41727
   object_id: 21474ee6-824a-4547-7f45-b236864358ab
   sha: sha256:80a2b08f2b58ae81c823cc0bb1dd7956fbc173037fc621bfa31af34140724e02
-opensearch-2.19.0-linux-x64.tar.gz:
-  size: 964198305
-  object_id: a2c6996b-1b60-4383-5743-79abd5825872
-  sha: sha256:455b900182ef2a7193d443d96aaea55f534ec0f91b1bad6d2eacdbaea601f16e
-opensearch-dashboards-2.19.0-linux-x64.tar.gz:
-  size: 347915942
-  object_id: 7909712a-1098-4df1-59bb-321d0f032930
-  sha: sha256:ed3734cec031c28c7a59ca938a9319233e032def33a855e4f003d657f0982b94
+opensearch-3.0.0-linux-x64.tar.gz:
+  size: 978590132
+  object_id: 06b6fa71-91f1-482d-7b87-4fd25f01f026
+  sha: sha256:d98c60bf7d75b8b4257b2421dd22b89155e87be4b509da6a4e1136cf62e0b155
+opensearch-dashboards-3.0.0-linux-x64.tar.gz:
+  size: 382012461
+  object_id: d040027a-52b6-4743-4def-87e060f3c7cb
+  sha: sha256:8d4e826961e1d01501f7eb5f4851894d249b046c17b331018e57521f404bbe9e
 opensearch-dashboards-cf-auth-proxy-0.0.7.tar.gz:
   size: 35056
   object_id: ea4bbc49-356f-4935-696f-b00ec3da6e6e
   sha: sha256:c73877ea46ceb878877afb01ce9ef73a4edd81a6356867250c00e78752d8c35a
-opensearch/opensearch-alerting-2.19.0.0.zip:
-  size: 9484415
-  object_id: 68dd71bd-0b49-436e-4ce5-3f7dae03ddb6
-  sha: sha256:e55054e0046c23b5951784af35e012c50b0d4bbe3d53ad39574e15cfc61e9d43
-opensearch/opensearch-notifications-2.19.0.0.zip:
-  size: 2754805
-  object_id: 65e2fe64-5a75-4695-4bac-5f449c3b1fd2
-  sha: sha256:b13dc11d5cf44ea66a733fcdeebdde65796d20e3369bf4bc807fb69ef82a9511
 requests/certifi-2023.11.17-py3-none-any.whl:
   size: 162530
   object_id: f2afff72-e415-4390-61c1-eb8010ed4e4a

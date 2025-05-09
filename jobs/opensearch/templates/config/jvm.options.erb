@@ -74,6 +74,9 @@
 # disabling may reduce performance on vector optimized lucene
 20-:--add-modules=jdk.incubator.vector
 
+21-:-javaagent:agent/opensearch-agent.jar
+21-:--add-opens=java.base/java.nio=org.apache.arrow.memory.core,ALL-UNNAMED
+
 # HDFS ForkJoinPool.common() support by SecurityManager
 -Djava.util.concurrent.ForkJoinPool.common.threadFactory=org.opensearch.secure_sm.SecuredForkJoinWorkerThreadFactory
 

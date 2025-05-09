@@ -2,9 +2,7 @@
 name: opensearch
 
 dependencies:
-  - openjdk-17
+- openjdk-21
 
 files:
-  - opensearch-2.19.0-linux-x64.tar.gz
-  - opensearch/opensearch-notifications-2.19.0.0.zip
-  - opensearch/opensearch-alerting-2.19.0.0.zip
+- opensearch-3.0.0-linux-x64.tar.gz
