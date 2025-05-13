@@ -115,6 +115,7 @@ uiSettings:
   overrides:
     "home:useNewHomePage": true
 savedObjects.permission.enabled: true
+opensearchDashboards.dashboardAdmin.groups: ["admin"]
 
 <% if_p('opensearch_dashboards.config_options') do p("opensearch_dashboards.config_options", {}).each do | k, v | %>
 <%= k %>: <%= v %><% end %>
