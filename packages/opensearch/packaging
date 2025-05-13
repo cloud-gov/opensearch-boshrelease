@@ -8,3 +8,5 @@ export PATH="${BOSH_INSTALL_TARGET}/bin:${PATH}"
 opensearch-plugin remove opensearch-security-analytics
 opensearch-plugin remove opensearch-security
 echo y | opensearch-plugin install "file://${PWD}/opensearch/opensearch-security-3.0.0.0.zip"
+opensearch-plugin remove opensearch-alerting
+echo y | opensearch-plugin install "file://${PWD}/opensearch/opensearch-alerting-3.0.0.0.zip"
