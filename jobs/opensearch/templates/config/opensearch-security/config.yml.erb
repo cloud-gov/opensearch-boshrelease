@@ -6,9 +6,6 @@ _meta:
 config:
   dynamic:
     kibana:
-      multitenancy_enabled: true
-      private_tenant_enabled: <%= p('opensearch.multitenancy.private_tenant_enabled') %>
-      default_tenant: ""
       server_username: <%= p('opensearch.dashboard_username') %>
       index: <%= p('opensearch.index') %>
     <% if p('opensearch.enable_proxy_auth') %>
