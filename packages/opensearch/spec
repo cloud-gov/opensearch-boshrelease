@@ -6,3 +6,6 @@ dependencies:
 
 files:
 - opensearch-3.0.0-linux-x64.tar.gz
+- opensearch/opensearch-alerting-3.0.0.0.zip
+- opensearch/opensearch-notifications-3.0.0.0.zip
+- opensearch/opensearch-security-3.0.0.0.zip
