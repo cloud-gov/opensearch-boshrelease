@@ -10,3 +10,5 @@ opensearch-plugin remove opensearch-security
 echo y | opensearch-plugin install "file://${PWD}/opensearch/opensearch-security-3.0.0.0.zip"
 opensearch-plugin remove opensearch-alerting
 echo y | opensearch-plugin install "file://${PWD}/opensearch/opensearch-alerting-3.0.0.0.zip"
+opensearch-plugin remove opensearch-notifications
+echo y | opensearch-plugin install "file://${PWD}/opensearch/opensearch-notifications-3.0.0.0.zip"
