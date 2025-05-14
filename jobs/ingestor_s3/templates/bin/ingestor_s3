@@ -38,6 +38,10 @@ echo "filter {" >> ${JOB_DIR}/config/logstash.conf
 cat /var/vcap/packages/cf-logstash-filters/audit_event.conf >> ${JOB_DIR}/config/logstash.conf
 <% end %>
 
+<% if 'metric' == p('logstash.type') %>
+cat /var/vcap/packages/cf-logstash-filters/metrics.conf >> ${JOB_DIR}/config/logstash.conf
+<% end %>
+
 echo "} #close filters" >> ${JOB_DIR}/config/logstash.conf
 
 
