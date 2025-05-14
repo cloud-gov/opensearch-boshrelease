@@ -1,5 +1,5 @@
-# This file contains the filters for cf audit logs from s3
-<%= File.read('src/logstash-filters/snippets/audit_event.conf') %>
+# This file contains the filters for metrics from s3
+<%= File.read('src/logstash-filters/snippets/metrics.conf') %>
 
 # Teardown
 <%= File.read('src/logstash-filters/snippets/teardown-s3.conf') %>
