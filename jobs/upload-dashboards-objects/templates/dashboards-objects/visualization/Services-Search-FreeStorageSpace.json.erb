@@ -21,9 +21,14 @@
             "id": "services-domainsearch",
             "name": "search_0",
             "type": "search"
+        },
+        {
+            "id": "logs-app*",
+            "name": "kibanaSavedObjectMeta.searchSourceJSON.filter[0].meta.index",
+            "type": "index-pattern"
         }
     ],
-    "type": "visualization",
+    "type": "Opensearch/Elasticsearch visualization",
     "title": "FreeStorageSpace"
 }
 <% end %>
