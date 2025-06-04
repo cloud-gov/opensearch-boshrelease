@@ -109,13 +109,6 @@ opensearch_security.proxycache.user_header: "x-proxy-user"
 opensearch_security.proxycache.roles_header: "x-proxy-roles"
 <% end %>
 
-opensearch_security.multitenancy.enabled: false
-workspace.enabled: true
-uiSettings:
-  overrides:
-    "home:useNewHomePage": true
-savedObjects.permission.enabled: true
-opensearchDashboards.dashboardAdmin.groups: ["admin"]
 
 <% if_p('opensearch_dashboards.config_options') do p("opensearch_dashboards.config_options", {}).each do | k, v | %>
 <%= k %>: <%= v %><% end %>

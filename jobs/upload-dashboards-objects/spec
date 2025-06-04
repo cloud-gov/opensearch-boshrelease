@@ -46,47 +46,61 @@ templates:
   dashboards-objects/search/app-logs-errors.json.erb:                 dashboards-objects/search/app-logs-errors.json
   dashboards-objects/search/app-container-metric.json.erb:            dashboards-objects/search/app-container-metric.json
   dashboards-objects/search/app-container-metric-cpu.json.erb:        dashboards-objects/search/app-container-metric-cpu.json
-  dashboards-objects/search/app-container-metric-disk.json.erb:            dashboards-objects/search/app-container-metric-disk.json
-  dashboards-objects/search/app-container-metric-memory.json.erb:            dashboards-objects/search/app-container-metric-memory.json
+  dashboards-objects/search/app-container-metric-disk.json.erb:       dashboards-objects/search/app-container-metric-disk.json
+  dashboards-objects/search/app-container-metric-memory.json.erb:     dashboards-objects/search/app-container-metric-memory.json
   dashboards-objects/search/app-counter.json.erb:                     dashboards-objects/search/app-counter.json
   dashboards-objects/search/app-http.json.erb:                        dashboards-objects/search/app-http.json
   dashboards-objects/search/app-rtr.json.erb:                         dashboards-objects/search/app-rtr.json
   dashboards-objects/search/app-rtr-long-response.json.erb:           dashboards-objects/search/app-rtr-long-response.json
   dashboards-objects/search/app-value-metric.json.erb:                dashboards-objects/search/app-value-metric.json
-  dashboards-objects/search/audit-logs.json.erb:                dashboards-objects/search/audit-logs.json
+  dashboards-objects/search/audit-logs.json.erb:                      dashboards-objects/search/audit-logs.json
+  dashboards-objects/search/services-domainsearch.json.erb            dashboards-objects/search/services-domainsearch.json
+  dashboards-objects/search/services-s3search.json.erb                dashboards-objects/search/services-s3search.json
 
-  dashboards-objects/dashboard/App-Errors.json.erb:          dashboards-objects/dashboard/App-Errors.json
-  dashboards-objects/dashboard/App-Location.json.erb:        dashboards-objects/dashboard/App-Location.json
-  dashboards-objects/dashboard/App-Logs.json.erb:            dashboards-objects/dashboard/App-Logs.json
-  dashboards-objects/dashboard/App-Metrics.json.erb:         dashboards-objects/dashboard/App-Metrics.json
-  dashboards-objects/dashboard/App-Overview.json.erb:        dashboards-objects/dashboard/App-Overview.json
-  dashboards-objects/dashboard/App-Performance.json.erb:     dashboards-objects/dashboard/App-Performance.json
-  dashboards-objects/dashboard/Audit-Overview.json.erb:     dashboards-objects/dashboard/Audit-Overview.json
+  dashboards-objects/dashboard/App-Errors.json.erb:           dashboards-objects/dashboard/App-Errors.json
+  dashboards-objects/dashboard/App-Location.json.erb:         dashboards-objects/dashboard/App-Location.json
+  dashboards-objects/dashboard/App-Logs.json.erb:             dashboards-objects/dashboard/App-Logs.json
+  dashboards-objects/dashboard/App-Metrics.json.erb:          dashboards-objects/dashboard/App-Metrics.json
+  dashboards-objects/dashboard/App-Overview.json.erb:         dashboards-objects/dashboard/App-Overview.json
+  dashboards-objects/dashboard/App-Performance.json.erb:      dashboards-objects/dashboard/App-Performance.json
+  dashboards-objects/dashboard/Audit-Overview.json.erb:       dashboards-objects/dashboard/Audit-Overview.json
+  dashboards-objects/dashboard/Services-DomainSearch.json.erb: dashboards-objects/dashboard/Services-DomainSearch.json
 
-  dashboards-objects/visualization/App-APP-logs-count-(top-10-apps).json.erb: dashboards-objects/visualization/App-APP-logs-count-(top-10-apps).json
-  dashboards-objects/visualization/App-APP-logs-count-by-level-(top-5-apps).json.erb: dashboards-objects/visualization/App-APP-logs-count-by-level-(top-5-apps).json
-  dashboards-objects/visualization/App-APP-logs-count-by-level.json.erb: dashboards-objects/visualization/App-APP-logs-count-by-level.json
-  dashboards-objects/visualization/App-APP-logs-count-in-timeline.json.erb: dashboards-objects/visualization/App-APP-logs-count-in-timeline.json
-  dashboards-objects/visualization/App-apps-with-errors.json.erb: dashboards-objects/visualization/App-apps-with-errors.json
-  dashboards-objects/visualization/App-errors-count-in-timeline-(top-5-apps).json.erb: dashboards-objects/visualization/App-errors-count-in-timeline-(top-5-apps).json
-  dashboards-objects/visualization/App-links.json.erb: dashboards-objects/visualization/App-links.json
-  dashboards-objects/visualization/App-logs-by-source-type-(top-10).json.erb: dashboards-objects/visualization/App-logs-by-source-type-(top-10).json
+  dashboards-objects/visualization/App-APP-logs-count-(top-10-apps).json.erb:                     dashboards-objects/visualization/App-APP-logs-count-(top-10-apps).json
+  dashboards-objects/visualization/App-APP-logs-count-by-level-(top-5-apps).json.erb:             dashboards-objects/visualization/App-APP-logs-count-by-level-(top-5-apps).json
+  dashboards-objects/visualization/App-APP-logs-count-by-level.json.erb:                          dashboards-objects/visualization/App-APP-logs-count-by-level.json
+  dashboards-objects/visualization/App-APP-logs-count-in-timeline.json.erb:                       dashboards-objects/visualization/App-APP-logs-count-in-timeline.json
+  dashboards-objects/visualization/App-apps-with-errors.json.erb:                                 dashboards-objects/visualization/App-apps-with-errors.json
+  dashboards-objects/visualization/App-errors-count-in-timeline-(top-5-apps).json.erb:            dashboards-objects/visualization/App-errors-count-in-timeline-(top-5-apps).json
+  dashboards-objects/visualization/App-links.json.erb:                                            dashboards-objects/visualization/App-links.json
+  dashboards-objects/visualization/App-logs-by-source-type-(top-10).json.erb:                     dashboards-objects/visualization/App-logs-by-source-type-(top-10).json
   dashboards-objects/visualization/App-logs-count-by-source-type-(APP-or-cf-top-5-apps).json.erb: dashboards-objects/visualization/App-logs-count-by-source-type-(APP-or-cf-top-5-apps).json
-  dashboards-objects/visualization/App-METRIC-CPU-usage.json.erb: dashboards-objects/visualization/App-METRIC-CPU-usage.json
-  dashboards-objects/visualization/App-METRIC-disk-usage.json.erb: dashboards-objects/visualization/App-METRIC-disk-usage.json
-  dashboards-objects/visualization/App-METRIC-memory-usage.json.erb: dashboards-objects/visualization/App-METRIC-memory-usage.json
-  dashboards-objects/visualization/App-instance-METRIC-CPU-usage.json.erb: dashboards-objects/visualization/App-instance-METRIC-CPU-usage.json
-  dashboards-objects/visualization/App-instance-METRIC-disk-usage.json.erb: dashboards-objects/visualization/App-instance-METRIC-disk-usage.json
-  dashboards-objects/visualization/App-instance-METRIC-memory-usage.json.erb: dashboards-objects/visualization/App-instance-METRIC-memory-usage.json
-  dashboards-objects/visualization/App-names.json.erb: dashboards-objects/visualization/App-names.json
-  dashboards-objects/visualization/App-RTR-request-count-(top-10-apps).json.erb: dashboards-objects/visualization/App-RTR-request-count-(top-10-apps).json
-  dashboards-objects/visualization/App-RTR-request-count-by-timezone-(top-5).json.erb: dashboards-objects/visualization/App-RTR-request-count-by-timezone-(top-5).json
-  dashboards-objects/visualization/App-RTR-requests-map.json.erb: dashboards-objects/visualization/App-RTR-requests-map.json
+  dashboards-objects/visualization/App-METRIC-CPU-usage.json.erb:                                 dashboards-objects/visualization/App-METRIC-CPU-usage.json
+  dashboards-objects/visualization/App-METRIC-disk-usage.json.erb:                                dashboards-objects/visualization/App-METRIC-disk-usage.json
+  dashboards-objects/visualization/App-METRIC-memory-usage.json.erb:                              dashboards-objects/visualization/App-METRIC-memory-usage.json
+  dashboards-objects/visualization/App-instance-METRIC-CPU-usage.json.erb:                        dashboards-objects/visualization/App-instance-METRIC-CPU-usage.json
+  dashboards-objects/visualization/App-instance-METRIC-disk-usage.json.erb:                       dashboards-objects/visualization/App-instance-METRIC-disk-usage.json
+  dashboards-objects/visualization/App-instance-METRIC-memory-usage.json.erb:                     dashboards-objects/visualization/App-instance-METRIC-memory-usage.json
+  dashboards-objects/visualization/App-names.json.erb:                                            dashboards-objects/visualization/App-names.json
+  dashboards-objects/visualization/App-RTR-request-count-(top-10-apps).json.erb:                  dashboards-objects/visualization/App-RTR-request-count-(top-10-apps).json
+  dashboards-objects/visualization/App-RTR-request-count-by-timezone-(top-5).json.erb:            dashboards-objects/visualization/App-RTR-request-count-by-timezone-(top-5).json
+  dashboards-objects/visualization/App-RTR-requests-map.json.erb:                                 dashboards-objects/visualization/App-RTR-requests-map.json
   dashboards-objects/visualization/App-RTR-response-times-(50th-and-95th-first-10-apps).json.erb: dashboards-objects/visualization/App-RTR-response-times-(50th-and-95th-first-10-apps).json
-  dashboards-objects/visualization/App-RTR-response-times.json.erb: dashboards-objects/visualization/App-RTR-response-times.json
-  dashboards-objects/visualization/App-RTR-traffic-by-response_time_ms-(first-10-apps).json.erb: dashboards-objects/visualization/App-RTR-traffic-by-response_time_ms-(first-10-apps).json
-  dashboards-objects/visualization/Audit-logs-count.json.erb: dashboards-objects/visualization/Audit-logs-count.json
-  dashboards-objects/visualization/Audit-target-names.json.erb: dashboards-objects/visualization/Audit-target-names.json
+  dashboards-objects/visualization/App-RTR-response-times.json.erb:                               dashboards-objects/visualization/App-RTR-response-times.json
+  dashboards-objects/visualization/App-RTR-traffic-by-response_time_ms-(first-10-apps).json.erb:  dashboards-objects/visualization/App-RTR-traffic-by-response_time_ms-(first-10-apps).json
+  dashboards-objects/visualization/Audit-logs-count.json.erb:                                     dashboards-objects/visualization/Audit-logs-count.json
+  dashboards-objects/visualization/Audit-target-names.json.erb:                                   dashboards-objects/visualization/Audit-target-names.json
+  dashboards-objects/visualization/Services-Search-CPUUtilization.json.erb:                       dashboards-objects/visualization/Services-Search-CPUUtilization.json
+  dashboards-objects/visualization/Services-Search-FreeStorageSpace.json.erb:                     dashboards-objects/visualization/Services-Search-FreeStorageSpace.json
+  dashboards-objects/visualization/Services-Search-JVMMemoryPressure.json.erb:                    dashboards-objects/visualization/Services-Search-JVMMemoryPressure.json
+  dashboards-objects/visualization/Services-Search-ThreadpoolSearchQueue.json.erb:                dashboards-objects/visualization/Services-Search-ThreadpoolSearchQueue.json
+  dashboards-objects/visualization/Services-Search-ThreadpoolSearchRejected.json.erb:             dashboards-objects/visualization/Services-Search-ThreadpoolSearchRejected.json
+  dashboards-objects/visualization/Services-Search-ThreadpoolWriteQueue.json.erb:                 dashboards-objects/visualization/Services-Search-ThreadpoolWriteQueue.json
+  dashboards-objects/visualization/Services-Search-ThreadpoolWriteRejected.json.erb:              dashboards-objects/visualization/Services-Search-ThreadpoolWriteRejected.json
+  dashboards-objects/visualization/Services-Search-MasterCPUUtilization.json.erb:                 dashboards-objects/visualization/Services-Search-MasterCPUUtilization.json
+  dashboards-objects/visualization/Services-Search-MasterJVMMemoryPressure.json.erb:              dashboards-objects/visualization/Services-Search-MasterJVMMemoryPressure.json
+  dashboards-objects/visualization/Services-Search-MasterOldGenJVMMemoryPressure.json.erb:        dashboards-objects/visualization/Services-Search-MasterOldGenJVMMemoryPressure.json
+  dashboards-objects/visualization/Services-Search-OldGenJVMMemoryPressure.json.erb:              dashboards-objects/visualization/Services-Search-OldGenJVMMemoryPressure.json
 
 properties:
   dashboards_objects.upload_patterns:
