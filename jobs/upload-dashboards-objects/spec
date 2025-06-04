@@ -54,7 +54,7 @@ templates:
   dashboards-objects/search/app-rtr-long-response.json.erb:           dashboards-objects/search/app-rtr-long-response.json
   dashboards-objects/search/app-value-metric.json.erb:                dashboards-objects/search/app-value-metric.json
   dashboards-objects/search/audit-logs.json.erb:                      dashboards-objects/search/audit-logs.json
-  dashboards-objects/search/services-domainsearch.json.erb            dashboards-objects/search/services-domainsearch.json
+  dashboards-objects/search/services-domainsearch.json.erb:           dashboards-objects/search/services-domainsearch.json
   dashboards-objects/search/services-s3search.json.erb:               dashboards-objects/search/services-s3search.json
 
   dashboards-objects/dashboard/App-Errors.json.erb:           dashboards-objects/dashboard/App-Errors.json
