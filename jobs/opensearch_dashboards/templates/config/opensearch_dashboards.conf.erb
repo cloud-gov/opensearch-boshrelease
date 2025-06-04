@@ -110,6 +110,12 @@ opensearch_security.proxycache.roles_header: "x-proxy-roles"
 <% end %>
 
 
+
+opensearch_security.multitenancy.enabled: <%= p('opensearch_dashboards.multitenancy.enabled') %>
+opensearch_security.multitenancy.tenants.enable_global: <%= p('opensearch_dashboards.multitenancy.tenants.enable_global') %>
+opensearch_security.multitenancy.tenants.enable_private: <%= p('opensearch_dashboards.multitenancy.tenants.enable_private') %>
+opensearch_security.multitenancy.enable_filter: <%= p('opensearch_dashboards.multitenancy.enable_filter') %>
+
 <% if_p('opensearch_dashboards.config_options') do p("opensearch_dashboards.config_options", {}).each do | k, v | %>
 <%= k %>: <%= v %><% end %>
 <% end %>
