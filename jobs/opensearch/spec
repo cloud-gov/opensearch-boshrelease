@@ -137,7 +137,7 @@ properties:
     default: 15
   opensearch.health.connect_timeout:
     description: Post-start timeout for node to become available (seconds)
-    default: 60
+    default: 120
   opensearch.health.connect_interval:
     description: Post-start interval for node to become available (seconds)
     default: 5

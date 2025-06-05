@@ -3,10 +3,10 @@ import os
 import json
 
 folders = [
-"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/dashboard",
+"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/index-pattern",
 "/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/search",
 "/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/visualization",
-"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/index-pattern"
+"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/dashboard"
 ]
 output_file = "/var/vcap/jobs/upload-dashboards-objects/dashboard.ndjson"
 
