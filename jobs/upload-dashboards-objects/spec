@@ -101,6 +101,7 @@ templates:
   dashboards-objects/visualization/Services-Search-MasterJVMMemoryPressure.json.erb:              dashboards-objects/visualization/Services-Search-MasterJVMMemoryPressure.json
   dashboards-objects/visualization/Services-Search-MasterOldGenJVMMemoryPressure.json.erb:        dashboards-objects/visualization/Services-Search-MasterOldGenJVMMemoryPressure.json
   dashboards-objects/visualization/Services-Search-OldGenJVMMemoryPressure.json.erb:              dashboards-objects/visualization/Services-Search-OldGenJVMMemoryPressure.json
+  dashboards-objects/visualization/Services-S3-weekly-usage.json.erb:                             dashboards-objects/visualization/Services-S3-weekly-usage.json
 
 properties:
   dashboards_objects.upload_patterns:
