@@ -15,6 +15,8 @@ templates:
   config/auth-proxy-crt.erb: config/ssl/auth-proxy.crt
   config/auth-proxy-pem.erb: config/ssl/auth-proxy.pem
   config/ca.erb: config/ssl/opensearch.ca
+  config/admin-crt.erb: config/ssl/opensearch-admin.crt
+  config/admin-pem.erb: config/ssl/opensearch-admin.pem
 
 consumes:
   - name: opensearch
