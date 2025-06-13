@@ -78,3 +78,11 @@ properties:
     descrition: "Host of Redis backend used for session data storage"
   opensearch-dashboards-cf-auth-proxy.redis.password:
     descrition: "Password to access Redis backend used for session data storage"
+  opensearch-dashboards-cf-auth-proxy.opensearch_url:
+    description: "url of opensearch"
+  opensearch-dashboards-cf-auth-proxy.opensearch.ssl.ca:
+    description: ca for opensearch
+  opensearch-dashboards-cf-auth-proxy.opensearch.ssl.certificate:
+    description: cert for opensearch
+  opensearch-dashboards-cf-auth-proxy.opensearch.ssl.key:
+    description: key for opensearch
