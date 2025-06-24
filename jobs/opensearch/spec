@@ -134,10 +134,10 @@ properties:
     default: 300
   opensearch.health.interval:
     description: Post-start interval for node to join cluster (seconds)
-    default: 15
+    default: 30
   opensearch.health.connect_timeout:
     description: Post-start timeout for node to become available (seconds)
-    default: 120
+    default: 250
   opensearch.health.connect_interval:
     description: Post-start interval for node to become available (seconds)
     default: 5
