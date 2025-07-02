@@ -100,3 +100,8 @@ s3.client.default.region: <%= region %>
 
 plugins.security.system_indices.enabled: true
 plugins.anomaly_detection.enabled: false
+
+cluster.routing.allocation.disk.watermark.low: 89
+cluster.routing.allocation.disk.watermark.warm: 90
+cluster.routing.allocation.disk.watermark.high: 92
+cluster.routing.allocation.disk.watermark.flood: 95
