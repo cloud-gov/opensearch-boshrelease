@@ -8,7 +8,6 @@ opensearch-dashboards-plugin remove anomalyDetectionDashboards --allow-root
 opensearch-dashboards-plugin remove customImportMapDashboards --allow-root
 opensearch-dashboards-plugin remove flowFrameworkDashboards --allow-root
 opensearch-dashboards-plugin remove mlCommonsDashboards --allow-root
-opensearch-dashboards-plugin remove observabilityDashboards --allow-root
 opensearch-dashboards-plugin remove queryInsightsDashboards --allow-root
 opensearch-dashboards-plugin remove queryWorkbenchDashboards --allow-root
 opensearch-dashboards-plugin remove searchRelevanceDashboards --allow-root
