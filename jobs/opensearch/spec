@@ -166,6 +166,8 @@ properties:
   opensearch.plugins:
     description: "Plugins to run opensearch with (array[] = { plugin-name: install-source }; e.g. [ { kopf: 'lmenezes/opensearch-kopf' } ])"
     default: []
+  opensearch.plugins.datsource.masterkey:
+    description: key to securely store and encrypt data source connections in OpenSearch
   opensearch.http_host:
     description: "The host address to bind the opensearch HTTP service to and to publish for HTTP clients to connect to"
     default: 0.0.0.0
