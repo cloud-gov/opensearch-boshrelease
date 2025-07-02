@@ -1,18 +1,14 @@
-set -e
-
-tar xzf opensearch-dashboards-3.1.0-linux-x64.tar.gz -C $BOSH_INSTALL_TARGET --strip-components 1
-
-#Remove unused plugins
-export PATH="${BOSH_INSTALL_TARGET}/bin:${PATH}"
-opensearch-dashboards-plugin remove anomalyDetectionDashboards --allow-root
-opensearch-dashboards-plugin remove customImportMapDashboards --allow-root
-opensearch-dashboards-plugin remove flowFrameworkDashboards --allow-root
-opensearch-dashboards-plugin remove mlCommonsDashboards --allow-root
-opensearch-dashboards-plugin remove queryInsightsDashboards --allow-root
-opensearch-dashboards-plugin remove queryWorkbenchDashboards --allow-root
-opensearch-dashboards-plugin remove searchRelevanceDashboards --allow-root
-opensearch-dashboards-plugin remove securityAnalyticsDashboards --allow-root
-
-# Removes alerting and notification
-opensearch-dashboards-plugin remove alertingDashboards --allow-root
-opensearch-dashboards-plugin remove notificationsDashboards --allow-root
+---
+- set -e
+- tar xzf opensearch-dashboards-3.1.0-linux-x64.tar.gz -C $BOSH_INSTALL_TARGET --strip-components 1
+- export PATH="${BOSH_INSTALL_TARGET}/bin:${PATH}"
+- opensearch-dashboards-plugin remove anomalyDetectionDashboards --allow-root
+- opensearch-dashboards-plugin remove customImportMapDashboards --allow-root
+- opensearch-dashboards-plugin remove flowFrameworkDashboards --allow-root
+- opensearch-dashboards-plugin remove mlCommonsDashboards --allow-root
+- opensearch-dashboards-plugin remove queryInsightsDashboards --allow-root
+- opensearch-dashboards-plugin remove queryWorkbenchDashboards --allow-root
+- opensearch-dashboards-plugin remove searchRelevanceDashboards --allow-root
+- opensearch-dashboards-plugin remove securityAnalyticsDashboards --allow-root
+- opensearch-dashboards-plugin remove alertingDashboards --allow-root
+- opensearch-dashboards-plugin remove notificationsDashboards --allow-root
