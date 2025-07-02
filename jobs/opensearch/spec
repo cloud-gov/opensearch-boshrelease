@@ -74,8 +74,6 @@ properties:
   opensearch.routing.watermark.flood_stage:
     description: OpenSearch enforces a read-only index block (index.blocks.read_only_allow_delete) on every index that has one or more shards allocated on the node and at least one disk exceeding the flood stage.
     default: 95%
-  opensearch.plugins.datasource.masterkey:
-    description: key to securely store and encrypt data source connections in OpenSearch
   opensearch.username:
     description: "Admin username for Opensearch"
   opensearch.password:
