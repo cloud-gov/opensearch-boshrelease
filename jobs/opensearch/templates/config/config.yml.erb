@@ -40,9 +40,9 @@ plugins.security.ssl.http.pemtrustedcas_filepath: ssl/opensearch.ca
 plugins.anomaly_detection.enabled: false
 plugins.security.system_indices.enabled: true
 
-<% if p('opensearch.plugins.datsource.masterkey') do |key| %>
-plugins.query.datasources.encryption.masterkey: <%= key %>
-<% end %>
+# <% if p('opensearch.plugins.datsource.masterkey') do |key| %>
+# plugins.query.datasources.encryption.masterkey: <%= key %>
+# <% end %>
 
 <%
   cluster_name = nil
