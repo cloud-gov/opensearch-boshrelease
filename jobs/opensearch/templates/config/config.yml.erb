@@ -112,7 +112,3 @@ cluster.routing.allocation.disk.watermark.high: <%= high %>
 <% if_p('opensearch.routing.watermark.flood_stage') do |flood_stage| %>
 cluster.routing.allocation.disk.watermark.flood_stage: <%= flood_stage %>
 <% end %>
-
-# <% if_p('opensearch.plugins.datasource.masterkey') do |key| %>
-# plugins.query.datasources.encryption.masterkey: <%= key %>
-# <% end %>
