@@ -76,6 +76,7 @@ properties:
     default: 95%
   opensearch.plugin.datasource.masterkey:
     description: masterkey for datasources stored
+    default: ""
   opensearch.username:
     description: "Admin username for Opensearch"
   opensearch.password:
