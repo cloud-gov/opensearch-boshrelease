@@ -76,7 +76,7 @@ output {
 
     <% p('logstash_parser.outputs').each do | output | %>
     if [@index_type] == "app" {
-        if "app_metric" in [tags]{
+        if @type == "app_metric"{
           <%= output['plugin'] %> {
         <% if 'opensearch' == output['plugin'] %>
             <%
