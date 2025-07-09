@@ -106,6 +106,7 @@ output {
           <%= k %> => <%= v.inspect %>
         <% end %>
         }
+      }
       else{
         <%= output['plugin'] %> {
         <% if 'opensearch' == output['plugin'] %>
