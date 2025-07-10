@@ -76,7 +76,7 @@ output {
 
     <% p('logstash_parser.outputs').each do | output | %>
     if [@index_type] == "app" {
-        if [@type] == "app_metric"{
+        if [@type == "app_metric"{
           <%= output['plugin'] %> {
         <% if 'opensearch' == output['plugin'] %>
             <%
@@ -99,10 +99,14 @@ output {
               if p('logstash_parser.opensearch.routing', nil)
                 options['routing'] = p('logstash_parser.opensearch.routing')
               end
-              output['options'] = options.merge(output['options'])
+              merged_options = options.merge(output['options'])
             %>
+        <% else %>
+              <%
+                merged_options = output['options']
+              %>
         <% end %>
-        <% output['options'].each do | k, v | %>
+        <% merged_options.each do | k, v | %>
           <%= k %> => <%= v.inspect %>
         <% end %>
         }
@@ -130,14 +134,18 @@ output {
               if p('logstash_parser.opensearch.routing', nil)
                 options['routing'] = p('logstash_parser.opensearch.routing')
               end
-              output['options'] = options.merge(output['options'])
+             merged_options = options.merge(output['options'])
             %>
+        <% else %>
+              <%
+                merged_options = output['options']
+              %>
         <% end %>
-        <% output['options'].each do | k, v | %>
+        <% merged_options.each do | k, v | %>
           <%= k %> => <%= v.inspect %>
         <% end %>
-          }
         }
-        }
+      }
+    }
     <% end %>
 }
