@@ -11,7 +11,7 @@ templates:
   config/admin-crt.erb: config/ssl/opensearch-admin.crt
   config/admin-pem.erb: config/ssl/opensearch-admin.pem
   config/ca.erb: config/ssl/opensearch.ca
-  onfig/ism-policy.json.erb: config/ism-policy.json
+  config/ism-policy.json.erb: config/ism-policy.json
   index-templates/shards-and-replicas.json.erb: index-templates/shards-and-replicas.json
   index-templates/index-settings.json.erb: index-templates/index-settings.json
   index-templates/index-mappings.json.erb: index-templates/index-mappings.json
