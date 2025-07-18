@@ -117,9 +117,9 @@ echo "--- License"
 
 echo "--- Creating ISM policy"
 
-logs-app-rollover_policy=$(curl -XGET ${CA} ${CERT} ${KEY} ${BASEURL}/_plugins/_ism/policies/logs-app-rollover_policy)
-TERM=$(echo "$logs-app-rollover_policy" | grep -o '"_primary_term":[0-9]*' | sed 's/"_primary_term"://')
-SEQ=$(echo "$logs-app-rollover_policy" | grep -o '"_seq_no":[0-9]*' | sed 's/"_seq_no"://')
+logs_app_rollover_policy=$(curl -XGET ${CA} ${CERT} ${KEY} ${BASEURL}/_plugins/_ism/policies/logs-app-rollover_policy)
+TERM=$(echo "$logs_app_rollover_policy" | grep -o '"_primary_term":[0-9]*' | sed 's/"_primary_term"://')
+SEQ=$(echo "$logs_app_rollover_policy" | grep -o '"_seq_no":[0-9]*' | sed 's/"_seq_no"://')
 if [[ -n "$TERM" ]]; then
   curl -XPUT ${CA} ${CERT} ${KEY} "${BASEURL}/_plugins/_ism/policies/logs-app-rollover_policy?if_seq_no=${SEQ}&if_primary_term=${TERM}" -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy.json
 else
