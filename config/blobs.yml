@@ -174,10 +174,10 @@ opensearch-dashboards-3.1.0-linux-x64.tar.gz:
   size: 385456866
   object_id: 7444b652-d178-4b48-6632-12ccd4a3dd8a
   sha: sha256:d7ae01dce54d13a62cc268dfede9941331805270073cb5e3832aa8fc54c4156f
-opensearch-dashboards-cf-auth-proxy-0.0.8.tar.gz:
-  size: 35751
-  object_id: 5ab0f5e3-60bc-4171-688e-aa912d6e94d5
-  sha: sha256:b02ee8b6e62757817fb4aa4c120f420f86a9c480afd10cec6c70ad43ab9ac9d4
+opensearch-dashboards-cf-auth-proxy-0.0.9.tar.gz:
+  size: 35945
+  object_id: b63bb241-f6f0-4024-5a05-0f28378cca87
+  sha: sha256:e7f57e92d933bfc8a1bb292dc259a2a9829f3334746d6b181e869013c16fc449
 requests/certifi-2023.11.17-py3-none-any.whl:
   size: 162530
   object_id: f2afff72-e415-4390-61c1-eb8010ed4e4a
