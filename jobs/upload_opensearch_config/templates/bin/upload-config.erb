@@ -133,6 +133,15 @@ if [ "$HTTP_CODE" -ge "201" ]; then
   curl -XPUT ${CA} ${CERT} ${KEY} ${BASEURL}/%3Clogs-app-%7Bnow%2Fd%7D-01%3E -H 'Content-Type: application/json' -d'{"aliases": {"'${ALIAS}'": {}}}'
 fi
 
+logs_metric_rollover_policy=$(curl -XGET ${CA} ${CERT} ${KEY} ${BASEURL}/_plugins/_ism/policies/logs-metric-rollover_policy)
+TERM=$(echo "$logs_metric_rollover_policy" | grep -o '"_primary_term":[0-9]*' | sed 's/"_primary_term"://')
+SEQ=$(echo "$logs_metric_rollover_policy" | grep -o '"_seq_no":[0-9]*' | sed 's/"_seq_no"://')
+if [[ -n "$TERM" ]]; then
+  curl -XPUT ${CA} ${CERT} ${KEY} "${BASEURL}/_plugins/_ism/policies/logs-metric-rollover_policy?if_seq_no=${SEQ}&if_primary_term=${TERM}" -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy-metrics.json
+else
+  curl -XPUT ${CA} ${CERT} ${KEY} ${BASEURL}/_plugins/_ism/policies/logs-metric-rollover_policy -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy-metrics.json
+fi
+
 HTTP_CODE=$(curl -s -o /dev/null -s -w "%{http_code}\n" -I  ${CA} ${CERT} ${KEY} ${BASEURL}/_alias/${METRIC_ALIAS}/ )
 if [ "$HTTP_CODE" -ge "201" ]; then
   curl -XPUT ${CA} ${CERT} ${KEY} ${BASEURL}/%3Clogs-metrics-%7Bnow%2Fd%7D-01%3E -H 'Content-Type: application/json' -d'{"aliases": {"'${METRIC_ALIAS}'": {}}}'
