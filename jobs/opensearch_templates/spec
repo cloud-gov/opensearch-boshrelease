@@ -41,6 +41,8 @@ properties:
     description: Name index-settings component template is uploaded as by upload_opensearch_config
   opensearch_config.shards_and_replicas_component_name:
     description: Name shards-and-replicas component template is uploaded as by upload_opensearch_config
+  opensearch_config.metrics_shards_and_replicas_component_name:
+    description: Name shards-and-replicas component template is uploaded as by upload_opensearch_config
   opensearch_config.index_settings:
     description: Index settings for logs
   opensearch_config.app_index_settings:
