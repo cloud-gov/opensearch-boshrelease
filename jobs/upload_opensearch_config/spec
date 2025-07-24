@@ -13,6 +13,7 @@ templates:
   config/ca.erb: config/ssl/opensearch.ca
   config/ism-policy.json.erb: config/ism-policy.json
   index-templates/shards-and-replicas.json.erb: index-templates/shards-and-replicas.json
+  index-templates/shards-and-replicas-metrics.json.erb: index-templates/shards-and-replicas-metrics.json
   index-templates/index-settings.json.erb: index-templates/index-settings.json
   index-templates/index-mappings.json.erb: index-templates/index-mappings.json
 
@@ -32,10 +33,15 @@ properties:
   opensearch_config.opensearch.ssl.private_key:
     description: Private key for communication between Opensearch Dashboards and Opensearch
   opensearch_config.shard_count:
-    description: shard count for environment, should match the amount of data nodes.
+    description: shard count for environment, should match the average daily volume expected /50 for for basic logging and /20 for high access
+    default: 3
+  opensearch_config.metrics_shard_count:
+    description: shard count for environment, should match the average daily volume expected /50 for for basic logging and /20 for high access
     default: 3
   opensearch_config.alias:
-    description: alias of index
+    description: alias of default index
+  opensearch_config.metrics_alias:
+    description: alias of metrics index
   opensearch_config.index_prefix:
     description: |
       Name prefix of your log indices that can uniquely distinguish them among other ES indices if apply pattern '*' to it, e.g. 'logs-*'.

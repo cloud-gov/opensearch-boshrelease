@@ -7,9 +7,11 @@ description: |
 templates:
   component-index-mappings-base.json.erb:        component-index-mappings-base.json
   component-index-mappings-app.json.erb:         component-index-mappings-app.json
+  component-index-mappings-metrics.json.erb:     component-index-mappings-metrics.json
   component-index-mappings-platform.json.erb:    component-index-mappings-platform.json
   index-template-base.json.erb:                  index-template.json
   index-template-app.json.erb:                   index-template-app.json
+  index-template-metric.json.erb:                index-template-metrics.json
   index-template-platform.json.erb:              index-template-platform.json
 
 properties:
@@ -27,6 +29,8 @@ properties:
     default: "logs-platform"
   opensearch_config.base_index_component_name:
     description: Name that component template component-index-mappings-base.json is uploaded as by upload_opensearch_config
+  opensearch_config.metric_index_component_name:
+    description: Name that compenent-index-mappings-metrics.json is uploaded as by upload_opensearch_config
   opensearch_config.app_index_component_name:
     description: Name that component-index-mappings-app.json is uploaded as by upload_opensearch_config
   opensearch_config.platform_index_component_name:
