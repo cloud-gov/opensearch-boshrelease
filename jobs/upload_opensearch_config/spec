@@ -40,7 +40,7 @@ properties:
     default: 3
   opensearch_config.alias:
     description: alias of default index
-  opensearch_config.metrics_alias:
+  opensearch_config.metric_alias:
     description: alias of metrics index
   opensearch_config.index_prefix:
     description: |
