@@ -13,8 +13,8 @@
                             "delay": "1m"
                         },
                         "rollover": {
-                            "min_index_age": "1d",
-                            "min_primary_shard_size": "3gb",
+                            "min_index_age": "<%= p('opensearch_config.rollover_index_age')%>",
+                            "min_primary_shard_size": "<%= p('opensearch_config.rollover_document_size')%>" ,
                             "copy_alias": false
                         }
                     },
