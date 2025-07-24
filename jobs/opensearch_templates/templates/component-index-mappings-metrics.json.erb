@@ -112,9 +112,7 @@ keyword_default = { "type": "keyword", "index": true }.to_json
                 "syslog_sd_params": {
                     "type": "flat_object"
                 },
-                "tags": {
-                    "type": <%= keyword_default %>
-                }
+                "tags": <%= keyword_default %>,
             }
         }
     }
