@@ -22,7 +22,7 @@ KEY="--key ${JOB_DIR}/config/ssl/opensearch-admin.key"
 DOCUMENT_SIZE=<%= document_size %>
 INDEX_AGE=<%= index_age %>
 ALIAS=<%= aliases %>
-METRIC_ALIASES=<%= metric_aliases %>
+METRIC_ALIAS=<%= metric_aliases %>
 
 
 for template in $(curl -s ${CA} ${CERT} ${KEY} ${URL}/_cat/templates | awk '{print $1}'); do
