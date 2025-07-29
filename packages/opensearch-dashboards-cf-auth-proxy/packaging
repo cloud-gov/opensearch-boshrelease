@@ -6,4 +6,4 @@ export LD_LIBRARY_PATH="/var/vcap/packages/python3/lib:${LD_LIBRARY_PATH}"
 export C_INCLUDE_PATH="/var/vcap/packages/python3/include:${C_INCLUDE_PATH}"
 
 python3 -m pip install "--prefix=${BOSH_INSTALL_TARGET}" --no-index auth-proxy/*.whl
-tar xzvf opensearch-dashboards-cf-auth-proxy-0.0.8.tar.gz -C $BOSH_INSTALL_TARGET --strip-components 1
+tar xzvf opensearch-dashboards-cf-auth-proxy-0.0.11.tar.gz -C $BOSH_INSTALL_TARGET --strip-components 1
