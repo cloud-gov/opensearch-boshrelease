@@ -22,7 +22,7 @@
     "kibanaSavedObjectMeta": {
       "searchSourceJSON": "<%= JSON.parse(
       {
-        "index": "#{p('opensearch_config.app_index_prefix')}*",
+        "index": "#{p('opensearch_config.metric_index_prefix')}*",
         "query": {
           "query_string": {
             "analyze_wildcard": true,
@@ -37,7 +37,7 @@
                 "type": "exists",
                 "key": "containermetric.cpu_percentage",
                 "value": "exists",
-                "index": "#{p('opensearch_config.app_index_prefix')}*"
+                "index": "#{p('opensearch_config.metric_index_prefix')}*"
             },
             "exists": {
                 "field": "containermetric.cpu_percentage"
