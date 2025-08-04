@@ -34,10 +34,10 @@ properties:
   opensearch_config.opensearch.ssl.private_key:
     description: Private key for communication between Opensearch Dashboards and Opensearch
   opensearch_config.shard_count:
-    description: shard count for environment, should match the average daily volume expected /50 for for basic logging and /20 for high access
+    description: shard count for environment, should match the average daily volume expected /50 for basic logging and /20 for high access
     default: 3
   opensearch_config.metrics_shard_count:
-    description: shard count for environment, should match the average daily volume expected /50 for for basic logging and /20 for high access
+    description: shard count for metrics data in environment, should match the average daily volume expected /50 for for basic logging and /20 for high access
     default: 3
   opensearch_config.alias:
     description: alias of default index
