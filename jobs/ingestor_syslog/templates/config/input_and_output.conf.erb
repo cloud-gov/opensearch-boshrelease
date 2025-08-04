@@ -75,30 +75,33 @@ output {
     <% end %>
 
     <% p('logstash_parser.outputs').each do | output | %>
+    <%
+      options = {
+        "hosts" => [ es_output_hosts ],
+        "manage_template" => false,
+        "ssl_certificate_verification" => true,
+        "tls_certificate" => "/var/vcap/jobs/ingestor_syslog/config/ssl/ingestor.crt",
+        "tls_key" => "/var/vcap/jobs/ingestor_syslog/config/ssl/ingestor.key",
+        "ssl" => true,
+        "cacert" => "/var/vcap/jobs/ingestor_syslog/config/ssl/opensearch.ca"
+      }
+
+      if p('logstash_parser.opensearch.idle_flush_time', nil)
+        options['idle_flush_time'] = p('logstash_parser.opensearch.idle_flush_time')
+      end
+      if p('logstash_parser.opensearch.document_id', nil)
+        options['document_id'] = p('logstash_parser.opensearch.document_id')
+      end
+      if p('logstash_parser.opensearch.routing', nil)
+        options['routing'] = p('logstash_parser.opensearch.routing')
+      end
+    %>
     if [@index_type] == "app" {
         if [@type] == "app_metric"{
           <%= output['plugin'] %> {
         <% if 'opensearch' == output['plugin'] %>
             <%
-              options = {
-                "hosts" => [ es_output_hosts ],
-                "index" => p('logstash_parser.opensearch.index_metrics'),
-                "manage_template" => false,
-                "ssl_certificate_verification" => true,
-                "tls_certificate" => "/var/vcap/jobs/ingestor_syslog/config/ssl/ingestor.crt",
-                "tls_key" => "/var/vcap/jobs/ingestor_syslog/config/ssl/ingestor.key",
-                "ssl" => true,
-                "cacert" => "/var/vcap/jobs/ingestor_syslog/config/ssl/opensearch.ca"
-              }
-              if p('logstash_parser.opensearch.idle_flush_time', nil)
-                options['idle_flush_time'] = p('logstash_parser.opensearch.idle_flush_time')
-              end
-              if p('logstash_parser.opensearch.document_id', nil)
-                options['document_id'] = p('logstash_parser.opensearch.document_id')
-              end
-              if p('logstash_parser.opensearch.routing', nil)
-                options['routing'] = p('logstash_parser.opensearch.routing')
-              end
+              options['index'] = p('logstash_parser.opensearch.index_metrics')
               merged_options = options.merge(output['options'])
             %>
         <% else %>
@@ -115,26 +118,8 @@ output {
         <%= output['plugin'] %> {
         <% if 'opensearch' == output['plugin'] %>
             <%
-              options = {
-                "hosts" => [ es_output_hosts ],
-                "index" => p('logstash_parser.opensearch.index'),
-                "manage_template" => false,
-                "ssl_certificate_verification" => true,
-                "tls_certificate" => "/var/vcap/jobs/ingestor_syslog/config/ssl/ingestor.crt",
-                "tls_key" => "/var/vcap/jobs/ingestor_syslog/config/ssl/ingestor.key",
-                "ssl" => true,
-                "cacert" => "/var/vcap/jobs/ingestor_syslog/config/ssl/opensearch.ca"
-              }
-              if p('logstash_parser.opensearch.idle_flush_time', nil)
-                options['idle_flush_time'] = p('logstash_parser.opensearch.idle_flush_time')
-              end
-              if p('logstash_parser.opensearch.document_id', nil)
-                options['document_id'] = p('logstash_parser.opensearch.document_id')
-              end
-              if p('logstash_parser.opensearch.routing', nil)
-                options['routing'] = p('logstash_parser.opensearch.routing')
-              end
-             merged_options = options.merge(output['options'])
+              options['index'] = p('logstash_parser.opensearch.index')
+              merged_options = options.merge(output['options'])
             %>
         <% else %>
               <%
