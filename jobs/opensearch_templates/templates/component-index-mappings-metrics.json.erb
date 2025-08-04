@@ -19,16 +19,16 @@ keyword_default = { "type": "keyword", "index": true }.to_json
                 "type": "object",
                 "properties": {
                     "app": {
-                    "type": "match_only_text"
+                    "type": <%= keyword_default %>
                     },
                     "app_id": {
                     "type": "match_only_text"
                     },
                     "app_instance": {
-                    "type": "match_only_text"
+                    "type": <%= keyword_default %>
                     },
                     "org": {
-                    "type": "match_only_text"
+                    "type": <%= keyword_default %>
                     },
                     "org_id": {
                     "type": "match_only_text"
@@ -43,7 +43,7 @@ keyword_default = { "type": "keyword", "index": true }.to_json
                     "type": "match_only_text"
                     },
                     "space": {
-                    "type": "match_only_text"
+                    "type": <%= keyword_default %>
                     },
                     "space_id": {
                     "type": "match_only_text"
