@@ -10,6 +10,7 @@ opensearch_port = p("opensearch_config.opensearch.port")
 document_size = p("opensearch_config.rollover_document_size")
 index_age = p("opensearch_config.rollover_index_age")
 aliases = p("opensearch_config.alias")
+metric_aliases = p("opensearch_config.metric_alias")
 %>
 
 # Delete existing templates before uploading
@@ -21,6 +22,7 @@ KEY="--key ${JOB_DIR}/config/ssl/opensearch-admin.key"
 DOCUMENT_SIZE=<%= document_size %>
 INDEX_AGE=<%= index_age %>
 ALIAS=<%= aliases %>
+METRIC_ALIAS=<%= metric_aliases %>
 
 
 for template in $(curl -s ${CA} ${CERT} ${KEY} ${URL}/_cat/templates | awk '{print $1}'); do
@@ -130,6 +132,21 @@ HTTP_CODE=$(curl -s -o /dev/null -s -w "%{http_code}\n" -I  ${CA} ${CERT} ${KEY}
 if [ "$HTTP_CODE" -ge "201" ]; then
   curl -XPUT ${CA} ${CERT} ${KEY} ${BASEURL}/%3Clogs-app-%7Bnow%2Fd%7D-01%3E -H 'Content-Type: application/json' -d'{"aliases": {"'${ALIAS}'": {}}}'
 fi
+
+logs_metric_rollover_policy=$(curl -XGET ${CA} ${CERT} ${KEY} ${BASEURL}/_plugins/_ism/policies/logs-metric-rollover_policy)
+TERM=$(echo "$logs_metric_rollover_policy" | grep -o '"_primary_term":[0-9]*' | sed 's/"_primary_term"://')
+SEQ=$(echo "$logs_metric_rollover_policy" | grep -o '"_seq_no":[0-9]*' | sed 's/"_seq_no"://')
+if [[ -n "$TERM" ]]; then
+  curl -XPUT ${CA} ${CERT} ${KEY} "${BASEURL}/_plugins/_ism/policies/logs-metric-rollover_policy?if_seq_no=${SEQ}&if_primary_term=${TERM}" -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy-metrics.json
+else
+  curl -XPUT ${CA} ${CERT} ${KEY} ${BASEURL}/_plugins/_ism/policies/logs-metric-rollover_policy -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy-metrics.json
+fi
+
+HTTP_CODE=$(curl -s -o /dev/null -s -w "%{http_code}\n" -I  ${CA} ${CERT} ${KEY} ${BASEURL}/_alias/${METRIC_ALIAS}/ )
+if [ "$HTTP_CODE" -ge "201" ]; then
+  curl -XPUT ${CA} ${CERT} ${KEY} ${BASEURL}/%3Clogs-metrics-%7Bnow%2Fd%7D-01%3E -H 'Content-Type: application/json' -d'{"aliases": {"'${METRIC_ALIAS}'": {}}}'
+fi
+
 
 echo "--- Creating Reporting indexs"
 

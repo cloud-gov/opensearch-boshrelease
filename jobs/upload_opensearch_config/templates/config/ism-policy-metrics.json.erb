@@ -52,37 +52,9 @@
                 ],
                 "transitions": [
                     {
-                        "state_name": "Old_index",
-                        "conditions": {
-                            "min_index_age": "90d"
-                        }
-                    }
-                ]
-            },
-            {
-                "name": "Old_index",
-                "actions": [
-                    {
-                        "retry": {
-                            "count": 3,
-                            "backoff": "exponential",
-                            "delay": "1m"
-                        },
-                        "allocation": {
-                            "require": {
-                                "box_type": "warm"
-                            },
-                            "include": {},
-                            "exclude": {},
-                            "wait_for": false
-                        }
-                    }
-                ],
-                "transitions": [
-                    {
                         "state_name": "Delete_index",
                         "conditions": {
-                            "min_index_age": "365d"
+                            "min_index_age": "90d"
                         }
                     }
                 ]
@@ -105,7 +77,7 @@
         "ism_template": [
             {
                 "index_patterns": [
-                    "logs-app-*"
+                    "logs-metrics-*"
                 ],
                 "priority": 100
             }

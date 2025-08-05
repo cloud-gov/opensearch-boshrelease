@@ -1,0 +1,11 @@
+{
+  "template": {
+    "settings": {
+      "number_of_shards": <%= p('opensearch_config.metrics_shard_count')%>,
+      "number_of_replicas" : 1,
+      "index.routing.allocation.require.box_type": "hot",
+      "plugins.index_state_management.rollover_alias": "<%= p('opensearch_config.metric_alias')%>",
+      "refresh_interval": "2s"
+    }
+  }
+}

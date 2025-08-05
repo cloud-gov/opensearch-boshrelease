@@ -188,6 +188,9 @@ properties:
   logstash_parser.opensearch.index:
     description: "The specific, dynamic index name to write events to."
     default: "logstash-%{+YYYY.MM.dd}"
+  logstash_parser.opensearch.index_metrics:
+    description: "the specific, dynamic index name to write metrics to"
+    default: "logs-metrics-%{+YYYY.MM.dd}"
   logstash_parser.opensearch.index_type:
     description: "The specific, dynamic index type name to write events to."
     default: "%{@type}"
