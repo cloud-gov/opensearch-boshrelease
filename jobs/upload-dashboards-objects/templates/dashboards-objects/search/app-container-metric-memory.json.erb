@@ -20,8 +20,7 @@
         "title": "[app] Container Metric memory",
         "version": 1,
         "kibanaSavedObjectMeta": {
-      "searchSourceJSON": "<%= JSON.parse(
-      {
+      "searchSourceJSON": <%= {
         "index": "#{p('opensearch_config.metric_index_prefix')}*",
         "query": {
             "query_string": {
@@ -60,9 +59,7 @@
             "require_field_match": false,
             "fragment_size": 2147483647
         }
-      }.to_json
-  ).to_json.gsub(/"/) { '\"' }
-  %>"
+      }.to_json.to_json %>
             }
         },
     "id": "app-container-metric-memory",

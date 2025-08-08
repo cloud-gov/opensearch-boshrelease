@@ -18,8 +18,7 @@
     ],
     "version": 1,
     "kibanaSavedObjectMeta": {
-      "searchSourceJSON": "<%= JSON.parse(
-      {
+      "searchSourceJSON": <%= {
         "index": "#{p('opensearch_config.app_index_prefix')}*",
         "filter": [
           {
@@ -64,9 +63,7 @@
             "analyze_wildcard": true
           }
         }
-      }.to_json
-  ).to_json.gsub(/"/) { '\"' }
-  %>"
+      }.to_json.to_json %>
     }
   },
   "id": "app-all-errors",
