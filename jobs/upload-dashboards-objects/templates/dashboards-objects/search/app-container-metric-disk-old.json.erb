@@ -2,7 +2,7 @@
 <% if(p('cloudfoundry.event_types').include? 'ContainerMetric') %>
 {
   "attributes": {
-    "title": "[app] Container Metric",
+    "title": "[app] Container Metric disk Old",
     "description": "",
     "hits": 0,
     "columns": [
@@ -22,7 +22,7 @@
     "kibanaSavedObjectMeta": {
       "searchSourceJSON": "<%= JSON.parse(
       {
-        "index": "#{p('opensearch_config.metric_index_prefix')}*",
+        "index": "#{p('opensearch_config.app_index_prefix')}*",
         "query": {
           "query_string": {
             "analyze_wildcard": true,
@@ -31,25 +31,21 @@
         },
         "filter": [
           {
-            "$state": {
-              "store": "appState"
-            },
-            "meta": {
-              "disabled": false,
-              "index": "#{p('opensearch_config.metric_index_prefix')}*",
-              "key": "@source.type",
+          "meta": {
               "negate": false,
-              "value": "CONTAINER"
-            },
-            "query": {
-              "match": {
-                "@source.type": {
-                  "query": "CONTAINER",
-                  "type": "phrase"
-                }
-              }
-            }
+              "disabled": false,
+              "type": "exists",
+              "key": "containermetric.disk_bytes",
+              "value": "exists",
+              "index": "#{p('opensearch_config.app_index_prefix')}*"
+          },
+          "exists": {
+              "field": "containermetric.disk_bytes"
+          },
+          "$state": {
+              "store": "appState"
           }
+                    }
         ],
         "highlight": {
           "pre_tags": [
@@ -69,9 +65,9 @@
   %>"
     }
   },
-  "id": "app-container-metric",
+  "id": "app-container-metric-disk-old",
   "references": [],
-  "title": "[app] Container Metric",
+  "title": "[app] Container Metric disk old",
   "type": "search"
 }
 <% end %>

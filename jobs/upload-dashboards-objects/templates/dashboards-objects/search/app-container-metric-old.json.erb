@@ -2,7 +2,7 @@
 <% if(p('cloudfoundry.event_types').include? 'ContainerMetric') %>
 {
   "attributes": {
-    "title": "[app] Container Metric",
+    "title": "[app] Container Metri Old",
     "description": "",
     "hits": 0,
     "columns": [
@@ -22,7 +22,7 @@
     "kibanaSavedObjectMeta": {
       "searchSourceJSON": "<%= JSON.parse(
       {
-        "index": "#{p('opensearch_config.metric_index_prefix')}*",
+        "index": "#{p('opensearch_config.app_index_prefix')}*",
         "query": {
           "query_string": {
             "analyze_wildcard": true,
@@ -36,7 +36,7 @@
             },
             "meta": {
               "disabled": false,
-              "index": "#{p('opensearch_config.metric_index_prefix')}*",
+              "index": "#{p('opensearch_config.app_index_prefix')}*",
               "key": "@source.type",
               "negate": false,
               "value": "CONTAINER"
@@ -69,9 +69,9 @@
   %>"
     }
   },
-  "id": "app-container-metric",
+  "id": "app-container-metric-old",
   "references": [],
-  "title": "[app] Container Metric",
+  "title": "[app] Container Metric Old",
   "type": "search"
 }
 <% end %>

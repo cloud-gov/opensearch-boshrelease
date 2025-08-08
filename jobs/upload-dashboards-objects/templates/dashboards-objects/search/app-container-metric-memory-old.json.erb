@@ -1,0 +1,73 @@
+<% require 'json' %>
+<% if(p('cloudfoundry.event_types').include? 'ContainerMetric') %>
+{
+    "attributes": {
+        "columns": [
+            "@source.component",
+            "@cf.app",
+            "containermetric.cpu_percentage",
+            "containermetric.disk_bytes",
+            "containermetric.disk_bytes_quota",
+            "containermetric.memory_bytes",
+            "containermetric.memory_bytes_quota"
+        ],
+        "description": "",
+        "hits": 0,
+        "sort": [
+            "@timestamp",
+            "desc"
+        ],
+        "title": "[app] Container Metric memory Old",
+        "version": 1,
+        "kibanaSavedObjectMeta": {
+      "searchSourceJSON": "<%= JSON.parse(
+      {
+        "index": "#{p('opensearch_config.app_index_prefix')}*",
+        "query": {
+            "query_string": {
+                "analyze_wildcard": true,
+                "query": "*"
+            }
+        },
+        "filter": [
+            {
+                "meta": {
+                    "negate": false,
+                    "disabled": false,
+                    "type": "exists",
+                    "key": "containermetric.memory_bytes",
+                    "value": "exists",
+                    "index": "#{p('opensearch_config.app_index_prefix')}*"
+                },
+                "exists": {
+                    "field": "containermetric.memory_bytes"
+                },
+                "$state": {
+                    "store": "appState"
+                }
+            }
+        ],
+        "highlight": {
+            "pre_tags": [
+                "@kibana-highlighted-field@"
+            ],
+            "post_tags": [
+                "@/kibana-highlighted-field@"
+            ],
+            "fields": {
+                "*": {}
+            },
+            "require_field_match": false,
+            "fragment_size": 2147483647
+        }
+      }.to_json
+  ).to_json.gsub(/"/) { '\"' }
+  %>"
+            }
+        },
+    "id": "app-container-metric-memory-old",
+    "references": [],
+    "title": "[app] Container Metric memory Old",
+    "type": "search"
+}
+<% end %>
