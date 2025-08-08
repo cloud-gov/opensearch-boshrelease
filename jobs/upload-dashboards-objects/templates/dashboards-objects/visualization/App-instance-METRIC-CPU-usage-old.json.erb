@@ -1,17 +1,21 @@
 <% require 'json' %>
-<% if(p('cloudfoundry.event_types').include? 'LogMessage') %>
+<% if(p('cloudfoundry.event_types').include? 'ContainerMetric') %>
 {
   "attributes": {
-    "title": "App RTR: traffic by response time (first 10 apps)",
+    "title": "App instance METRIC: CPU usage Old",
     "visState": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
       {
-        "type": "histogram",
+        "type": "line",
         "params": {
           "shareYAxis": true,
           "addTooltip": true,
-          "addLegend": false,
+          "addLegend": true,
+          "showCircles": true,
+          "smoothLines": false,
+          "interpolate": "linear",
           "scale": "linear",
-          "mode": "stacked",
+          "drawLinesBetweenPoints": true,
+          "radiusRatio": 9,
           "times": [
 
           ],
@@ -24,25 +28,14 @@
         "aggs": [
           {
             "id": "1",
-            "type": "count",
+            "type": "max",
             "schema": "metric",
             "params": {
+              "field": "containermetric.cpu_percentage"
             }
           },
           {
             "id": "2",
-            "type": "terms",
-            "schema": "split",
-            "params": {
-              "field": "@cf.app",
-              "size": 10,
-              "order": "asc",
-              "orderBy": "_term",
-              "row": false
-            }
-          },
-          {
-            "id": "3",
             "type": "date_histogram",
             "schema": "segment",
             "params": {
@@ -55,14 +48,25 @@
             }
           },
           {
-            "id": "4",
-            "type": "histogram",
+            "id": "3",
+            "type": "terms",
             "schema": "group",
             "params": {
-              "field": "rtr.response_time_ms",
-              "interval": 500,
-              "extended_bounds": {
-              }
+              "field": "@cf.app",
+              "size": 25,
+              "order": "desc",
+              "orderBy": "_term"
+            }
+          },
+          {
+            "id": "4",
+            "type": "terms",
+            "schema": "group",
+            "params": {
+              "field": "@cf.app_instance",
+              "size": 25,
+              "order": "desc",
+              "orderBy": "_term"
             }
           }
         ],
@@ -85,12 +89,12 @@ ENDOFFJSON
   %>"
     }
   },
-  "title": "App RTR traffic by response time ms (first 10 apps)",
-  "id": "App-RTR-traffic-by-response-time-ms-(first-10-apps)",
+  "title": "App Instance METRIC CPU usage Old",
+  "id": "App-instance-METRIC-CPU-usage-old",
   "type": "visualization",
   "references": [
     {
-      "id": "app-rtr",
+      "id": "app-container-metric-cpu-old",
       "name": "search_0",
       "type": "search"
     }

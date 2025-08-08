@@ -5,7 +5,7 @@
     "title": "App - Overview",
     "hits": 0,
     "description": "",
-    "panelsJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/"/) { '\"' }
+    "panelsJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
       [
         {
           "panelIndex": "1",
@@ -85,7 +85,7 @@ ENDOFFJSON
     "version": 1,
     "timeRestore": false,
     "kibanaSavedObjectMeta": {
-      "searchSourceJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/"/) { '\"' }
+      "searchSourceJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
       {
         "filter": [
           {

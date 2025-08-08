@@ -1,16 +1,18 @@
 <% require 'json' %>
-<% if(p('cloudfoundry.event_types').include? 'HttpStartStop') %>
+<% if(p('cloudfoundry.event_types').include? 'ContainerMetric') %>
 {
   "attributes": {
-    "title": "[app] Http",
+    "title": "[app] Container Metric cpu old",
     "description": "",
     "hits": 0,
     "columns": [
       "@source.component",
       "@cf.app",
-      "httpstartstop.duration_ms",
-      "httpstartstop.status_code",
-      "httpstartstop.uri"
+      "containermetric.cpu_percentage",
+      "containermetric.disk_bytes",
+      "containermetric.disk_bytes_quota",
+      "containermetric.memory_bytes",
+      "containermetric.memory_bytes_quota"
     ],
     "sort": [
       "@timestamp",
@@ -28,25 +30,21 @@
         },
         "filter": [
           {
-            "$state": {
-              "store": "appState"
-            },
             "meta": {
-              "disabled": false,
-              "index": "#{p('opensearch_config.app_index_prefix')}*",
-              "key": "@source.type",
-              "negate": false,
-              "value": "HTTP"
+                "negate": false,
+                "disabled": false,
+                "type": "exists",
+                "key": "containermetric.cpu_percentage",
+                "value": "exists",
+                "index": "#{p('opensearch_config.app_index_prefix')}*"
             },
-            "query": {
-              "match": {
-                "@source.type": {
-                  "query": "HTTP",
-                  "type": "phrase"
-                }
-              }
+            "exists": {
+                "field": "containermetric.cpu_percentage"
+            },
+            "$state": {
+                "store": "appState"
             }
-          }
+        }
         ],
         "highlight": {
           "pre_tags": [
@@ -64,9 +62,9 @@
       }.to_json.to_json %>
     }
   },
-  "id": "app-http",
+  "id": "app-container-metric-cpu-old",
   "references": [],
-  "title": "[app] http",
+  "title": "[app] Container Metric cpu old",
   "type": "search"
 }
 <% end %>

@@ -56,6 +56,10 @@ templates:
   dashboards-objects/search/audit-logs.json.erb: dashboards-objects/search/audit-logs.json
   dashboards-objects/search/services-domainsearch.json.erb: dashboards-objects/search/services-domainsearch.json
   dashboards-objects/search/services-s3search.json.erb: dashboards-objects/search/services-s3search.json
+  dashboards-objects/search/app-container-metric-old.json.erb: dashboards-objects/search/app-container-metric-old.json
+  dashboards-objects/search/app-container-metric-cpu-old.json.erb: dashboards-objects/search/app-container-metric-cpu-old.json
+  dashboards-objects/search/app-container-metric-disk-old.json.erb: dashboards-objects/search/app-container-metric-disk-old.json
+  dashboards-objects/search/app-container-metric-memory-old.json.erb: dashboards-objects/search/app-container-metric-memory-old.json
 
   dashboards-objects/dashboard/App-Errors.json.erb: dashboards-objects/dashboard/App-Errors.json
   dashboards-objects/dashboard/App-Location.json.erb: dashboards-objects/dashboard/App-Location.json
@@ -103,6 +107,12 @@ templates:
   dashboards-objects/visualization/Services-Search-MasterOldGenJVMMemoryPressure.json.erb: dashboards-objects/visualization/Services-Search-MasterOldGenJVMMemoryPressure.json
   dashboards-objects/visualization/Services-Search-OldGenJVMMemoryPressure.json.erb: dashboards-objects/visualization/Services-Search-OldGenJVMMemoryPressure.json
   dashboards-objects/visualization/Services-S3-weekly-usage.json.erb: dashboards-objects/visualization/Services-S3-weekly-usage.json
+  dashboards-objects/visualization/App-METRIC-CPU-usage-old.json.erb: dashboards-objects/visualization/App-METRIC-CPU-usage-old.json
+  dashboards-objects/visualization/App-METRIC-disk-usage-old.json.erb: dashboards-objects/visualization/App-METRIC-disk-usage-old.json
+  dashboards-objects/visualization/App-METRIC-memory-usage-old.json.erb: dashboards-objects/visualization/App-METRIC-memory-usage-old.json
+  dashboards-objects/visualization/App-instance-METRIC-CPU-usage-old.json.erb: dashboards-objects/visualization/App-instance-METRIC-CPU-usage-old.json
+  dashboards-objects/visualization/App-instance-METRIC-disk-usage-old.json.erb: dashboards-objects/visualization/App-instance-METRIC-disk-usage-old.json
+  dashboards-objects/visualization/App-instance-METRIC-memory-usage-old.json.erb: dashboards-objects/visualization/App-instance-METRIC-memory-usage-old.json
 
 properties:
   dashboards_objects.upload_patterns:

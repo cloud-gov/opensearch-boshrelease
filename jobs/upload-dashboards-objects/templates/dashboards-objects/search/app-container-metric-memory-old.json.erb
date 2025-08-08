@@ -17,11 +17,11 @@
             "@timestamp",
             "desc"
         ],
-        "title": "[app] Container Metric memory",
+        "title": "[app] Container Metric memory Old",
         "version": 1,
         "kibanaSavedObjectMeta": {
       "searchSourceJSON": <%= {
-        "index": "#{p('opensearch_config.metric_index_prefix')}*",
+        "index": "#{p('opensearch_config.app_index_prefix')}*",
         "query": {
             "query_string": {
                 "analyze_wildcard": true,
@@ -36,7 +36,7 @@
                     "type": "exists",
                     "key": "containermetric.memory_bytes",
                     "value": "exists",
-                    "index": "#{p('opensearch_config.metric_index_prefix')}*"
+                    "index": "#{p('opensearch_config.app_index_prefix')}*"
                 },
                 "exists": {
                     "field": "containermetric.memory_bytes"
@@ -62,9 +62,9 @@
       }.to_json.to_json %>
             }
         },
-    "id": "app-container-metric-memory",
+    "id": "app-container-metric-memory-old",
     "references": [],
-    "title": "[app] Container Metric memory",
+    "title": "[app] Container Metric memory Old",
     "type": "search"
 }
 <% end %>

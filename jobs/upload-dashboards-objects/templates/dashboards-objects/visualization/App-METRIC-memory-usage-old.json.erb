@@ -1,17 +1,21 @@
 <% require 'json' %>
-<% if(p('cloudfoundry.event_types').include? 'LogMessage') %>
+<% if(p('cloudfoundry.event_types').include? 'ContainerMetric') %>
 {
   "attributes": {
-    "title": "App RTR: traffic by response time (first 10 apps)",
+    "title": "App METRIC: memory usage Old",
     "visState": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
       {
-        "type": "histogram",
+        "type": "line",
         "params": {
           "shareYAxis": true,
           "addTooltip": true,
-          "addLegend": false,
+          "addLegend": true,
+          "showCircles": true,
+          "smoothLines": false,
+          "interpolate": "linear",
           "scale": "linear",
-          "mode": "stacked",
+          "drawLinesBetweenPoints": true,
+          "radiusRatio": 9,
           "times": [
 
           ],
@@ -24,25 +28,14 @@
         "aggs": [
           {
             "id": "1",
-            "type": "count",
+            "type": "max",
             "schema": "metric",
             "params": {
+              "field": "containermetric.memory_bytes"
             }
           },
           {
             "id": "2",
-            "type": "terms",
-            "schema": "split",
-            "params": {
-              "field": "@cf.app",
-              "size": 10,
-              "order": "asc",
-              "orderBy": "_term",
-              "row": false
-            }
-          },
-          {
-            "id": "3",
             "type": "date_histogram",
             "schema": "segment",
             "params": {
@@ -55,14 +48,14 @@
             }
           },
           {
-            "id": "4",
-            "type": "histogram",
+            "id": "3",
+            "type": "terms",
             "schema": "group",
             "params": {
-              "field": "rtr.response_time_ms",
-              "interval": 500,
-              "extended_bounds": {
-              }
+              "field": "@cf.app",
+              "size": 25,
+              "order": "desc",
+              "orderBy": "1"
             }
           }
         ],
@@ -85,12 +78,12 @@ ENDOFFJSON
   %>"
     }
   },
-  "title": "App RTR traffic by response time ms (first 10 apps)",
-  "id": "App-RTR-traffic-by-response-time-ms-(first-10-apps)",
+  "title": "App METRIC memory usage Old",
+  "id": "App-METRIC-memory-usage-old",
   "type": "visualization",
   "references": [
     {
-      "id": "app-rtr",
+      "id": "app-container-metric-memory-old",
       "name": "search_0",
       "type": "search"
     }
