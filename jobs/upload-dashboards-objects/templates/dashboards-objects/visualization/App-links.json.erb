@@ -30,7 +30,7 @@ end
         "aggs": [],
         "listeners": {}
       }.to_json
-  ).to_json.gsub(/"/) { '\"' }
+  ).to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
   %>",
     "description": "",
     "version": 1,
