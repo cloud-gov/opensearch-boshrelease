@@ -3,7 +3,7 @@
 {
   "attributes": {
    "title": "App: logs count by source type (APP or cf, top 5 apps)",
-    "visState": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/"/) { '\"' }
+    "visState": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
       {
         "type": "histogram",
         "params": {
@@ -71,7 +71,7 @@
       }
 ENDOFFJSON
   %>",
-    "uiStateJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/"/) { '\"' }
+    "uiStateJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
       {
         "vis": {
           "colors": {
@@ -88,7 +88,7 @@ ENDOFFJSON
     "savedSearchRefName": "search_0",
     "version": 1,
     "kibanaSavedObjectMeta": {
-       "searchSourceJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/"/) { '\"' }
+       "searchSourceJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
       {
         "query": {
                   "query": "",
