@@ -41,15 +41,9 @@
               "negate": false,
               "value": "exists"
             },
-            "query": {
-              "match": {
-                "@source.type": {
-                  "query": "CONTAINER",
-                  "type": "phrase"
-                }
-              }
+            "exists": {
+                "field": "containermetric.name"
             }
-          }
         ],
         "highlight": {
           "pre_tags": [
