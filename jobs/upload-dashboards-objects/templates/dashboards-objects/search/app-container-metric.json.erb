@@ -36,19 +36,14 @@
             "meta": {
               "disabled": false,
               "index": "#{p('opensearch_config.metric_index_prefix')}*",
-              "key": "@source.type",
+              "key": "containermetric.name",
+              "type": "exists",
               "negate": false,
-              "value": "CONTAINER"
+              "value": "exists"
             },
-            "query": {
-              "match": {
-                "@source.type": {
-                  "query": "CONTAINER",
-                  "type": "phrase"
-                }
-              }
+            "exists": {
+                "field": "containermetric.name"
             }
-          }
         ],
         "highlight": {
           "pre_tags": [
