@@ -373,6 +373,7 @@ cf_user:
   index_permissions:
   - index_patterns:
     - "logs-app-*"
+    - "logs-metrics-*"
     dls: "{\"bool\": {\"should\": [{\"terms\": { \"@cf.space_id\": [${attr.proxy.spaceids}] }}, {\"terms\": {\"@cf.org_id\": [${attr.proxy.orgids}]}}]}}"
     fls:
     allowed_actions:
