@@ -10,6 +10,7 @@ packages:
   - cf-cli-8-linux
 
 templates:
+  bin/drain.erb: bin/drain
   bin/opensearch: bin/opensearch.sh
   bin/pre-start.erb: bin/pre-start
   bin/post-deploy.erb: bin/post-deploy
