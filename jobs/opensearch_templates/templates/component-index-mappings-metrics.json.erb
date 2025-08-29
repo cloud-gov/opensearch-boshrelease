@@ -24,9 +24,7 @@ keyword_default = { "type": "keyword", "index": true }.to_json
                     },
                     "app_instance": <%= keyword_default %>,
                     "org": <%= keyword_default %>,
-                    "org_id": {
-                    "type": "match_only_text"
-                    },
+                    "org_id": <%= keyword_default %>,
                     "process_id": {
                     "type": "match_only_text"
                     },
@@ -37,9 +35,7 @@ keyword_default = { "type": "keyword", "index": true }.to_json
                     "type": "match_only_text"
                     },
                     "space": <%= keyword_default %>,
-                    "space_id": {
-                    "type": "match_only_text"
-                    }
+                    "space_id": <%= keyword_default %>
                 }
                 },
                 "@index_type": {
