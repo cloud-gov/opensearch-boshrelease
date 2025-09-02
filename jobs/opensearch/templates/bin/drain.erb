@@ -26,6 +26,4 @@ curl -X DELETE -s https://localhost:9200/_snapshot/<%= p('opensearch.repository.
 curl -X DELETE -s https://localhost:9200/_snapshot/<%= p('opensearch.repository.name') %> > /dev/null
 <% end %>
 
-return_code=$?
-echo 0
-exit ${return_code}
+exit 0
