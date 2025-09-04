@@ -7,7 +7,11 @@ input
     <% if_p("logstash_ingestor.s3.region") do |region_zone| %>
     region => "<%= region_zone %>"
     <% end %>
-    codec => "json_lines"
+    codec => multiline {
+      pattern => "^{"
+      negate => true
+      what => "previous"
+    }
     prefix => "20"
   }
 }
