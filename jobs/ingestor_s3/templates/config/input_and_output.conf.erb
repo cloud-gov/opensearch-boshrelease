@@ -7,9 +7,7 @@ input
     <% if_p("logstash_ingestor.s3.region") do |region_zone| %>
     region => "<%= region_zone %>"
     <% end %>
-    codec => "plain" {
-      charset => "ASCII-8BIT"  # Read as binary
-    }
+    ccodec => "json_lines"
     prefix => "20"
   }
 }
