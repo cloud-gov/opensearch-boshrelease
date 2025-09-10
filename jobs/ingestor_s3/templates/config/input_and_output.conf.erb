@@ -7,7 +7,9 @@ input
     <% if_p("logstash_ingestor.s3.region") do |region_zone| %>
     region => "<%= region_zone %>"
     <% end %>
-    codec => "line"
+    codec => line {
+     delimiter => "xyz"
+      }
     prefix => "20"
   }
 }
