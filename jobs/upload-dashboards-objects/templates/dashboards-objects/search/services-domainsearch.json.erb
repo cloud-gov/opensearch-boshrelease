@@ -20,12 +20,12 @@
     },
     "references": [
         {
-            "id": "logs-app*",
+            "id": "#{p('opensearch_config.metric_index_prefix')}*",
             "name": "kibanaSavedObjectMeta.searchSourceJSON.index",
             "type": "index-pattern"
         },
         {
-            "id": "logs-app*",
+            "id": "#{p('opensearch_config.metric_index_prefix')}*",
             "name": "kibanaSavedObjectMeta.searchSourceJSON.filter[0].meta.index",
             "type": "index-pattern"
         }
