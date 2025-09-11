@@ -10,93 +10,149 @@ keyword_default = { "type": "keyword", "index": true }.to_json
 
 %>
 {
-  "template" : {
-        "settings": <%= p('opensearch_config.metric_index_settings', {}).to_json %>,
-        "mappings" : {
+    "template": {
+        "settings": <%= p('opensearch_config.metric_index_settings',
+        {}).to_json %>,
+        "mappings": {
         <%# ------------ App specific fields %>
             "properties": {
                 "@cf": {
-                "type": "object",
-                "properties": {
-                    "app": <%= keyword_default %>,
-                    "app_id": {
-                    "type": "match_only_text"
-                    },
-                    "app_instance": <%= keyword_default %>,
-                    "org": <%= keyword_default %>,
-                    "org_id": <%= keyword_default %>,
-                    "process_id": {
-                    "type": "match_only_text"
-                    },
-                    "process_instance_id": {
-                    "type": "match_only_text"
-                    },
-                    "process_type": {
-                    "type": "match_only_text"
-                    },
-                    "space": <%= keyword_default %>,
-                    "space_id": <%= keyword_default %>
-                }
+                    "type": "object",
+                    "properties": {
+                        "app": <%= keyword_default %>,
+                        "app_id": {
+                            "type": "match_only_text"
+                        },
+                        "app_instance": <%= keyword_default %>,
+                        "instance": <%= keyword_default %>,
+                        "instance_id": <%= keyword_default %>,
+                        "org": <%= keyword_default %>,
+                        "org_id": <%= keyword_default %>,
+                        "process_id": {
+                            "type": "match_only_text"
+                        },
+                        "process_instance_id": {
+                            "type": "match_only_text"
+                        },
+                        "process_type": {
+                            "type": "match_only_text"
+                        },
+                        "service_offering": <%= keyword_default %>,
+                        "service_plan": <%= keyword_default %>,
+                        "space": <%= keyword_default %>,
+                        "space_id": <%= keyword_default %>
+                    }
                 },
                 "@index_type": {
-                "type": "match_only_text"
+                    "type": "match_only_text"
                 },
                 "@input": {
-                "type": "match_only_text"
+                    "type": "match_only_text"
                 },
                 "@level": {
-                "type": "match_only_text"
+                    "type": "match_only_text"
                 },
                 "@raw": {
-                "type": "keyword"
+                    "type": "keyword"
                 },
                 "@shipper": {
-                "type": "flat_object"
+                    "type": "flat_object"
                 },
                 "@source": {
-                "type": "flat_object"
+                    "type": "flat_object"
                 },
                 "@timestamp": {
-                "type": "date"
+                    "type": "date"
                 },
                 "@type": {
-                "type": "match_only_text"
+                    "type": "match_only_text"
+                },
+                "@version": {
+                    "type": "keyword"
+                },
+                "Tags": {
+                    "type": "object"
                 },
                 "app": {
-                "type": "flat_object"
+                    "type": "flat_object"
+                },
+                "broker": {
+                    "type": "keyword"
                 },
                 "containermetric": {
-                "type": "object",
-                "properties": {
-                    "cpu_percentage": {
-                    "type": "half_float"
-                    },
-                    "disk_bytes": {
-                    "type": "long"
-                    },
-                    "disk_bytes_quota": {
-                    "type": "long"
-                    },
-                    "memory_bytes": {
-                    "type": "long"
-                    },
-                    "memory_bytes_quota": {
-                    "type": "long"
-                    },
-                    "name": {
-                    "type": "text"
-                    },
-                    "unit": {
-                    "type": "text"
-                    },
-                    "value": {
-                    "type": "text"
+                    "type": "object",
+                    "properties": {
+                        "cpu_percentage": {
+                            "type": "half_float"
+                        },
+                        "disk_bytes": {
+                            "type": "long"
+                        },
+                        "disk_bytes_quota": {
+                            "type": "long"
+                        },
+                        "memory_bytes": {
+                            "type": "long"
+                        },
+                        "memory_bytes_quota": {
+                            "type": "long"
+                        },
+                        "name": {
+                            "type": "text"
+                        },
+                        "unit": {
+                            "type": "text"
+                        },
+                        "value": {
+                            "type": "text"
+                        }
                     }
-                }
                 },
+                "created at": {
+                    "type": "date"
+                },
+                "dimensions": {
+                    "type": "object"
+                },
+                "geoip": {
+                    "dynamic": "true",
+                    "type": "object",
+                    "properties": {
+                        "location": {
+                            "type": "geo_point"
+                        }
+                    }
+                },
+                "metric": {
+                    "type": "object",
+                    "properties": {
+                        "average": {
+                            "type": "float"
+                        },
+                        "count": {
+                            "type": "float"
+                        },
+                        "domain_name": <%= keyword_default %>,
+                        "max": {
+                            "type": "float"
+                        },
+                        "min": {
+                            "type": "float"
+                        },
+                        "node_id": {
+                            "type": "keyword"
+                        },
+                        "sum": {
+                            "type": "float"
+                        },
+                        "unit": <%= keyword_default %>,
+                    }
+                },
+                "metric_name": <%= keyword_default %>,
                 "metrics_sd_params": {
                     "type": "flat_object"
                 },
+                "namespace": <%= keyword_default %>,
                 "syslog_sd_params": {
                     "type": "flat_object"
                 },
