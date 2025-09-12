@@ -129,6 +129,7 @@ keyword_default = { "type": "keyword", "index": true }.to_json
                         "average": {
                             "type": "float"
                         },
+                        "bucket_name": <%= keyword_default %> ,
                         "count": {
                             "type": "float"
                         },
@@ -139,13 +140,12 @@ keyword_default = { "type": "keyword", "index": true }.to_json
                         "min": {
                             "type": "float"
                         },
-                        "node_id": {
-                            "type": "keyword"
-                        },
+                        "node_id": <%= keyword_default %>,
+                        "storage_type": <%= keyword_default %>,
                         "sum": {
                             "type": "float"
                         },
-                        "unit": <%= keyword_default %>,
+                        "unit": <%= keyword_default %>
                     }
                 },
                 "metric_name": <%= keyword_default %>,
