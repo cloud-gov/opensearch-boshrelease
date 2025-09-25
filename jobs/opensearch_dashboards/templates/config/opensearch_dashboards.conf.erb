@@ -59,8 +59,11 @@ opensearchDashboards.branding:
     darkModeUrl: ""
   faviconUrl: "https://raw.githubusercontent.com/cloud-gov/opensearch-boshrelease/refs/heads/main/src/images/cloud-gov%20logomark.svg"
   applicationTitle: "Cloud.gov Logs"
-  useExpandedHeader: false
+  darkMode: false
+  useExpandedHeader: true
 
+uiSettings.overrides:
+  "theme:darkMode": false
 # If your opensearch is protected with basic auth, these are the user credentials
 # used by the opensearch_dashboards server to perform maintenance on the opensearchDashboards.index at startup. Your opensearch_dashboards
 # users will still need to authenticate with opensearch (which is proxied through
@@ -117,3 +120,7 @@ opensearch_security.multitenancy.enable_filter: <%= p('opensearch_dashboards.mul
 <% if_p('opensearch_dashboards.config_options') do p("opensearch_dashboards.config_options", {}).each do | k, v | %>
 <%= k %>: <%= v %><% end %>
 <% end %>
+
+
+banner.enabled: true
+banner.content: "Application and service metrics are changing to 90-day retention policy. [**See the announcement on our website for full details.**](https://docs.cloud.gov/news/2025/09/24/opensearch-metric-change-announcement/)"
