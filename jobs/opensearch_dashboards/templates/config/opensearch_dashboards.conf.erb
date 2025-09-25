@@ -117,3 +117,7 @@ opensearch_security.multitenancy.enable_filter: <%= p('opensearch_dashboards.mul
 <% if_p('opensearch_dashboards.config_options') do p("opensearch_dashboards.config_options", {}).each do | k, v | %>
 <%= k %>: <%= v %><% end %>
 <% end %>
+
+
+banner.enabled: true
+banner.content: "This is an important announcement for all users. [Learn more](https://opensearch.org) about OpenSearch."
