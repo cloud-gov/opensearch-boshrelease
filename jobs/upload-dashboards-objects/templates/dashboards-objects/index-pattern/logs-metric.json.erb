@@ -699,9 +699,9 @@ fields_json =
 
 {
     "attributes": {
-        "fields": "<%= fields_json.to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"') %>"
+        "title": "logs-metrics-*",
         "timeFieldName": "@timestamp",
-        "title": "logs-metrics-*"
+        "fields": "<%= fields_json.to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"') %>"
     },
     "id": "logs-metrics-*",
     "title": "logs-metrics-*",
