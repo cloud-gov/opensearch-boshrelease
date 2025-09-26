@@ -1,0 +1,35 @@
+<% require 'json' %>
+<% if(p('cloudfoundry.event_types').include? 'Metrics') %>
+{
+    "attributes": {
+        "columns": [
+            "_source"
+        ],
+        "description": "",
+        "hits": 0,
+        "kibanaSavedObjectMeta": {
+            "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"kuery\"},\"highlightAll\":true,\"version\":true,\"aggs\":{\"2\":{\"date_histogram\":{\"field\":\"@timestamp\",\"calendar_interval\":\"1h\",\"time_zone\":\"America/New_York\",\"min_doc_count\":1}}},\"filter\":[{\"meta\":{\"alias\":null,\"negate\":false,\"disabled\":false,\"type\":\"phrase\",\"key\":\"@cf.service_offering\",\"params\":{\"query\":\"aws-rds\"},\"indexRefName\":\"kibanaSavedObjectMeta.searchSourceJSON.filter[0].meta.index\"},\"query\":{\"match_phrase\":{\"@cf.service_offering\":\"aws-rds\"}},\"$state\":{\"store\":\"appState\"}}],\"indexRefName\":\"kibanaSavedObjectMeta.searchSourceJSON.index\"}"
+        },
+        "sort": [],
+        "title": "Services - RDS",
+        "version": 1
+    },
+    "id": "services-rds-search",
+    "migrationVersion": {
+        "search": "7.9.3"
+    },
+   "references": [
+        {
+            "id": "logs-metrics-*",
+            "name": "kibanaSavedObjectMeta.searchSourceJSON.index",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-metrics-*",
+            "name": "kibanaSavedObjectMeta.searchSourceJSON.filter[0].meta.index",
+            "type": "index-pattern"
+        }
+    ],
+    "type": "search"
+}
+<% end %>
