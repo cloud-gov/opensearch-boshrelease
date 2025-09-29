@@ -552,6 +552,30 @@ fields_json =
             },
             {
                 "count": 0,
+                "name": "metric.db_size",
+                "type": "number",
+                "esTypes": [
+                    "float"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "metric.db_name",
+                "type": "number",
+                "esTypes": [
+                    "float"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
                 "name": "metric.domain_name",
                 "type": "string",
                 "esTypes": [
@@ -685,6 +709,18 @@ fields_json =
             {
                 "count": 0,
                 "name": "tags",
+                "type": "string",
+                "esTypes": [
+                    "keyword"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "updated at",
                 "type": "string",
                 "esTypes": [
                     "keyword"
