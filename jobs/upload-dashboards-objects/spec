@@ -55,6 +55,7 @@ templates:
   dashboards-objects/search/app-value-metric.json.erb: dashboards-objects/search/app-value-metric.json
   dashboards-objects/search/audit-logs.json.erb: dashboards-objects/search/audit-logs.json
   dashboards-objects/search/services-domainsearch.json.erb: dashboards-objects/search/services-domainsearch.json
+  dashboards-objects/search/services-rdssearch.json.erb: dashboards-objects/search/services-rdssearch.json
   dashboards-objects/search/services-s3search.json.erb: dashboards-objects/search/services-s3search.json
   dashboards-objects/search/app-container-metric-old.json.erb: dashboards-objects/search/app-container-metric-old.json
   dashboards-objects/search/app-container-metric-cpu-old.json.erb: dashboards-objects/search/app-container-metric-cpu-old.json
@@ -71,6 +72,7 @@ templates:
   dashboards-objects/dashboard/App-Performance.json.erb: dashboards-objects/dashboard/App-Performance.json
   dashboards-objects/dashboard/Audit-Overview.json.erb: dashboards-objects/dashboard/Audit-Overview.json
   dashboards-objects/dashboard/Services-DomainSearch.json.erb: dashboards-objects/dashboard/Services-DomainSearch.json
+  dashboards-objects/dashboard/Services-RDS.json.erb: dashboards-objects/dashboard/Services-RDS.json
   dashboards-objects/dashboard/Services-S3.json.erb: dashboards-objects/dashboard/Services-S3.json
   dashboards-objects/dashboard/Services-DomainSearch-old.json.erb: dashboards-objects/dashboard/Services-DomainSearch-old.json
   dashboards-objects/dashboard/Services-S3-old.json.erb: dashboards-objects/dashboard/Services-S3-old.json
@@ -99,6 +101,12 @@ templates:
   dashboards-objects/visualization/App-RTR-traffic-by-response_time_ms-(first-10-apps).json.erb: dashboards-objects/visualization/App-RTR-traffic-by-response_time_ms-(first-10-apps).json
   dashboards-objects/visualization/Audit-logs-count.json.erb: dashboards-objects/visualization/Audit-logs-count.json
   dashboards-objects/visualization/Audit-target-names.json.erb: dashboards-objects/visualization/Audit-target-names.json
+  dashboards-objects/visualization/Services-RDS-UsagePercentage.json.erb: dashboards-objects/visualization/Services-RDS-UsagePercentage.json
+  dashboards-objects/visualization/Services-RDS-CPUUtilization.json.erb: dashboards-objects/visualization/Services-RDS-CPUUtilization.json
+  dashboards-objects/visualization/Services-RDS-WriteLatency.json.erb: dashboards-objects/visualization/Services-RDS-WriteLatency.json
+  dashboards-objects/visualization/Services-RDS-ReadLatency.json.erb: dashboards-objects/visualization/Services-RDS-ReadLatency.json
+  dashboards-objects/visualization/Services-RDS-DatabaseConnections.json.erb: dashboards-objects/visualization/Services-RDS-DatabaseConnections.json
+  dashboards-objects/visualization/Services-RDS-FreeStorageSpace.json.erb: dashboards-objects/visualization/Services-RDS-FreeStorageSpace.json
   dashboards-objects/visualization/Services-Search-CPUUtilization.json.erb: dashboards-objects/visualization/Services-Search-CPUUtilization.json
   dashboards-objects/visualization/Services-Search-FreeStorageSpace.json.erb: dashboards-objects/visualization/Services-Search-FreeStorageSpace.json
   dashboards-objects/visualization/Services-Search-JVMMemoryPressure.json.erb: dashboards-objects/visualization/Services-Search-JVMMemoryPressure.json
