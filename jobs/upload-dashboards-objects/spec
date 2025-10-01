@@ -72,6 +72,7 @@ templates:
   dashboards-objects/dashboard/App-Performance.json.erb: dashboards-objects/dashboard/App-Performance.json
   dashboards-objects/dashboard/Audit-Overview.json.erb: dashboards-objects/dashboard/Audit-Overview.json
   dashboards-objects/dashboard/Services-DomainSearch.json.erb: dashboards-objects/dashboard/Services-DomainSearch.json
+  dashboards-objects/dashboard/Services-RDS.json.erb: dashboards-objects/dashboard/Services-RDS.json
   dashboards-objects/dashboard/Services-S3.json.erb: dashboards-objects/dashboard/Services-S3.json
   dashboards-objects/dashboard/Services-DomainSearch-old.json.erb: dashboards-objects/dashboard/Services-DomainSearch-old.json
   dashboards-objects/dashboard/Services-S3-old.json.erb: dashboards-objects/dashboard/Services-S3-old.json
