@@ -100,7 +100,7 @@ templates:
   dashboards-objects/visualization/App-RTR-traffic-by-response_time_ms-(first-10-apps).json.erb: dashboards-objects/visualization/App-RTR-traffic-by-response_time_ms-(first-10-apps).json
   dashboards-objects/visualization/Audit-logs-count.json.erb: dashboards-objects/visualization/Audit-logs-count.json
   dashboards-objects/visualization/Audit-target-names.json.erb: dashboards-objects/visualization/Audit-target-names.json
-  dashboards-objects/visualization/Services-RDS-AllocatedStorage.json.erb: dashboards-objects/visualization/Services-RDS-AllocatedStorage.json
+  dashboards-objects/visualization/Services-RDS-UsagePercentage.json.erb: dashboards-objects/visualization/Services-RDS-UsagePercentage.json
   dashboards-objects/visualization/Services-RDS-CPUUtilization.json.erb: dashboards-objects/visualization/Services-RDS-CPUUtilization.json
   dashboards-objects/visualization/Services-RDS-WriteLatency.json.erb: dashboards-objects/visualization/Services-RDS-WriteLatency.json
   dashboards-objects/visualization/Services-RDS-ReadLatency.json.erb: dashboards-objects/visualization/Services-RDS-ReadLatency.json
