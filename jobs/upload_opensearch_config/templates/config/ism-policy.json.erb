@@ -82,7 +82,7 @@
                     {
                         "state_name": "Delete_index",
                         "conditions": {
-                            "min_index_age": "365d"
+                            "min_index_age": "<%= p('opensearch_config.app_delete_index_age')%>"
                         }
                     }
                 ]
