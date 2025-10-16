@@ -5,4 +5,4 @@ dependencies:
 - openjdk-21
 
 files:
-- opensearch-3.2.0-linux-x64.tar.gz
+- opensearch-3.3.0-linux-x64.tar.gz

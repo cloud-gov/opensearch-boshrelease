@@ -2,7 +2,7 @@
 
 set -e
 
-tar xzf opensearch-3.2.0-linux-x64.tar.gz -C "$BOSH_INSTALL_TARGET" --strip-components 1
+tar xzf opensearch-3.3.0-linux-x64.tar.gz -C "$BOSH_INSTALL_TARGET" --strip-components 1
 
 export PATH="${BOSH_INSTALL_TARGET}/bin:${PATH}"
 opensearch-plugin remove opensearch-security-analytics
