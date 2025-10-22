@@ -215,9 +215,9 @@ properties:
     description: username of the cf client
   opensearch.cf.client_password:
     description: password of cf client
-  opensearch.notification.username:
+  opensearch.notification.smtp_username:
     description: username of SMTP
-  opensearch.notification.password:
+  opensearch.notification.smtp_password:
     description: password for SMTP
   opensearch.notification.host:
     description: host for SMTP
