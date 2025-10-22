@@ -67,6 +67,7 @@ fi
     echo "Restoring OpenSearch keystore from persistent storage"
     cp "$STORE_DIR/opensearch.keystore" "$OPENSEARCH_PATH_CONF/opensearch.keystore"
   else
+    echo "Create new OpenSearch keystore"
     echo y | "$PACKAGE_DIR/bin/opensearch-keystore" create
     chmod 600 "$OPENSEARCH_PATH_CONF/opensearch.keystore"
     # Copy keystore to persistent volume
