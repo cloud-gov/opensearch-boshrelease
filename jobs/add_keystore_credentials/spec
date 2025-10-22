@@ -3,6 +3,9 @@ name: add_keystore_credentials
 
 description: This job add data to the OpenSearch keystore
 
+packages:
+  - jq
+
 templates:
   bin/pre-start.erb: bin/pre-start
   bin/run.sh.erb: bin/run
