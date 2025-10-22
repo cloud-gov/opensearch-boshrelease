@@ -215,22 +215,6 @@ properties:
     description: username of the cf client
   opensearch.cf.client_password:
     description: password of cf client
-  opensearch.notification.smtp_username:
-    description: username of SMTP
-  opensearch.notification.smtp_password:
-    description: password for SMTP
-  opensearch.notification.host:
-    description: host for SMTP
-  opensearch.notification.port:
-    description: port for SMTP
-  opensearch.notification.from:
-    description: sender for SMT
-  opensearch.notification.ca:
-    description: CA for SMTP
-  opensearch.notification.certificate:
-    description: Certificate for SMTP
-  opensearch.notification.privatekey:
-    description: private key for SMTP
   opensearch.notification.keystorepass:
     description: password for keystore
   opensearch.notification.defaultkeystorepass:

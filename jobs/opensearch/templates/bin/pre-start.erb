@@ -15,17 +15,6 @@ DEFAULTPASS=<%= p("opensearch.notification.defaultkeystorepass") %>
 
 /var/vcap/packages/openjdk-21/bin/keytool -storepasswd -new $STOREPASS -cacerts -storepass "$DEFAULTPASS" > /dev/null 2>&1;
 
-delete_alias_if_exists(){
-    local alias=$1
-    if /var/vcap/packages/openjdk-21/bin/keytool -list -cacerts -storepass "$STOREPASS" | grep -q "$alias";then
-       /var/vcap/packages/openjdk-21/bin/keytool -delete -alias "$alias" -cacerts -storepass "$STOREPASS"
-    fi
-}
-delete_alias_if_exists "smtp-ca"
-/var/vcap/packages/openjdk-21/bin/keytool -importcert -file ${JOB_DIR}/config/ssl/smtp.ca -storepass "$STOREPASS" -alias smtp-ca -trustcacerts -cacerts -noprompt
-delete_alias_if_exists "smtp-crt"
-/var/vcap/packages/openjdk-21/bin/keytool -importcert -file ${JOB_DIR}/config/ssl/smtp.crt -storepass "$STOREPASS" -alias smtp-crt -trustcacerts -cacerts -noprompt
-
 sysctl -q -w vm.max_map_count=262144
 mkdir -p ${OPENSEARCH_HOME}/plugins
 if [ -d ${JOB_DIR}/config/ssl ]; then

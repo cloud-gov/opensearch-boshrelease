@@ -63,17 +63,15 @@ fi
 
 
 <% if_p("opensearch.notification.smtp_username", "opensearch.notification.smtp_password") do |username, password| %>
-if [ -f "$STORE_DIR/opensearch.keystore" ]; then
-  echo "Restoring OpenSearch keystore from persistent storage"
-  cp "$STORE_DIR/opensearch.keystore" "$OPENSEARCH_PATH_CONF/opensearch.keystore"
-else
-  echo y | "$PACKAGE_DIR/bin/opensearch-keystore" create
-fi
-BASE64_USERNAME="<%= username %>"
-BASE64_PASSWORD="<%= password %>"
-echo ${BASE64_USERNAME} | "$PACKAGE_DIR/bin/opensearch-keystore" add opensearch.notifications.core.email.cloudgovemail.username --stdin
-echo ${BASE64_PASSWORD} | "$PACKAGE_DIR/bin/opensearch-keystore" add opensearch.notifications.core.email.cloudgovemail.password --stdin
-chmod 600 "$OPENSEARCH_PATH_CONF/opensearch.keystore"
+  if [ -f "$STORE_DIR/opensearch.keystore" ]; then
+    echo "Restoring OpenSearch keystore from persistent storage"
+    cp "$STORE_DIR/opensearch.keystore" "$OPENSEARCH_PATH_CONF/opensearch.keystore"
+  else
+    echo y | "$PACKAGE_DIR/bin/opensearch-keystore" create
+    chmod 600 "$OPENSEARCH_PATH_CONF/opensearch.keystore"
+    # Copy keystore to persistent volume
+    cp "$OPENSEARCH_PATH_CONF/opensearch.keystore" "$STORE_DIR/opensearch.keystore"
+  fi
 <% end %>
 
 ${OPENSEARCH_HOME}/bin/opensearch \
