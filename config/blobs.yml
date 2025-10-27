@@ -166,18 +166,26 @@ logstash/logstash-output-syslog-3.0.5.zip:
   size: 41727
   object_id: 21474ee6-824a-4547-7f45-b236864358ab
   sha: sha256:80a2b08f2b58ae81c823cc0bb1dd7956fbc173037fc621bfa31af34140724e02
-opensearch-3.2.0-linux-x64.tar.gz:
-  size: 942883522
-  object_id: 30461cc4-1beb-4900-760a-4cc7999d5ffe
-  sha: sha256:3f77e6a69925af8a18d6feaa651129027dccab4e4f8a20c23fee7873db992f44
-opensearch-dashboards-3.2.0-linux-x64.tar.gz:
-  size: 406560982
-  object_id: b3c49269-b3bb-4e67-79e8-3039131b0f4c
-  sha: sha256:a09ce437ac0a0089b86550f3f2360b586b764fb619740c550ee9e4ac2a5dfee0
+opensearch-3.3.1-linux-x64.tar.gz:
+  size: 964982932
+  object_id: d2b686ee-df5e-4e36-7af2-27bfc93558cd
+  sha: sha256:042abfd4769a11e1de169cc17416eccead624bd555c2bb9b47245cf12e4df2dc
+opensearch-dashboards-3.3.0-linux-x64.tar.gz:
+  size: 415081666
+  object_id: 8d32f774-e28c-4f08-7593-01bf6d5b2cf4
+  sha: sha256:8ce4fb4533f4a6c2879f81962858a2c54c9f3cc557b9cd44c70630507ec3dc4f
 opensearch-dashboards-cf-auth-proxy-0.0.11.tar.gz:
   size: 36275
   object_id: c8408b65-2c08-4d47-731c-fa1dbb7a9747
   sha: sha256:d81c67e7372f250a1c21cf03c6156a7e6e870796a3b87757d2396bf1c2c8853c
+opensearch/opensearch-alerting-3.3.1.0.zip:
+  size: 8592570
+  object_id: c1d43a3d-3d28-4fe0-4bb1-7cbcf48cecdb
+  sha: sha256:68cdaecbffd385cdd746be9b3b2b8619823ae0f561d19e384a2614f6255a42e6
+opensearch/opensearch-notifications-3.3.1.0.zip:
+  size: 23491348
+  object_id: 61245c34-ed5c-4dec-5f99-3c39062c502f
+  sha: sha256:c51c54bb178accb84b8c8525ca293da14db08ec7392f70e0a51e03784da8fcfa
 requests/certifi-2023.11.17-py3-none-any.whl:
   size: 162530
   object_id: f2afff72-e415-4390-61c1-eb8010ed4e4a

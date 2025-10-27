@@ -43,6 +43,15 @@ properties:
     description: alias of default index
   opensearch_config.metric_alias:
     description: alias of metrics index
+  opensearch_config.app_delete_index_age:
+    description: how old a app index has to be before deletion
+    default: 364d
+  opensearch_config.metric_delete_index_age:
+    description: how old a metric index has to be before deletion
+    default: 90d
+  opensearch_config.replica_shard_count:
+    description: how many replicas will be on indexs. 
+    default: 1
   opensearch_config.index_prefix:
     description: |
       Name prefix of your log indices that can uniquely distinguish them among other ES indices if apply pattern '*' to it, e.g. 'logs-*'.
