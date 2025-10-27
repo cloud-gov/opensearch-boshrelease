@@ -8,6 +8,7 @@ packages:
   - openjdk-21
   - yq
   - cf-cli-8-linux
+  - jq
 
 templates:
   bin/drain.erb: bin/drain
@@ -15,12 +16,11 @@ templates:
   bin/pre-start.erb: bin/pre-start
   bin/post-deploy.erb: bin/post-deploy
   bin/post-start.erb: bin/post-start
+  bin/add-keystore-credentials.sh.erb: bin/add-keystore-credentials.sh
   config/bpm.yml.erb: config/bpm.yml
   config/config.yml.erb: config/opensearch.yml
   config/ca.erb: config/ssl/opensearch.ca
-  config/smtp_ca.erb: config/ssl/smtp.ca
-  config/smtp-crt.erb: config/ssl/smtp.crt
-  config/smtp-pem.erb: config/ssl/smtp.pem
+  config/.env.erb: config/.env
   config/http-crt.erb: config/ssl/opensearch-http.crt
   config/http-pem.erb: config/ssl/opensearch-http.pem
   config/node-crt.erb: config/ssl/opensearch-node.crt
@@ -215,23 +215,9 @@ properties:
     description: username of the cf client
   opensearch.cf.client_password:
     description: password of cf client
-  opensearch.notification.username:
-    description: username of SMTP
-  opensearch.notification.password:
-    description: password for SMTP
-  opensearch.notification.host:
-    description: host for SMTP
-  opensearch.notification.port:
-    description: port for SMTP
-  opensearch.notification.from:
-    description: sender for SMT
-  opensearch.notification.ca:
-    description: CA for SMTP
-  opensearch.notification.certificate:
-    description: Certificate for SMTP
-  opensearch.notification.privatekey:
-    description: private key for SMTP
   opensearch.notification.keystorepass:
     description: password for keystore
   opensearch.notification.defaultkeystorepass:
     description: default password for keystore
+  opensearch.notifications.credential_map:
+    description: Map containing credentials for OpenSearch notifications mail senders

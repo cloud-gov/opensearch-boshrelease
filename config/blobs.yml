@@ -126,6 +126,10 @@ jdk-21.0.7_linux-x64_bin.tar.gz:
   size: 197755939
   object_id: 23f844d3-02eb-4ea7-6a13-a8b82e7cb61f
   sha: sha256:332636375b234e56f0198fdea409f896afcc3ce627f9d0b7924cc7b51d50a295
+jq-linux-amd64-1.8.1.tar.gz:
+  size: 995911
+  object_id: fa239437-7080-45f1-6e31-3fa88414b51d
+  sha: sha256:bf735e7e23ac7718779966591536a2146b3562349eb2ab85f39724290d9f46a1
 logstash/logstash-8.16.1-linux-x86_64.tar.gz:
   size: 428558276
   object_id: 6448195b-fb5b-4a22-5f16-759c29296cf6
