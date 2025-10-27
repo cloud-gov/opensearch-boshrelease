@@ -54,7 +54,7 @@
                     {
                         "state_name": "Delete_index",
                         "conditions": {
-                            "min_index_age": "90d"
+                            "min_index_age": "<%= p('opensearch_config.metric_delete_index_age')%>"
                         }
                     }
                 ]
