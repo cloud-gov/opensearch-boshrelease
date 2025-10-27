@@ -3,21 +3,5 @@ name: add_keystore_credentials
 
 description: This job add data to the OpenSearch keystore
 
-packages:
-  - jq
-
 templates:
-  bin/pre-start.erb: bin/pre-start
-  bin/run.sh.erb: bin/run
-  config/admin-crt.erb: config/ssl/opensearch-admin.crt
-  config/admin-pem.erb: config/ssl/opensearch-admin.pem
-  config/ca.erb: config/ssl/opensearch.ca
-
-consumes:
-- name: opensearch
-  type: opensearch
-
-properties:
-  opensearch.notifications.credential_map:
-    description: Map containing credentials for OpenSearch notifications mail senders
-
+  bin/run: bin/run
