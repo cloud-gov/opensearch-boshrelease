@@ -9,7 +9,6 @@ export PATH=$JQ_PACKAGE_DIR/bin:$PATH
 export JOB_NAME=opensearch
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
-export OPENSEARCH_PACKAGE_DIR=/var/vcap/packages/$JOB_NAME
 
 wait_for_listening() {
   echo -n "=== Waiting <%= p("opensearch.health.connect_timeout") %>s for opensearch to accept connections..."
