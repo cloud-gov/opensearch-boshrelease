@@ -61,18 +61,6 @@ fi
   chmod 600 ${JOB_DIR}/config/ssl/opensearch*.key
 <% end %>
 
-
-if [ -f "$STORE_DIR/opensearch.keystore" ]; then
-  echo "Restoring OpenSearch keystore from persistent storage"
-  cp "$STORE_DIR/opensearch.keystore" "$OPENSEARCH_PATH_CONF/opensearch.keystore"
-else
-  echo "Create new OpenSearch keystore"
-  echo y | "$PACKAGE_DIR/bin/opensearch-keystore" create
-  chmod 600 "$OPENSEARCH_PATH_CONF/opensearch.keystore"
-  # Copy keystore to persistent volume
-  cp "$OPENSEARCH_PATH_CONF/opensearch.keystore" "$STORE_DIR/opensearch.keystore"
-fi
-
 ${OPENSEARCH_HOME}/bin/opensearch \
   <%= p("opensearch.exec.options", []).join(' ') %>
 

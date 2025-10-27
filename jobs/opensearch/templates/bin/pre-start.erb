@@ -3,6 +3,7 @@
 export JOB_NAME=opensearch
 export OPENSEARCH_HOME=/var/vcap/packages/opensearch
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
+export PACKAGE_DIR=/var/vcap/packages/$JOB_NAME
 export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
 export OPENSEARCH_SECURITY_CONFIG_PATH=${OPENSEARCH_PATH_CONF}/opensearch-security
 export YQ_PACKAGE_DIR=/var/vcap/packages/yq
@@ -56,6 +57,8 @@ done
 ORG_GUID_ROLE_LIST=$(IFS=,; echo "${ORG_GUID_LIST[*]}")
 yq -i ".cf_user={\"backend_roles\": [$ORG_GUID_ROLE_LIST]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles_mapping.yml"
 yq -i ".reports_full_access={\"backend_roles\": [$ORG_GUID_ROLE_LIST]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles_mapping.yml"
+yq -i ".alerting_full_access={\"backend_roles\": [$ORG_GUID_ROLE_LIST]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles_mapping.yml"
+yq -i ".notifications_full_access={\"backend_roles\": [$ORG_GUID_ROLE_LIST]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles_mapping.yml"
 <% end %>
 <% end %>
 
@@ -84,11 +87,18 @@ yq -i ".reports_full_access={\"backend_roles\": [$ORG_GUID_ROLE_LIST]}" "$OPENSE
 
 log_dir=${OPENSEARCH_HOME}/logs
 
-if [[ -d ${log_dir} ]]; then
-  # rmdir fails on a symlink
-  rmdir ${log_dir} || rm ${log_dir}
-fi
-
 if [[ ! -a ${log_dir} ]]; then
   ln -s /var/vcap/sys/log/opensearch ${log_dir}
 fi
+
+# Create new Opensearch keystore in persistent storage, if necessary
+if [ ! -f "$OPENSEARCH_PATH_CONF/opensearch.keystore" ]; then
+  echo "Create new OpenSearch keystore"
+  echo y | "$PACKAGE_DIR/bin/opensearch-keystore" create
+fi
+
+# Make sure the keystore has the right ownership and file permissions
+chown vcap:vcap "$OPENSEARCH_PATH_CONF/opensearch.keystore"
+chmod 600 "$OPENSEARCH_PATH_CONF/opensearch.keystore"
+
+

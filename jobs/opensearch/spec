@@ -8,6 +8,7 @@ packages:
   - openjdk-21
   - yq
   - cf-cli-8-linux
+  - jq
 
 templates:
   bin/drain.erb: bin/drain
@@ -15,9 +16,11 @@ templates:
   bin/pre-start.erb: bin/pre-start
   bin/post-deploy.erb: bin/post-deploy
   bin/post-start.erb: bin/post-start
+  bin/add-keystore-credentials.sh.erb: bin/add-keystore-credentials.sh
   config/bpm.yml.erb: config/bpm.yml
   config/config.yml.erb: config/opensearch.yml
   config/ca.erb: config/ssl/opensearch.ca
+  config/.env.erb: config/.env
   config/http-crt.erb: config/ssl/opensearch-http.crt
   config/http-pem.erb: config/ssl/opensearch-http.pem
   config/node-crt.erb: config/ssl/opensearch-node.crt
@@ -216,3 +219,5 @@ properties:
     description: password for keystore
   opensearch.notification.defaultkeystorepass:
     description: default password for keystore
+  opensearch.notifications.credential_map:
+    description: Map containing credentials for OpenSearch notifications mail senders
