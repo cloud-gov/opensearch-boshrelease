@@ -20,7 +20,6 @@ templates:
   config/bpm.yml.erb: config/bpm.yml
   config/config.yml.erb: config/opensearch.yml
   config/ca.erb: config/ssl/opensearch.ca
-  config/.env.erb: config/.env
   config/http-crt.erb: config/ssl/opensearch-http.crt
   config/http-pem.erb: config/ssl/opensearch-http.pem
   config/node-crt.erb: config/ssl/opensearch-node.crt
