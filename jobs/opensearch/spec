@@ -219,5 +219,5 @@ properties:
     description: password for keystore
   opensearch.notification.defaultkeystorepass:
     description: default password for keystore
-  opensearch.notifications.credential_map:
-    description: Map containing credentials for OpenSearch notifications mail senders
+  opensearch.notifications.secrets_prefix:
+    description: Prefix for name of secrets containing credentials for OpenSearch notifications email senders
