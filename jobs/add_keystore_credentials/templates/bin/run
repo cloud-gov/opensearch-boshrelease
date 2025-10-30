@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-exec /var/vcap/jobs/opensearch/bin/add-keystore-credentials.sh
