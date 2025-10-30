@@ -9,6 +9,7 @@ packages:
   - yq
   - cf-cli-8-linux
   - jq
+  - awscli
 
 templates:
   bin/drain.erb: bin/drain
