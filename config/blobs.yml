@@ -122,6 +122,10 @@ auth-proxy/werkzeug-3.1.2-py3-none-any.whl:
   size: 224352
   object_id: 45af49a7-9728-4fdb-5576-6627b8e4fbb7
   sha: sha256:4f7d1a5de312c810a8a2c6f0b47e9f6a7cffb7c8322def35e4d4d9841ff85597
+awscli-exe-linux-x86_64.zip:
+  size: 62186639
+  object_id: acf3ef43-9e8d-4749-4daf-7c6edf3a5297
+  sha: sha256:fca9d80afb77f4cf5f2df6078b30ebb123b40e5b070ee7c1d5c3fba92d6b3755
 jdk-21.0.7_linux-x64_bin.tar.gz:
   size: 197755939
   object_id: 23f844d3-02eb-4ea7-6a13-a8b82e7cb61f
