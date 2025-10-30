@@ -126,6 +126,10 @@ jdk-21.0.7_linux-x64_bin.tar.gz:
   size: 197755939
   object_id: 23f844d3-02eb-4ea7-6a13-a8b82e7cb61f
   sha: sha256:332636375b234e56f0198fdea409f896afcc3ce627f9d0b7924cc7b51d50a295
+jq-linux-amd64-1.8.1.tar.gz:
+  size: 995911
+  object_id: fa239437-7080-45f1-6e31-3fa88414b51d
+  sha: sha256:bf735e7e23ac7718779966591536a2146b3562349eb2ab85f39724290d9f46a1
 logstash/logstash-8.16.1-linux-x86_64.tar.gz:
   size: 428558276
   object_id: 6448195b-fb5b-4a22-5f16-759c29296cf6
@@ -166,10 +170,7 @@ logstash/logstash-output-syslog-3.0.5.zip:
   size: 41727
   object_id: 21474ee6-824a-4547-7f45-b236864358ab
   sha: sha256:80a2b08f2b58ae81c823cc0bb1dd7956fbc173037fc621bfa31af34140724e02
-opensearch-3.3.0-linux-x64.tar.gz:
-  size: 964982618
-  object_id: 4168b0ed-7831-4dff-571b-5d02f34b0129
-  sha: sha256:9cd3ca5867c2146314504de075f19a9a9b6885ae65d2ae02cb12d190baaa6997
+>>>>>>> origin/main
 opensearch-3.3.1-linux-x64.tar.gz:
   size: 964982932
   object_id: d2b686ee-df5e-4e36-7af2-27bfc93558cd
@@ -182,14 +183,14 @@ opensearch-dashboards-cf-auth-proxy-0.0.11.tar.gz:
   size: 36275
   object_id: c8408b65-2c08-4d47-731c-fa1dbb7a9747
   sha: sha256:d81c67e7372f250a1c21cf03c6156a7e6e870796a3b87757d2396bf1c2c8853c
-opensearch/opensearch-alerting-3.3.0.0.zip:
+opensearch/opensearch-alerting-3.3.1.0.zip:
   size: 8592570
-  object_id: c3136b1b-585c-4818-5809-0fcd4144bb5d
-  sha: sha256:4d98c490f2aa2fbccc0fb08b9c4581da16c8f6bf7cae22e9ac3d2e6892196cc5
-opensearch/opensearch-notifications-3.3.0.0.zip:
-  size: 23491352
-  object_id: dad7f123-7dfb-476b-4487-bb80261640bc
-  sha: sha256:e18afe0dfe1b9c3719453223d00ff6967973892cb13c19939238a689471ad000
+  object_id: c1d43a3d-3d28-4fe0-4bb1-7cbcf48cecdb
+  sha: sha256:68cdaecbffd385cdd746be9b3b2b8619823ae0f561d19e384a2614f6255a42e6
+opensearch/opensearch-notifications-3.3.1.0.zip:
+  size: 23491348
+  object_id: 61245c34-ed5c-4dec-5f99-3c39062c502f
+  sha: sha256:c51c54bb178accb84b8c8525ca293da14db08ec7392f70e0a51e03784da8fcfa
 requests/certifi-2023.11.17-py3-none-any.whl:
   size: 162530
   object_id: f2afff72-e415-4390-61c1-eb8010ed4e4a

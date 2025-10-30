@@ -3,8 +3,12 @@
 set -e
 set -x
 
+export JQ_PACKAGE_DIR=/var/vcap/packages/jq
+export PATH=$JQ_PACKAGE_DIR/bin:$PATH
+
 export JOB_NAME=opensearch
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
+export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
 
 wait_for_listening() {
   echo -n "=== Waiting <%= p("opensearch.health.connect_timeout") %>s for opensearch to accept connections..."
@@ -94,3 +98,6 @@ echo "Disable post start script property is set to <%= p("opensearch.health.disa
     -icl -nhnv
   <% end %>
 <% end %>
+
+# Add credentials to keystore
+$JOB_DIR/bin/add-keystore-credentials.sh
