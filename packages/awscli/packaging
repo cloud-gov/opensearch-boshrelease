@@ -2,5 +2,5 @@
 
 unzip awscli-exe-linux-x86_64.zip -d "$BOSH_INSTALL_TARGET"
 mkdir "$BOSH_INSTALL_TARGET/bin"
-cp "$BOSH_INSTALL_TARGET/aws/dist/aws" "$BOSH_INSTALL_TARGET/bin/aws"
+cp -R "$BOSH_INSTALL_TARGET/aws/dist/*" "$BOSH_INSTALL_TARGET/bin"
 chmod +x "$BOSH_INSTALL_TARGET/bin/aws"
