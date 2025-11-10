@@ -1,0 +1,7 @@
+---
+name: add_keystore_credentials
+
+description: This job add data to the OpenSearch keystore
+
+templates:
+  bin/run: bin/run
