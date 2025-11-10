@@ -46,7 +46,6 @@ containermetric_enabled = p('cloudfoundry.event_types').include? 'ContainerMetri
 valuemetric_enabled = p('cloudfoundry.event_types').include? 'ValueMetric'
 counterevent_enabled = p('cloudfoundry.event_types').include? 'CounterEvent'
 error_enabled = p('cloudfoundry.event_types').include? 'Error'
-http_enabled = p('cloudfoundry.event_types').include? 'HttpStartStop'
 audit_enabled = p('cloudfoundry.event_types').include? 'Audit'
 
 # Only LogMessage, ContainerMetric, Http* events contain `app_id` field so other app-related `@cf.*` fields are set for them too. See protocol definition https://github.com/cloudfoundry/dropsonde-protocol/blob/master/events/README.md.

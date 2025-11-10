@@ -743,7 +743,9 @@ fields_json =
                 "readFromDocValues": true
             }
         ]
-        if(http_enabled == true)
+http_enabled = p('cloudfoundry.event_types').include? 'HttpStartStop'
+
+if(http_enabled == true)
   fields_json.concat(
     [
       {"name":"httpstartstop.forwarded","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
