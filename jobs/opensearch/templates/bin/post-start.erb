@@ -98,3 +98,6 @@ echo "Disable post start script property is set to <%= p("opensearch.health.disa
     -icl -nhnv
   <% end %>
 <% end %>
+
+# Add credentials to keystore
+$JOB_DIR/bin/add-keystore-credentials.sh
