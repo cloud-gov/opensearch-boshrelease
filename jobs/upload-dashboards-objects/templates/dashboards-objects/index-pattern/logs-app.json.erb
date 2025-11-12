@@ -46,7 +46,6 @@ containermetric_enabled = p('cloudfoundry.event_types').include? 'ContainerMetri
 valuemetric_enabled = p('cloudfoundry.event_types').include? 'ValueMetric'
 counterevent_enabled = p('cloudfoundry.event_types').include? 'CounterEvent'
 error_enabled = p('cloudfoundry.event_types').include? 'Error'
-http_enabled = p('cloudfoundry.event_types').include? 'HttpStartStop'
 audit_enabled = p('cloudfoundry.event_types').include? 'Audit'
 
 # Only LogMessage, ContainerMetric, Http* events contain `app_id` field so other app-related `@cf.*` fields are set for them too. See protocol definition https://github.com/cloudfoundry/dropsonde-protocol/blob/master/events/README.md.
@@ -164,26 +163,6 @@ if(audit_enabled == true)
       {"name":"updated_at","type":"date","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
       {"name":"type","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
       {"name":"guid","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true}
-    ]
-  )
-end
-
-if(http_enabled == true)
-  fields_json.concat(
-    [
-      {"name":"httpstartstop.forwarded","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"httpstartstop.status_code","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"httpstartstop.instance_id","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"httpstartstop.duration_ms","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"httpstartstop.uri","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"httpstartstop.content_length","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"httpstartstop.method","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"httpstartstop.remote_addr","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"httpstartstop.stop_timestamp","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"httpstartstop.user_agent","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"httpstartstop.request_id","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"httpstartstop.peer_type","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"httpstartstop.instance_index","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true}
     ]
   )
 end
