@@ -206,10 +206,7 @@ keyword_default = { "type": "keyword", "index": true }.to_json
                   "dynamic": true,
                   "properties": {}
                 },
-                "level": <%= keyword_default %>,
                 "ts": { "type": "date" },
-                "logger": <%= keyword_default %>,
-                "msg": <%= keyword_default %>,
                 "bytes_read": { "type": "long" },
                 "user_id": <%= keyword_default %>,
                 "duration": { "type": "double" },
