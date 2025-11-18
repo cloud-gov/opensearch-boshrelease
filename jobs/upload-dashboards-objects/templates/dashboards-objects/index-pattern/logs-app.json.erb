@@ -93,6 +93,44 @@ if(logmessage_enabled == true)
     ]
   )
 
+  # http.request fields
+
+  fields_json.concat(
+    [
+      {"name":"http.request","type":"keyword","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":false},
+      {"name":"http.request.body.bytes","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"http.request.body.content","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":false},
+      {"name":"http.request.body.content.text","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":false},
+      {"name":"http.request.bytes","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"http.request.bytes_read","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"http.request.client_ip","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"http.request.duration","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"http.request.host","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"http.request.id","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"http.request.level","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"http.request.logger","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"http.request.method","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"http.request.mime_type","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"http.request.msg","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"http.request.proto","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"http.request.referrer","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"http.request.remote_ip","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"http.request.remote_port","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"http.request.size","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"http.request.status","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"http.request.ts","type":"date","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"http.request.uri","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"http.request.user_id","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"http.response.body.bytes","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"http.response.body.content","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":false},
+      {"name":"http.response.body.content.text","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":false},
+      {"name":"http.response.bytes","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"http.response.mime_type","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"http.response.status_code","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"http.version","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true}
+    ]
+  )
+
   # geoip fields
   fields_json.concat(
     [
