@@ -96,7 +96,7 @@ if(logmessage_enabled == true)
   # http.request fields
 
   fields_json.concat(
-    {
+    [
       {"name":"http.request","type":"keyword","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":false},
       {"name":"http.request.body.bytes","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
       {"name":"http.request.body.content","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":false},
@@ -128,7 +128,7 @@ if(logmessage_enabled == true)
       {"name":"http.response.mime_type","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
       {"name":"http.response.status_code","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
       {"name":"http.version","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true}
-    }
+    ]
   )
 
   # geoip fields
