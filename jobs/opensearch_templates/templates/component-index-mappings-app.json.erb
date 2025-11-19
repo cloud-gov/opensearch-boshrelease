@@ -192,26 +192,31 @@ keyword_default = { "type": "keyword", "index": true }.to_json
                 },
                 "bytes": { "type": "long" },
                 "client_ip": <%= keyword_default %>,
+                "duration": { "type": "double" },
                 "host": <%= keyword_default %>,
                 "id": <%= keyword_default %>,
                 "method": <%= keyword_default %>,
                 "mime_type": <%= keyword_default %>,
+                "protocol": <%= keyword_default %>,
                 "proto": <%= keyword_default %>,
+                "referer": <%= keyword_default %>,
                 "referrer": <%= keyword_default %>,
                 "remote_ip": <%= keyword_default %>,
                 "remote_port": <%= keyword_default %>,
+                "size": { "type": "long" },
+                "status": { "type": "long" },
+                "timestamp": { "type": "date" },
+                "ts": { "type": "date" },
                 "uri": <%= keyword_default %>,
+                "url": <%= keyword_default %>,
+                "user_agent": <%= keyword_default %>,
+                "user_id": <%= keyword_default %>,
                 "headers": {
                   "type": "object",
                   "dynamic": true,
                   "properties": {}
                 },
-                "ts": { "type": "date" },
-                "bytes_read": { "type": "long" },
-                "user_id": <%= keyword_default %>,
-                "duration": { "type": "double" },
-                "size": { "type": "long" },
-                "status": { "type": "long" }
+                "bytes_read": { "type": "long" }
               }
             },
             "response": {
@@ -238,9 +243,9 @@ keyword_default = { "type": "keyword", "index": true }.to_json
               }
             },
             "version": <%= keyword_default %>
-          }
         }
       }
+    }
     }
   }
 }
