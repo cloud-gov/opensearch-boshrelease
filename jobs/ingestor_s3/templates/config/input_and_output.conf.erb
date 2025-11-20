@@ -8,7 +8,9 @@ input
     region => "<%= region_zone %>"
     <% end %>
     codec => "plain"
-    prefix => "20"
+    <% if_p("logstash_ingestor.s3.prefix") do |prefix| %>
+    prefix => "<%= prefix %>"
+    <% end %>
   }
 }
 
