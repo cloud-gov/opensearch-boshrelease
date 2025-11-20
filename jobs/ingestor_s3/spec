@@ -81,6 +81,9 @@ properties:
     description: "What bucket to pull s3 logs from"
   logstash_ingestor.s3.region:
     description: "Region for aws"
+  logstash_ingestor.s3.prefix:
+    description: "prefix for aws"
+    default: "20"
   logstash_ingestor.relp.port:
     description: Port to listen for RELP messages
     default: 2514
