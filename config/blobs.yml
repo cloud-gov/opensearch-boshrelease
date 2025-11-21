@@ -187,9 +187,9 @@ opensearch-dashboards-cf-auth-proxy-0.0.11.tar.gz:
   object_id: c8408b65-2c08-4d47-731c-fa1dbb7a9747
   sha: sha256:d81c67e7372f250a1c21cf03c6156a7e6e870796a3b87757d2396bf1c2c8853c
 opensearch/opensearch-alerting-3.3.1.0.zip:
-  size: 14319813
-  object_id: 928f89a4-023f-48e9-5b11-7d77f6134a58
-  sha: sha256:97cd7cf1426ca3a32f23f026826d9289bdd208307b6f86f6c7d8d4c79715a9f3
+  size: 14319855
+  object_id: 41d8a515-8401-4efd-46e7-ce1f3aa5ecf6
+  sha: sha256:7d750299f17d5adb161eed3dd2fdd01d98939ef5f701d885082a2ed4f2540569
 opensearch/opensearch-notifications-3.3.1.0.zip:
   size: 23491348
   object_id: 61245c34-ed5c-4dec-5f99-3c39062c502f
