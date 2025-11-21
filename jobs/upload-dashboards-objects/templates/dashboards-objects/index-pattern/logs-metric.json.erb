@@ -748,19 +748,18 @@ http_enabled = p('cloudfoundry.event_types').include? 'HttpStartStop'
 if(http_enabled == true)
   fields_json.concat(
     [
-      {"name":"httpstartstop.forwarded","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"httpstartstop.status_code","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"httpstartstop.instance_id","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"httpstartstop.duration_ms","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"httpstartstop.uri","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"httpstartstop.content_length","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"httpstartstop.method","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"httpstartstop.remote_addr","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"httpstartstop.stop_timestamp","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"httpstartstop.user_agent","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"httpstartstop.request_id","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"httpstartstop.peer_type","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"httpstartstop.instance_index","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true}
+    {"name":"httpstartstop.content_length","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true,"searchable":true,"aggregatable":true},
+    {"name":"httpstartstop.duration_in_ms","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true,"searchable":true,"aggregatable":true},
+    {"name":"httpstartstop.forwarded","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true,"searchable":true,"aggregatable":true},
+    {"name":"httpstartstop.method","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true,"searchable":true,"aggregatable":true},
+    {"name":"httpstartstop.peer_type","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true,"searchable":true,"aggregatable":true},
+    {"name":"httpstartstop.remote_addr","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true,"searchable":true,"aggregatable":true},
+    {"name":"httpstartstop.request_id","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true,"searchable":true,"aggregatable":true},
+    {"name":"httpstartstop.start_timestamp","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true,"searchable":true,"aggregatable":true},
+    {"name":"httpstartstop.status_code","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true,"searchable":true,"aggregatable":true},
+    {"name":"httpstartstop.stop_timestamp","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true,"searchable":true,"aggregatable":true},
+    {"name":"httpstartstop.uri","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true,"searchable":true,"aggregatable":true},
+    {"name":"httpstartstop.user_agent","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true,"searchable":true,"aggregatable":true}
     ]
   )
 end
