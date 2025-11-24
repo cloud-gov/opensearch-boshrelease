@@ -25,6 +25,9 @@ consumes:
   optional: true
 
 properties:
+  smoke_tests.app_log.enabled:
+    description: app log smoketest
+    default: true
   smoke_tests.opensearch.ssl.private_key:
     description: opensearch private key
   smoke_tests.opensearch.ssl.certificate:
