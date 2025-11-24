@@ -8,6 +8,7 @@ packages: []
 templates:
   bin/pre-start.erb: bin/pre-start
   bin/run.sh: bin/run
+  bin/app-log.sh: bin/app-log
   config/smoketest-crt.erb: config/ssl/smoketest.crt
   config/smoketest-pem.erb: config/ssl/smoketest.pem
   config/ingestor-crt.erb: config/ssl/ingestor.crt
