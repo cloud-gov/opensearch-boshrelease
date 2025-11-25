@@ -3,12 +3,14 @@ name: smoke_tests
 
 description: This job runs Smoke tests to make sure the cluster is configured properly
 
-packages: []
+packages: 
+  - jq
 
 templates:
   bin/pre-start.erb: bin/pre-start
   bin/run.sh: bin/run
   bin/app-log.sh: bin/app-log
+  bin/metric-test.sh: bin/metric-test
   config/smoketest-crt.erb: config/ssl/smoketest.crt
   config/smoketest-pem.erb: config/ssl/smoketest.pem
   config/ingestor-crt.erb: config/ssl/ingestor.crt
@@ -63,3 +65,11 @@ properties:
     description: Minimum expected documents in the given time window
   smoke_tests.count_test.time_interval:
     description: 'How far back to look in time for the count. e.g. "15m", "1h", "2d" see https://www.open.co/guide/en/opensearch/reference/current/common-options.html#date-math for more'
+
+
+  smoke_tests.s3.environment:
+    description: environment of deployment
+  smoke_tests.s3.region:
+    description: region for aws
+  smoke_tests.s3_metric.bucket:
+    description: name of metrics bucket
