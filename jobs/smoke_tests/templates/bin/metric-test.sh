@@ -15,18 +15,23 @@ if [ -z "$S3_BUCKET" ] || [ -z "$S3_REGION" ] || [ -z "$ENVIRONMENT" ]; then
 fi
 
 S3_PREFIX=$(date -u +"%Y/%m/%d/%H")
+SMOKE_ID=$(LC_ALL=C; cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 S3_LOG_FILE="smoke_test_log_${SMOKE_ID}.log"
 TIMESTAMP=$(date -u +"%Y%m%d-%H%M%S")
 S3_KEY="${S3_PREFIX}/${TIMESTAMP}-${SMOKE_ID}.log"
 
-rds_prefix = "cg-aws-broker-"
-if ENVIRONMENT == "production":
-    rds_prefix = rds_prefix + "prod"
-if ENVIRONMENT == "staging":
-    rds_prefix = rds_prefix + "stage"
-if ENVIRONMENT == "development":
-    rds_prefix = rds_prefix + "dev"
-
+rds_prefix="cg-aws-broker-"
+case "$ENVIRONMENT" in
+    "production")
+        rds_prefix="${rds_prefix}prod"
+        ;;
+    "staging")
+        rds_prefix="${rds_prefix}stage"
+        ;;
+    "development")
+        rds_prefix="${rds_prefix}dev"
+        ;;
+esac
 # Get time in microsecond format
 current_time_ms=$(date -u +%s%3N)
 
