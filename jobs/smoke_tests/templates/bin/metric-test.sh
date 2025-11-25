@@ -77,7 +77,7 @@ LOG=$(jq -n \
 )
 
 echo "Generated LOG: $LOG"  # Print the JSON object for debugging
-
+echo "$LOG" > "$S3_LOG_FILE"
 # Upload log to S3
 echo "Uploading failure log to S3..."
 if command -v aws &> /dev/null; then
@@ -94,3 +94,31 @@ if command -v aws &> /dev/null; then
 else
   echo "AWS CLI not found, skipping S3 upload"
 fi
+
+
+# Polling configuration
+TRIES=${1:-300}  # Default to 300 seconds if not specified
+SLEEP=5
+
+echo -n "Polling for $TRIES seconds"
+
+while [ $TRIES -gt 0 ]; do
+  result=$(curl --key ${JOB_DIR}/config/ssl/smoketest.key \
+    --cert ${JOB_DIR}/config/ssl/smoketest.crt  \
+    --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
+    -s $MASTER_URL/_search?q=$SMOKE_ID)
+  
+  if [[ $result == *"$SMOKE_ID"* ]]; then
+    echo -e "\nSUCCESS: Found log containing $SMOKE_ID"
+    echo $result
+    exit 0
+  else
+    sleep $SLEEP
+    echo -n "."
+    TRIES=$((TRIES-SLEEP))
+  fi
+done
+
+echo -e "\nERROR:  Couldn't find app log containing: $SMOKE_ID"
+echo "Last search result: $result"
+exit 1
