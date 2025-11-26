@@ -6,6 +6,16 @@ export JQ_PACKAGE_DIR=/var/vcap/packages/jq
 export AWS_PACKAGE_DIR=/var/vcap/packages/awscli
 export PATH=$JQ_PACKAGE_DIR/bin:$AWS_PACKAGE_DIR/bin:$PATH
 
+
+<%
+  opensearch_host = p("smoke_tests.opensearch_manager.host")
+  opensearch_port = p("smoke_tests.opensearch_manager.port")
+  index = p("smoke_tests.metric_index")
+%>
+
+MASTER_URL="https://<%= opensearch_host %>:<%= opensearch_port %>"
+INDEX="<%= index %>"
+
 S3_BUCKET="<%= p('smoke_tests.s3_metric.bucket') %>"
 S3_REGION="<%= p('smoke_tests.s3.region') %>"
 ENVIRONMENT="<%= p('smoke_tests.s3.environment') %>"
