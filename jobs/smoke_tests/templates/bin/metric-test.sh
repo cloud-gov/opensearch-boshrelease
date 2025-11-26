@@ -29,7 +29,7 @@ S3_PREFIX=$(date -u +"%Y/%m/%d/%H")
 SMOKE_ID=$(LC_ALL=C; cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 S3_LOG_FILE="smoke_test_log_${SMOKE_ID}.log"
 TIMESTAMP=$(date -u +"%Y%m%d-%H%M%S")
-S3_KEY="${S3_PREFIX}/${TIMESTAMP}-${SMOKE_ID}.log"
+S3_KEY="${S3_PREFIX}/${TIMESTAMP}-${SMOKE_ID}.gz"
 
 rds_prefix="cg-aws-broker-"
 case "$ENVIRONMENT" in
@@ -82,9 +82,8 @@ LOG=$(jq -n \
       "Created at": "2024-12-20T19:08:54Z",
       "Instance GUID": "024d7b3a-1732-4ae4-9e2a-f36eaa2c741c"
     }
-  }
-'
-)
+  } | paths(scalars) as $p | [$p | join("_"), getpath($p)] | {key: .[0], value: .[1]} | "\(.key)=\(.value)"
+' | gzip )
 
 echo "Generated LOG: $LOG"  # Print the JSON object for debugging
 echo "$LOG" > "$S3_LOG_FILE"
