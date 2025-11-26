@@ -83,10 +83,12 @@ LOG=$(jq -n \
       "Instance GUID": "024d7b3a-1732-4ae4-9e2a-f36eaa2c741c"
     }
   } | paths(scalars) as $p | [$p | join("_"), getpath($p)] | {key: .[0], value: .[1]} | "\(.key)=\(.value)"
-' | gzip )
+')
+
+# Then compress the variable content to a file
+echo "$LOG" | gzip > "$S3_LOG_FILE"
 
 echo "Generated LOG: $LOG"  # Print the JSON object for debugging
-echo "$LOG" > "$S3_LOG_FILE"
 # Upload log to S3
 echo "Uploading failure log to S3..."
 if command -v aws &> /dev/null; then
