@@ -25,7 +25,7 @@ if [ -z "$S3_BUCKET" ] || [ -z "$S3_REGION" ] || [ -z "$ENVIRONMENT" ]; then
   exit 1
 fi
 
-S3_PREFIX=$(date -u +"%Y/%m/%d/%H")
+S3_PREFIX=$(date -u +"%Y/%m/%d/%H/")
 SMOKE_ID=$(LC_ALL=C; cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 S3_LOG_FILE="smoke_test_log_${SMOKE_ID}.log"
 TIMESTAMP=$(date -u +"%Y%m%d-%H%M%S")
