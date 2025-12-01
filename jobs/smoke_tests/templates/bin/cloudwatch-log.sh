@@ -143,7 +143,7 @@ while [ $TRIES -gt 0 ]; do
         org_value=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["org_id"]')
         space_value=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["space_id"]')
         
-        if [[ "$org_value" != "null" && "$space_value" != "null"]]; then
+        if [[ "$org_value" != "null" && "$space_value" != "null" ]]; then
             echo "SUCCESS: CloudWatch log contains 'org id' and 'space id' fields."
             
             # Parse and validate CloudWatch fields
@@ -152,16 +152,13 @@ while [ $TRIES -gt 0 ]; do
             
             if [[ "$group_value" != "null" && "$stream_value" != "null" ]]; then
                 echo "SUCCESS: CloudWatch log contains 'log group' and 'log stream' fields."
-                echo "$result"
                 exit 0
             else
                 echo "ERROR: CloudWatch log does not contain both 'log group' and 'log stream' fields."
-                echo "Full JSON result: $result"
                 exit 1
             fi
         else
             echo "ERROR: CloudWatch log does not contain both 'org id' and 'space id' fields."
-            echo "Full JSON result: $result"
             exit 1
         fi
     else
