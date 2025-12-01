@@ -86,14 +86,15 @@ mv temp_log.json.gz "$S3_LOG_FILE"
 echo "Generated LOG: $LOG"
 
 # Upload log to S3
-echo "Uploading failure log to S3..."
+echo "Uploading audit log to S3..."
 if command -v aws &> /dev/null; then
     if [ -f "$S3_LOG_FILE" ]; then
         aws s3 cp "$S3_LOG_FILE" "s3://${S3_BUCKET}/${S3_KEY}" --region "${S3_REGION}"
         if [ $? -eq 0 ]; then
-            echo "Successfully uploaded failure log to s3://${S3_BUCKET}/${S3_KEY}"
+            echo "Successfully uploaded audit log to s3://${S3_BUCKET}/${S3_KEY}"
+            rm -f "$S3_LOG_FILE"
         else
-            echo "Failed to upload log to S3"
+            echo "Failed to upload audit log to S3"
         fi
     else
         echo "WARNING: Log file '$S3_LOG_FILE' not found. Skipping S3 upload."
