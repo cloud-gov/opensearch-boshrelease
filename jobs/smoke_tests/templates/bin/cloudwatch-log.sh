@@ -132,11 +132,11 @@ while [ $TRIES -gt 0 ]; do
     if [[ -n "$org_value" && -n "$space_value" ]]; then
       echo "SUCCESS: cloudwatch Log contains 'org id' and 'space id' fields."
       # Parse the JSON using jq
-      average_value=$(echo "$result" | jq -r '.hits.hits[0]._source."cloudwatch.average')
-      db_instance_identifier_value=$(echo "$result" | jq -r '.hits.hits[0]._source."cloudwatch.db_instance_identifier')
+      group_value=$(echo "$result" | jq -r '.hits.hits[0]._source."cloudwatch_logs.log_group')
+      stream_value=$(echo "$result" | jq -r '.hits.hits[0]._source."cloudwatch_logs.log_streamr')
 
-      if [[ -n "$average_value" && -n "$db_instance_identifier_value" ]]; then
-        echo "SUCCESS: cloudwatch Log contains 'average' and 'db instance identifier' fields."
+      if [[ -n "$group_value" && -n "$stream_value" ]]; then
+        echo "SUCCESS: cloudwatch Log contains 'log group' and 'log stream' fields."
         echo "$result"  # Output the full JSON result (optional)
         exit 0
       else 

@@ -11,7 +11,8 @@ templates:
   bin/pre-start.erb: bin/pre-start
   bin/run.sh: bin/run
   bin/app-log.sh: bin/app-log
-  bin/metric-test.sh: bin/metric-test
+  bin/metric-log.sh: bin/metric-log
+  bin/cloudwatch-log.sh: bin/cloudwatch-log
   config/smoketest-crt.erb: config/ssl/smoketest.crt
   config/smoketest-pem.erb: config/ssl/smoketest.pem
   config/ingestor-crt.erb: config/ssl/ingestor.crt

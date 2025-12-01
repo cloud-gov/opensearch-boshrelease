@@ -63,19 +63,6 @@ while [ $TRIES -gt 0 ]; do
     # Validate that the fields exist and have values (you can customize the validation)
     if [[ -n "$org_value" && -n "$space_value" ]]; then
       echo "SUCCESS: App Log contains 'org id' and 'space id' fields."
-      # Parse the JSON using jq
-      # find a value we love
-      # average_value=$(echo "$result" | jq -r '.hits.hits[0]._source."metric.average')
-      # db_instance_identifier_value=$(echo "$result" | jq -r '.hits.hits[0]._source."metric.db_instance_identifier')
-      # if [[ -n "$average_value" && -n "$db_instance_identifier_value" ]]; then
-      #   echo "SUCCESS: app Log contains 'average' and 'db instance identifier' fields."
-      #   echo "$result"  # Output the full JSON result (optional)
-      #   exit 0
-      # else 
-      #   echo "ERROR: Metric Log does not contain both 'average' and 'db instance identifier' fields."
-      #   echo "Full JSON result: $result" #Output full JSON for debugging
-      #   exit 1 # Or continue retrying, depending on your needs
-      # fi
     else
       echo "ERROR: metric Log does not contain both 'average' and 'db instance indentief' fields."
       echo "Full JSON result: $result" #Output full JSON for debugging

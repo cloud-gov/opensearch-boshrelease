@@ -42,5 +42,16 @@ fi
 
 # app logs
 <% if p('smoke_tests.app_log.enabled') %>
-${JOB_DIR}/bin/app-log.sh
+${JOB_DIR}/bin/app-log
 <% end %>
+
+# metric logs
+<% if p('smoke_tests.s3_metric.bucket') %>
+${JOB_DIR}/bin/metric-log
+<% end %>
+
+# cloudwatch logs
+<% if p('smoke_tests.s3_cloudwatch.bucket') %>
+${JOB_DIR}/bin/cloudwatch-log
+<% end %>
+
