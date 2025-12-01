@@ -111,6 +111,7 @@ if command -v aws &> /dev/null; then
         aws s3 cp "$S3_LOG_FILE" "s3://${S3_BUCKET}/${S3_KEY}" --region "${S3_REGION}"
         if [ $? -eq 0 ]; then
             echo "Successfully uploaded metric log to s3://${S3_BUCKET}/${S3_KEY}"
+            rm -f "$S3_LOG_FILE"
         else
             echo "Failed to upload log to S3"
         fi

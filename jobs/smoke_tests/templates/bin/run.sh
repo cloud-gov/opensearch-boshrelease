@@ -45,6 +45,11 @@ fi
 ${JOB_DIR}/bin/app-log
 <% end %>
 
+# audit logs
+<% if p('smoke_tests.s3_audit.bucket') %>
+${JOB_DIR}/bin/audit-log
+<% end %>
+
 # metric logs
 <% if p('smoke_tests.s3_metric.bucket') %>
 ${JOB_DIR}/bin/metric-log
