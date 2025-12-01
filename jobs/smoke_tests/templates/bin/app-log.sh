@@ -63,7 +63,7 @@ while [ $TRIES -gt 0 ]; do
     space_value=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["space_id"]')
 
     # Validate that the fields exist and have cf values
-    if [[ "$org_value" != "null" && "$space_value" != "null"]]; then
+    if [[ "$org_value" != "null" && "$space_value" != "null" ]]; then
       echo "SUCCESS: App Log contains 'org id' and 'space id' fields."
       exit 0
     else

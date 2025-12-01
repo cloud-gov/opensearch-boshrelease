@@ -143,7 +143,7 @@ while [ $TRIES -gt 0 ]; do
         org_value=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["org_id"]')
         space_value=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["space_id"]')
         
-        if [[ "$org_value" != "null" && "$space_value" != "null"]]; then
+        if [[ "$org_value" != "null" && "$space_value" != "null" ]]; then
             echo "SUCCESS: CloudWatch log contains 'org id' and 'space id' fields."
             
             # Parse and validate CloudWatch fields
