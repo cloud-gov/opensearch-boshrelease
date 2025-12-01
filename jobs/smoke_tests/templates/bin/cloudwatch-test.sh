@@ -10,13 +10,13 @@ export PATH=$JQ_PACKAGE_DIR/bin:$AWS_PACKAGE_DIR/bin:$PATH
 <%
   opensearch_host = p("smoke_tests.opensearch_manager.host")
   opensearch_port = p("smoke_tests.opensearch_manager.port")
-  index = p("smoke_tests.metric_index")
+  index = p("smoke_tests.index")
 %>
 
 MASTER_URL="https://<%= opensearch_host %>:<%= opensearch_port %>"
 INDEX="<%= index %>"
 
-S3_BUCKET="<%= p('smoke_tests.s3_metric.bucket') %>"
+S3_BUCKET="<%= p('smoke_tests.s3_cloudwatch.bucket') %>"
 S3_REGION="<%= p('smoke_tests.s3.region') %>"
 ENVIRONMENT="<%= p('smoke_tests.s3.environment') %>"
 # Check if properties are empty, exit if so.
@@ -69,6 +69,8 @@ LOG=$(jq -n \
       "count": 1.0
     },
     "unit": "Seconds",
+
+    
     "Tags": {
       "Service offering name": "aws-rds",
       "Organization GUID": "c9b54579-7056-46c3-9870-334330e9be75",
@@ -128,22 +130,22 @@ while [ $TRIES -gt 0 ]; do
 
     # Validate that the fields exist and have values (you can customize the validation)
     if [[ -n "$org_value" && -n "$space_value" ]]; then
-      echo "SUCCESS: Metric Log contains 'org id' and 'space id' fields."
+      echo "SUCCESS: cloudwatch Log contains 'org id' and 'space id' fields."
       # Parse the JSON using jq
-      average_value=$(echo "$result" | jq -r '.hits.hits[0]._source."metric.average')
-      db_instance_identifier_value=$(echo "$result" | jq -r '.hits.hits[0]._source."metric.db_instance_identifier')
+      average_value=$(echo "$result" | jq -r '.hits.hits[0]._source."cloudwatch.average')
+      db_instance_identifier_value=$(echo "$result" | jq -r '.hits.hits[0]._source."cloudwatch.db_instance_identifier')
 
       if [[ -n "$average_value" && -n "$db_instance_identifier_value" ]]; then
-        echo "SUCCESS: Metric Log contains 'average' and 'db instance identifier' fields."
+        echo "SUCCESS: cloudwatch Log contains 'average' and 'db instance identifier' fields."
         echo "$result"  # Output the full JSON result (optional)
         exit 0
       else 
-        echo "ERROR: Metric Log does not contain both 'average' and 'db instance identifier' fields."
+        echo "ERROR: cloudwatch Log does not contain both 'average' and 'db instance identifier' fields."
         echo "Full JSON result: $result" #Output full JSON for debugging
         exit 1 # Or continue retrying, depending on your needs
       fi
     else
-      echo "ERROR: metric Log does not contain both 'average' and 'db instance indentief' fields."
+      echo "ERROR: cloudwatch Log does not contain both 'average' and 'db instance indentief' fields."
       echo "Full JSON result: $result" #Output full JSON for debugging
       exit 1 # Or continue retrying, depending on your needs
     fi
@@ -155,9 +157,9 @@ while [ $TRIES -gt 0 ]; do
   fi
 done
 
-echo "ERROR: Timed out waiting for log with $SMOKE_ID"
+echo "ERROR: Timed out waiting for cloudwatch log with $SMOKE_ID"
 exit 1
 
-echo -e "\nERROR:  Couldn't find app log containing: $SMOKE_ID"
+echo -e "\nERROR:  Couldn't find cloudwatch log containing: $SMOKE_ID"
 echo "Last search result: $result"
 exit 1

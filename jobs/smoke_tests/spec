@@ -76,3 +76,5 @@ properties:
     description: region for aws
   smoke_tests.s3_metric.bucket:
     description: name of metrics bucket
+  smoke_tests.s3_cloudwatch.bucket:
+    description: name of cloudwatch bucket
