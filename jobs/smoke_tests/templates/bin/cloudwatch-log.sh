@@ -140,17 +140,17 @@ while [ $TRIES -gt 0 ]; do
         echo -e "\nSUCCESS: Found log containing $SMOKE_ID"
         
         # Parse and validate organization and space fields
-        org_value=$(echo "$result" | jq -r '.hits.hits[0]._source."@cf.org_id"')
-        space_value=$(echo "$result" | jq -r '.hits.hits[0]._source."@cf.space_id"')
+        org_value=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["org_id"]')
+        space_value=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["space_id"]')
         
-        if [[ -n "$org_value" && -n "$space_value" ]]; then
+        if [[ "$org_value" != "null" && "$space_value" != "null"]]; then
             echo "SUCCESS: CloudWatch log contains 'org id' and 'space id' fields."
             
             # Parse and validate CloudWatch fields
-            group_value=$(echo "$result" | jq -r '.hits.hits[0]._source."cloudwatch_logs.log_group"')
-            stream_value=$(echo "$result" | jq -r '.hits.hits[0]._source."cloudwatch_logs.log_stream"')
+            group_value=$(echo "$result" | jq -r '.hits.hits[0]._source["cloudwatch_logs"]["log_group"]')
+            stream_value=$(echo "$result" | jq -r '.hits.hits[0]._source["cloudwatch_logs"]["log_stream"]')
             
-            if [[ -n "$group_value" && -n "$stream_value" ]]; then
+            if [[ "$group_value" != "null" && "$stream_value" != "null" ]]; then
                 echo "SUCCESS: CloudWatch log contains 'log group' and 'log stream' fields."
                 echo "$result"
                 exit 0

@@ -150,17 +150,17 @@ while [ $TRIES -gt 0 ]; do
         echo -e "\nSUCCESS: Found log containing $SMOKE_ID"
         
         # Parse and validate organization and space fields
-        org_value=$(echo "$result" | jq -r '.hits.hits[0]._source."@cf.org_id"')
-        space_value=$(echo "$result" | jq -r '.hits.hits[0]._source."@cf.space_id"')
+        org_value=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["org_id"]')
+        space_value=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["space_id"]')
         
-        if [[ -n "$org_value" && -n "$space_value" ]]; then
+        if [[ "$org_value" != "null" && "$space_value" != "null"]]; then
             echo "SUCCESS: Metric log contains 'org id' and 'space id' fields."
             
             # Parse and validate metric-specific fields
-            average_value=$(echo "$result" | jq -r '.hits.hits[0]._source."metric.average"')
-            db_instance_identifier_value=$(echo "$result" | jq -r '.hits.hits[0]._source."metric.db_instance_identifier"')
+            average_value=$(echo "$result" | jq -r '.hits.hits[0]._source["metric"]["average"]')
+            db_instance_identifier_value=$(echo "$result" | jq -r '.hits.hits[0]._source["metric"]["db_instance_identifier"]')
             
-            if [[ -n "$average_value" && -n "$db_instance_identifier_value" ]]; then
+            if [["$average_value" != "null"  && "$db_instance_identifier_value" != "null"  ]]; then
                 echo "SUCCESS: Metric log contains 'average' and 'db instance identifier' fields."
                 echo "$result"
                 exit 0

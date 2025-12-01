@@ -131,17 +131,17 @@ while [ $TRIES -gt 0 ]; do
         echo -e "\nSUCCESS: Found log containing $SMOKE_ID"
         
         # Parse and validate organization and space fields
-        org_value=$(echo "$result" | jq -r '.hits.hits[0]._source."@cf.org_id"')
-        space_value=$(echo "$result" | jq -r '.hits.hits[0]._source."@cf.space_id"')
+        org_value=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["org_id"]')
+        space_value=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["space_id"]')
         
-        if [[ -n "$org_value" && -n "$space_value" ]]; then
+        if [[ "$org_value" != "null" && "$space_value" != "null"]]; then
             echo "SUCCESS: Actor log contains 'org id' and 'space id' fields."
             
             # Parse and validate Actor fields
-            target_value=$(echo "$result" | jq -r '.hits.hits[0]._source."target.type')
-            actor_value=$(echo "$result" | jq -r '.hits.hits[0]._source."actor.type"')
+            target_value=$(echo "$result" | jq -r '.hits.hits[0]._source["target"]["type"]')
+            actor_value=$(echo "$result" | jq -r '.hits.hits[0]._source["actor"]["type"]')
             
-            if [[ -n "$target_value" && -n "$actor_value" ]]; then
+            if [["$target_value" != "null" && "$actor_value" != "null" ]]; then
                 echo "SUCCESS: Actor log contains 'target type' and 'actor type' fields."
                 echo "$result"
                 exit 0
