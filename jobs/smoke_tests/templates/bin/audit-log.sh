@@ -143,16 +143,13 @@ while [ $TRIES -gt 0 ]; do
             
             if [[ -n "$target_value" && -n "$actor_value" ]]; then
                 echo "SUCCESS: Actor log contains 'target type' and 'actor type' fields."
-                echo "$result"
                 exit 0
             else
                 echo "ERROR: Actor log does not contain both 'target type' and 'actor type' fields."
-                echo "Full JSON result: $result"
                 exit 1
             fi
         else
             echo "ERROR: Actor log does not contain both 'org id' and 'space id' fields."
-            echo "Full JSON result: $result"
             exit 1
         fi
     else

@@ -152,16 +152,13 @@ while [ $TRIES -gt 0 ]; do
             
             if [[ -n "$group_value" && -n "$stream_value" ]]; then
                 echo "SUCCESS: CloudWatch log contains 'log group' and 'log stream' fields."
-                echo "$result"
                 exit 0
             else
                 echo "ERROR: CloudWatch log does not contain both 'log group' and 'log stream' fields."
-                echo "Full JSON result: $result"
                 exit 1
             fi
         else
             echo "ERROR: CloudWatch log does not contain both 'org id' and 'space id' fields."
-            echo "Full JSON result: $result"
             exit 1
         fi
     else

@@ -162,16 +162,13 @@ while [ $TRIES -gt 0 ]; do
             
             if [[ -n "$average_value" && -n "$db_instance_identifier_value" ]]; then
                 echo "SUCCESS: Metric log contains 'average' and 'db instance identifier' fields."
-                echo "$result"
                 exit 0
             else
                 echo "ERROR: Metric log does not contain both 'average' and 'db instance identifier' fields."
-                echo "Full JSON result: $result"
                 exit 1
             fi
         else
             echo "ERROR: Metric log does not contain both 'org id' and 'space id' fields."
-            echo "Full JSON result: $result"
             exit 1
         fi
     else

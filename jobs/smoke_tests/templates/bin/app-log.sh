@@ -60,15 +60,15 @@ while [ $TRIES -gt 0 ]; do
 
     # Parse the JSON using jq
     org_value=$(echo "$result" | jq -r '.hits.hits[0]._source."@cf.org_id"')
-    space_value=$(echo "$result" | jq -r '.hits.hits[0]._source."@cf.space_id')
+    space_value=$(echo "$result" | jq -r '.hits.hits[0]._source."@cf.space_id"')
 
-    # Validate that the fields exist and have values (you can customize the validation)
+    # Validate that the fields exist and have cf values
     if [[ -n "$org_value" && -n "$space_value" ]]; then
       echo "SUCCESS: App Log contains 'org id' and 'space id' fields."
+      exit 0
     else
-      echo "ERROR: metric Log does not contain both 'average' and 'db instance indentief' fields."
-      echo "Full JSON result: $result" #Output full JSON for debugging
-      exit 1 # Or continue retrying, depending on your needs
+      echo "ERROR: App Log does not contain both 'org id' and 'space id' fields."
+      exit 1 
     fi
 
   else
