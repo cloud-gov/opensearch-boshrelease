@@ -2,6 +2,8 @@ set -eu
 
 JOB_NAME=smoke_tests
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
+export JQ_PACKAGE_DIR=/var/vcap/packages/jq
+export PATH=$JQ_PACKAGE_DIR/bin:$PATH
 
 
 <%

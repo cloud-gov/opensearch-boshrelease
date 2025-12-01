@@ -62,7 +62,7 @@ esac
 # =============================================================================
 
 # Construct the LOG JSON object (using jq for proper formatting)
-LOG=$(jq -n \
+LOG=$(jq -nc \
     --arg db_instance_identifier "${rds_prefix}-tester" \
     --arg timestamp "$current_time_ms" \
     --arg environment "$ENVIRONMENT" \
@@ -86,11 +86,12 @@ LOG=$(jq -n \
             "Created at": "2024-12-20T19:08:54Z",
             "Instance GUID": "024d7b3a-1732-4ae4-9e2a-f36eaa2c741c"
         }
-    } | paths(scalars) as $p | getpath($p) as $v | ($p | join("_")) + "=" + ($v | tostring)' \
-    | tr '\n' ' ')
+    }')
 
-# Compress and prepare log file
-echo "$LOG" | gzip > "$S3_LOG_FILE"
+# Save log to file and compress
+echo "$LOG" > temp_log.json
+gzip temp_log.json
+mv temp_log.json.gz "$S3_LOG_FILE"
 echo "Generated LOG: $LOG"
 
 # Upload log to S3
@@ -122,9 +123,18 @@ echo -n "Polling for $TRIES seconds"
 while [ $TRIES -gt 0 ]; do
     # Search for the log entry
     result=$(curl --key ${JOB_DIR}/config/ssl/smoketest.key \
-        --cert ${JOB_DIR}/config/ssl/smoketest.crt \
-        --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
-        -s $MASTER_URL/_search?q=$SMOKE_ID)
+    --cert ${JOB_DIR}/config/ssl/smoketest.crt \
+    --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
+    -s -H "Content-Type: application/json" \
+    -X POST "$MASTER_URL/_search" \
+    -d '{
+        "query": {
+            "term": {
+                "smoke_test_id": "'$SMOKE_ID'"
+            }
+        },
+        "size": 1
+    }')
     
     if [[ $result == *"$SMOKE_ID"* ]]; then
         echo -e "\nSUCCESS: Found log containing $SMOKE_ID"
