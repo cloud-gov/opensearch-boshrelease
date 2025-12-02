@@ -89,7 +89,7 @@ echo "Generated LOG: $LOG"
 echo "Uploading audit log to S3..."
 if command -v aws &> /dev/null; then
     if [ -f "$S3_LOG_FILE" ]; then
-        aws s3 cp "$S3_LOG_FILE" "s3://${S3_BUCKET}/${S3_KEY}" --region "${S3_REGION}"
+        aws s3 cp "$S3_LOG_FILE" "s3://${S3_BUCKET}/${S3_KEY}" --region "${S3_REGION}" --server-side-encryption AES256
         if [ $? -eq 0 ]; then
             echo "Successfully uploaded audit log to s3://${S3_BUCKET}/${S3_KEY}"
             rm -f "$S3_LOG_FILE"
