@@ -68,7 +68,7 @@ while [ $TRIES -gt 0 ]; do
       exit 0
     else
       echo "ERROR: APP Log does not contain both 'space id' and 'org id' fields."
-      exit 1 # Or continue retrying, depending on your needs
+      exit 1
     fi
 
   else
