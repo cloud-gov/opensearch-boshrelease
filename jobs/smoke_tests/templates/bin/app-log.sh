@@ -31,7 +31,7 @@ INDEX="<%= index %>"
 
 
 SMOKE_ID=$(LC_ALL=C; cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
-LOG="1012 <13>1 $(date -u +"%Y-%m-%dT%H:%M:%SZ") 0.0.0.0 d20d2020-d200-d200-d200-d20d20d20d20 [SMOKE/TEST/ERRAND/0] - [org=smoke-tests organization_id=$INDEX job=smoke_tests index=0 app_id=smoke_tests instance_id=0]  {\"smoke-id\":\"$SMOKE_ID\"}"
+LOG="1090 <14>1 $(date -u +"%Y-%m-%dT%H:%M:%SZ") 0.0.0.0 d20d2020-d200-d200-d200-d20d20d20d20 [SMOKE/TEST/ERRAND/0] - [tags@47450 app_id=\"8675309e-f567-4d58-9649-ba24fad5344c\" app_name=\"smoke_tests\" organization_id=\"c9b54579-7056-46c3-9870-334330e9be75\" organization_name=\"smoke-tests\" job=\"smoke_tests\" space_id=\"5db8fd06-ac53-4ed0-a224-b0bad2e463d2\" space_name=\"app\" source_type=\"APP/PROC/WEB\"] {\"smoke-id\":\"$SMOKE_ID\"}"
 
 <% if p('smoke_tests.tls.use_tls') %>
 INGEST="openssl s_client -cert $JOB_DIR/config/ssl/ingestor.crt -key $JOB_DIR/config/ssl/ingestor.key -CAfile ${JOB_DIR}/config/ssl/opensearch.ca -connect $INGESTOR_HOST:$INGESTOR_PORT"
@@ -65,9 +65,9 @@ while [ $TRIES -gt 0 ]; do
     # Validate that the fields exist and have cf values
     if [[ "$org_value" != "null" && "$space_value" != "null" ]]; then
       echo "SUCCESS: App Log contains 'org id' and 'space id' fields."
+      exit 0
     else
-      echo "ERROR: metric Log does not contain both 'average' and 'db instance indentief' fields."
-      echo "Full JSON result: $result" #Output full JSON for debugging
+      echo "ERROR: APP Log does not contain both 'space id' and 'org id' fields."
       exit 1 # Or continue retrying, depending on your needs
     fi
 
