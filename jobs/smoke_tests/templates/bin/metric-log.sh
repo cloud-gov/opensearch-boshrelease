@@ -81,9 +81,9 @@ LOG=$(jq -nc \
         },
         "timestamp": ($timestamp | tonumber),
         "value": {
-            "max": 0.0,
-            "min": 0.0,
-            "sum": 0.0,
+            "max": 5.0,
+            "min": 5.0,
+            "sum": 5.0,
             "count": 1.0
         },
         "unit": "Seconds",
@@ -165,7 +165,7 @@ while [ $TRIES -gt 0 ]; do
             average_value=$(echo "$result" | jq -r '.hits.hits[0]._source["metric"]["average"]')
             db_instance_identifier_value=$(echo "$result" | jq -r '.hits.hits[0]._source["metric"]["db_instance_identifier"]')
             
-            if [[ "$average_value" == "1.0"  && "$db_instance_identifier_value" == "${rds_prefix}-tester" ]]; then
+            if [[ "$average_value" == "5.0"  && "$db_instance_identifier_value" == "${rds_prefix}-tester" ]]; then
                 echo "SUCCESS: Metric log contains 'average' and 'db instance identifier' fields."
                 exit 0
             else
