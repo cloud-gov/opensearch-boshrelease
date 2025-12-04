@@ -155,7 +155,7 @@ while [ $TRIES -gt 0 ]; do
             group_value=$(echo "$result" | jq -r '.hits.hits[0]._source["cloudwatch_logs"]["log_group"]')
             stream_value=$(echo "$result" | jq -r '.hits.hits[0]._source["cloudwatch_logs"]["log_stream"]')
             
-            if [[ "$group_value" == "/aws/rds/instance/${db_instance_identifier}/postgresql" && "$stream_value" == "${rds_prefix}-tester.0" ]]; then
+            if [[ "$group_value" == "/aws/rds/instance/${rds_prefix}-tester/postgresql" && "$stream_value" == "${rds_prefix}-tester.0" ]]; then
                 echo "SUCCESS: CloudWatch log contains 'log group' and 'log stream' fields."
                 exit 0
             else
