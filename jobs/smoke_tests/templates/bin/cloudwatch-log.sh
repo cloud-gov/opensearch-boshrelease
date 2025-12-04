@@ -61,12 +61,16 @@ esac
 # CREATE AND UPLOAD LOG
 # =============================================================================
 
+org_value="c9b54579-7056-46c3-9870-334330e9be75"
+space_value="5db8fd06-ac53-4ed0-a224-b0bad2e463d2"
 # Construct the LOG JSON object (using jq for proper formatting)
 LOG=$(jq -nc \
     --arg db_instance_identifier "${rds_prefix}-tester" \
     --arg timestamp "$current_time_ms" \
     --arg environment "$ENVIRONMENT" \
     --arg smoke_id "$SMOKE_ID" \
+    --arg org_value "$org_value" \
+    --arg space_value "$space_value" \
     '{
         "logGroup": ("/aws/rds/instance/" + $db_instance_identifier + "/postgresql"),
         "logStream": ($db_instance_identifier + ".0"),
@@ -75,12 +79,12 @@ LOG=$(jq -nc \
         "timestamp": ($timestamp | tonumber),
         "Tags": {
             "Service offering name": "aws-rds",
-            "Organization GUID": "c9b54579-7056-46c3-9870-334330e9be75",
+            "Organization GUID": $org_value,
             "Organization name": "smoke-test",
             "environment": $environment,
             "Service plan name": "micro-psql",
             "client": "Cloud Foundry",
-            "Space GUID": "5db8fd06-ac53-4ed0-a224-b0bad2e463d2",
+            "Space GUID": $space_value,
             "broker": "AWS broker",
             "Space name": "cloudwatch",
             "Created at": "2024-12-20T19:08:54Z",
@@ -141,10 +145,10 @@ while [ $TRIES -gt 0 ]; do
         echo -e "\nSUCCESS: Found log containing $SMOKE_ID"
         
         # Parse and validate organization and space fields
-        org_value=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["org_id"]')
-        space_value=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["space_id"]')
+        org_opensearch=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["org_id"]')
+        space_opensearch=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["space_id"]')
         
-        if [[ "$org_value" == "c9b54579-7056-46c3-9870-334330e9be75" && "$space_value" == "5db8fd06-ac53-4ed0-a224-b0bad2e463d2" ]]; then
+         if [[ "$org_opensearch" == "$org_value" && "$space_opensearch" == "$space_value" ]]; then
             echo "SUCCESS: CloudWatch log contains 'org id' and 'space id' fields."
             
             # Parse and validate CloudWatch fields

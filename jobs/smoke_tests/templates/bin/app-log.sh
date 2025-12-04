@@ -31,6 +31,8 @@ INDEX="<%= index %>"
 
 
 SMOKE_ID=$(LC_ALL=C; cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+org_value="c9b54579-7056-46c3-9870-334330e9be75"
+space_value="5db8fd06-ac53-4ed0-a224-b0bad2e463d2"
 LOG="1090 <14>1 $(date -u +"%Y-%m-%dT%H:%M:%SZ") 0.0.0.0 d20d2020-d200-d200-d200-d20d20d20d20 [SMOKE/TEST/ERRAND/0] - [tags@47450 app_id=\"8675309e-f567-4d58-9649-ba24fad5344c\" app_name=\"smoke_tests\" organization_id=\"c9b54579-7056-46c3-9870-334330e9be75\" organization_name=\"smoke-tests\" job=\"smoke_tests\" space_id=\"5db8fd06-ac53-4ed0-a224-b0bad2e463d2\" space_name=\"app\" source_type=\"APP/PROC/WEB\"] {\"smoke-id\":\"$SMOKE_ID\"}"
 
 <% if p('smoke_tests.tls.use_tls') %>
