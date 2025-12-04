@@ -142,7 +142,7 @@ while [ $TRIES -gt 0 ]; do
             target_value=$(echo "$result" | jq -r '.hits.hits[0]._source["target"]["type"]')
             actor_value=$(echo "$result" | jq -r '.hits.hits[0]._source["actor"]["type"]')
             
-            if [[ "$target_value" != "null" && "$actor_value" != "null" ]]; then
+            if [[ "$target_value" == "app" && "$actor_value" == "user" ]]; then
                 echo "SUCCESS: Actor log contains 'target type' and 'actor type' fields."
                 exit 0
             else
