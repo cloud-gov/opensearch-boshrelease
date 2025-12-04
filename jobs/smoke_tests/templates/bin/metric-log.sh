@@ -108,7 +108,7 @@ echo "Generated LOG: $LOG"
 echo "Uploading metric log to S3..."
 if command -v aws &> /dev/null; then
     if [ -f "$S3_LOG_FILE" ]; then
-        aws s3 cp "$S3_LOG_FILE" "s3://${S3_BUCKET}/${S3_KEY}" --region "${S3_REGION}"
+        aws s3api put-object --bucket ${S3_BUCKET} --key ${S3_KEY} --body "$S3_LOG_FILE" --region "${S3_REGION}" --server-side-encryption AES256
         if [ $? -eq 0 ]; then
             echo "Successfully uploaded metric log to s3://${S3_BUCKET}/${S3_KEY}"
             rm -f "$S3_LOG_FILE"
@@ -154,7 +154,7 @@ while [ $TRIES -gt 0 ]; do
         org_value=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["org_id"]')
         space_value=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["space_id"]')
         
-        if [[ "$org_value" != "null" && "$space_value" != "null" ]]; then
+        if [[ "$org_value" == "c9b54579-7056-46c3-9870-334330e9be75" && "$space_value" == "5db8fd06-ac53-4ed0-a224-b0bad2e463d2" ]]; then
             echo "SUCCESS: Metric log contains 'org id' and 'space id' fields."
             
             # Parse and validate metric-specific fields
