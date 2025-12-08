@@ -46,11 +46,14 @@ current_time=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 # =============================================================================
 # CREATE AND UPLOAD LOG
 # =============================================================================
-
+org_value="c9b54579-7056-46c3-9870-334330e9be75"
+space_value="5db8fd06-ac53-4ed0-a224-b0bad2e463d2"
 # Construct the LOG JSON object (using jq for proper formatting)
 LOG=$(jq -nc \
     --arg timestamp "$current_time" \
     --arg smoke_id "$SMOKE_ID" \
+    --arg org_value "$org_value" \
+    --arg space_value "$space_value" \
     '{
         "guid": "024d7b3a-1732-4ae4-9e2a-f36eaa2c741c",
         "created_at": $timestamp,
@@ -70,10 +73,10 @@ LOG=$(jq -nc \
             "app_port": 8080
         },
         "space": {
-            "guid": "5db8fd06-ac53-4ed0-a224-b0bad2e463d2"
+            "guid": $space_value
         },
         "organization": {
-            "guid": "c9b54579-7056-46c3-9870-334330e9be75"
+            "guid": $org_value
         },
         "organization_name": "smoke-test",
         "space_name": "audit"
@@ -89,7 +92,7 @@ echo "Generated LOG: $LOG"
 echo "Uploading audit log to S3..."
 if command -v aws &> /dev/null; then
     if [ -f "$S3_LOG_FILE" ]; then
-        aws s3 cp "$S3_LOG_FILE" "s3://${S3_BUCKET}/${S3_KEY}" --region "${S3_REGION}" --server-side-encryption AES256
+        aws s3api put-object --bucket ${S3_BUCKET} --key ${S3_KEY} --body "$S3_LOG_FILE" --region "${S3_REGION}" --server-side-encryption AES256
         if [ $? -eq 0 ]; then
             echo "Successfully uploaded audit log to s3://${S3_BUCKET}/${S3_KEY}"
             rm -f "$S3_LOG_FILE"
@@ -132,17 +135,17 @@ while [ $TRIES -gt 0 ]; do
         echo -e "\nSUCCESS: Found log containing $SMOKE_ID"
         
         # Parse and validate organization and space fields
-        org_value=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["org_id"]')
-        space_value=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["space_id"]')
+        org_opensearch=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["org_id"]')
+        space_opensearch=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["space_id"]')
         
-        if [[ "$org_value" != "null" && "$space_value" != "null" ]]; then
+        if [[ "$org_opensearch" == "$org_value" && "$space_opensearch" == "$space_value" ]]; then
             echo "SUCCESS: Actor log contains 'org id' and 'space id' fields."
             
             # Parse and validate Actor fields
             target_value=$(echo "$result" | jq -r '.hits.hits[0]._source["target"]["type"]')
             actor_value=$(echo "$result" | jq -r '.hits.hits[0]._source["actor"]["type"]')
             
-            if [[ "$target_value" != "null" && "$actor_value" != "null" ]]; then
+            if [[ "$target_value" == "app" && "$actor_value" == "user" ]]; then
                 echo "SUCCESS: Actor log contains 'target type' and 'actor type' fields."
                 exit 0
             else
