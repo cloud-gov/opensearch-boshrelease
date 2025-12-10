@@ -191,9 +191,9 @@ opensearch/opensearch-alerting-3.3.1.0.zip:
   object_id: 46daa474-cb55-435f-7229-b0541c3f9327
   sha: sha256:88bb4a4e9b82391928af0a353fed31a472bfff4cc1bbd0d36f47aaac0b5c9057
 opensearch/opensearch-notifications-3.3.1.0.zip:
-  size: 23494481
-  object_id: 27640f83-a693-451c-7e00-c634c5573d9c
-  sha: sha256:7f84e0cf0034db5dfadefb5068006350e82ce5941d8e070bb04f5679a419da6d
+  size: 39581981
+  object_id: f5fd3033-2a11-48b7-488f-3633629e6778
+  sha: sha256:f123d3164ba2259355ff89b0257705863d0b479a6a51e93fd07f2fdf6013f1f7
 requests/certifi-2023.11.17-py3-none-any.whl:
   size: 162530
   object_id: f2afff72-e415-4390-61c1-eb8010ed4e4a
