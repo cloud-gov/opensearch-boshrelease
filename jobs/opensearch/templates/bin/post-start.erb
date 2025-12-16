@@ -69,7 +69,18 @@ wait_for_greenstate() {
 
   if [ "${remaining}" -le 0 ]; then
     echo "Node failed to join the cluster"
-    exit 1
+    curl -sw '\n%{http_code}' \
+      --key ${JOB_DIR}/config/ssl/opensearch-admin.key \
+      --cert ${JOB_DIR}/config/ssl/opensearch-admin.crt  \
+      --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
+      https://localhost:9200/_cluster/health > ${out}
+    body=$(cat ${out} | head -n -1)
+    status=$(cat ${out} | tail -n 1)
+    if [ ${status} = "200" ] && echo ${body} | grep '"unassigned_shards":0'; then
+      echo "unassigned_shards is 0"
+    else 
+      exit 1
+    fi
   fi
 }
 
