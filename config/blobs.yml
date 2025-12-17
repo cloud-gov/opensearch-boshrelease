@@ -190,6 +190,10 @@ opensearch/opensearch-alerting-3.3.1.0.zip:
   size: 14155971
   object_id: 46daa474-cb55-435f-7229-b0541c3f9327
   sha: sha256:88bb4a4e9b82391928af0a353fed31a472bfff4cc1bbd0d36f47aaac0b5c9057
+opensearch/opensearch-alerting-3.4.0.0.zip:
+  size: 10906114
+  object_id: 19287a4d-d141-4bf3-6c25-8247b223bfaf
+  sha: sha256:7a2f21cfb2cae91ce02f23be610368c6a8081afeb49fca631dd22f453767585a
 opensearch/opensearch-notifications-3.3.1.0.zip:
   size: 23494481
   object_id: 27640f83-a693-451c-7e00-c634c5573d9c
