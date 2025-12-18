@@ -13,7 +13,3 @@ opensearch-dashboards-plugin remove queryInsightsDashboards --allow-root
 opensearch-dashboards-plugin remove queryWorkbenchDashboards --allow-root
 opensearch-dashboards-plugin remove searchRelevanceDashboards --allow-root
 opensearch-dashboards-plugin remove securityAnalyticsDashboards --allow-root
-
-# Removes alerting and notification
-opensearch-dashboards-plugin remove alertingDashboards --allow-root
-opensearch-dashboards-plugin remove notificationsDashboards --allow-root
