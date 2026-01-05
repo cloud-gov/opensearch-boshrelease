@@ -36,17 +36,26 @@ fi
 
 MIN=<%= p('smoke_tests.metric_count_test.minimum') %>
 url="$MASTER_URL/$INDEX/_count?pretty"
-query_body='{ "query": {
-  "range": {
-    "<%= p('smoke_tests.count_test.time_field') %>": {
-      "gte": "now-<%= p('smoke_tests.count_test.time_interval') %>",
-      "lt": "now"
-      }
+query_body='{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "range": {
+            "<%= p('smoke_tests.count_test.time_field') %>": {
+              "gte": "now-<%= p('smoke_tests.count_test.time_interval') %>",
+              "lt": "now"
+            }
+          }
+        },
+        {
+          "term": {
+            "@type": "metric"
+          }
+        }
+      ]
     }
-  },
-  "term": {
-      "@type": "metric"
-    }
+  }
 }'
 
 result=$(curl  --key ${JOB_DIR}/config/ssl/smoketest.key \

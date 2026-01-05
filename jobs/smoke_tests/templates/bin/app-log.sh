@@ -43,6 +43,7 @@ query_body='{ "query": {
     }
   }
 }'
+
 result=$(curl  --key ${JOB_DIR}/config/ssl/smoketest.key \
     --cert ${JOB_DIR}/config/ssl/smoketest.crt  \
     --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
