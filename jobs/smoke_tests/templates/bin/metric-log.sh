@@ -50,7 +50,7 @@ query_body='{
         },
         {
           "term": {
-            "@type": "metric"
+            "@type": "metrics"
           }
         }
       ]

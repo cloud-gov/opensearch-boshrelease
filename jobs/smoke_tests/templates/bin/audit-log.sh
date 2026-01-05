@@ -59,13 +59,6 @@ query_body='{
   }
 }'
 
-query_body='{ "query": {
-  ,
-  "term": {
-      "@type": "audit_event"
-    }
-}'
-
 result=$(curl  --key ${JOB_DIR}/config/ssl/smoketest.key \
     --cert ${JOB_DIR}/config/ssl/smoketest.crt  \
     --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
