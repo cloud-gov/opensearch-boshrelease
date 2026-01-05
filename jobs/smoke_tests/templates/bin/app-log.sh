@@ -27,7 +27,7 @@ export PATH=$JQ_PACKAGE_DIR/bin:$PATH
 MASTER_URL="https://<%= opensearch_host %>:<%= opensearch_port %>"
 INGESTOR_HOST="<%= ingestor_host %>"
 INGESTOR_PORT="<%= ingestor_port %>"
-INDEX="<%= index %>"
+INDEX="<%= index %>*"
 
 
 <% if p('smoke_tests.count_test.run') %>
