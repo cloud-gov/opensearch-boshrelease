@@ -32,6 +32,36 @@ if [ -z "$S3_BUCKET" ] || [ -z "$S3_REGION" ] || [ -z "$ENVIRONMENT" ]; then
     exit 1
 fi
 
+
+<% if p('smoke_tests.count_test.run') %>
+
+MIN=<%= p('smoke_tests.metric_count_test.minimum') %>
+url="$MASTER_URL/$INDEX/_count?pretty"
+query_body='{ "query": {
+  "range": {
+    "<%= p('smoke_tests.count_test.time_field') %>": {
+      "gte": "now-<%= p('smoke_tests.count_test.time_interval') %>",
+      "lt": "now"
+      }
+    }
+  },
+  "term": {
+      "@type": "metric"
+    }
+}'
+
+result=$(curl  --key ${JOB_DIR}/config/ssl/smoketest.key \
+    --cert ${JOB_DIR}/config/ssl/smoketest.crt  \
+    --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
+    $url -H "content-type: application/json" -d "$query_body" | grep count | cut -d: -f2 | sed 's/,//' )
+
+if [[ ${result} -lt ${MIN} ]]; then
+  echo "ERROR: expected at least ${MIN} audit documents, only got ${result}"
+  exit 1
+fi
+<% end %>
+
+
 # =============================================================================
 # GENERATE IDENTIFIERS AND TIMESTAMPS
 # =============================================================================

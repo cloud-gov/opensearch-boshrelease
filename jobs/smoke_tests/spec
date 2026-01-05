@@ -62,15 +62,18 @@ properties:
     description: Index to send smoke_tests to.
   smoke_tests.metric_index:
     description: Index to send metric smoke_tests to.
-  smoke_tests.count_test.index_pattern:
-    description: Index pattern to run the count test against (e.g. logs-* )
+  smoke_tests.audit_count_test.minimum:
+    description: Minimum expected documents for cloudwatch in the given time window
   smoke_tests.count_test.time_field:
     description: Name of the time field in your index
   smoke_tests.count_test.minimum:
     description: Minimum expected documents in the given time window
   smoke_tests.count_test.time_interval:
     description: 'How far back to look in time for the count. e.g. "15m", "1h", "2d" see https://www.open.co/guide/en/opensearch/reference/current/common-options.html#date-math for more'
-
+  smoke_tests.cloudwatch_count_test.minimum:
+    description: Minimum expected documents for cloudwatch in the given time window
+  smoke_tests.metric_count_test.minimum:
+    description: Minimum expected documents for metrics in the given time window
 
   smoke_tests.s3.environment:
     description: environment of deployment
