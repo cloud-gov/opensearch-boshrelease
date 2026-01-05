@@ -30,6 +30,30 @@ INGESTOR_PORT="<%= ingestor_port %>"
 INDEX="<%= index %>"
 
 
+<% if p('smoke_tests.count_test.run') %>
+
+MIN=<%= p('smoke_tests.count_test.minimum') %>
+url="$MASTER_URL/$INDEX/_count?pretty"
+query_body='{ "query": {
+  "range": {
+    "<%= p('smoke_tests.count_test.time_field') %>": {
+      "gte": "now-<%= p('smoke_tests.count_test.time_interval') %>",
+      "lt": "now"
+      }
+    }
+  }
+}'
+result=$(curl  --key ${JOB_DIR}/config/ssl/smoketest.key \
+    --cert ${JOB_DIR}/config/ssl/smoketest.crt  \
+    --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
+    $url -H "content-type: application/json" -d "$query_body" | grep count | cut -d: -f2 | sed 's/,//' )
+
+if [[ ${result} -lt ${MIN} ]]; then
+  echo "ERROR: expected at least ${MIN} documents, only got ${result}"
+  exit 1
+fi
+<% end %>
+
 SMOKE_ID=$(LC_ALL=C; cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 org_value="c9b54579-7056-46c3-9870-334330e9be75"
 space_value="5db8fd06-ac53-4ed0-a224-b0bad2e463d2"
