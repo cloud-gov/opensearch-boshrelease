@@ -5,6 +5,6 @@ dependencies:
 - openjdk-21
 
 files:
-- opensearch-3.3.1-linux-x64.tar.gz
-- opensearch/opensearch-notifications-3.3.1.0.zip
-- opensearch/opensearch-alerting-3.3.1.0.zip
+- opensearch-3.4.0-linux-x64.tar.gz
+- opensearch/opensearch-notifications-3.4.0.0.zip
+- opensearch/opensearch-alerting-3.4.0.0.zip
