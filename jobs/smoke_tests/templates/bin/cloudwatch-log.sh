@@ -43,7 +43,7 @@ query_body='{
         {
           "range": {
             "<%= p('smoke_tests.count_test.time_field') %>": {
-              "gte": "now-<%= p('smoke_tests.count_test.time_interval') %>",
+              "gte": "now-<%= p('smoke_tests.count_test.long_time_interval') %>",
               "lt": "now"
             }
           }

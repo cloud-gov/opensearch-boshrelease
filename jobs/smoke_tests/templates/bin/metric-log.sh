@@ -43,7 +43,7 @@ query_body='{
         {
           "range": {
             "<%= p('smoke_tests.count_test.time_field') %>": {
-              "gte": "now-<%= p('smoke_tests.count_test.time_interval') %>",
+              "gte": "now-<%= p('smoke_tests.count_test.long_time_interval') %>",
               "lt": "now"
             }
           }
@@ -64,7 +64,7 @@ result=$(curl  --key ${JOB_DIR}/config/ssl/smoketest.key \
     $url -H "content-type: application/json" -d "$query_body" | grep count | cut -d: -f2 | sed 's/,//' )
 
 if [[ ${result} -lt ${MIN} ]]; then
-  echo "ERROR: expected at least ${MIN} audit documents, only got ${result}"
+  echo "ERROR: expected at least ${MIN} metric documents, only got ${result}"
   exit 1
 fi
 <% end %>

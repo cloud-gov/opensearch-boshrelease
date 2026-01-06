@@ -34,12 +34,24 @@ INDEX="<%= index %>*"
 
 MIN=<%= p('smoke_tests.count_test.minimum') %>
 url="$MASTER_URL/$INDEX/_count?pretty"
-query_body='{ "query": {
-  "range": {
-    "<%= p('smoke_tests.count_test.time_field') %>": {
-      "gte": "now-<%= p('smoke_tests.count_test.time_interval') %>",
-      "lt": "now"
-      }
+query_body='{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "range": {
+            "<%= p('smoke_tests.count_test.time_field') %>": {
+              "gte": "now-<%= p('smoke_tests.count_test.time_interval') %>",
+              "lt": "now"
+            }
+          }
+        },
+        {
+          "term": {
+            "@index_type": "app"
+          }
+        }
+      ]
     }
   }
 }'
