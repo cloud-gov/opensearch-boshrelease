@@ -21,7 +21,7 @@ export PATH=$JQ_PACKAGE_DIR/bin:$AWS_PACKAGE_DIR/bin:$PATH
 
 # Service configuration
 MASTER_URL="https://<%= opensearch_host %>:<%= opensearch_port %>"
-INDEX="<%= index %>"
+INDEX="<%= index %>*"
 S3_BUCKET="<%= p('smoke_tests.s3_audit.bucket') %>"
 S3_REGION="<%= p('smoke_tests.s3.region') %>"
 ENVIRONMENT="<%= p('smoke_tests.s3.environment') %>"
@@ -31,6 +31,44 @@ if [ -z "$S3_BUCKET" ] || [ -z "$S3_REGION" ] || [ -z "$ENVIRONMENT" ]; then
     echo "ERROR: One or more required properties (S3_BUCKET, S3_REGION, ENVIRONMENT) are not defined."
     exit 1
 fi
+
+
+<% if p('smoke_tests.count_test.run') %>
+
+MIN=<%= p('smoke_tests.audit_count_test.minimum') %>
+url="$MASTER_URL/$INDEX/_count?pretty"
+query_body='{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "range": {
+            "<%= p('smoke_tests.count_test.time_field') %>": {
+              "gte": "now-<%= p('smoke_tests.count_test.long_time_interval') %>",
+              "lt": "now"
+            }
+          }
+        },
+        {
+          "term": {
+            "@type": "audit_event"
+          }
+        }
+      ]
+    }
+  }
+}'
+
+result=$(curl  --key ${JOB_DIR}/config/ssl/smoketest.key \
+    --cert ${JOB_DIR}/config/ssl/smoketest.crt  \
+    --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
+    $url -H "content-type: application/json" -d "$query_body" | grep count | cut -d: -f2 | sed 's/,//' )
+
+if [[ ${result} -lt ${MIN} ]]; then
+  echo "ERROR: expected at least ${MIN} audit documents, only got ${result}"
+  exit 1
+fi
+<% end %>
 
 # =============================================================================
 # GENERATE IDENTIFIERS AND TIMESTAMPS
