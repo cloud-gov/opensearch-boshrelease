@@ -13,6 +13,7 @@ task :build => :clean do
   build_erb 'src/logstash-filters/default.conf.erb', 'target/logstash-filters-default.conf'
   build_erb 'src/logstash-filters/audit_event.conf.erb', 'target/audit_event.conf'
   build_erb 'src/logstash-filters/cloudwatch.conf.erb', 'target/cloudwatch.conf'
+  build_erb 'src/logstash-filters/falco.conf.erb', 'target/falco.conf'
   build_erb 'src/logstash-filters/metrics.conf.erb', 'target/metrics.conf'
 end
 
