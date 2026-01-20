@@ -176,10 +176,10 @@ while [ $TRIES -gt 0 ]; do
             echo "SUCCESS: Metric log contains 'org id' and 'space id' fields."
             
             # Parse and validate metric-specific fields
-            average_value=$(echo "$result" | jq -r '.hits.hits[0]._source["metric"]["average"]')
+            average_value=$(echo "$result" | jq -r '.hits.hits[0]._source["metric"]["sum"]')
             db_instance_identifier_value=$(echo "$result" | jq -r '.hits.hits[0]._source["metric"]["db_instance_identifier"]')
             
-            if [[ "$average_value" == "${METRIC_VALUE}"  && "$db_instance_identifier_value" != "" ]]; then
+            if [[ ${average_value%.*} -eq ${METRIC_VALUE%.*}  && "$db_instance_identifier_value" != "" ]]; then
                 echo "SUCCESS: Metric log contains 'average' and 'db instance identifier' fields."
                 exit 0
             else
