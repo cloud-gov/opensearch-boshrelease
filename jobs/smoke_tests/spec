@@ -89,10 +89,10 @@ properties:
     description: name of cloudwatch bucket
   smoke_tests.s3_metric.bucket:
     description: name of metrics bucket
-  smoke_tests.s3.org_guid:
+  smoke_tests.org_guid:
     description: org guid for opensearch smoketest test org
-  smoke_tests.s3.space_guid:
+  smoke_tests.space_guid:
     description: space guid for opensearch smoketest test space
-  smoke_tests.s3.rds_instance:
+  smoke_tests.rds_instance:
     description: rds instance for test
   
