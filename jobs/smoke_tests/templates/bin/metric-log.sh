@@ -44,7 +44,7 @@ query_body='{
         {
           "range": {
             "<%= p('smoke_tests.count_test.time_field') %>": {
-              "gte": "now-${long_time_interval}",
+              "gte": "now-'${long_time_interval}'",
               "lt": "now"
             }
           }
@@ -104,10 +104,6 @@ if command -v aws &> /dev/null; then
                     {
                         "Name": "DBInstanceIdentifier",
                         "Value": "'$db_instance'"
-                    },
-                    {
-                        "Name": "ServiceOffering",
-                        "Value": "aws-rds"
                     }
                 ]
             }
@@ -153,24 +149,24 @@ while [ $TRIES -gt 0 ]; do
                     {
                     "range": {
                         "<%= p('smoke_tests.count_test.time_field') %>": {
-                        "gte": "now-${long_time_interval}",
+                        "gte": "now-'${long_time_interval}'",
                         "lt": "now"
                         }
                     }
                     },
-                    {
-                        "term": {
-                            "@type": "metrics"
-                        }
+                   {
+                    "term": {
+                        "metric.sum": "'$METRIC_VALUE'"
                     }
+                }
                 ]
             }
         },
         "size": 1
     }')
     
-    if [[ $result == *"$SMOKE_ID"* ]]; then
-        echo -e "\nSUCCESS: Found log containing $SMOKE_ID"
+    if [[ $result == *"$METRIC_VALUE"* ]]; then
+        echo -e "\nSUCCESS: Found log containing $METRIC_VALUE"
         
         # Parse and validate organization and space fields
         org_opensearch=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["org_id"]')
@@ -183,7 +179,7 @@ while [ $TRIES -gt 0 ]; do
             average_value=$(echo "$result" | jq -r '.hits.hits[0]._source["metric"]["average"]')
             db_instance_identifier_value=$(echo "$result" | jq -r '.hits.hits[0]._source["metric"]["db_instance_identifier"]')
             
-            if [[ "$average_value" == "5.0"  && "$db_instance_identifier_value" == "" ]]; then
+            if [[ "$average_value" == "${METRIC_VALUE}"  && "$db_instance_identifier_value" != "" ]]; then
                 echo "SUCCESS: Metric log contains 'average' and 'db instance identifier' fields."
                 exit 0
             else
