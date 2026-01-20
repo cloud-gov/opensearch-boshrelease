@@ -25,6 +25,7 @@ INDEX="<%= index %>*"
 ORG_GUID="<%= p('smoke_tests.org_guid') %>"
 SPACE_GUID="<%= p('smoke_tests.space_guid') %>"
 RDS_INSTANCE="<%= p('smoke_tests.rds_instance') %>"
+long_time_interval="<%= p('smoke_tests.count_test.long_time_interval') %>"
 
 # Validate required properties
 if [ -z "$ORG_GUID" ] || [ -z "$RDS_INSTANCE" ] || [ -z "$SPACE_GUID" ]; then
@@ -43,7 +44,7 @@ query_body='{
         {
           "range": {
             "<%= p('smoke_tests.count_test.time_field') %>": {
-              "gte": "now-<%= p('smoke_tests.count_test.long_time_interval') %>",
+              "gte": "now-${long_time_interval}",
               "lt": "now"
             }
           }
@@ -143,7 +144,7 @@ while [ $TRIES -gt 0 ]; do
                     {
                     "range": {
                         "<%= p('smoke_tests.count_test.time_field') %>": {
-                        "gte": "now-<%= p('smoke_tests.count_test.long_time_interval') %>",
+                        "gte": "now-${long_time_interval}",
                         "lt": "now"
                         }
                     }
