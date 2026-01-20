@@ -92,17 +92,26 @@ echo "Smoke ID: $SMOKE_ID"
 echo "DB Instance: $db_instance"
 # Send metric to CloudWatch (will be picked up by your existing metric stream)
 if command -v aws &> /dev/null; then
-    aws cloudwatch put-metric-data \
+     aws cloudwatch put-metric-data \
         --namespace "AWS/RDS" \
-        --metric-data \
-            MetricName="WriteLatency",\
-            Value=$METRIC_VALUE,\
-            Unit="Seconds",\
-            Timestamp="$TIMESTAMP",\
-            Dimensions="[\
-                {Name=DBInstanceIdentifier,Value=$db_instance},\
-                {Name=ServiceOffering,Value=aws-rds}
-            ]"
+        --metric-data '[
+            {
+                "MetricName": "WriteLatency",
+                "Value": '$METRIC_VALUE',
+                "Unit": "Seconds",
+                "Timestamp": "'$TIMESTAMP'",
+                "Dimensions": [
+                    {
+                        "Name": "DBInstanceIdentifier",
+                        "Value": "'$db_instance'"
+                    },
+                    {
+                        "Name": "ServiceOffering",
+                        "Value": "aws-rds"
+                    }
+                ]
+            }
+        ]'
     
     if [ $? -eq 0 ]; then
         echo "Successfully sent smoke test metric to CloudWatch"

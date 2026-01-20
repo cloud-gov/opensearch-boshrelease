@@ -147,12 +147,12 @@ while [ $TRIES -gt 0 ]; do
     --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
     -s -H "Content-Type: application/json" \
     -X POST "$MASTER_URL/_search" \
-    -d '{
-        "query": {
-            "term": {
-                "smoke_test_id": "'$SMOKE_ID'"
-            }
-        },
+     -d '{
+    "query": {
+        "match_phrase": {
+            "@message": "Smoke test '$SMOKE_ID': This is a test of cloudwatch logs"
+        }
+    },
         "size": 1
     }')
     
