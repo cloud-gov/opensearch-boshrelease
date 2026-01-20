@@ -22,9 +22,9 @@ export PATH=$JQ_PACKAGE_DIR/bin:$AWS_PACKAGE_DIR/bin:$PATH
 # Service configuration
 MASTER_URL="https://<%= opensearch_host %>:<%= opensearch_port %>"
 INDEX="<%= index %>*"
-ORG_GUID="<%= p('smoke_tests.s3.org_guid') %>"
-SPACE_GUID="<%= p('smoke_tests.s3.space_guid') %>"
-RDS_INSTANCE="<%= p('smoke_tests.s3.rds_instance') %>"
+ORG_GUID="<%= p('smoke_tests.org_guid') %>"
+SPACE_GUID="<%= p('smoke_tests.space_guid') %>"
+RDS_INSTANCE="<%= p('smoke_tests.rds_instance') %>"
 
 # Validate required properties
 if [ -z "$ORG_GUID" ] || [ -z "$RDS_INSTANCE" ] || [ -z "$SPACE_GUID" ]; then
