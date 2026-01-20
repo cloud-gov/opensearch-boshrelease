@@ -22,13 +22,13 @@ export PATH=$JQ_PACKAGE_DIR/bin:$AWS_PACKAGE_DIR/bin:$PATH
 # Service configuration
 MASTER_URL="https://<%= opensearch_host %>:<%= opensearch_port %>"
 INDEX="<%= index %>*"
-S3_BUCKET="<%= p('smoke_tests.s3_metric.bucket') %>"
-S3_REGION="<%= p('smoke_tests.s3.region') %>"
-ENVIRONMENT="<%= p('smoke_tests.s3.environment') %>"
+ORG_GUID="<%= p('smoke_tests.s3.org_guid') %>"
+SPACE_GUID="<%= p('smoke_tests.s3.space_guid') %>"
+RDS_INSTANCE="<%= p('smoke_tests.s3.rds_instance') %>"
 
 # Validate required properties
-if [ -z "$S3_BUCKET" ] || [ -z "$S3_REGION" ] || [ -z "$ENVIRONMENT" ]; then
-    echo "ERROR: One or more required properties (S3_BUCKET, S3_REGION, ENVIRONMENT) are not defined."
+if [ -z "$ORG_GUID" ] || [ -z "$RDS_INSTANCE" ] || [ -z "$SPACE_GUID" ]; then
+    echo "ERROR: One or more required properties (RDS_INSTANCE, ORG_GUID, SPACE_GUID) are not defined."
     exit 1
 fi
 
@@ -72,95 +72,52 @@ fi
 # =============================================================================
 # GENERATE IDENTIFIERS AND TIMESTAMPS
 # =============================================================================
-
-S3_PREFIX=$(date -u +"%Y/%m/%d/%H")
+# Generate your ID
 SMOKE_ID=$(LC_ALL=C; cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
-S3_LOG_FILE="smoke_test_log_${SMOKE_ID}.log"
-TIMESTAMP=$(date -u +"%Y%m%d-%H%M%S")
-S3_KEY="${S3_PREFIX}/${TIMESTAMP}-${SMOKE_ID}.gz"
+# Convert to numeric using checksum for metric value
+METRIC_VALUE=$(echo "$SMOKE_ID" | cksum | cut -f1 -d' ')
+TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%S.%3NZ")
 current_time_ms=$(date -u +%s%3N)
 
-# Set RDS prefix based on environment
-rds_prefix="cg-aws-broker-"
-case "$ENVIRONMENT" in
-    "production")
-        rds_prefix="${rds_prefix}prod"
-        ;;
-    "staging")
-        rds_prefix="${rds_prefix}stage"
-        ;;
-    "development")
-        rds_prefix="${rds_prefix}dev"
-        ;;
-esac
-
 # =============================================================================
-# CREATE AND UPLOAD METRIC LOG
+# SEND METRIC TO CLOUDWATCH
 # =============================================================================
+org_value=$ORG_GUID
+space_value=$SPACE_GUID
+db_instance=$RDS_INSTANCE
 
-org_value="c9b54579-7056-46c3-9870-334330e9be75"
-space_value="5db8fd06-ac53-4ed0-a224-b0bad2e463d2"
-# Construct the metric LOG JSON object (using jq for proper formatting)
-LOG=$(jq -nc \
-    --arg namespace "AWS/RDS" \
-    --arg metric_name "WriteLatency" \
-    --arg db_instance_identifier "${rds_prefix}-tester" \
-    --arg timestamp "$current_time_ms" \
-    --arg environment "$ENVIRONMENT" \
-    --arg smoke_id "$SMOKE_ID" \
-    --arg org_value "$org_value" \
-    --arg space_value "$space_value" \
-    '{
-        "namespace": $namespace,
-        "metric_name": $metric_name,
-        "dimensions": {
-            "DBInstanceIdentifier": $db_instance_identifier
-        },
-        "timestamp": ($timestamp | tonumber),
-        "value": {
-            "max": 5.0,
-            "min": 5.0,
-            "sum": 5.0,
-            "count": 1.0
-        },
-        "unit": "Seconds",
-        "smoke_test_id": $smoke_id,
-        "Tags": {
-            "Service offering name": "aws-rds",
-            "Organization GUID": $org_value,
-            "Organization name": "smoke-test",
-            "environment": $environment,
-            "Service plan name": "micro-psql",
-            "client": "Cloud Foundry",
-            "Space GUID": $space_value,
-            "broker": "AWS broker",
-            "Space name": "metrics",
-            "Created at": "2024-12-20T19:08:54Z",
-            "Instance GUID": "024d7b3a-1732-4ae4-9e2a-f36eaa2c741c"
-        }
-    } ')
-
-# Save log to file and compress
-echo "$LOG" > temp_log.json
-gzip temp_log.json
-mv temp_log.json.gz "$S3_LOG_FILE"
-echo "Generated LOG: $LOG"
-# Upload log to S3
-echo "Uploading metric log to S3..."
+echo "Sending smoke test metric to CloudWatch..."
+echo "Smoke ID: $SMOKE_ID"
+echo "DB Instance: $db_instance"
+# Send metric to CloudWatch (will be picked up by your existing metric stream)
 if command -v aws &> /dev/null; then
-    if [ -f "$S3_LOG_FILE" ]; then
-        aws s3api put-object --bucket ${S3_BUCKET} --key ${S3_KEY} --body "$S3_LOG_FILE" --region "${S3_REGION}" --server-side-encryption AES256
-        if [ $? -eq 0 ]; then
-            echo "Successfully uploaded metric log to s3://${S3_BUCKET}/${S3_KEY}"
-            rm -f "$S3_LOG_FILE"
-        else
-            echo "Failed to upload log to S3"
-        fi
+    aws cloudwatch put-metric-data \
+        --namespace "AWS/RDS" \
+        --metric-data \
+            MetricName="WriteLatency",\
+            Value=$METRIC_VALUE,\
+            Unit="Seconds",\
+            Timestamp="$TIMESTAMP",\
+            Dimensions="[\
+                {Name=DBInstanceIdentifier,Value=$db_instance},\
+                {Name=ServiceOffering,Value=aws-rds}
+            ]"
+    
+    if [ $? -eq 0 ]; then
+        echo "Successfully sent smoke test metric to CloudWatch"
+        echo "Metric Details:"
+        echo "  - Namespace: AWS/RDS"
+        echo "  - Metric: WriteLatency"
+        echo "  - Value: $METRIC_VALUE"
+        echo "  - DB Instance: $db_instance"
+        echo "  - Timestamp: $TIMESTAMP"
     else
-        echo "WARNING: Log file '$S3_LOG_FILE' not found. Skipping S3 upload."
+        echo "Failed to send metric to CloudWatch"
+        exit 1
     fi
 else
-    echo "AWS CLI not found, skipping S3 upload"
+    echo "AWS CLI not found, cannot send metric to CloudWatch"
+    exit 1
 fi
 
 # =============================================================================
@@ -181,8 +138,22 @@ while [ $TRIES -gt 0 ]; do
     -X POST "$MASTER_URL/_search" \
     -d '{
         "query": {
-            "term": {
-                "smoke_test_id": "'$SMOKE_ID'"
+            "bool": {
+                "must": [
+                    {
+                    "range": {
+                        "<%= p('smoke_tests.count_test.time_field') %>": {
+                        "gte": "now-<%= p('smoke_tests.count_test.long_time_interval') %>",
+                        "lt": "now"
+                        }
+                    }
+                    },
+                    {
+                        "term": {
+                            "@type": "metrics"
+                        }
+                    }
+                ]
             }
         },
         "size": 1
@@ -202,7 +173,7 @@ while [ $TRIES -gt 0 ]; do
             average_value=$(echo "$result" | jq -r '.hits.hits[0]._source["metric"]["average"]')
             db_instance_identifier_value=$(echo "$result" | jq -r '.hits.hits[0]._source["metric"]["db_instance_identifier"]')
             
-            if [[ "$average_value" == "5.0"  && "$db_instance_identifier_value" == "${rds_prefix}-tester" ]]; then
+            if [[ "$average_value" == "5.0"  && "$db_instance_identifier_value" == "" ]]; then
                 echo "SUCCESS: Metric log contains 'average' and 'db instance identifier' fields."
                 exit 0
             else
