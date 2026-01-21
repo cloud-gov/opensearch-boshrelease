@@ -86,8 +86,6 @@ properties:
     description: name of audit bucket
   smoke_tests.s3_cloudwatch.bucket:
     description: name of cloudwatch bucket
-  smoke_tests.s3_falco.bucket:
-    description: name of cloudwatch bucket
   smoke_tests.s3_metric.bucket:
     description: name of metrics bucket
   smoke_tests.org_guid:
