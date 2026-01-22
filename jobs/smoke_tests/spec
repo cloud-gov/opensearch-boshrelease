@@ -72,6 +72,7 @@ properties:
     description: 'How far back to look in time for the count. e.g. "15m", "1h", "2d" see https://www.open.co/guide/en/opensearch/reference/current/common-options.html#date-math for more'
   smoke_tests.count_test.long_time_interval:
     description: "How far back to look in time for the count for delayed resources"
+    default: 7m
   smoke_tests.cloudwatch_count_test.minimum:
     description: Minimum expected documents for cloudwatch in the given time window
   smoke_tests.metric_count_test.minimum:
@@ -83,7 +84,16 @@ properties:
     description: region for aws
   smoke_tests.s3_audit.bucket:
     description: name of audit bucket
-  smoke_tests.s3_metric.bucket:
-    description: name of metrics bucket
   smoke_tests.s3_cloudwatch.bucket:
     description: name of cloudwatch bucket
+  smoke_tests.s3_metric.bucket:
+    description: name of metrics bucket
+  smoke_tests.org_guid:
+    description: org guid for opensearch smoketest test org
+  smoke_tests.space_guid:
+    description: space guid for opensearch smoketest test space
+  smoke_tests.rds_instance:
+    description: rds instance for test
+  smoke_tests.log_group:
+    description: log group for test
+  
