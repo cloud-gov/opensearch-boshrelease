@@ -126,10 +126,6 @@ awscli-exe-linux-x86_64.zip:
   size: 62186639
   object_id: acf3ef43-9e8d-4749-4daf-7c6edf3a5297
   sha: sha256:fca9d80afb77f4cf5f2df6078b30ebb123b40e5b070ee7c1d5c3fba92d6b3755
-jason.tar.gz:
-  size: 771704
-  object_id: 720e17a0-e399-468b-4e70-9632365f81af
-  sha: sha256:7bf636379a4e6b1e438e8c803139c476ef52e0c0a330f57e4fa47a20dfd20b14
 jdk-21.0.7_linux-x64_bin.tar.gz:
   size: 197755939
   object_id: 23f844d3-02eb-4ea7-6a13-a8b82e7cb61f
@@ -186,10 +182,10 @@ opensearch-dashboards-3.4.0-linux-x64.tar.gz:
   size: 448850112
   object_id: b3666a8d-da39-49c2-55b9-c9554b2bd506
   sha: sha256:266ab69f494ae63fcbc638cd3ac2a108e5e744a88224209e01e388586ea4fb9f
-opensearch-dashboards-cf-auth-proxy-0.0.11.tar.gz:
-  size: 36275
-  object_id: c8408b65-2c08-4d47-731c-fa1dbb7a9747
-  sha: sha256:d81c67e7372f250a1c21cf03c6156a7e6e870796a3b87757d2396bf1c2c8853c
+opensearch-dashboards-cf-auth-proxy-0.0.12.tar.gz:
+  size: 36370
+  object_id: f20110db-5f4f-4758-7424-063a3e82689e
+  sha: sha256:a0fcfce4bcbf2ae8cf64032f2d30b5ba100de9b5f539d5172300b22a6ca39d19
 opensearch/opensearch-alerting-3.4.0.0.zip:
   size: 10906015
   object_id: 715a9c9b-ee09-4a78-6ffc-cefe3cec728a
