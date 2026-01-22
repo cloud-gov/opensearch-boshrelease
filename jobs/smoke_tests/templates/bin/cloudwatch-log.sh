@@ -25,6 +25,7 @@ INDEX="<%= index %>*"
 ORG_GUID="<%= p('smoke_tests.org_guid') %>"
 SPACE_GUID="<%= p('smoke_tests.space_guid') %>"
 RDS_INSTANCE="<%= p('smoke_tests.rds_instance') %>"
+LOG_GROUP="<%= p('smoke_tests.log_group') %>"
 
 # Validate required properties
 if [ -z "$ORG_GUID" ] || [ -z "$RDS_INSTANCE" ] || [ -z "$SPACE_GUID" ]; then
@@ -80,7 +81,6 @@ current_time_ms=$(date -u +%s%3N)
 # UPLOAD SIMPLE LOG MESSAGE TO CLOUDWATCH LOGS
 # =============================================================================
 db_instance=$RDS_INSTANCE
-LOG_GROUP="/aws/rds/instance/${db_instance}/postgresql"
 LOG_STREAM="${db_instance}.0"
 
 # Simple log message with smoke test ID

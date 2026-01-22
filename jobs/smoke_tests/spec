@@ -94,4 +94,6 @@ properties:
     description: space guid for opensearch smoketest test space
   smoke_tests.rds_instance:
     description: rds instance for test
+  smoke_tests.log_group:
+    description: log group for test
   
