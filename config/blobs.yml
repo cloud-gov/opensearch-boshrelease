@@ -182,10 +182,10 @@ opensearch-dashboards-3.4.0-linux-x64.tar.gz:
   size: 448850112
   object_id: b3666a8d-da39-49c2-55b9-c9554b2bd506
   sha: sha256:266ab69f494ae63fcbc638cd3ac2a108e5e744a88224209e01e388586ea4fb9f
-opensearch-dashboards-cf-auth-proxy-0.0.11.tar.gz:
-  size: 36275
-  object_id: c8408b65-2c08-4d47-731c-fa1dbb7a9747
-  sha: sha256:d81c67e7372f250a1c21cf03c6156a7e6e870796a3b87757d2396bf1c2c8853c
+opensearch-dashboards-cf-auth-proxy-0.0.14.tar.gz:
+  size: 36364
+  object_id: f5a675da-f42b-4806-7257-8bf00446c514
+  sha: sha256:34904deee0f4d55c20d43eea43a7c42e5f9eb8a677a72d2ebc281110b1c9f465
 opensearch/opensearch-alerting-3.4.0.0.zip:
   size: 10906015
   object_id: 715a9c9b-ee09-4a78-6ffc-cefe3cec728a

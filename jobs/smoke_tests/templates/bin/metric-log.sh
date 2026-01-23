@@ -156,7 +156,7 @@ while [ $TRIES -gt 0 ]; do
                     },
                    {
                     "term": {
-                        "metric.sum": "'$METRIC_VALUE'"
+                        "metric.max": "'$METRIC_VALUE'"
                     }
                 }
                 ]
