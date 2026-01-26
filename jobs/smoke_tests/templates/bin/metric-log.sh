@@ -131,8 +131,8 @@ fi
 # =============================================================================
 
 # Polling configuration
-TRIES=${1:-300}  # Default to 300 seconds if not specified
-SLEEP=5
+TRIES=${1:-400}  # Default to 400 seconds if not specified
+SLEEP=10
 
 echo -n "Polling for $TRIES seconds"
 while [ $TRIES -gt 0 ]; do
