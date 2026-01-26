@@ -131,7 +131,7 @@ fi
 # =============================================================================
 
 # Polling configuration
-TRIES=${1:-300}  # Default to 300 seconds if not specified
+TRIES=${1:-400}  # Default to 400 seconds if not specified
 SLEEP=5
 
 echo -n "Polling for $TRIES seconds"
