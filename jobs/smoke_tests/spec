@@ -6,6 +6,7 @@ description: This job runs Smoke tests to make sure the cluster is configured pr
 packages: 
   - jq
   - awscli
+  - cf-cli-8-linux
 
 templates:
   bin/pre-start.erb: bin/pre-start
