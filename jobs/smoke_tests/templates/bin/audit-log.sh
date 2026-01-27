@@ -11,7 +11,7 @@ export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 export JQ_PACKAGE_DIR=/var/vcap/packages/jq
 export AWS_PACKAGE_DIR=/var/vcap/packages/awscli
 export PATH=$JQ_PACKAGE_DIR/bin:$AWS_PACKAGE_DIR/bin:$PATH
-
+export PATH=/var/vcap/packages/cf-cli-8-linux/bin:${PATH}
 # Template variables
 <%
   opensearch_host = p("smoke_tests.opensearch_manager.host")
