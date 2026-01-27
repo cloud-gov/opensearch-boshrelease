@@ -17,7 +17,16 @@ export PATH=$JQ_PACKAGE_DIR/bin:$AWS_PACKAGE_DIR/bin:$PATH
   opensearch_host = p("smoke_tests.opensearch_manager.host")
   opensearch_port = p("smoke_tests.opensearch_manager.port")
   index = p("smoke_tests.index")
+  api = p("cloudfoundry.system_domain")
+  client = p("cloudfoundry.client_id")
+  password = p("cloudfoundry.client_password")
+  target_org = p("cloudfoundry.smoke_test_org")
 %>
+
+cf api "<%= api %>"
+cf auth "<%= client %>" "<%= password %>" --client-credentials
+
+
 
 # Service configuration
 MASTER_URL="https://<%= opensearch_host %>:<%= opensearch_port %>"
@@ -25,132 +34,19 @@ INDEX="<%= index %>*"
 S3_BUCKET="<%= p('smoke_tests.s3_audit.bucket') %>"
 S3_REGION="<%= p('smoke_tests.s3.region') %>"
 ENVIRONMENT="<%= p('smoke_tests.s3.environment') %>"
-
-# Validate required properties
-if [ -z "$S3_BUCKET" ] || [ -z "$S3_REGION" ] || [ -z "$ENVIRONMENT" ]; then
-    echo "ERROR: One or more required properties (S3_BUCKET, S3_REGION, ENVIRONMENT) are not defined."
-    exit 1
-fi
-
-
-<% if p('smoke_tests.count_test.run') %>
-
-MIN=<%= p('smoke_tests.audit_count_test.minimum') %>
-url="$MASTER_URL/$INDEX/_count?pretty"
-query_body='{
-  "query": {
-    "bool": {
-      "must": [
-        {
-          "range": {
-            "<%= p('smoke_tests.count_test.time_field') %>": {
-              "gte": "now-<%= p('smoke_tests.count_test.long_time_interval') %>",
-              "lt": "now"
-            }
-          }
-        },
-        {
-          "term": {
-            "@type": "audit_event"
-          }
-        }
-      ]
-    }
-  }
-}'
-
-result=$(curl  --key ${JOB_DIR}/config/ssl/smoketest.key \
-    --cert ${JOB_DIR}/config/ssl/smoketest.crt  \
-    --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
-    $url -H "content-type: application/json" -d "$query_body" | grep count | cut -d: -f2 | sed 's/,//' )
-
-if [[ ${result} -lt ${MIN} ]]; then
-  echo "ERROR: expected at least ${MIN} audit documents, only got ${result}"
-  exit 1
-fi
-<% end %>
-
-# =============================================================================
-# GENERATE IDENTIFIERS AND TIMESTAMPS
-# =============================================================================
-
-S3_PREFIX=$(date -u +"%Y/%m/%d/%H")
 SMOKE_ID=$(LC_ALL=C; cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
-S3_LOG_FILE="smoke_test_log_${SMOKE_ID}.log"
-TIMESTAMP=$(date -u +"%Y%m%d-%H%M%S")
-S3_KEY="${S3_PREFIX}/${TIMESTAMP}-${SMOKE_ID}.gz"
-current_time=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
-# =============================================================================
-# CREATE AND UPLOAD LOG
-# =============================================================================
-org_value="c9b54579-7056-46c3-9870-334330e9be75"
-space_value="5db8fd06-ac53-4ed0-a224-b0bad2e463d2"
-# Construct the LOG JSON object (using jq for proper formatting)
-LOG=$(jq -nc \
-    --arg timestamp "$current_time" \
-    --arg smoke_id "$SMOKE_ID" \
-    --arg org_value "$org_value" \
-    --arg space_value "$space_value" \
-    '{
-        "guid": "024d7b3a-1732-4ae4-9e2a-f36eaa2c741c",
-        "created_at": $timestamp,
-        "updated_at": $timestamp,
-        "type": "audit",
-        "smoke_test_id": $smoke_id,
-        "actor": {
-            "guid": "smoke-tests",
-            "type": "user",
-            "name": ""
-        },
-        "target": {
-            "type": "app",
-            "name": "tester"
-        },
-        "data": {
-            "app_port": 8080
-        },
-        "space": {
-            "guid": $space_value
-        },
-        "organization": {
-            "guid": $org_value
-        },
-        "organization_name": "smoke-test",
-        "space_name": "audit"
-    } ')
-
-# Save log to file and compress
-echo "$LOG" > temp_log.json
-gzip temp_log.json
-mv temp_log.json.gz "$S3_LOG_FILE"
-echo "Generated LOG: $LOG"
-
-# Upload log to S3
-echo "Uploading audit log to S3..."
-if command -v aws &> /dev/null; then
-    if [ -f "$S3_LOG_FILE" ]; then
-        aws s3api put-object --bucket ${S3_BUCKET} --key ${S3_KEY} --body "$S3_LOG_FILE" --region "${S3_REGION}" --server-side-encryption AES256
-        if [ $? -eq 0 ]; then
-            echo "Successfully uploaded audit log to s3://${S3_BUCKET}/${S3_KEY}"
-            rm -f "$S3_LOG_FILE"
-        else
-            echo "Failed to upload audit log to S3"
-        fi
-    else
-        echo "WARNING: Log file '$S3_LOG_FILE' not found. Skipping S3 upload."
-    fi
-else
-    echo "AWS CLI not found, skipping S3 upload"
-fi
+cf target -o $target_org
+cf create-space $SMOKE_ID
+cf delete-space $SMOKE_ID
 
 # =============================================================================
 # POLLING AND VALIDATION
 # =============================================================================
 
 # Polling configuration
-TRIES=${1:-300}  # Default to 300 seconds if not specified
-SLEEP=5
+TRIES=${1:-420}  # Default to 420 seconds(7 minutes)
+SLEEP=10
 
 echo -n "Polling for $TRIES seconds"
 while [ $TRIES -gt 0 ]; do
@@ -161,12 +57,23 @@ while [ $TRIES -gt 0 ]; do
     -s -H "Content-Type: application/json" \
     -X POST "$MASTER_URL/_search" \
     -d '{
-        "query": {
+    "query": {
+        "bool": {
+        "must": [
+            {
             "term": {
-                "smoke_test_id": "'$SMOKE_ID'"
+                "type": "audit.space.create"
             }
-        },
-        "size": 1
+            },
+            {
+            "term": {
+                "target.name": "$SMOKE_ID"
+            }
+            }
+        ]
+        }
+    },
+    "size": 1
     }')
     
     if [[ $result == *"$SMOKE_ID"* ]]; then

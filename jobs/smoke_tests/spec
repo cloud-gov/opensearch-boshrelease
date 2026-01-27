@@ -96,4 +96,12 @@ properties:
     description: rds instance for test
   smoke_tests.log_group:
     description: log group for test
-  
+
+  cloudfoundry.smoke_test_org:
+    description: The org for smoketesting
+  cloudfoundry.system_domain:
+    description: The Cloud Foundry System Domain
+  cloudfoundry.client_id:
+    description: The Cloud Foundry client id.
+  cloudfoundry.client_password:
+    description: The Cloud Foundry client's password.
