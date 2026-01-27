@@ -34,9 +34,10 @@ INDEX="<%= index %>*"
 S3_BUCKET="<%= p('smoke_tests.s3_audit.bucket') %>"
 S3_REGION="<%= p('smoke_tests.s3.region') %>"
 ENVIRONMENT="<%= p('smoke_tests.s3.environment') %>"
+TARGET_ORG="<%= target_org %>"
 SMOKE_ID=$(LC_ALL=C; cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 
-cf target -o $target_org
+cf target -o $TARGET_ORG
 cf create-space $SMOKE_ID
 cf delete-space $SMOKE_ID
 
