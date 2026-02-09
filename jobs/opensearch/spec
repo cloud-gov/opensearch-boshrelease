@@ -51,14 +51,6 @@ provides:
       - opensearch.node.ssl.certificate
       - opensearch.node.ssl.private_key
       - opensearch.dashboard_username
-      - opensearch.notification.username
-      - opensearch.notification.password
-      - opensearch.notification.host
-      - opensearch.notification.port
-      - opensearch.notification.from
-      - opensearch.notification.ca
-      - opensearch.notification.certificate
-      - opensearch.notification.privatekey
 
 consumes:
   - name: opensearch
