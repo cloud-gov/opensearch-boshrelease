@@ -57,7 +57,7 @@ templates:
   dashboards-objects/search/services-domainsearch.json.erb: dashboards-objects/search/services-domainsearch.json
   dashboards-objects/search/services-rdssearch.json.erb: dashboards-objects/search/services-rdssearch.json
   dashboards-objects/search/services-s3search.json.erb: dashboards-objects/search/services-s3search.json
-  dashboards-objects/search/services-redis.json.erb: dashboards_objects/search/services-redis.json
+  dashboards-objects/search/services-redis.json.erb: dashboards-objects/search/services-redis.json
   dashboards-objects/search/app-container-metric-old.json.erb: dashboards-objects/search/app-container-metric-old.json
   dashboards-objects/search/app-container-metric-cpu-old.json.erb: dashboards-objects/search/app-container-metric-cpu-old.json
   dashboards-objects/search/app-container-metric-disk-old.json.erb: dashboards-objects/search/app-container-metric-disk-old.json
