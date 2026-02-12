@@ -77,6 +77,7 @@ templates:
   dashboards-objects/dashboard/Services-S3.json.erb: dashboards-objects/dashboard/Services-S3.json
   dashboards-objects/dashboard/Services-DomainSearch-old.json.erb: dashboards-objects/dashboard/Services-DomainSearch-old.json
   dashboards-objects/dashboard/Services-S3-old.json.erb: dashboards-objects/dashboard/Services-S3-old.json
+  dashboards-objects/dashboard/Services-Redis.json.erb: dashboards-objects/dashboard/Services-Redis.json
 
   dashboards-objects/visualization/App-APP-logs-count-(top-10-apps).json.erb: dashboards-objects/visualization/App-APP-logs-count-(top-10-apps).json
   dashboards-objects/visualization/App-APP-logs-count-by-level-(top-5-apps).json.erb: dashboards-objects/visualization/App-APP-logs-count-by-level-(top-5-apps).json
