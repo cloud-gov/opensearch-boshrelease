@@ -57,6 +57,7 @@ templates:
   dashboards-objects/search/services-domainsearch.json.erb: dashboards-objects/search/services-domainsearch.json
   dashboards-objects/search/services-rdssearch.json.erb: dashboards-objects/search/services-rdssearch.json
   dashboards-objects/search/services-s3search.json.erb: dashboards-objects/search/services-s3search.json
+  dashboards-objects/search/services-elasticcache.json.erb: dashboards-objects/search/services-elasticcache.json
   dashboards-objects/search/app-container-metric-old.json.erb: dashboards-objects/search/app-container-metric-old.json
   dashboards-objects/search/app-container-metric-cpu-old.json.erb: dashboards-objects/search/app-container-metric-cpu-old.json
   dashboards-objects/search/app-container-metric-disk-old.json.erb: dashboards-objects/search/app-container-metric-disk-old.json
@@ -76,6 +77,7 @@ templates:
   dashboards-objects/dashboard/Services-S3.json.erb: dashboards-objects/dashboard/Services-S3.json
   dashboards-objects/dashboard/Services-DomainSearch-old.json.erb: dashboards-objects/dashboard/Services-DomainSearch-old.json
   dashboards-objects/dashboard/Services-S3-old.json.erb: dashboards-objects/dashboard/Services-S3-old.json
+  dashboards-objects/dashboard/Services-ElasticCache.json.erb: dashboards-objects/dashboard/Services-ElasticCache.json
 
   dashboards-objects/visualization/App-APP-logs-count-(top-10-apps).json.erb: dashboards-objects/visualization/App-APP-logs-count-(top-10-apps).json
   dashboards-objects/visualization/App-APP-logs-count-by-level-(top-5-apps).json.erb: dashboards-objects/visualization/App-APP-logs-count-by-level-(top-5-apps).json
@@ -101,6 +103,14 @@ templates:
   dashboards-objects/visualization/App-RTR-traffic-by-response_time_ms-(first-10-apps).json.erb: dashboards-objects/visualization/App-RTR-traffic-by-response_time_ms-(first-10-apps).json
   dashboards-objects/visualization/Audit-logs-count.json.erb: dashboards-objects/visualization/Audit-logs-count.json
   dashboards-objects/visualization/Audit-target-names.json.erb: dashboards-objects/visualization/Audit-target-names.json
+  dashboards-objects/visualization/Services-ElasticCache-BytesUsedForCache.json.erb: dashboards-objects/visualization/Services-ElasticCache-BytesUsedForCache.json
+  dashboards-objects/visualization/Services-ElasticCache-FreeableMemory.json.erb: dashboards-objects/visualization/Services-ElasticCache-FreeableMemory.json
+  dashboards-objects/visualization/Services-ElasticCache-CacheHitRate.json.erb: dashboards-objects/visualization/Services-ElasticCache-CacheHitRate.json
+  dashboards-objects/visualization/Services-ElasticCache-CPUUtilization.json.erb: dashboards-objects/visualization/Services-ElasticCache-CPUUtilization.json
+  dashboards-objects/visualization/Services-ElasticCache-DatabaseCapacityUsagePercentage.json.erb: dashboards-objects/visualization/Services-ElasticCache-DatabaseCapacityUsagePercentage.json
+  dashboards-objects/visualization/Services-ElasticCache-DatabaseMemoryUsagePercentage.json.erb: dashboards-objects/visualization/Services-ElasticCache-DatabaseMemoryUsagePercentage.json
+  dashboards-objects/visualization/Services-ElasticCache-EngineCPUUtilization.json.erb: dashboards-objects/visualization/Services-ElasticCache-EngineCPUUtilization.json
+  dashboards-objects/visualization/Services-ElasticCache-MemoryFragmentationRatio.json.erb: dashboards-objects/visualization/Services-ElasticCache-MemoryFragmentationRatio.json
   dashboards-objects/visualization/Services-RDS-UsagePercentage.json.erb: dashboards-objects/visualization/Services-RDS-UsagePercentage.json
   dashboards-objects/visualization/Services-RDS-CPUUtilization.json.erb: dashboards-objects/visualization/Services-RDS-CPUUtilization.json
   dashboards-objects/visualization/Services-RDS-WriteLatency.json.erb: dashboards-objects/visualization/Services-RDS-WriteLatency.json
