@@ -47,6 +47,7 @@ valuemetric_enabled = p('cloudfoundry.event_types').include? 'ValueMetric'
 counterevent_enabled = p('cloudfoundry.event_types').include? 'CounterEvent'
 error_enabled = p('cloudfoundry.event_types').include? 'Error'
 audit_enabled = p('cloudfoundry.event_types').include? 'Audit'
+falco_enabled = p('cloudfoundry.event_types').include? 'Falco'
 
 # Only LogMessage, ContainerMetric, Http* events contain `app_id` field so other app-related `@cf.*` fields are set for them too. See protocol definition https://github.com/cloudfoundry/dropsonde-protocol/blob/master/events/README.md.
 if(logmessage_enabled == true or containermetric_enabled == true or http_enabled == true)
@@ -202,6 +203,16 @@ if(audit_enabled == true)
       {"name":"updated_at","type":"date","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
       {"name":"type","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
       {"name":"guid","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true}
+    ]
+  )
+end
+
+#falco fields
+if(falco_enabled ==true)
+  fields_json.concat(
+    [
+      {"name":"falco_priority","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"name":"falco_rule","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true}
     ]
   )
 end
