@@ -374,7 +374,7 @@ cf_user:
   - index_patterns:
     - "logs-app-*"
     - "logs-metrics-*"
-    dls: "{\"bool\": {\"should\": [{\"terms\": { \"@cf.space_id\": [${attr.proxy.spaceids}] }}, {\"terms\": {\"@cf.org_id\": [${attr.proxy.orgids}]}}]}}"
+     dls: "{\"bool\": {\"should\": [{\"bool\": {\"must\": [{\"terms\": {\"@cf.space_id\": [${attr.proxy.spaceids}]}}, {\"bool\": {\"must_not\": {\"term\": {\"user.backend_roles\": \"auditor\"}}}}]}}, {\"bool\": {\"must\": [{\"terms\": {\"@cf.org_id\": [${attr.proxy.orgids}]}}, {\"bool\": {\"must_not\": {\"term\": {\"user.backend_roles\": \"auditor\"}}}}]}}, {\"term\": {\"user.backend_roles\": \"auditor\"}}]}}"
     fls:
     allowed_actions:
     - "read"
