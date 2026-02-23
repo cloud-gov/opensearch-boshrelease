@@ -55,7 +55,7 @@ done
 
 # this makes a list of cf org guids and assigns them to roles, making users with a org have access to the following roles.
 ORG_GUID_ROLE_LIST=$(IFS=,; echo "${ORG_GUID_LIST[*]}")
-yq -i ".cf_user={\"backend_roles\": [$ORG_GUID_ROLE_LIST]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles_mapping.yml"
+yq -i ".cf_user={\"backend_roles\": [$ORG_GUID_ROLE_LIST], \"exclude_backend_roles\": [\"auditor\"]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles_mapping.yml"
 yq -i ".reports_full_access={\"backend_roles\": [$ORG_GUID_ROLE_LIST]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles_mapping.yml"
 yq -i ".alerting_full_access={\"backend_roles\": [$ORG_GUID_ROLE_LIST]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles_mapping.yml"
 yq -i ".notifications_full_access={\"backend_roles\": [$ORG_GUID_ROLE_LIST]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles_mapping.yml"
