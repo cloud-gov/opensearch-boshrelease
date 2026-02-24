@@ -71,7 +71,7 @@ templates:
   dashboards-objects/dashboard/Services-RDS.json.erb: dashboards-objects/dashboard/Services-RDS.json
   dashboards-objects/dashboard/Services-S3.json.erb: dashboards-objects/dashboard/Services-S3.json
   dashboards-objects/dashboard/Services-ElasticCache.json.erb: dashboards-objects/dashboard/Services-ElasticCache.json
-  dashboards-objects/dashboards/Falco-Overview.json.erb: dashboards-objects/dashboard/Falco-Overview.json
+  dashboards-objects/dashboard/Falco-Overview.json.erb: dashboards-objects/dashboard/Falco-Overview.json
 
   dashboards-objects/visualization/App-APP-logs-count-(top-10-apps).json.erb: dashboards-objects/visualization/App-APP-logs-count-(top-10-apps).json
   dashboards-objects/visualization/App-APP-logs-count-by-level-(top-5-apps).json.erb: dashboards-objects/visualization/App-APP-logs-count-by-level-(top-5-apps).json
