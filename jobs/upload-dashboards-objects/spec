@@ -58,7 +58,7 @@ templates:
   dashboards-objects/search/services-rdssearch.json.erb: dashboards-objects/search/services-rdssearch.json
   dashboards-objects/search/services-s3search.json.erb: dashboards-objects/search/services-s3search.json
   dashboards-objects/search/services-elasticcache.json.erb: dashboards-objects/search/services-elasticcache.json
-  dashboards-objects/search/falcosearch.json.erb: dashboards-objects/search/falcosearch.json
+  dashboards-objects/search/falco-search.json.erb: dashboards-objects/search/falco-search.json
 
   dashboards-objects/dashboard/App-Errors.json.erb: dashboards-objects/dashboard/App-Errors.json
   dashboards-objects/dashboard/App-Location.json.erb: dashboards-objects/dashboard/App-Location.json
