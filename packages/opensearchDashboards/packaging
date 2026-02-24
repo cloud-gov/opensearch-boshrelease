@@ -4,7 +4,6 @@ tar xzf opensearch-dashboards-3.5.0-linux-x64.tar.gz -C $BOSH_INSTALL_TARGET --s
 
 #Remove unused plugins
 export PATH="${BOSH_INSTALL_TARGET}/bin:${PATH}"
-opensearch-dashboards-plugin remove anomalyDetectionDashboards --allow-root
 opensearch-dashboards-plugin remove customImportMapDashboards --allow-root
 opensearch-dashboards-plugin remove flowFrameworkDashboards --allow-root
 opensearch-dashboards-plugin remove mlCommonsDashboards --allow-root
