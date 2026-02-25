@@ -1,8 +1,8 @@
-# This file contains the filters for cloudwatch from s3
-<%= File.read('src/logstash-filters/snippets/cloudwatch.conf') %>
-
 # This file contains the filters for parsing CF tags into fields
 <%= File.read('src/logstash-filters/snippets/cf-tags.conf') %>
+
+# This file contains the filters for cloudwatch from s3
+<%= File.read('src/logstash-filters/snippets/cloudwatch.conf') %>
 
 # Teardown
 <%= File.read('src/logstash-filters/snippets/teardown-s3.conf') %>
