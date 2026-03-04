@@ -2,4 +2,4 @@
 name: openjdk-21
 dependencies: []
 files:
-- jdk-21.0.7_linux-x64_bin.tar.gz
+- jdk-21.0.9_linux-x64_bin.tar.gz
