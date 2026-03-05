@@ -3,6 +3,11 @@ set -ex
 export JAVA_HOME=/var/vcap/packages/openjdk-21
 export PATH=$JAVA_HOME/bin:$PATH
 
-cd ${BOSH_INSTALL_TARGET}
+mkdir ${BOSH_INSTALL_TARGET}/bosh
 
+# Copy runtime.env and compile.env to the bosh folder
+cp openjdk-21/runtime.env ${BOSH_INSTALL_TARGET}/bosh/runtime.env
+cp openjdk-21/compile.env ${BOSH_INSTALL_TARGET}/bosh/compile.env
+
+cd ${BOSH_INSTALL_TARGET}
 tar zxvf ${BOSH_COMPILE_TARGET}/*.tar.gz --strip 1
