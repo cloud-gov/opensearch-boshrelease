@@ -7,26 +7,7 @@ mkdir ${BOSH_INSTALL_TARGET}/bosh
 
 # Copy runtime.env and compile.env to the bosh folder
 cp openjdk-21/runtime.env ${BOSH_INSTALL_TARGET}/bosh/runtime.env
-if [ $? -ne 0 ]; then
-  echo "Error: Failed to copy runtime.env"
-  exit 1
-fi
-
 cp openjdk-21/compile.env ${BOSH_INSTALL_TARGET}/bosh/compile.env
-if [ $? -ne 0 ]; then
-  echo "Error: Failed to copy compile.env"
-  exit 1
-fi
 
 cd ${BOSH_INSTALL_TARGET}
 tar zxvf ${BOSH_COMPILE_TARGET}/*.tar.gz --strip 1
-if [ $? -ne 0 ]; then
-  echo "Error: Failed to extract tar.gz archive to bosh folder"
-  exit 1
-fi
-
-# Verify that at least one file was extracted to the bosh folder
-if [ ! -n "$(find ${BOSH_INSTALL_TARGET}/bosh -maxdepth 1 -type f)" ]; then
-    echo "Error: No files were extracted to the bosh folder."
-    exit 1
-fi
