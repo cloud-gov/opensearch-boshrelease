@@ -54,7 +54,7 @@ if __name__ == "__main__":
         for visual in delete_list_visual:
           r = session.delete('{}/api/saved_objects/visualization/{}'.format(
                 logs_url,
-                visuals
+                visual
               ),
               headers=headers,
               cert=(cert, key),
