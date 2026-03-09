@@ -37,7 +37,7 @@ if __name__ == "__main__":
           'securitytenant': tenant.strip()
         }
 
-        for dashboard in range(delete_list_dashboard):
+        for dashboard in delete_list_dashboard:
           r = session.delete('{}/api/saved_objects/dashboard/{}'.format(
                 logs_url,
                 dashboard
@@ -51,8 +51,8 @@ if __name__ == "__main__":
           else: 
             logging.info(f'delete failed dashboard {dashboard} for tenant {tenant}')
         
-        for visual in range(delete_list_visual):
-          r = session.delete('{}/api/saved_objects/dashboard/{}'.format(
+        for visual in delete_list_visual:
+          r = session.delete('{}/api/saved_objects/visualization/{}'.format(
                 logs_url,
                 visuals
               ),
@@ -65,8 +65,8 @@ if __name__ == "__main__":
           else: 
             logging.info(f'delete failed visual {visual} for tenant {tenant}')
 
-        for search in range(delete_list_search):
-          r = session.delete('{}/api/saved_objects/dashboard/{}'.format(
+        for search in delete_list_search:
+          r = session.delete('{}/api/saved_objects/search/{}'.format(
                 logs_url,
                 search
               ),
