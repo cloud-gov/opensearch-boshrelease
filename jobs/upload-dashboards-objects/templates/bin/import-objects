@@ -14,6 +14,10 @@ import requests
 
 logging.basicConfig(level=logging.INFO)
 
+delete_list_dashboard = ['falco-dashboard','aws-elasticsearch-old','services-s3-old']
+delete_list_visual = ['falco-count','falco-graph','domain-cpuutilization-old','domains-mastercpuutilization-old','domains-jvmmemorypressure-old','domains-masterjvmmemorypressure-old','domains-masteroldgenjvmmemorypressure-old','domains-oldgenjvmmemorypressure-old','domains-reestoragespace-old','domains-threadpoolsearchqueue-old','domains-threadpoolsearchrejected-old','domains-threadpoolwritequeue-old','domains-threadpoolwriterejected-old','s3-bucket-size-week-old']
+delete_list_search = ['services-domainsearch-old','services-s3-search-old','app-container-metric-old','app-container-metric-cpu-old','app-container-metric-disk-old','app-container-metric-memory-old']
+
 if __name__ == "__main__":
     session = requests.Session()
     ndjson_output_path = "/var/vcap/jobs/upload-dashboards-objects/dashboard.ndjson"
@@ -32,6 +36,51 @@ if __name__ == "__main__":
           'x-forwarded-for': '127.0.0.1',
           'securitytenant': tenant.strip()
         }
+
+        for dashboard in range(delete_list_dashboard):
+          r = session.delete('{}/api/saved_objects/dashboard/{}'.format(
+                logs_url,
+                dashboard
+              ),
+              headers=headers,
+              cert=(cert, key),
+              verify=ca )
+
+          if r.status_code == 200:
+            logging.info(f'delete sucessfully dashboard {dashboard} for tenant {tenant}')
+          else: 
+            logging.info(f'delete failed dashboard {dashboard} for tenant {tenant}')
+        
+        for visual in range(delete_list_visual):
+          r = session.delete('{}/api/saved_objects/dashboard/{}'.format(
+                logs_url,
+                visuals
+              ),
+              headers=headers,
+              cert=(cert, key),
+              verify=ca )
+
+          if r.status_code == 200:
+            logging.info(f'delete sucessfully visual {visual} for tenant {tenant}')
+          else: 
+            logging.info(f'delete failed visual {visual} for tenant {tenant}')
+
+        for search in range(delete_list_search):
+          r = session.delete('{}/api/saved_objects/dashboard/{}'.format(
+                logs_url,
+                search
+              ),
+              headers=headers,
+              cert=(cert, key),
+              verify=ca )
+
+          if r.status_code == 200:
+            logging.info(f'delete sucessfully search {search} for tenant {tenant}')
+          else: 
+            logging.info(f'delete failed searcg {search} for tenant {tenant}')
+        
+
+        
 
         with open(ndjson_output_path, 'rb') as ndjson_file:
           ndjson_files= {'file':(ndjson_output_path, ndjson_file, 'application/x-ndjson')}
