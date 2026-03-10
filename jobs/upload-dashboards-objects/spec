@@ -156,6 +156,15 @@ properties:
   dashboards_objects.login_host_name:
     description: the host-portion of the login FQDN, without the domain name
     default: login
+  dashboards_objects.delete_list_dashboard:
+    description: dashboards you wish to delete
+    default: []
+  dashboards_objects.delete_list_visual:
+    description: visualizations you wish to delete 
+    default: []
+  dashboards_objects.delete_list_search:
+    description: searches you wish to delete
+    default: []
 
   cloudfoundry.event_types:
     description: "Array of events you would like to get. Valid options are CounterEvent,Error,HttpStartStop,LogMessage,ValueMetric,ContainerMetric"

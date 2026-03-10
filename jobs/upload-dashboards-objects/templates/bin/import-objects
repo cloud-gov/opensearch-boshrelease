@@ -14,7 +14,7 @@ import requests
 
 logging.basicConfig(level=logging.INFO)
 
-delete_list_dashboard = ['falco-dashboard','aws-elasticsearch-old','services-s3-old']
+delete_list_dashboard = <%= p('dashboards_objects.delete_list_dashboard') %>
 delete_list_visual = ['falco-count','falco-graph','domain-cpuutilization-old','domains-mastercpuutilization-old','domains-jvmmemorypressure-old','domains-masterjvmmemorypressure-old','domains-masteroldgenjvmmemorypressure-old','domains-oldgenjvmmemorypressure-old','domains-reestoragespace-old','domains-threadpoolsearchqueue-old','domains-threadpoolsearchrejected-old','domains-threadpoolwritequeue-old','domains-threadpoolwriterejected-old','s3-bucket-size-week-old']
 delete_list_search = ['services-domainsearch-old','services-s3-search-old','app-container-metric-old','app-container-metric-cpu-old','app-container-metric-disk-old','app-container-metric-memory-old']
 
