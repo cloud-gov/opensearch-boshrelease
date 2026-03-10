@@ -5,6 +5,14 @@
   job_dir = "/var/vcap/jobs/upload-dashboards-objects"
   store_dir = "/var/vcap/store/upload-dashboards-objects"
   dashboards_link = link('opensearch_dashboards')
+
+  comma_separated_string = p('dashboards_objects.delete_list_dashboard')
+  delete_list_dashboard = "[]"  # Always default to an empty list
+  if comma_separated_string && !comma_separated_string.empty?
+    items = comma_separated_string.split(',').map(&:strip) # Split and remove whitespace
+    items = items.map { |item| item.gsub("'", "\\'") }
+    delete_list_dashboard = "[" + items.map { |item| "'#{item}'" }.join(", ") + "]"
+  end
 %>
 
 import glob
@@ -14,7 +22,7 @@ import requests
 
 logging.basicConfig(level=logging.INFO)
 
-delete_list_dashboard = <%= p('dashboards_objects.delete_list_dashboard') %>
+delete_list_dashboard = <%= delete_list_dashboard %>
 delete_list_visual = ['falco-count','falco-graph','domain-cpuutilization-old','domains-mastercpuutilization-old','domains-jvmmemorypressure-old','domains-masterjvmmemorypressure-old','domains-masteroldgenjvmmemorypressure-old','domains-oldgenjvmmemorypressure-old','domains-reestoragespace-old','domains-threadpoolsearchqueue-old','domains-threadpoolsearchrejected-old','domains-threadpoolwritequeue-old','domains-threadpoolwriterejected-old','s3-bucket-size-week-old']
 delete_list_search = ['services-domainsearch-old','services-s3-search-old','app-container-metric-old','app-container-metric-cpu-old','app-container-metric-disk-old','app-container-metric-memory-old']
 
