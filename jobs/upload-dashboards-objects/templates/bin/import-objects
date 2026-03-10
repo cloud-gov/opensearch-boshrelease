@@ -15,9 +15,14 @@ import ast
 
 logging.basicConfig(level=logging.INFO)
 
-delete_list_dashboard =  ast.literal_eval("<%= p('dashboards_objects.delete_list_dashboard') %>") 
-delete_list_visual = ast.literal_eval("<%= p('dashboards_objects.delete_list_visual') %>")
-delete_list_search = ast.literal_eval("<%= p('dashboards_objects.delete_list_search') %>")
+delete_list_dashboard_str = "<%= p('dashboards_objects.delete_list_dashboard') %>"
+delete_list_dashboard = delete_list_dashboard_str.strip('[]').split(',') if delete_list_dashboard_str.strip('[]') else []
+
+delete_list_visual_str = "<%= p('dashboards_objects.delete_list_visual') %>"
+delete_list_visual = delete_list_visual_str.strip('[]').split(',') if delete_list_visual_str.strip('[]') else []
+
+delete_list_search_str = "<%= p('dashboards_objects.delete_list_search') %>"
+delete_list_search = delete_list_search_str.strip('[]').split(',') if delete_list_search_str.strip('[]') else []
 
 if __name__ == "__main__":
     session = requests.Session()
