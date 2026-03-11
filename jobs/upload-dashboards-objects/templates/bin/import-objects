@@ -11,8 +11,18 @@ import glob
 import logging
 import os
 import requests
+import ast
 
 logging.basicConfig(level=logging.INFO)
+
+delete_list_dashboard_str = "<%= p('dashboards_objects.delete_list_dashboard') %>"
+delete_list_dashboard = delete_list_dashboard_str.strip('[]').split(',') if delete_list_dashboard_str.strip('[]') else []
+
+delete_list_visual_str = "<%= p('dashboards_objects.delete_list_visual') %>"
+delete_list_visual = delete_list_visual_str.strip('[]').split(',') if delete_list_visual_str.strip('[]') else []
+
+delete_list_search_str = "<%= p('dashboards_objects.delete_list_search') %>"
+delete_list_search = delete_list_search_str.strip('[]').split(',') if delete_list_search_str.strip('[]') else []
 
 if __name__ == "__main__":
     session = requests.Session()
@@ -32,6 +42,51 @@ if __name__ == "__main__":
           'x-forwarded-for': '127.0.0.1',
           'securitytenant': tenant.strip()
         }
+
+        for dashboard in delete_list_dashboard:
+          r = session.delete('{}/api/saved_objects/dashboard/{}'.format(
+                logs_url,
+                dashboard
+              ),
+              headers=headers,
+              cert=(cert, key),
+              verify=ca )
+
+          if r.status_code == 200:
+            logging.info(f'delete sucessfully dashboard {dashboard} for tenant {tenant}')
+          else: 
+            logging.info(f'delete failed dashboard {dashboard} for tenant {tenant}')
+        
+        for visual in delete_list_visual:
+          r = session.delete('{}/api/saved_objects/visualization/{}'.format(
+                logs_url,
+                visual
+              ),
+              headers=headers,
+              cert=(cert, key),
+              verify=ca )
+
+          if r.status_code == 200:
+            logging.info(f'delete sucessfully visual {visual} for tenant {tenant}')
+          else: 
+            logging.info(f'delete failed visual {visual} for tenant {tenant}')
+
+        for search in delete_list_search:
+          r = session.delete('{}/api/saved_objects/search/{}'.format(
+                logs_url,
+                search
+              ),
+              headers=headers,
+              cert=(cert, key),
+              verify=ca )
+
+          if r.status_code == 200:
+            logging.info(f'delete sucessfully search {search} for tenant {tenant}')
+          else: 
+            logging.info(f'delete failed searcg {search} for tenant {tenant}')
+        
+
+        
 
         with open(ndjson_output_path, 'rb') as ndjson_file:
           ndjson_files= {'file':(ndjson_output_path, ndjson_file, 'application/x-ndjson')}
