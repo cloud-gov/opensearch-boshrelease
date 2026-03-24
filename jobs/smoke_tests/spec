@@ -62,6 +62,7 @@ properties:
     description: Index to send smoke_tests to.
   smoke_tests.metric_index:
     description: Index to send metric smoke_tests to.
+    default: ""
   smoke_tests.audit_count_test.minimum:
     description: Minimum expected documents for cloudwatch in the given time window
   smoke_tests.count_test.time_field:
