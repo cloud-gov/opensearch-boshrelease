@@ -84,12 +84,16 @@ properties:
     description: region for aws
   smoke_tests.s3_audit.bucket:
     description: name of audit bucket
+    default: []
   smoke_tests.s3_cloudwatch.bucket:
     description: name of cloudwatch bucket
+    default: []
   smoke_tests.s3_metric.bucket:
     description: name of metrics bucket
+    default: []
   smoke_tests.s3_falco.bucket:
     description: name of S3 bucket containing falco logs
+    default: []
   smoke_tests.org_guid:
     description: org guid for opensearch smoketest test org
   smoke_tests.space_guid:
