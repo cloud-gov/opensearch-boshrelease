@@ -20,41 +20,19 @@ config:
     <% end %>
     authc:
       <% if p('opensearch.oidc.enabled') %>
-      openid_auth_domain:
-        description: "Authenticate via OpenID Connect"
+      oauth2_proxy_auth_domain:
+        description: "Authenticate via OAuth2 Proxy headers"
         http_enabled: true
         transport_enabled: true
         order: 0
         http_authenticator:
-          type: openid
+          type: extended-proxy
           challenge: false
           config:
-            subject_key: <%= p('opensearch.oidc.subject_key', 'sub') %>
-            roles_key: <%= p('opensearch.oidc.roles_key', 'roles') %>
-            # OpenID Connect Discovery URL - construct from your issuer
-            openid_connect_url: "https://<%= p('opensearch.oidc.hostname') %>/.well-known/openid_configuration"
-            # OR manually specify endpoints if discovery isn't available:
-            openid_connect_idp:
-              enable_ssl: true
-              verify_hostnames: true
-              # Manual endpoint configuration based on your setup
-              issuer: "https://<%= p('opensearch.oidc.hostname') %>/oauth/token"
-              authorization_endpoint: "https://<%= p('opensearch.oidc.hostname') %>/oauth/authorize"
-              token_endpoint: "https://<%= p('opensearch.oidc.hostname') %>/oauth/token"
-              userinfo_endpoint: "https://<%= p('opensearch.oidc.hostname') %>/userinfo"
-              jwks_uri: "https://<%= p('opensearch.oidc.hostname') %>/oauth/jwks"
-              # Client credentials
-              client_id: <%= p('opensearch.oidc.client_id') %>
-              client_secret: <%= p('opensearch.oidc.client_secret') %>
-              scope: "openid profile email"
-            jwt_header: "Authorization"
-            jwt_url_parameter: null
-            refresh_rate_limit_count: 10
-            refresh_rate_limit_time_window_ms: 10000
+            user_header: "X-Forwarded-User"             
         authentication_backend:
           type: noop
         <% end %>
-
       clientcert_auth_domain:
         description: "Authenticate via SSL client certificates"
         http_enabled: true

@@ -202,13 +202,7 @@ properties:
   opensearch.oidc.enabled:
     description: enables oidc
     default: false
-  opensearch.oidc.hostname:
-    description: hostname for oidc
-  opensearch.oidc.client_id:
-    description: client for oidc
-  opensearch.oidc.client_secret:
-    description: secret of oidc
-  
+    
   opensearch.multitenancy.private_tenant_enabled:
     description: True to enable private tenant
     default: false
