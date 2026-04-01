@@ -199,6 +199,9 @@ properties:
     description: username for dashboard
     default: "dashboard.opensearch.internal"
 
+  opensearch.oidc.enabled:
+    description: enables oidc
+    default: false
   opensearch.oidc.hostname:
     description: hostname for oidc
   opensearch.oidc.client_id:

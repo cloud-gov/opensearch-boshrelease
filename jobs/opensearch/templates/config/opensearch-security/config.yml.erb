@@ -19,7 +19,7 @@ config:
         remoteIpHeader: "x-forwarded-for"
     <% end %>
     authc:
-      <% if p('opensearch.oidc.hostname') %>
+      <% if p('opensearch.oidc.enabled') %>
       openid_auth_domain:
         description: "Authenticate via OpenID Connect"
         http_enabled: true
