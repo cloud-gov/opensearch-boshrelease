@@ -20,16 +20,23 @@ config:
     <% end %>
     authc:
       <% if p('opensearch.oidc.enabled') %>
-      oauth2_proxy_auth_domain:
-        description: "Authenticate via OAuth2 Proxy headers"
+      oidc_auth_domain:
+        description: "Authenticate users via OpenID Connect (OIDC)"
         http_enabled: true
         transport_enabled: true
-        order: 0
+        order: 0 
         http_authenticator:
-          type: extended-proxy
-          challenge: false
+          type: openid 
+          challenge: true
           config:
-            user_header: "X-Forwarded-User"             
+            client_id: ((client_id))
+            client_secret: ((client_secret)) 
+            openid_connect_url: ((oidc_issuer_url)) 
+            redirect_url: ((redirect_url)) 
+            scope: "openid profile email" 
+            subject_key: "email"
+            # roles_key: "roles" 
+            # cookie_max_age: 86400 
         authentication_backend:
           type: noop
         <% end %>

@@ -202,7 +202,14 @@ properties:
   opensearch.oidc.enabled:
     description: enables oidc
     default: false
-    
+  opensearch.oidc.client_id: 
+    description: "The client ID for your OpenID Connect application."
+  opensearch.oidc.client_secret: 
+    description: "The client secret for your OpenID Connect application."
+  opensearch.oidc.openid_connect_url:
+    description: "The issuer URL of your OpenID Connect Identity Provider."
+  opensearch.oidc.redirect_url:
+    description: "The redirect URL registered with your OpenID Connect Identity Provider."
   opensearch.multitenancy.private_tenant_enabled:
     description: True to enable private tenant
     default: false
