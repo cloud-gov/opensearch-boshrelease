@@ -115,4 +115,4 @@ properties:
     default: false
 
   opensearch_dashboards.oidc.redirect:
-   description: redirect for oidc
+    description: redirect for oidc
