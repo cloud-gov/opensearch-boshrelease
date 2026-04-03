@@ -29,13 +29,10 @@ config:
           type: openid 
           challenge: true
           config:
+            subject_key: preferred_username
+            roles_key: roles
             openid_connect_url: <%= p('opensearch.oidc.openid_connect_url') %> 
-            client_id: <%= p('opensearch.oidc.client_id') %>
-            client_secret: <%= p('opensearch.oidc.client_secret') %>
-            redirect_url: <%= p('opensearch.oidc.redirect_url') %>
-            scope: "openid profile email"
-            subject_key: "email"
-            roles_key: "roles"
+            required_audience: <%= p('opensearch.oidc.client_id') %>
         authentication_backend:
           type: noop
     <% end %>
