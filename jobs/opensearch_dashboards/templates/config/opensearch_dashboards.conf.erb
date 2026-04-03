@@ -104,12 +104,21 @@ opensearch.shardTimeout: <%= p('opensearch_dashboards.shard_timeout') %>
 
 #need this for certs
 opensearch_security.auth.type: "openid"
-opensearch_security.openid.connect_url: <%= p('opensearch.oidc.openid_connect_url') %>/.well-known/openid-configuration
-# The ID of the OpenID Connect client in your IdP
-opensearch_security.openid.client_id: <%= p('opensearch.oidc.client_id') %>
 
+
+<% if_link("opensearch") do |opensearch_config| %>
+<% opensearch_config.if_p('opensearch.oidc.openid_connect_url') do %>
+opensearch_security.openid.connect_url: <%= opensearch_config.p('opensearch.oidc.openid_connect_url') %>
+<% end %>
+<% opensearch_config.if_p('opensearch.oidc.client_id') do %>
+# The ID of the OpenID Connect client in your IdP
+opensearch_security.openid.client_id: <%= opensearch_config.p('opensearch.oidc.client_id') %>
+<% end %>
+<% opensearch_config.if_p('opensearch.oidc.client_secret') do %>
 # The client secret of the OpenID Connect client
-opensearch_security.openid.client_secret: <%= p('opensearch.oidc.client_secret') %>
+opensearch_security.openid.client_secret: <%= opensearch_config.p('opensearch.oidc.client_secret') %>
+<% end %>
+<% end %>
 
 <% if p('opensearch_dashboards.opensearch.enable_proxy_auth') %>
 opensearch.requestHeadersAllowlist: ["securitytenant","Authorization","x-forwarded-for","x-proxy-user","x-proxy-roles","x-proxy-ext-spaceids","x-proxy-ext-orgids"]
