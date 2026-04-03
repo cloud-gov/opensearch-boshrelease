@@ -113,3 +113,6 @@ properties:
   opensearch_dashboards.multitenancy.tenants.enable_private:
     description: "whether the private tenant is available on OpenSearch Dashboards"
     default: false
+
+  opensearch_dashboards.oidc.redirect:
+   description: redirect for oidc
