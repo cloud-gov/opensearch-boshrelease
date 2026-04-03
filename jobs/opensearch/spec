@@ -51,6 +51,9 @@ provides:
       - opensearch.node.ssl.certificate
       - opensearch.node.ssl.private_key
       - opensearch.dashboard_username
+      - opensearch.oidc.client_id
+      - opensearch.oidc.client_secret
+      - opensearch.oidc.openid_connect_url
 
 consumes:
   - name: opensearch
