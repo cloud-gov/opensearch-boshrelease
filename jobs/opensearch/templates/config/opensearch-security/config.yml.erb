@@ -19,27 +19,6 @@ config:
         remoteIpHeader: "x-forwarded-for"
     <% end %>
     authc:
-    <% if p('opensearch.oidc.enabled') %>
-      oidc_auth_domain:
-        description: "Authenticate users via OpenID Connect (OIDC)"
-        http_enabled: true
-        transport_enabled: true
-        order: 1
-        http_authenticator:
-          type: openid 
-          challenge: false
-          config:
-            openid_connect_url: <%= p('opensearch.oidc.openid_connect_url') %> 
-            subject_key: "preferred_username"
-            roles_key: "roles"
-            openid_connect_idp:
-              client_id: <%= p('opensearch.oidc.client_id') %>
-              client_secret: <%= p('opensearch.oidc.client_secret') %>
-              response_type: "code"
-              scope: "openid profile email"
-        authentication_backend:
-          type: noop
-    <% end %>
       clientcert_auth_domain:
         description: "Authenticate via SSL client certificates"
         http_enabled: true
