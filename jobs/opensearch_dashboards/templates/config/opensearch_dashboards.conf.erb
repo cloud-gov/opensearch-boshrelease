@@ -103,7 +103,7 @@ opensearch.requestTimeout: <%= p('opensearch_dashboards.request_timeout') %>
 opensearch.shardTimeout: <%= p('opensearch_dashboards.shard_timeout') %>
 
 #need this for certs
-opensearch_security.auth.type: ["proxy"]
+opensearch_security.auth.type: ["openid"]
 
 
 <% if_link("opensearch") do |opensearch_config| %>
