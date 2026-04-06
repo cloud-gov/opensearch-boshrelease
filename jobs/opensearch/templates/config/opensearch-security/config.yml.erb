@@ -27,7 +27,7 @@ config:
         order: 0
         http_authenticator:
           type: openid 
-          challenge: true
+          challenge: false
           config:
             openid_connect_url: <%= p('opensearch.oidc.openid_connect_url') %> 
             subject_key: "preferred_username"
@@ -39,7 +39,6 @@ config:
               scope: "openid profile email"
         authentication_backend:
           type: noop
-        skip_on_failure: true 
     <% end %>
       clientcert_auth_domain:
         description: "Authenticate via SSL client certificates"
