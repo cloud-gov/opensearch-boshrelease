@@ -111,6 +111,9 @@ opensearch.requestHeadersAllowlist: ["Authorization","X-Forwarded-User","X-Forwa
 opensearch_security.proxycache.user_header: "X-Forwarded-User"
 opensearch_security.proxycache.roles_header: "X-Forwarded-Groups" %> 
 
+# Remove proxy auth - use basic auth with service account
+opensearch_security.auth.type: "anonymous"
+
 #<% if_link("opensearch") do |opensearch_config| %>
 #<% opensearch_config.if_p('opensearch.oidc.openid_connect_url') do %>
 #opensearch_security.openid.connect_url: <%= opensearch_config.p('opensearch.oidc.openid_connect_url') %>
