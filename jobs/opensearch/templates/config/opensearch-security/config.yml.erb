@@ -20,13 +20,18 @@ config:
     <% end %>
     authc:
       anonymous_auth_domain:
-        description: "Anonymous access for testing"
+        description: "Allow anonymous access"
         http_enabled: true
         transport_enabled: false
         order: 0
         http_authenticator:
-          type: noop
+          type: anonymous
           challenge: false
+          config:
+            anonymous_auth_enabled: true
+            anonymous_username: "anonymous"
+            anonymous_backend_roles: 
+              - "dashboards_user"
         authentication_backend:
           type: noop
       clientcert_auth_domain:
