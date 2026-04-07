@@ -24,7 +24,7 @@ config:
         description: "Authenticate users via OpenID Connect (OIDC)"
         http_enabled: true
         transport_enabled: false
-        order: 0
+        order: 1
         http_authenticator:
           type: openid 
           challenge: false
@@ -40,11 +40,26 @@ config:
         authentication_backend:
           type: noop
     <% end %>
+
+      proxy_auth_domain:
+        description: "Authenticate via proxy"
+        http_enabled: true
+        transport_enabled: false
+        order: 0
+        http_authenticator:
+          type: proxy
+          challenge: false
+          config:
+            user_header: "X-Forwarded-User"
+            roles_header: "X-Forwarded-Groups"
+        authentication_backend:
+          type: noop
+          
       clientcert_auth_domain:
         description: "Authenticate via SSL client certificates"
         http_enabled: true
         transport_enabled: true
-        order: 1
+        order: 2
         http_authenticator:
           type: clientcert
           config:
