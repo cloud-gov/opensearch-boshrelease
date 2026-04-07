@@ -127,7 +127,7 @@ opensearch_security.openid.client_secret: <%= opensearch_config.p('opensearch.oi
 <% end %>
 <% opensearch_config.if_p('opensearch.oidc.redirect_url') do %>
 # The redirect for openid
-opensearch_security.openid.base_redirect_url <%= opensearch_config.p('opensearch.oidc.redirect_url') %>
+opensearch_security.openid.base_redirect_url: <%= opensearch_config.p('opensearch.oidc.redirect_url') %>
 <% end %>
 
 opensearch_security.openid.scope: "openid profile email"
