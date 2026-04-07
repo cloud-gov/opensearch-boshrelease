@@ -54,6 +54,7 @@ provides:
       - opensearch.oidc.client_id
       - opensearch.oidc.client_secret
       - opensearch.oidc.openid_connect_url
+      - opensearch.oidc.redirect_url
 
 consumes:
   - name: opensearch

@@ -125,8 +125,15 @@ opensearch_security.openid.client_id: <%= opensearch_config.p('opensearch.oidc.c
 # The client secret of the OpenID Connect client
 opensearch_security.openid.client_secret: <%= opensearch_config.p('opensearch.oidc.client_secret') %>
 <% end %>
+<% opensearch_config.if_p('opensearch.oidc.redirect_url') do %>
+# The redirect for openid
+opensearch_security.openid.base_redirect_url <%= opensearch_config.p('opensearch.oidc.redirect_url') %>
+<% end %>
+
 opensearch_security.openid.scope: "openid profile email"
 <% end %>
+
+
 
 <% if p('opensearch_dashboards.opensearch.enable_proxy_auth') %>
 opensearch.requestHeadersAllowlist: ["securitytenant","Authorization","x-forwarded-for","x-proxy-user","x-proxy-roles","x-proxy-ext-spaceids","x-proxy-ext-orgids"]
