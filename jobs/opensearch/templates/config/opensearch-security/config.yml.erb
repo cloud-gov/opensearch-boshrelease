@@ -30,7 +30,7 @@ config:
           challenge: false
           config:
             openid_connect_url: <%= p('opensearch.oidc.openid_connect_url') %> 
-            subject_key: "preferred_username"
+            subject_key: "user_name"
             roles_key: "roles"
             openid_connect_idp:
               client_id: <%= p('opensearch.oidc.client_id') %>
