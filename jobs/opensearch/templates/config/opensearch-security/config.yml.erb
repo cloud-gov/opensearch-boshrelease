@@ -19,16 +19,14 @@ config:
         remoteIpHeader: "x-forwarded-for"
     <% end %>
     authc:
-      proxy_auth_domain:
-        description: "Authenticate users from OAuth2 proxy"
+      anonymous_auth_domain:
+        description: "Anonymous access for testing"
         http_enabled: true
         transport_enabled: false
         order: 0
         http_authenticator:
-          type: proxy
+          type: noop
           challenge: false
-          config:
-            user_header: "X-Auth-Request-User"
         authentication_backend:
           type: noop
       clientcert_auth_domain:
