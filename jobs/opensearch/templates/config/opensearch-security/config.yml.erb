@@ -37,6 +37,8 @@ config:
               client_secret: <%= p('opensearch.oidc.client_secret') %>
               response_type: "code"
               scope: "openid profile email"
+              enable_ssl: true
+              verify_hostnames: true
         authentication_backend:
           type: noop
     <% end %>
