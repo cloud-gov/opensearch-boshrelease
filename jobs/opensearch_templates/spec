@@ -53,3 +53,4 @@ properties:
     description: Index settings for app logs
   opensearch_config.platform_index_settings:
     description: Index settings for platform logs
+
