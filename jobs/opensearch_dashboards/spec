@@ -17,6 +17,10 @@ templates:
   config/dashboard-web-crt.erb: config/ssl/dashboard-web.crt
   config/dashboard-web-pem.erb: config/ssl/dashboard-web.pem
   config/ca.erb: config/ssl/opensearch.ca
+  config/oidc-ca.erb: config/ssl/oidc.ca
+  config/oidc-crt.erb: config/ssl/oidc.crt
+  config/oidc-pem.erb: config/ssl/oidc.pem
+
 
 consumes:
   - name: opensearch
@@ -119,3 +123,11 @@ properties:
     default: false
   opensearch_dashboards.oidc.redirect:
     description: redirect for oidc
+
+
+  opensearch_dashboards.oidc.ssl.ca:
+    description: oidc certificate authority 
+  opensearch_dashboards.oidc.ssl.certificate:
+    description: oidc certificate
+  opensearch_dashboards.oidc.ssl.private_key:
+    description: oidc key
