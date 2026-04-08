@@ -209,6 +209,10 @@ opensearch_security.openid.base_redirect_url: <%= opensearch_config.p('opensearc
 # opensearch_security.openid.scope: The OpenID Connect scopes requested from the IdP.
 opensearch_security.openid.scope: "openid profile email"
   <% end %>
+
+  opensearch_security.openid.root_ca: "/var/vcap/jobs/opensearch_dashboards/config/ssl/oidc.ca"
+  opensearch_security.openid.certificate: "/var/vcap/jobs/opensearch_dashboards/config/ssl/oidc.crt"
+  opensearch_security.openid.private_key: "/var/vcap/jobs/opensearch_dashboards/config/ssl/oidc.key"
 <% end %>
 
 <% if p('opensearch_dashboards.opensearch.enable_proxy_auth') %>
