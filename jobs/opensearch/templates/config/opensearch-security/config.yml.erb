@@ -31,12 +31,12 @@ config:
           config:
             openid_connect_url: <%= p('opensearch.oidc.openid_connect_url') %> 
             subject_key: "user_name"
-            roles_key: "roles"
+            roles_key: "scope" 
             openid_connect_idp:
               client_id: <%= p('opensearch.oidc.client_id') %>
               client_secret: <%= p('opensearch.oidc.client_secret') %>
               response_type: "code"
-              scope: "openid profile email roles"
+              scope: "openid profile email roles cloud_controller.admin"
         authentication_backend:
           type: noop
     <% end %>
