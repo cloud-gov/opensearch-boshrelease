@@ -1,0 +1,14 @@
+# NOTE: All parsed data should include @message, @level and @source.component.
+# Otherwise these fields are set from syslog_ fields in teardown script afterwards.
+
+# NOTE: @timestamp for CF components logs is set in opensearch-boshrelease from syslog_timestamp (timestamp set by metron_agent).
+
+# Setup snippet (should precede all other snippets)
+<%= File.read('src/logstash-filters/snippets/setup.conf') %>
+
+##-- Platform
+# (Platform snippet should precede all other platform snippets)
+<%= File.read('src/logstash-filters/snippets/platform.conf') %>
+
+# Teardown snippet (should follow all other snippets)
+<%= File.read('src/logstash-filters/snippets/teardown.conf') %>
