@@ -73,7 +73,12 @@ cat ${JOB_DIR}/config/input_and_output.conf > ${JOB_DIR}/config/logstash.conf
 echo "filter {" >> ${JOB_DIR}/config/logstash.conf
 
 cat ${JOB_DIR}/config/filters_pre.conf >> ${JOB_DIR}/config/logstash.conf
+
+<% if p('logstash_ingestor.ingest_syslog_enabled') == "app" %>
 cat /var/vcap/packages/base-logstash-filters/logstash-filters-default.conf >> ${JOB_DIR}/config/logstash.conf
+<% else %>
+cat /var/vcap/packages/base-logstash-filters/platform-filters-default.conf >> ${JOB_DIR}/config/logstash.conf
+<% end %>
 
 <% if p('logstash_parser.filters').is_a? Array %>
   <% p('logstash_parser.filters').each do |filter| %>
