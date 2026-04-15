@@ -11,6 +11,7 @@ desc "Builds logstash filters"
 task :build => :clean do
   puts "===> Building ..."
   compile_erb 'src/logstash-filters/default.conf.erb', 'target/logstash-filters-default.conf'
+  compile_erb 'src/logstash-filters/platform.conf.erb', 'target/logstash-filters-platform.conf'
   compile_erb 'src/logstash-filters/cluster_monitor.conf.erb', 'target/logstash-filters-monitor.conf'
 
   puts "===> Artifacts:"
