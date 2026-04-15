@@ -96,6 +96,23 @@ output {
         options['routing'] = p('logstash_parser.opensearch.routing')
       end
     %>
+     <% if p("logstash_ingestor.type") == "platform" %>
+        <%= output['plugin'] %> {
+        <% if 'opensearch' == output['plugin'] %>
+            <%
+              options['index'] = p('logstash_parser.opensearch.index')
+              merged_options = options.merge(output['options'])
+            %>
+        <% else %>
+              <%
+                merged_options = output['options']
+              %>
+        <% end %>
+        <% merged_options.each do | k, v | %>
+          <%= k %> => <%= v.inspect %>
+        <% end %>
+        }
+    <% else %>
     if [@index_type] == "app" {
         if [@type] == "app_metric"{
           <%= output['plugin'] %> {
@@ -132,5 +149,6 @@ output {
         }
       }
     }
+    <% end %>
     <% end %>
 }

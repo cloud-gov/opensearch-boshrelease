@@ -110,6 +110,9 @@ properties:
     description: Filters to execute on the ingestors
     default: ""
 
+  logstash_ingestor.type:
+    description: what data is being ingested
+    default: app
   logstash_ingestor.syslog.port:
     description: Port to listen for syslog messages
   logstash_ingestor.syslog.transport:
