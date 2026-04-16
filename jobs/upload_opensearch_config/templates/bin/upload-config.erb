@@ -122,10 +122,6 @@ echo "--- License"
 echo "--- Creating ISM policy"
 
 <% if_link("opensearch") do |opensearch| %>
-<% if opensearch.p('opensearch.deployment_type') == app %>
-
-
-<% if_link("opensearch") do |opensearch| %>
   <% if opensearch.p('opensearch.deployment_type').include?('app') %>
     logs_app_rollover_policy=$(curl -XGET ${CA} ${CERT} ${KEY} ${BASEURL}/_plugins/_ism/policies/logs-app-rollover_policy)
     TERM=$(echo "$logs_app_rollover_policy" | grep -o '"_primary_term":[0-9]*' | sed 's/"_primary_term"://')
