@@ -175,9 +175,9 @@ logstash/logstash-output-opensearch-2.0.2.zip:
   object_id: f15ae09c-ac8c-4dba-51ce-952917dedad6
   sha: sha256:11d471575afb3cf5d6ef26fa112e7c42e38f24d0a02b0a5d9405a5c8d8bb157c
 logstash/logstash-output-opensearch-2.1.1.zip:
-  size: 204800
-  object_id: d996c453-2de6-4438-411d-dacf09c78f40
-  sha: sha256:6aaa1a7ec7ef1cb6dfdb2193c71aab059d5ed6cedd4421a999d13b35e3b9bb5c
+  size: 2310784
+  object_id: c4a5b72b-bfc9-45ff-514e-2af856bab24d
+  sha: sha256:29600be090ec98e70f291c493e5e2ac603e0bc5bad9267809c6ba233ecf8bb55
 logstash/logstash-output-syslog-3.0.5.zip:
   size: 41727
   object_id: 21474ee6-824a-4547-7f45-b236864358ab
