@@ -135,9 +135,9 @@ jq-linux-amd64-1.8.1.tar.gz:
   object_id: fa239437-7080-45f1-6e31-3fa88414b51d
   sha: sha256:bf735e7e23ac7718779966591536a2146b3562349eb2ab85f39724290d9f46a1
 logstash/logstash-9.3.3-linux-x86_64.tar.gz:
-  size: 468154083
-  object_id: 07af9a05-8433-46a5-77e6-e9cc613b5b91
-  sha: sha256:b6a42411e72a4cc7ea0c5336f9cfde18a3e9c814c7d3b19d1c1475b5014b9b0d
+  size: 469560444
+  object_id: 79e10d4a-ee86-400f-4607-14f24259603d
+  sha: sha256:3df43b689c31e81de9e7ca371dae8e9204a88f9872b21991939437db66201aef
 logstash/logstash-filter-alter-3.0.3.zip:
   size: 7655
   object_id: 552763c7-779b-4ac3-5993-04a06d967c93
