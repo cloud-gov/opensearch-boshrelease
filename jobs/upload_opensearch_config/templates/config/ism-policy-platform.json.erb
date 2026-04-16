@@ -1,5 +1,5 @@
 <% if_link("opensearch") do |opensearch| %>
-<% if opensearch.p('opensearch.deployment_type').include?('app') %>
+<% if opensearch.p('opensearch.deployment_type').include?('platform') %>
 {
     "policy": {
         "description": "Rollover to a new index when age or size becomes our target",
@@ -84,7 +84,7 @@
                     {
                         "state_name": "Delete_index",
                         "conditions": {
-                            "min_index_age": "<%= p('opensearch_config.app_delete_index_age')%>"
+                            "min_index_age": "<%= p('opensearch_config.platform_delete_index_age')%>"
                         }
                     }
                 ]
@@ -107,7 +107,7 @@
         "ism_template": [
             {
                 "index_patterns": [
-                    "logs-app-*"
+                    "logs-platform-*"
                 ],
                 "priority": 100
             }

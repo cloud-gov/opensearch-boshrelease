@@ -1,0 +1,27 @@
+<%
+
+require 'json'
+
+{
+    "attributes": {
+        "fieldAttrs": {"@message":{"count":55},"@source.component":{"count":91},"rtr.hostname":{"count":18},"@source.job":{"count":33},"rtr.x_forwarded_for":{"count":26},"@source.host":{"count":24},"rtr.src.host":{"count":5},"source":{"count":2},"rtr.body_bytes_sent":{"count":1},"rtr.response_time_sec":{"count":5},"rtr.status":{"count":19},"rtr.gorouter_time_sec":{"count":1},"@shipper.name":{"count":15},"@input":{"count":4},"@level":{"count":9},"@source.deployment":{"count":44},"@source.director":{"count":2},"@timestamp":{"count":1},"@source.id":{"count":17},"@type":{"count":2},"_type":{"count":2},"rtr.http_user_agent":{"count":37},"rtr.referer":{"count":1},"rtr.app.id":{"count":4},"@raw":{"count":6},"syslog_sd_id":{"count":2},"syslog_sd_params.id":{"count":3},"rtr.path":{"count":6},"@source.type":{"count":1},"tags":{"count":2},"message":{"count":2},"rtr.verb":{"count":1},"syslog_sd_params.group":{"count":1}},
+        "fields": "[]",
+        "runtimeFieldMap": "{}",
+        "timeFieldName": "@timestamp",
+        "title": "logs-platform*",
+        "typeMeta": "{}"
+    },
+    "id": "logs-platform*",
+    "references": []
+}
+
+%>
+{
+  "attributes": {
+    "title": "<%= p('opensearch_config.platform_index_prefix') %>*",
+    "timeFieldName": "@timestamp",
+    "fields": "<%= fields_json.to_json.gsub(//, '').gsub(/"/, '"') %>"
+  },
+  "id": "<%= p('opensearch_config.platform_index_prefix') %>*",
+  "type":"index-pattern"
+}

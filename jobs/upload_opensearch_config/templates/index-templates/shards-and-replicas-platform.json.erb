@@ -1,0 +1,16 @@
+<% if_link("opensearch") do |opensearch| %>
+<% if opensearch.p('opensearch.deployment_type').include?('platform') %>
+{
+  "template": {
+    "settings": {
+      "number_of_shards": <%= p('opensearch_config.platform_shard_count')%>,
+      "number_of_replicas" : <%= p('opensearch_config.platform_replica_shard_count')%>,
+      "routing.allocation.total_shards_per_node": 2,
+      "index.routing.allocation.require.box_type": "hot",
+      "plugins.index_state_management.rollover_alias": "<%= p('opensearch_config.platform_alias')%>",
+      "refresh_interval": "2s"
+    }
+  }
+}
+<% end %>
+<% end %>

@@ -34,6 +34,7 @@ provides:
       - opensearch_dashboards.port
       - opensearch_dashboards.server.ssl.certificate
       - opensearch_dashboards.server.ssl.private_key
+      - opensearch_dashboards.multitenancy.enabled
 
 properties:
   opensearch_dashboards.username:

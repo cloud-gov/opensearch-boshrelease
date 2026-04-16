@@ -31,113 +31,149 @@ if __name__ == "__main__":
     ca =  '<%= job_dir %>/config/ssl/opensearch.ca'
     cert = '<%= job_dir %>/config/ssl/dashboard-web.crt'
     key = '<%= job_dir %>/config/ssl/dashboard-web.key'
-
     logs_url = 'https://<%= p('opensearch_dashboards.host') %>:<%= dashboards_link.p('opensearch_dashboards.port') %>'
-    with open('<%= store_dir %>/org-tenants.txt') as orgs:
-      for tenant in orgs:
-        headers = {
-          'osd-xsrf': 'true',
-          'x-proxy-roles': 'admin',
-          'x-proxy-user': 'admin',
-          'x-forwarded-for': '127.0.0.1',
-          'securitytenant': tenant.strip()
-        }
+    
+    # Check if tenants are enabled
 
+    <% if_link("opensearch_dashboards") do |opensearch_dashboards| %>
+    use_tenants = <%= opensearch_dashboards.p('opensearch_dashboards.multitenancy.enabled') %>
+    <% end %>
+    # Get tenant list or use default
+    if use_tenants:
+        with open('<%= store_dir %>/org-tenants.txt') as orgs:
+            tenant_list = [tenant.strip() for tenant in orgs]
+    else:
+        tenant_list = [None]  # Single iteration without tenant
+    
+    for tenant in tenant_list:
+        # Set headers based on whether we're using tenants
+        if use_tenants and tenant:
+            headers = {
+                'osd-xsrf': 'true',
+                'x-proxy-roles': 'admin',
+                'x-proxy-user': 'admin',
+                'x-forwarded-for': '127.0.0.1',
+                'securitytenant': tenant
+            }
+        else:
+            headers = {
+                'osd-xsrf': 'true',
+                'x-proxy-roles': 'admin',
+                'x-proxy-user': 'admin',
+                'x-forwarded-for': '127.0.0.1'
+            }
+        
+        # Delete dashboards
         for dashboard in delete_list_dashboard:
-          r = session.delete('{}/api/saved_objects/dashboard/{}'.format(
-                logs_url,
-                dashboard
-              ),
-              headers=headers,
-              cert=(cert, key),
-              verify=ca )
-
-          if r.status_code == 200:
-            logging.info(f'delete sucessfully dashboard {dashboard} for tenant {tenant}')
-          else: 
-            logging.info(f'delete failed dashboard {dashboard} for tenant {tenant}')
+            r = session.delete('{}/api/saved_objects/dashboard/{}'.format(
+                  logs_url,
+                  dashboard
+                ),
+                headers=headers,
+                cert=(cert, key),
+                verify=ca )
+            if r.status_code == 200:
+                tenant_msg = f' for tenant {tenant}' if use_tenants and tenant else ''
+                logging.info(f'delete sucessfully dashboard {dashboard}{tenant_msg}')
+            else: 
+                tenant_msg = f' for tenant {tenant}' if use_tenants and tenant else ''
+                logging.info(f'delete failed dashboard {dashboard}{tenant_msg}')
         
+        # Delete visualizations
         for visual in delete_list_visual:
-          r = session.delete('{}/api/saved_objects/visualization/{}'.format(
-                logs_url,
-                visual
-              ),
-              headers=headers,
-              cert=(cert, key),
-              verify=ca )
-
-          if r.status_code == 200:
-            logging.info(f'delete sucessfully visual {visual} for tenant {tenant}')
-          else: 
-            logging.info(f'delete failed visual {visual} for tenant {tenant}')
-
+            r = session.delete('{}/api/saved_objects/visualization/{}'.format(
+                  logs_url,
+                  visual
+                ),
+                headers=headers,
+                cert=(cert, key),
+                verify=ca )
+            if r.status_code == 200:
+                tenant_msg = f' for tenant {tenant}' if use_tenants and tenant else ''
+                logging.info(f'delete sucessfully visual {visual}{tenant_msg}')
+            else: 
+                tenant_msg = f' for tenant {tenant}' if use_tenants and tenant else ''
+                logging.info(f'delete failed visual {visual}{tenant_msg}')
+        
+        # Delete searches
         for search in delete_list_search:
-          r = session.delete('{}/api/saved_objects/search/{}'.format(
-                logs_url,
-                search
+            r = session.delete('{}/api/saved_objects/search/{}'.format(
+                  logs_url,
+                  search
+                ),
+                headers=headers,
+                cert=(cert, key),
+                verify=ca )
+            if r.status_code == 200:
+                tenant_msg = f' for tenant {tenant}' if use_tenants and tenant else ''
+                logging.info(f'delete sucessfully search {search}{tenant_msg}')
+            else: 
+                tenant_msg = f' for tenant {tenant}' if use_tenants and tenant else ''
+                logging.info(f'delete failed search {search}{tenant_msg}')
+        
+        # Upload NDJSON file
+        with open(ndjson_output_path, 'rb') as ndjson_file:
+            ndjson_files= {'file':(ndjson_output_path, ndjson_file, 'application/x-ndjson')}
+            r = session.post(
+              '{}/api/saved_objects/_import?overwrite=true'.format(
+                logs_url
               ),
+              files=ndjson_files,
               headers=headers,
               cert=(cert, key),
-              verify=ca )
-
-          if r.status_code == 200:
-            logging.info(f'delete sucessfully search {search} for tenant {tenant}')
-          else: 
-            logging.info(f'delete failed searcg {search} for tenant {tenant}')
-        
-
-        
-
-        with open(ndjson_output_path, 'rb') as ndjson_file:
-          ndjson_files= {'file':(ndjson_output_path, ndjson_file, 'application/x-ndjson')}
-          r = session.post(
-            '{}/api/saved_objects/_import?overwrite=true'.format(
-              logs_url
-            ),
-            files=ndjson_files,
-            headers=headers,
-            cert=(cert, key),
-            verify=ca
-          )
-          if r.status_code == 200:
-            logging.info(f'NDJSON FILE {ndjson_output_path} uploaded sucessfully for tenant {tenant}')
-          elif r.status_code == 409:
-            put = session.put(
-                  '{}/api/saved_objects/_import?overwrite=true'.format(
-              logs_url
-              ),
-            data=ndjson_file,
-            headers=headers,
-            cert=(cert, key),
-            verify=ca
+              verify=ca
             )
-            if put.status_code == 200:
-                logging.info(f'NDJSON FILE {ndjson_output_path} uploaded sucessfully for tenant {tenant}')
+            tenant_msg = f' for tenant {tenant}' if use_tenants and tenant else ''
+            if r.status_code == 200:
+                logging.info(f'NDJSON FILE {ndjson_output_path} uploaded sucessfully{tenant_msg}')
+            elif r.status_code == 409:
+                put = session.put(
+                      '{}/api/saved_objects/_import?overwrite=true'.format(
+                logs_url
+                ),
+              data=ndjson_file,
+              headers=headers,
+              cert=(cert, key),
+              verify=ca
+              )
+                if put.status_code == 200:
+                    logging.info(f'NDJSON FILE {ndjson_output_path} uploaded sucessfully{tenant_msg}')
+                else:
+                    logging.error(f"Failed to upload file {ndjson_output_path}, status code: {put.status_code}")
+                    try:
+                       error_response = put.json()
+                       logging.error(f"Error details: {error_response}")
+                    except ValueError:
+                       logging.error(f"raw response: {put.text}")
+                    logging.info(f'Failed to upload NDJSON FILE {ndjson_output_path}')
             else:
-                logging.error(f"Failed to upload file {ndjson_output_path}, status code: {put.status_code}")
+                logging.error(f"Failed to upload file {ndjson_output_path}, status code: {r.status_code}")
                 try:
-                   error_response = put.json()
-                   logging.error(f"Error detils: {error_response}")
+                    error_response = r.json()
+                    logging.error(f"Error details: {error_response}")
                 except ValueError:
-                   logging.error(f"raw response: {put.text}")
+                    logging.error(f"raw response: {r.text}")
                 logging.info(f'Failed to upload NDJSON FILE {ndjson_output_path}')
-          else:
-              logging.error(f"Failed to upload file {ndjson_output_path}, status code: {r.status_code}")
-              try:
-                  error_response = r.json()
-                  logging.error(f"Error detils: {error_response}")
-              except ValueError:
-                  logging.error(f"raw response: {r.text}")
-              logging.info(f'Failed to upload NDJSON FILE {ndjson_output_path}')
-
-        index_headers = {
-          'content-type': 'application/json',
-          'osd-xsrf': 'true',
-          'x-proxy-roles': 'admin',
-          'x-proxy-user': 'admin',
-          'x-forwarded-for': '127.0.0.1',
-          'securitytenant': tenant.strip(),
-        }
+        
+        # Set default index
+        if use_tenants and tenant:
+            index_headers = {
+                'content-type': 'application/json',
+                'osd-xsrf': 'true',
+                'x-proxy-roles': 'admin',
+                'x-proxy-user': 'admin',
+                'x-forwarded-for': '127.0.0.1',
+                'securitytenant': tenant,
+            }
+        else:
+            index_headers = {
+                'content-type': 'application/json',
+                'osd-xsrf': 'true',
+                'x-proxy-roles': 'admin',
+                'x-proxy-user': 'admin',
+                'x-forwarded-for': '127.0.0.1',
+            }
+        
         r = session.post(
           '{}/api/opensearch-dashboards/settings'.format(logs_url),
           data='{"changes":{"defaultIndex":"<%= p('dashboards_objects.default_index') %>", "timeline:es.default_index": "<%= p('dashboards_objects.default_index') %>"}}',

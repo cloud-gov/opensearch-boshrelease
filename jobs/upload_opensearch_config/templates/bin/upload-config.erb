@@ -11,6 +11,7 @@ document_size = p("opensearch_config.rollover_document_size")
 index_age = p("opensearch_config.rollover_index_age")
 aliases = p("opensearch_config.alias")
 metric_aliases = p("opensearch_config.metric_alias")
+platform_aliases = p("opensearch_config.platform_alias")
 %>
 
 # Delete existing templates before uploading
@@ -23,6 +24,7 @@ DOCUMENT_SIZE=<%= document_size %>
 INDEX_AGE=<%= index_age %>
 ALIAS=<%= aliases %>
 METRIC_ALIAS=<%= metric_aliases %>
+PLATFORM_ALIAS=<%= platform_aliases %>
 
 
 for template in $(curl -s ${CA} ${CERT} ${KEY} ${URL}/_cat/templates | awk '{print $1}'); do
@@ -119,34 +121,54 @@ echo "--- License"
 
 echo "--- Creating ISM policy"
 
-logs_app_rollover_policy=$(curl -XGET ${CA} ${CERT} ${KEY} ${BASEURL}/_plugins/_ism/policies/logs-app-rollover_policy)
-TERM=$(echo "$logs_app_rollover_policy" | grep -o '"_primary_term":[0-9]*' | sed 's/"_primary_term"://')
-SEQ=$(echo "$logs_app_rollover_policy" | grep -o '"_seq_no":[0-9]*' | sed 's/"_seq_no"://')
-if [[ -n "$TERM" ]]; then
-  curl -XPUT ${CA} ${CERT} ${KEY} "${BASEURL}/_plugins/_ism/policies/logs-app-rollover_policy?if_seq_no=${SEQ}&if_primary_term=${TERM}" -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy.json
-else
-  curl -XPUT ${CA} ${CERT} ${KEY} ${BASEURL}/_plugins/_ism/policies/logs-app-rollover_policy -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy.json
-fi
+<% if_link("opensearch") do |opensearch| %>
+<% if opensearch.p('opensearch.deployment_type') == app %>
 
-HTTP_CODE=$(curl -s -o /dev/null -s -w "%{http_code}\n" -I  ${CA} ${CERT} ${KEY} ${BASEURL}/_alias/${ALIAS}/ )
-if [ "$HTTP_CODE" -ge "201" ]; then
-  curl -XPUT ${CA} ${CERT} ${KEY} ${BASEURL}/%3Clogs-app-%7Bnow%2Fd%7D-01%3E -H 'Content-Type: application/json' -d'{"aliases": {"'${ALIAS}'": {}}}'
-fi
 
-logs_metric_rollover_policy=$(curl -XGET ${CA} ${CERT} ${KEY} ${BASEURL}/_plugins/_ism/policies/logs-metric-rollover_policy)
-TERM=$(echo "$logs_metric_rollover_policy" | grep -o '"_primary_term":[0-9]*' | sed 's/"_primary_term"://')
-SEQ=$(echo "$logs_metric_rollover_policy" | grep -o '"_seq_no":[0-9]*' | sed 's/"_seq_no"://')
-if [[ -n "$TERM" ]]; then
-  curl -XPUT ${CA} ${CERT} ${KEY} "${BASEURL}/_plugins/_ism/policies/logs-metric-rollover_policy?if_seq_no=${SEQ}&if_primary_term=${TERM}" -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy-metrics.json
-else
-  curl -XPUT ${CA} ${CERT} ${KEY} ${BASEURL}/_plugins/_ism/policies/logs-metric-rollover_policy -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy-metrics.json
-fi
-
-HTTP_CODE=$(curl -s -o /dev/null -s -w "%{http_code}\n" -I  ${CA} ${CERT} ${KEY} ${BASEURL}/_alias/${METRIC_ALIAS}/ )
-if [ "$HTTP_CODE" -ge "201" ]; then
-  curl -XPUT ${CA} ${CERT} ${KEY} ${BASEURL}/%3Clogs-metrics-%7Bnow%2Fd%7D-01%3E -H 'Content-Type: application/json' -d'{"aliases": {"'${METRIC_ALIAS}'": {}}}'
-fi
-
+<% if_link("opensearch") do |opensearch| %>
+  <% if opensearch.p('opensearch.deployment_type').include?('app') %>
+    logs_app_rollover_policy=$(curl -XGET ${CA} ${CERT} ${KEY} ${BASEURL}/_plugins/_ism/policies/logs-app-rollover_policy)
+    TERM=$(echo "$logs_app_rollover_policy" | grep -o '"_primary_term":[0-9]*' | sed 's/"_primary_term"://')
+    SEQ=$(echo "$logs_app_rollover_policy" | grep -o '"_seq_no":[0-9]*' | sed 's/"_seq_no"://')
+    if [[ -n "$TERM" ]]; then
+      curl -XPUT ${CA} ${CERT} ${KEY} "${BASEURL}/_plugins/_ism/policies/logs-app-rollover_policy?if_seq_no=${SEQ}&if_primary_term=${TERM}" -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy.json
+    else
+      curl -XPUT ${CA} ${CERT} ${KEY} ${BASEURL}/_plugins/_ism/policies/logs-app-rollover_policy -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy.json
+    fi
+    HTTP_CODE=$(curl -s -o /dev/null -s -w "%{http_code}\n" -I  ${CA} ${CERT} ${KEY} ${BASEURL}/_alias/${ALIAS}/ )
+    if [ "$HTTP_CODE" -ge "201" ]; then
+      curl -XPUT ${CA} ${CERT} ${KEY} ${BASEURL}/%3Clogs-app-%7Bnow%2Fd%7D-01%3E -H 'Content-Type: application/json' -d'{"aliases": {"'${ALIAS}'": {}}}'
+    fi
+  <% end %>
+  <% if opensearch.p('opensearch.deployment_type').include?('metric') %>
+    logs_metric_rollover_policy=$(curl -XGET ${CA} ${CERT} ${KEY} ${BASEURL}/_plugins/_ism/policies/logs-metric-rollover_policy)
+    TERM=$(echo "$logs_metric_rollover_policy" | grep -o '"_primary_term":[0-9]*' | sed 's/"_primary_term"://')
+    SEQ=$(echo "$logs_metric_rollover_policy" | grep -o '"_seq_no":[0-9]*' | sed 's/"_seq_no"://')
+    if [[ -n "$TERM" ]]; then
+      curl -XPUT ${CA} ${CERT} ${KEY} "${BASEURL}/_plugins/_ism/policies/logs-metric-rollover_policy?if_seq_no=${SEQ}&if_primary_term=${TERM}" -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy-metrics.json
+    else
+      curl -XPUT ${CA} ${CERT} ${KEY} ${BASEURL}/_plugins/_ism/policies/logs-metric-rollover_policy -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy-metrics.json
+    fi
+    HTTP_CODE=$(curl -s -o /dev/null -s -w "%{http_code}\n" -I  ${CA} ${CERT} ${KEY} ${BASEURL}/_alias/${METRIC_ALIAS}/ )
+    if [ "$HTTP_CODE" -ge "201" ]; then
+      curl -XPUT ${CA} ${CERT} ${KEY} ${BASEURL}/%3Clogs-metrics-%7Bnow%2Fd%7D-01%3E -H 'Content-Type: application/json' -d'{"aliases": {"'${METRIC_ALIAS}'": {}}}'
+    fi
+  <% end %>
+  <% if opensearch.p('opensearch.deployment_type').include?('platform') %>
+    logs_platform_rollover_policy=$(curl -XGET ${CA} ${CERT} ${KEY} ${BASEURL}/_plugins/_ism/policies/logs-platform-rollover_policy)
+    TERM=$(echo "$logs_platform_rollover_policy" | grep -o '"_primary_term":[0-9]*' | sed 's/"_primary_term"://')
+    SEQ=$(echo "$logs_platform_rollover_policy" | grep -o '"_seq_no":[0-9]*' | sed 's/"_seq_no"://')
+    if [[ -n "$TERM" ]]; then
+      curl -XPUT ${CA} ${CERT} ${KEY} "${BASEURL}/_plugins/_ism/policies/logs-platform-rollover_policy?if_seq_no=${SEQ}&if_primary_term=${TERM}" -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy-platform.json
+    else
+      curl -XPUT ${CA} ${CERT} ${KEY} ${BASEURL}/_plugins/_ism/policies/logs-platform-rollover_policy -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy-platform.json
+    fi
+    HTTP_CODE=$(curl -s -o /dev/null -s -w "%{http_code}\n" -I  ${CA} ${CERT} ${KEY} ${BASEURL}/_alias/${PLATFORM_ALIAS}/ )
+    if [ "$HTTP_CODE" -ge "201" ]; then
+      curl -XPUT ${CA} ${CERT} ${KEY} ${BASEURL}/%3Clogs-platform-%7Bnow%2Fd%7D-01%3E -H 'Content-Type: application/json' -d'{"aliases": {"'${PLATFORM_ALIAS}'": {}}}'
+    fi
+  <% end %>
+<% end %>
 
 echo "--- Creating Reporting indexs"
 

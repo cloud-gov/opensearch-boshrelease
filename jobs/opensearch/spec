@@ -55,6 +55,7 @@ provides:
       - opensearch.oidc.client_secret
       - opensearch.oidc.openid_connect_url
       - opensearch.oidc.redirect_url
+      - opensearch.deployment_type
 
 consumes:
   - name: opensearch
@@ -229,3 +230,7 @@ properties:
     description: default password for keystore
   opensearch.notifications.secrets_prefix:
     description: Prefix for name of secrets containing credentials for OpenSearch notifications email senders
+
+  opensearch.deployment_type:
+    description: type of opensearch deployment
+    default: app
