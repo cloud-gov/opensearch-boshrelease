@@ -52,7 +52,7 @@ templates:
   dashboards-objects/app/search/app-http.json.erb: dashboards-objects/app/search/app-http.json
   dashboards-objects/app/search/app-rtr.json.erb: dashboards-objects/app/search/app-rtr.json
   dashboards-objects/app/search/app-rtr-long-response.json.erb: dashboards-objects/app/search/app-rtr-long-response.json
-  dashboards-objects/app/search/app-value-metric.json.erb: dashboards-objects/app/search/app-value-metric.json
+  dashboards-objects/metric/search/app-value-metric.json.erb: dashboards-objects/metric/search/app-value-metric.json
   dashboards-objects/app/search/audit-logs.json.erb: dashboards-objects/app/search/audit-logs.json
   dashboards-objects/metric/search/services-domainsearch.json.erb: dashboards-objects/metric/search/services-domainsearch.json
   dashboards-objects/metric/search/services-rdssearch.json.erb: dashboards-objects/metric/search/services-rdssearch.json
