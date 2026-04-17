@@ -1,27 +1,450 @@
 <%
-
 require 'json'
-
-{
-    "attributes": {
-        "fieldAttrs": {"@message":{"count":55},"@source.component":{"count":91},"rtr.hostname":{"count":18},"@source.job":{"count":33},"rtr.x_forwarded_for":{"count":26},"@source.host":{"count":24},"rtr.src.host":{"count":5},"source":{"count":2},"rtr.body_bytes_sent":{"count":1},"rtr.response_time_sec":{"count":5},"rtr.status":{"count":19},"rtr.gorouter_time_sec":{"count":1},"@shipper.name":{"count":15},"@input":{"count":4},"@level":{"count":9},"@source.deployment":{"count":44},"@source.director":{"count":2},"@timestamp":{"count":1},"@source.id":{"count":17},"@type":{"count":2},"_type":{"count":2},"rtr.http_user_agent":{"count":37},"rtr.referer":{"count":1},"rtr.app.id":{"count":4},"@raw":{"count":6},"syslog_sd_id":{"count":2},"syslog_sd_params.id":{"count":3},"rtr.path":{"count":6},"@source.type":{"count":1},"tags":{"count":2},"message":{"count":2},"rtr.verb":{"count":1},"syslog_sd_params.group":{"count":1}},
-        "fields": "[]",
-        "runtimeFieldMap": "{}",
-        "timeFieldName": "@timestamp",
-        "title": "logs-platform*",
-        "typeMeta": "{}"
-    },
-    "id": "logs-platform*",
-    "references": []
-}
-
+fields_json =
+    [
+            {
+                "count": 0,
+                "name": "@index_type",
+                "type": "string",
+                "esTypes": [
+                    "keyword"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "@input",
+                "type": "string",
+                "esTypes": [
+                    "keyword"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "@level",
+                "type": "string",
+                "esTypes": [
+                    "keyword"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "@message",
+                "type": "string",
+                "esTypes": [
+                    "text"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": false,
+                "readFromDocValues": false
+            },
+            {
+                "count": 0,
+                "name": "@message.raw",
+                "type": "string",
+                "esTypes": [
+                    "keyword"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true,
+                "subType": {
+                    "multi": {
+                        "parent": "@message"
+                    }
+                }
+            },
+            {
+                "count": 0,
+                "name": "@raw",
+                "type": "string",
+                "esTypes": [
+                    "text"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": false,
+                "readFromDocValues": false
+            },
+            {
+                "count": 0,
+                "name": "@shipper.name",
+                "type": "string",
+                "esTypes": [
+                    "keyword"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "@shipper.priority",
+                "type": "number",
+                "esTypes": [
+                    "long"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "@source.az",
+                "type": "string",
+                "esTypes": [
+                    "keyword"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "@source.component",
+                "type": "string",
+                "esTypes": [
+                    "keyword"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "@source.deployment",
+                "type": "string",
+                "esTypes": [
+                    "keyword"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "@source.director",
+                "type": "string",
+                "esTypes": [
+                    "keyword"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "@source.host",
+                "type": "string",
+                "esTypes": [
+                    "keyword"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "@source.id",
+                "type": "string",
+                "esTypes": [
+                    "keyword"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "@source.index",
+                "type": "number",
+                "esTypes": [
+                    "long"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "@source.job",
+                "type": "string",
+                "esTypes": [
+                    "keyword"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "@source.job_index",
+                "type": "string",
+                "esTypes": [
+                    "keyword"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "@source.origin",
+                "type": "string",
+                "esTypes": [
+                    "keyword"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "@source.type",
+                "type": "string",
+                "esTypes": [
+                    "keyword"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "@source.vm",
+                "type": "string",
+                "esTypes": [
+                    "keyword"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "@timestamp",
+                "type": "date",
+                "esTypes": [
+                    "date"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "@type",
+                "type": "string",
+                "esTypes": [
+                    "keyword"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "@version",
+                "type": "string",
+                "esTypes": [
+                    "keyword"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "_id",
+                "type": "string",
+                "esTypes": [
+                    "_id"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": false
+            },
+            {
+                "count": 0,
+                "name": "_index",
+                "type": "string",
+                "esTypes": [
+                    "_index"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": false
+            },
+            {
+                "count": 0,
+                "name": "_score",
+                "type": "number",
+                "scripted": false,
+                "searchable": false,
+                "aggregatable": false,
+                "readFromDocValues": false
+            },
+            {
+                "count": 0,
+                "name": "_source",
+                "type": "_source",
+                "esTypes": [
+                    "_source"
+                ],
+                "scripted": false,
+                "searchable": false,
+                "aggregatable": false,
+                "readFromDocValues": false
+            },
+            {
+                "count": 0,
+                "name": "_type",
+                "type": "string",
+                "scripted": false,
+                "searchable": false,
+                "aggregatable": false,
+                "readFromDocValues": false
+            },
+            {
+                "count": 0,
+                "name": "geoip.location",
+                "type": "geo_point",
+                "esTypes": [
+                    "geo_point"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "syslog_msgid",
+                "type": "string",
+                "esTypes": [
+                    "keyword"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "syslog_procid",
+                "type": "string",
+                "esTypes": [
+                    "keyword"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "syslog_sd_params.az",
+                "type": "string",
+                "esTypes": [
+                    "keyword"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "syslog_sd_params.deployment",
+                "type": "string",
+                "esTypes": [
+                    "keyword"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "syslog_sd_params.group",
+                "type": "string",
+                "esTypes": [
+                    "keyword"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "syslog_sd_params.id",
+                "type": "string",
+                "esTypes": [
+                    "keyword"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            },
+            {
+                "count": 0,
+                "name": "tags",
+                "type": "string",
+                "esTypes": [
+                    "keyword"
+                ],
+                "scripted": false,
+                "searchable": true,
+                "aggregatable": true,
+                "readFromDocValues": true
+            }
+        ]
 %>
 {
-  "attributes": {
-    "title": "<%= p('opensearch_config.platform_index_prefix') %>*",
-    "timeFieldName": "@timestamp",
-    "fields": "<%= fields_json.to_json.gsub(//, '').gsub(/"/, '"') %>"
-  },
-  "id": "<%= p('opensearch_config.platform_index_prefix') %>*",
-  "type":"index-pattern"
+    "attributes": {
+        "fields": "<%= fields_json.to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"') %>",
+        "timeFieldName": "@timestamp",
+        "title": "logs-platform-*"
+    },
+    "id": "logs-platform-*",
+    "migrationVersion": {
+        "index-pattern": "7.6.0"
+    },
+    "references": [],
+    "type": "index-pattern",
 }
