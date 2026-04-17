@@ -1,58 +1,24 @@
-<% require 'json' %>
 {
-  "attributes": {
-    "title": "Platform: errors count by source component (top 5)",
-    "visState": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
-      {
-        "type": "pie",
-        "params": {
-          "shareYAxis": true,
-          "addTooltip": true,
-          "addLegend": true,
-          "isDonut": false
+    "attributes": {
+        "description": "",
+        "kibanaSavedObjectMeta": {
+            "searchSourceJSON": "{\"filter\":[]}"
         },
-        "aggs": [
-          {
-            "id": "1",
-            "type": "count",
-            "schema": "metric",
-            "params": {}
-          },
-          {
-            "id": "2",
-            "type": "terms",
-            "schema": "segment",
-            "params": {
-              "field": "@source.component",
-              "size": 5,
-              "order": "desc",
-              "orderBy": "1"
-            }
-          }
-        ],
-        "listeners": {}
-      }
-ENDOFFJSON
-  %>",
-    "description": "",
-    "savedSearchRefName": "search_0",
-    "version": 1,
-    "kibanaSavedObjectMeta": {
-      "searchSourceJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
-      {
-        "filter": [
-
-        ]
-      }
-ENDOFFJSON
-  %>"
-    }
-  },
-  "references": [
-    {
-      "id": "platform-all-errors",
-      "name": "search_0",
-      "type": "search"
-    }
-  ]
+        "savedSearchRefName": "search_0",
+        "title": "Platform: errors count by source component (top 5)",
+        "version": 1,
+        "visState": "{\"type\":\"pie\",\"params\":{\"shareYAxis\":true,\"addTooltip\":true,\"addLegend\":true,\"isDonut\":false},\"aggs\":[{\"id\":\"1\",\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"type\":\"terms\",\"schema\":\"segment\",\"params\":{\"field\":\"@source.component\",\"size\":5,\"order\":\"desc\",\"orderBy\":\"1\"}}],\"listeners\":{}}"
+    },
+    "id": "Platform-errors-count-by-source-component-(top-5)-visualization",
+    "migrationVersion": {
+        "visualization": "7.9.3"
+    },
+    "references": [
+        {
+            "id": "platform-all-errors-search",
+            "name": "search_0",
+            "type": "search"
+        }
+    ],
+    "type": "visualization"
 }

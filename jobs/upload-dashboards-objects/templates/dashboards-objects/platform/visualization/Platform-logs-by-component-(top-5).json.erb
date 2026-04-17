@@ -1,76 +1,24 @@
-<% require 'json' %>
 {
-  "attributes": {
-    "title": "Platform: logs by component (top 5)",
-    "visState": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
-      {
-        "type": "histogram",
-        "params": {
-          "shareYAxis": true,
-          "addTooltip": true,
-          "addLegend": true,
-          "scale": "linear",
-          "mode": "stacked",
-          "times": [],
-          "addTimeMarker": false,
-          "defaultYExtents": false,
-          "setYExtents": false,
-          "yAxis": {}
+    "attributes": {
+        "description": "",
+        "kibanaSavedObjectMeta": {
+            "searchSourceJSON": "{\"filter\":[]}"
         },
-        "aggs": [
-          {
-            "id": "1",
-            "type": "count",
-            "schema": "metric",
-            "params": {}
-          },
-          {
-            "id": "2",
-            "type": "date_histogram",
-            "schema": "segment",
-            "params": {
-              "field": "@timestamp",
-              "interval": "auto",
-              "customInterval": "2h",
-              "min_doc_count": 1,
-              "extended_bounds": {}
-            }
-          },
-          {
-            "id": "3",
-            "type": "terms",
-            "schema": "group",
-            "params": {
-              "field": "@source.component",
-              "size": 5,
-              "order": "desc",
-              "orderBy": "1"
-            }
-          }
-        ],
-        "listeners": {}
-      }
-ENDOFFJSON
-  %>",
-    "description": "",
-    "savedSearchRefName": "search_0",
-    "version": 1,
-    "kibanaSavedObjectMeta": {
-      "searchSourceJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
-      {
-        "filter": [
-
-        ]
-      }
-ENDOFFJSON
-  %>"
-    }
-  },
-  "references": [
-    {
-      "id": "platform-all",
-      "name": "search_0",
-      "type": "search"
-    }
-  ]
+        "savedSearchRefName": "search_0",
+        "title": "Platform: logs by component (top 5)",
+        "version": 1,
+        "visState": "{\"type\":\"histogram\",\"params\":{\"shareYAxis\":true,\"addTooltip\":true,\"addLegend\":true,\"scale\":\"linear\",\"mode\":\"stacked\",\"times\":[],\"addTimeMarker\":false,\"defaultYExtents\":false,\"setYExtents\":false,\"yAxis\":{}},\"aggs\":[{\"id\":\"1\",\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"type\":\"date_histogram\",\"schema\":\"segment\",\"params\":{\"field\":\"@timestamp\",\"interval\":\"auto\",\"customInterval\":\"2h\",\"min_doc_count\":1,\"extended_bounds\":{}}},{\"id\":\"3\",\"type\":\"terms\",\"schema\":\"group\",\"params\":{\"field\":\"@source.component\",\"size\":5,\"order\":\"desc\",\"orderBy\":\"1\"}}],\"listeners\":{}}"
+    },
+    "id": "Platform-logs-by-component-(top-5)-visualization",
+    "migrationVersion": {
+        "visualization": "7.9.3"
+    },
+    "references": [
+        {
+            "id": "platform-all-search",
+            "name": "search_0",
+            "type": "search"
+        }
+    ],
+    "type": "visualization"
 }

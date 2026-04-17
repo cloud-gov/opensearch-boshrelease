@@ -1,0 +1,29 @@
+{
+    "attributes": {
+        "columns": [
+            "@source.type",
+            "@type",
+            "@source.job",
+            "@source.component",
+            "@level",
+            "@message"
+        ],
+        "description": "",
+        "hits": 0,
+        "kibanaSavedObjectMeta": {
+            "searchSourceJSON": "{\"index\":\"*\",\"filter\":[],\"highlight\":{\"pre_tags\":[\"@kibana-highlighted-field@\"],\"post_tags\":[\"@/kibana-highlighted-field@\"],\"fields\":{\"*\":{}},\"require_field_match\":false,\"fragment_size\":2147483647},\"query\":{\"query_string\":{\"analyze_wildcard\":true,\"query\":\"*\"}}}"
+        },
+        "sort": [
+            "@timestamp",
+            "desc"
+        ],
+        "title": "[platform] All Overview",
+        "version": 1
+    },
+    "id": "platform-all-overview-search",
+    "migrationVersion": {
+        "search": "7.9.3"
+    },
+    "references": [],
+    "type": "search"
+}

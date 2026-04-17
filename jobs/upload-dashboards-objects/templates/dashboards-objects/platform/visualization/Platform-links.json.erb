@@ -1,35 +1,17 @@
-<% require 'json' %>
 {
-  "attributes": {
-    "title": "Platform links",
-    "visState": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
-      {
-        "type": "markdown",
-        "params": {
-          "markdown": "This is overview of Platform logs. Find some more useful dashboards:  [errors](#/dashboard/Platform-Errors) | [logs](#/dashboard/Platform-Logs) | [uaa audit](#/dashboard/Platform-UAA-Audit) | [haproxy](#/dashboard/Platform-Haproxy)"
+    "attributes": {
+        "description": "",
+        "kibanaSavedObjectMeta": {
+            "searchSourceJSON": "{\"query\":{\"query_string\":{\"query\":\"*\",\"analyze_wildcard\":true}},\"filter\":[]}"
         },
-        "aggs": [],
-        "listeners": {}
-      }
-ENDOFFJSON
-  %>",
-    "description": "",
-    "version": 1,
-    "kibanaSavedObjectMeta": {
-      "searchSourceJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
-      {
-        "query": {
-          "query_string": {
-            "query": "*",
-            "analyze_wildcard": true
-          }
-        },
-        "filter": [
-
-        ]
-      }
-ENDOFFJSON
-  %>"
-    }
-  }
+        "title": "Platform links",
+        "version": 1,
+        "visState": "{\"type\":\"markdown\",\"params\":{\"markdown\":\"This is overview of Platform logs. Find some more useful dashboards:  [errors](#/dashboard/Platform-Errors) | [logs](#/dashboard/Platform-Logs) | [uaa audit](#/dashboard/Platform-UAA-Audit) | [haproxy](#/dashboard/Platform-Haproxy)\"},\"aggs\":[],\"listeners\":{}}"
+    },
+    "id": "Platform-links-visualization",
+    "migrationVersion": {
+        "visualization": "7.9.3"
+    },
+    "references": [],
+    "type": "visualization"
 }

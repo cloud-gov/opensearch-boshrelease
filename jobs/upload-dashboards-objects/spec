@@ -34,33 +34,47 @@ templates:
   config/ssl/dashboard-web-pem.erb: config/ssl/dashboard-web.pem
   config/ssl/ca.erb: config/ssl/opensearch.ca
 
-    # OpenSearch Dashboards objects (defaults).
+  # OpenSearch Dashboards objects (defaults).
+
+  # Index Patterns
   dashboards-objects/app/index-pattern/logs-app.json.erb: dashboards-objects/app/index-pattern/logs-app*.json
   dashboards-objects/metric/index-pattern/logs-metric.json.erb: dashboards-objects/metric/index-pattern/logs-metric*.json
   dashboards-objects/platform/index-pattern/logs-platform.json.erb: dashboards-objects/platform/index_pattern/logs-platform.json
 
+  # Search Objects
+  ## App Search
   dashboards-objects/app/search/app-all.json.erb: dashboards-objects/app/search/app-all.json
   dashboards-objects/app/search/app-all-messages.json.erb: dashboards-objects/app/search/app-all-messages.json
   dashboards-objects/app/search/app-all-errors.json.erb: dashboards-objects/app/search/app-all-errors.json
   dashboards-objects/app/search/app-all-overview.json.erb: dashboards-objects/app/search/app-all-overview.json
   dashboards-objects/app/search/app-logs.json.erb: dashboards-objects/app/search/app-logs.json
   dashboards-objects/app/search/app-logs-errors.json.erb: dashboards-objects/app/search/app-logs-errors.json
-  dashboards-objects/metric/search/app-container-metric.json.erb: dashboards-objects/metric/search/app-container-metric.json
-  dashboards-objects/metric/search/app-container-metric-cpu.json.erb: dashboards-objects/metric/search/app-container-metric-cpu.json
-  dashboards-objects/metric/search/app-container-metric-disk.json.erb: dashboards-objects/metric/search/app-container-metric-disk.json
-  dashboards-objects/metric/search/app-container-metric-memory.json.erb: dashboards-objects/metric/search/app-container-metric-memory.json
   dashboards-objects/app/search/app-counter.json.erb: dashboards-objects/app/search/app-counter.json
   dashboards-objects/app/search/app-http.json.erb: dashboards-objects/app/search/app-http.json
   dashboards-objects/app/search/app-rtr.json.erb: dashboards-objects/app/search/app-rtr.json
   dashboards-objects/app/search/app-rtr-long-response.json.erb: dashboards-objects/app/search/app-rtr-long-response.json
-  dashboards-objects/metric/search/app-value-metric.json.erb: dashboards-objects/metric/search/app-value-metric.json
   dashboards-objects/app/search/audit-logs.json.erb: dashboards-objects/app/search/audit-logs.json
+  # dashboards-objects/app/search/falco-search.json.erb: dashboards-objects/app/search/falco-search.json
+
+  ## Metric Search
+  dashboards-objects/metric/search/app-container-metric.json.erb: dashboards-objects/metric/search/app-container-metric.json
+  dashboards-objects/metric/search/app-container-metric-cpu.json.erb: dashboards-objects/metric/search/app-container-metric-cpu.json
+  dashboards-objects/metric/search/app-container-metric-disk.json.erb: dashboards-objects/metric/search/app-container-metric-disk.json
+  dashboards-objects/metric/search/app-container-metric-memory.json.erb: dashboards-objects/metric/search/app-container-metric-memory.json
+  dashboards-objects/metric/search/app-value-metric.json.erb: dashboards-objects/metric/search/app-value-metric.json
   dashboards-objects/metric/search/services-domainsearch.json.erb: dashboards-objects/metric/search/services-domainsearch.json
   dashboards-objects/metric/search/services-rdssearch.json.erb: dashboards-objects/metric/search/services-rdssearch.json
   dashboards-objects/metric/search/services-s3search.json.erb: dashboards-objects/metric/search/services-s3search.json
   dashboards-objects/metric/search/services-elasticcache.json.erb: dashboards-objects/metric/search/services-elasticcache.json
-  # dashboards-objects/app/search/falco-search.json.erb: dashboards-objects/app/search/falco-search.json
-  
+
+  ## Platform Search
+  dashboards-objects/platform/search/platform-all-errors.json.erb: dashboards-objects/platform/search/platform-all-errors.json
+  dashboards-objects/platform/search/platform-all-overview.json.erb: dashboards-objects/platform/search/platform-all-overview.json
+  dashboards-objects/platform/search/platform-all.json.erb: dashboards-objects/platform/search/platform-all.json
+  dashboards-objects/platform/search/platform-uaa-audit.json.erb: dashboards-objects/platform/search/platform-uaa-audit.json
+
+  # Dashboard Objects
+  ## App Dashboards
   dashboards-objects/app/dashboard/App-Errors.json.erb: dashboards-objects/app/dashboard/App-Errors.json
   dashboards-objects/app/dashboard/App-Location.json.erb: dashboards-objects/app/dashboard/App-Location.json
   dashboards-objects/app/dashboard/App-Logs.json.erb: dashboards-objects/app/dashboard/App-Logs.json
@@ -68,12 +82,22 @@ templates:
   dashboards-objects/app/dashboard/App-Overview.json.erb: dashboards-objects/app/dashboard/App-Overview.json
   dashboards-objects/app/dashboard/App-Performance.json.erb: dashboards-objects/app/dashboard/App-Performance.json
   dashboards-objects/app/dashboard/Audit-Overview.json.erb: dashboards-objects/app/dashboard/Audit-Overview.json
+  # dashboards-objects/app/dashboard/Falco-Overview.json.erb: dashboards-objects/app/dashboard/Falco-Overview.json
+
+  ## Metric Dashboards
   dashboards-objects/metric/dashboard/Services-DomainSearch.json.erb: dashboards-objects/metric/dashboard/Services-DomainSearch.json
   dashboards-objects/metric/dashboard/Services-RDS.json.erb: dashboards-objects/metric/dashboard/Services-RDS.json
   dashboards-objects/metric/dashboard/Services-S3.json.erb: dashboards-objects/metric/dashboard/Services-S3.json
   dashboards-objects/metric/dashboard/Services-ElasticCache.json.erb: dashboards-objects/metric/dashboard/Services-ElasticCache.json
-  # dashboards-objects/app/dashboard/Falco-Overview.json.erb: dashboards-objects/app/dashboard/Falco-Overview.json
 
+  ## Platform Dashboards
+  dashboards-objects/platform/dashboard/Platform-Errors.json.erb: dashboards-objects/platform/dashboard/Platform-Errors.json
+  dashboards-objects/platform/dashboard/Platform-Logs.json.erb: dashboards-objects/platform/dashboard/Platform-Logs.json
+  dashboards-objects/platform/dashboard/Platform-Overview.json.erb: dashboards-objects/platform/dashboard/Platform-Overview.json
+  dashboards-objects/platform/dashboard/Platform-UAA-Audit.json.erb: dashboards-objects/platform/dashboard/Platform-UAA-Audit.json
+
+  # Visualization Objects
+  ## App Visualizations
   dashboards-objects/app/visualization/App-APP-logs-count-(top-10-apps).json.erb: dashboards-objects/app/visualization/App-APP-logs-count-(top-10-apps).json
   dashboards-objects/app/visualization/App-APP-logs-count-by-level-(top-5-apps).json.erb: dashboards-objects/app/visualization/App-APP-logs-count-by-level-(top-5-apps).json
   dashboards-objects/app/visualization/App-APP-logs-count-by-level.json.erb: dashboards-objects/app/visualization/App-APP-logs-count-by-level.json
@@ -83,12 +107,6 @@ templates:
   dashboards-objects/app/visualization/App-links.json.erb: dashboards-objects/app/visualization/App-links.json
   dashboards-objects/app/visualization/App-logs-by-source-type-(top-10).json.erb: dashboards-objects/app/visualization/App-logs-by-source-type-(top-10).json
   dashboards-objects/app/visualization/App-logs-count-by-source-type-(APP-or-cf-top-5-apps).json.erb: dashboards-objects/app/visualization/App-logs-count-by-source-type-(APP-or-cf-top-5-apps).json
-  dashboards-objects/metric/visualization/App-METRIC-CPU-usage.json.erb: dashboards-objects/metric/visualization/App-METRIC-CPU-usage.json
-  dashboards-objects/metric/visualization/App-METRIC-disk-usage.json.erb: dashboards-objects/metric/visualization/App-METRIC-disk-usage.json
-  dashboards-objects/metric/visualization/App-METRIC-memory-usage.json.erb: dashboards-objects/metric/visualization/App-METRIC-memory-usage.json
-  dashboards-objects/metric/visualization/App-instance-METRIC-CPU-usage.json.erb: dashboards-objects/metric/visualization/App-instance-METRIC-CPU-usage.json
-  dashboards-objects/metric/visualization/App-instance-METRIC-disk-usage.json.erb: dashboards-objects/metric/visualization/App-instance-METRIC-disk-usage.json
-  dashboards-objects/metric/visualization/App-instance-METRIC-memory-usage.json.erb: dashboards-objects/metric/visualization/App-instance-METRIC-memory-usage.json
   dashboards-objects/app/visualization/App-names.json.erb: dashboards-objects/app/visualization/App-names.json
   dashboards-objects/app/visualization/App-RTR-request-count-(top-10-apps).json.erb: dashboards-objects/app/visualization/App-RTR-request-count-(top-10-apps).json
   dashboards-objects/app/visualization/App-RTR-request-count-by-timezone-(top-5).json.erb: dashboards-objects/app/visualization/App-RTR-request-count-by-timezone-(top-5).json
@@ -98,6 +116,16 @@ templates:
   dashboards-objects/app/visualization/App-RTR-traffic-by-response_time_ms-(first-10-apps).json.erb: dashboards-objects/app/visualization/App-RTR-traffic-by-response_time_ms-(first-10-apps).json
   dashboards-objects/app/visualization/Audit-logs-count.json.erb: dashboards-objects/app/visualization/Audit-logs-count.json
   dashboards-objects/app/visualization/Audit-target-names.json.erb: dashboards-objects/app/visualization/Audit-target-names.json
+  # dashboards-objects/app/visualization/Falco-count.json.erb: dashboards-objects/app/visualization/Falco-count.json
+  # dashboards-objects/app/visualization/Falco-graph.json.erb: dashboards-objects/app/visualization/Falco-graph.json
+
+  ## Metric Visualizations
+  dashboards-objects/metric/visualization/App-METRIC-CPU-usage.json.erb: dashboards-objects/metric/visualization/App-METRIC-CPU-usage.json
+  dashboards-objects/metric/visualization/App-METRIC-disk-usage.json.erb: dashboards-objects/metric/visualization/App-METRIC-disk-usage.json
+  dashboards-objects/metric/visualization/App-METRIC-memory-usage.json.erb: dashboards-objects/metric/visualization/App-METRIC-memory-usage.json
+  dashboards-objects/metric/visualization/App-instance-METRIC-CPU-usage.json.erb: dashboards-objects/metric/visualization/App-instance-METRIC-CPU-usage.json
+  dashboards-objects/metric/visualization/App-instance-METRIC-disk-usage.json.erb: dashboards-objects/metric/visualization/App-instance-METRIC-disk-usage.json
+  dashboards-objects/metric/visualization/App-instance-METRIC-memory-usage.json.erb: dashboards-objects/metric/visualization/App-instance-METRIC-memory-usage.json
   dashboards-objects/metric/visualization/Services-ElasticCache-BytesUsedForCache.json.erb: dashboards-objects/metric/visualization/Services-ElasticCache-BytesUsedForCache.json
   dashboards-objects/metric/visualization/Services-ElasticCache-FreeableMemory.json.erb: dashboards-objects/metric/visualization/Services-ElasticCache-FreeableMemory.json
   dashboards-objects/metric/visualization/Services-ElasticCache-CacheHitRate.json.erb: dashboards-objects/metric/visualization/Services-ElasticCache-CacheHitRate.json
@@ -120,13 +148,7 @@ templates:
   dashboards-objects/metric/visualization/Services-Search-ThreadpoolWriteQueue.json.erb: dashboards-objects/metric/visualization/Services-Search-ThreadpoolWriteQueue.json
   dashboards-objects/metric/visualization/Services-Search-ThreadpoolWriteRejected.json.erb: dashboards-objects/metric/visualization/Services-Search-ThreadpoolWriteRejected.json
   dashboards-objects/metric/visualization/Services-Search-MasterCPUUtilization.json.erb: dashboards-objects/metric/visualization/Services-Search-MasterCPUUtilization.json
-  dashboards-objects/metric/visualization/Services-Search-MasterJVMMemoryPressure.json.erb: dashboards-objects/metric/visualization/Services-Search-MasterJVMMemoryPressure.json
-  dashboards-objects/metric/visualization/Services-Search-MasterOldGenJVMMemoryPressure.json.erb: dashboards-objects/metric/visualization/Services-Search-MasterOldGenJVMMemoryPressure.json
-  dashboards-objects/metric/visualization/Services-Search-OldGenJVMMemoryPressure.json.erb: dashboards-objects/metric/visualization/Services-Search-OldGenJVMMemoryPressure.json
-  dashboards-objects/metric/visualization/Services-S3-weekly-usage.json.erb: dashboards-objects/metric/visualization/Services-S3-weekly-usage.json
-  # dashboards-objects/app/visualization/Falco-count.json.erb: dashboards-objects/app/visualization/Falco-count.json
-  # dashboards-objects/app/visualization/Falco-graph.json.erb: dashboards-objects/app/visualization/Falco-graph.json
-
+  dashboards-objects/metric/visualization/Services-Search-MasterJVMMemoryPressure.json.erb: dashboards-objects/metric/visualization/Services-Search-MasterJV
 
 properties:
   dashboards_objects.upload_patterns:

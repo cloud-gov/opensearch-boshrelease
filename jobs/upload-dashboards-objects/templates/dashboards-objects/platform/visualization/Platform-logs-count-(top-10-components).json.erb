@@ -1,58 +1,24 @@
-<% require 'json' %>
 {
-  "attributes": {
-    "title": "Platform: logs count (top 10 components)",
-    "visState": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
-      {
-        "type": "pie",
-        "params": {
-          "shareYAxis": true,
-          "addTooltip": true,
-          "addLegend": true,
-          "isDonut": false
+    "attributes": {
+        "description": "",
+        "kibanaSavedObjectMeta": {
+            "searchSourceJSON": "{\"filter\":[]}"
         },
-        "aggs": [
-          {
-            "id": "1",
-            "type": "count",
-            "schema": "metric",
-            "params": {}
-          },
-          {
-            "id": "3",
-            "type": "terms",
-            "schema": "segment",
-            "params": {
-              "field": "@source.component",
-              "size": 10,
-              "order": "desc",
-              "orderBy": "1"
-            }
-          }
-        ],
-        "listeners": {}
-      }
-ENDOFFJSON
-  %>",
-    "description": "",
-    "savedSearchRefName": "search_0",
-    "version": 1,
-    "kibanaSavedObjectMeta": {
-      "searchSourceJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
-      {
-        "filter": [
-
-        ]
-      }
-ENDOFFJSON
-  %>"
-    }
-  },
-  "references": [
-    {
-      "id": "platform-all",
-      "name": "search_0",
-      "type": "search"
-    }
-  ]
+        "savedSearchRefName": "search_0",
+        "title": "Platform: logs count (top 10 components)",
+        "version": 1,
+        "visState": "{\"type\":\"pie\",\"params\":{\"shareYAxis\":true,\"addTooltip\":true,\"addLegend\":true,\"isDonut\":false},\"aggs\":[{\"id\":\"1\",\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"3\",\"type\":\"terms\",\"schema\":\"segment\",\"params\":{\"field\":\"@source.component\",\"size\":10,\"order\":\"desc\",\"orderBy\":\"1\"}}],\"listeners\":{}}"
+    },
+    "id": "Platform-logs-count-(top-10-components)-visualization",
+    "migrationVersion": {
+        "visualization": "7.9.3"
+    },
+    "references": [
+        {
+            "id": "platform-all-search",
+            "name": "search_0",
+            "type": "search"
+        }
+    ],
+    "type": "visualization"
 }
