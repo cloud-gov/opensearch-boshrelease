@@ -7,11 +7,9 @@ export DATA_DIR=/var/vcap/data/$JOB_NAME
 <%
 opensearch_host = p("opensearch_config.opensearch.host")
 opensearch_port = p("opensearch_config.opensearch.port")
-document_size = p("opensearch_config.rollover_document_size")
-index_age = p("opensearch_config.rollover_index_age")
-aliases = p("opensearch_config.alias")
-metric_aliases = p("opensearch_config.metric_alias")
-platform_aliases = p("opensearch_config.platform_alias")
+aliases = p("opensearch_config.alias","")
+metric_aliases = p("opensearch_config.metric_alias","")
+platform_aliases = p("opensearch_config.platform_alias","")
 %>
 
 # Delete existing templates before uploading
@@ -20,8 +18,6 @@ BASEURL=https://<%= opensearch_host %>:<%= opensearch_port %>
 CA="--cacert ${JOB_DIR}/config/ssl/opensearch.ca"
 CERT="--cert ${JOB_DIR}/config/ssl/opensearch-admin.crt"
 KEY="--key ${JOB_DIR}/config/ssl/opensearch-admin.key"
-DOCUMENT_SIZE=<%= document_size %>
-INDEX_AGE=<%= index_age %>
 ALIAS=<%= aliases %>
 METRIC_ALIAS=<%= metric_aliases %>
 PLATFORM_ALIAS=<%= platform_aliases %>
