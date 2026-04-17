@@ -5,11 +5,11 @@ description: |
   The job compiles OpenSearch component/index templates
 
 templates:
-  component-index-mappings-base.json.erb:        component-index-mappings-base.json
+  #component-index-mappings-base.json.erb:        component-index-mappings-base.json seeing if needed 
   component-index-mappings-app.json.erb:         component-index-mappings-app.json
   component-index-mappings-metrics.json.erb:     component-index-mappings-metrics.json
   component-index-mappings-platform.json.erb:    component-index-mappings-platform.json
-  index-template-base.json.erb:                  index-template.json
+  #index-template-base.json.erb:                  index-template.json
   index-template-app.json.erb:                   index-template-app.json
   index-template-metric.json.erb:                index-template-metrics.json
   index-template-platform.json.erb:              index-template-platform.json
