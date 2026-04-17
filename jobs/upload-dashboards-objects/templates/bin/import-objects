@@ -36,7 +36,7 @@ if __name__ == "__main__":
     # Check if tenants are enabled
 
     <% if_link("opensearch_dashboards") do |opensearch_dashboards| %>
-    use_tenants = <%= opensearch_dashboards.p('opensearch_dashboards.multitenancy.enabled') %>
+    use_tenants = <%= opensearch_dashboards.p('opensearch_dashboards.multitenancy.enabled') ? 'True' : 'False' %>
     <% end %>
     # Get tenant list or use default
     if use_tenants:
