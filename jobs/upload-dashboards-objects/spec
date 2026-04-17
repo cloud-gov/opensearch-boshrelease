@@ -150,6 +150,21 @@ templates:
   dashboards-objects/metric/visualization/Services-Search-MasterCPUUtilization.json.erb: dashboards-objects/metric/visualization/Services-Search-MasterCPUUtilization.json
   dashboards-objects/metric/visualization/Services-Search-MasterJVMMemoryPressure.json.erb: dashboards-objects/metric/visualization/Services-Search-MasterJV
 
+  ## Platform Visualizations
+  dashboards-objects/platform/visualization/Platform-components-with-errors.json.erb: dashboards-objects/platform/visualization/Platform-components-with-errors.json
+  dashboards-objects/platform/visualization/Platform-components.json.erb: dashboards-objects/platform/visualization/Platform-components.json
+  dashboards-objects/platform/visualization/Platform-errors-count-by-source-component-(top-5).json.erb: dashboards-objects/platform/visualization/Platform-errors-count-by-source-component-(top-5).json
+  dashboards-objects/platform/visualization/Platform-errors-count-in-timeline.json.erb: dashboards-objects/platform/visualization/Platform-errors-count-in-timeline.json
+  dashboards-objects/platform/visualization/Platform-links.json.erb: dashboards-objects/platform/visualization/Platform-links.json
+  dashboards-objects/platform/visualization/Platform-logs-by-component-(top-5).json.erb: dashboards-objects/platform/visualization/Platform-logs-by-component-(top-5).json
+  dashboards-objects/platform/visualization/Platform-logs-by-source-job-(top-5).json.erb: dashboards-objects/platform/visualization/Platform-logs-by-source-job-(top-5).json
+  dashboards-objects/platform/visualization/Platform-logs-count-(top-10-components).json.erb: dashboards-objects/platform/visualization/Platform-logs-count-(top-10-components).json
+  dashboards-objects/platform/visualization/Platform-logs-count-by-level.json.erb: dashboards-objects/platform/visualization/Platform-logs-count-by-level.json
+  dashboards-objects/platform/visualization/Platform-logs-count-in-timeline.json.erb: dashboards-objects/platform/visualization/Platform-logs-count-in-timeline.json
+  dashboards-objects/platform/visualization/Platform-UAA-Audit-event-locations.json.erb: dashboards-objects/platform/visualization/Platform-UAA-Audit-event-locations.json
+  dashboards-objects/platform/visualization/Platform-UAA-Audit-event-types.json.erb: dashboards-objects/platform/visualization/Platform-UAA-Audit-event-types.json
+  dashboards-objects/platform/visualization/Platform-UAA-Audit-events-by-type.json.erb: dashboards-objects/platform/visualization/Platform-UAA-Audit-events-by-type.json
+  
 properties:
   dashboards_objects.upload_patterns:
     description: "List of glob patterns of OpenSearch Dashboards objects to upload"
