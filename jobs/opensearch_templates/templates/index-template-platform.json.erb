@@ -1,3 +1,5 @@
+<% if_link("opensearch") do |opensearch| %>
+  <% if opensearch.p('opensearch.deployment_type').include?('platform') %>
 {
     "index_patterns": ["<%= p('opensearch_config.platform_index_prefix') %>*"],
     "composed_of": [
@@ -9,3 +11,5 @@
     ],
     "priority": 202
 }
+  <% end %>
+<% end %>
