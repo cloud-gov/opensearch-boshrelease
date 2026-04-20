@@ -1,12 +1,9 @@
 #!/var/vcap/packages/python3-requests/venv/bin/python3
-
 <%
-
   job_dir = "/var/vcap/jobs/upload-dashboards-objects"
   store_dir = "/var/vcap/store/upload-dashboards-objects"
   dashboards_link = link('opensearch_dashboards')
 %>
-
 import glob
 import logging
 import os
@@ -17,27 +14,96 @@ logging.basicConfig(level=logging.INFO)
 
 delete_list_dashboard_str = "<%= p('dashboards_objects.delete_list_dashboard') %>"
 delete_list_dashboard = delete_list_dashboard_str.strip('[]').split(',') if delete_list_dashboard_str.strip('[]') else []
-
 delete_list_visual_str = "<%= p('dashboards_objects.delete_list_visual') %>"
 delete_list_visual = delete_list_visual_str.strip('[]').split(',') if delete_list_visual_str.strip('[]') else []
-
 delete_list_search_str = "<%= p('dashboards_objects.delete_list_search') %>"
 delete_list_search = delete_list_search_str.strip('[]').split(',') if delete_list_search_str.strip('[]') else []
+
+# OIDC Configuration
+<% if p('opensearch_dashboards.oidc.enabled') %>
+  <% if_link("opensearch") do |opensearch_config| %>
+    <% opensearch_config.if_p('opensearch.oidc.client_id') do %>
+oidc_client_id = "<%= opensearch_config.p('opensearch.oidc.client_id') %>"
+    <% end %>
+    <% opensearch_config.if_p('opensearch.oidc.client_secret') do %>
+oidc_client_secret = "<%= opensearch_config.p('opensearch.oidc.client_secret') %>"
+    <% end %>
+    <% opensearch_config.if_p('opensearch.oidc.token_url') do %>
+token_url = "<%= opensearch_config.p('opensearch.oidc.token_url') %>"
+    <% end %>
+  <% end %>
+oidc_enabled = True
+<% else %>
+oidc_enabled = False
+oidc_client_id = None
+oidc_client_secret = None
+token_url = None
+<% end %>
+
+def get_oidc_token(token_endpoint, client_id, client_secret, scope=None):
+    """
+    Get OIDC token from the token endpoint using client credentials grant
+    """
+    token_data = {
+        'grant_type': 'client_credentials',
+        'client_id': client_id,
+        'client_secret': client_secret
+    }
+    
+    if scope:
+        token_data['scope'] = scope
+    
+    headers = {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+    
+    try:
+        response = requests.post(token_endpoint, data=token_data, headers=headers)
+        response.raise_for_status()
+        
+        token_response = response.json()
+        access_token = token_response.get('access_token')
+        
+        if not access_token:
+            logging.error("No access token received from token endpoint")
+            return None
+            
+        logging.info("Successfully obtained OIDC token")
+        return access_token
+        
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Failed to obtain OIDC token: {e}")
+        return None
+    except ValueError as e:
+        logging.error(f"Failed to parse token response: {e}")
+        return None
 
 if __name__ == "__main__":
     session = requests.Session()
     ndjson_output_path = "/var/vcap/jobs/upload-dashboards-objects/dashboard.ndjson"
+    
+    # Get OIDC token if OIDC is enabled
+    oidc_token = None
+    if oidc_enabled and token_url and oidc_client_id and oidc_client_secret:
+        oidc_token = get_oidc_token(token_url, oidc_client_id, oidc_client_secret)
+        if not oidc_token:
+            logging.error("Failed to obtain OIDC token. Exiting.")
+            exit(1)
+    elif oidc_enabled:
+        logging.error("OIDC is enabled but missing required configuration (token_url, client_id, or client_secret)")
+        exit(1)
+    
     # set CA
-    ca =  '<%= job_dir %>/config/ssl/opensearch.ca'
+    ca = '<%= job_dir %>/config/ssl/opensearch.ca'
     cert = '<%= job_dir %>/config/ssl/dashboard-web.crt'
     key = '<%= job_dir %>/config/ssl/dashboard-web.key'
     logs_url = 'https://<%= p('opensearch_dashboards.host') %>:<%= dashboards_link.p('opensearch_dashboards.port') %>'
     
     # Check if tenants are enabled
-
     <% if_link("opensearch_dashboards") do |opensearch_dashboards| %>
     use_tenants = <%= opensearch_dashboards.p('opensearch_dashboards.multitenancy.enabled') ? 'True' : 'False' %>
     <% end %>
+    
     # Get tenant list or use default
     if use_tenants:
         with open('<%= store_dir %>/org-tenants.txt') as orgs:
@@ -47,21 +113,21 @@ if __name__ == "__main__":
     
     for tenant in tenant_list:
         # Set headers based on whether we're using tenants
+        base_headers = {
+            'osd-xsrf': 'true',
+            'x-proxy-roles': 'admin',
+            'x-proxy-user': 'admin',
+            'x-forwarded-for': '127.0.0.1'
+        }
+        
+        # Add OIDC token if available
+        if oidc_token:
+            base_headers['Authorization'] = f'Bearer {oidc_token}'
+        
         if use_tenants and tenant:
-            headers = {
-                'osd-xsrf': 'true',
-                'x-proxy-roles': 'admin',
-                'x-proxy-user': 'admin',
-                'x-forwarded-for': '127.0.0.1',
-                'securitytenant': tenant
-            }
+            headers = {**base_headers, 'securitytenant': tenant}
         else:
-            headers = {
-                'osd-xsrf': 'true',
-                'x-proxy-roles': 'admin',
-                'x-proxy-user': 'admin',
-                'x-forwarded-for': '127.0.0.1'
-            }
+            headers = base_headers
         
         # Delete dashboards
         for dashboard in delete_list_dashboard:
@@ -75,9 +141,9 @@ if __name__ == "__main__":
             if r.status_code == 200:
                 tenant_msg = f' for tenant {tenant}' if use_tenants and tenant else ''
                 logging.info(f'delete sucessfully dashboard {dashboard}{tenant_msg}')
-            else: 
+            else:
                 tenant_msg = f' for tenant {tenant}' if use_tenants and tenant else ''
-                logging.info(f'delete failed dashboard {dashboard}{tenant_msg}')
+                logging.info(f'delete failed dashboard {dashboard}{tenant_msg} - Status: {r.status_code}')
         
         # Delete visualizations
         for visual in delete_list_visual:
@@ -91,9 +157,9 @@ if __name__ == "__main__":
             if r.status_code == 200:
                 tenant_msg = f' for tenant {tenant}' if use_tenants and tenant else ''
                 logging.info(f'delete sucessfully visual {visual}{tenant_msg}')
-            else: 
+            else:
                 tenant_msg = f' for tenant {tenant}' if use_tenants and tenant else ''
-                logging.info(f'delete failed visual {visual}{tenant_msg}')
+                logging.info(f'delete failed visual {visual}{tenant_msg} - Status: {r.status_code}')
         
         # Delete searches
         for search in delete_list_search:
@@ -107,9 +173,9 @@ if __name__ == "__main__":
             if r.status_code == 200:
                 tenant_msg = f' for tenant {tenant}' if use_tenants and tenant else ''
                 logging.info(f'delete sucessfully search {search}{tenant_msg}')
-            else: 
+            else:
                 tenant_msg = f' for tenant {tenant}' if use_tenants and tenant else ''
-                logging.info(f'delete failed search {search}{tenant_msg}')
+                logging.info(f'delete failed search {search}{tenant_msg} - Status: {r.status_code}')
         
         # Upload NDJSON file
         with open(ndjson_output_path, 'rb') as ndjson_file:
@@ -127,6 +193,8 @@ if __name__ == "__main__":
             if r.status_code == 200:
                 logging.info(f'NDJSON FILE {ndjson_output_path} uploaded sucessfully{tenant_msg}')
             elif r.status_code == 409:
+                # Reset file pointer for PUT request
+                ndjson_file.seek(0)
                 put = session.put(
                       '{}/api/saved_objects/_import?overwrite=true'.format(
                 logs_url
@@ -156,23 +224,9 @@ if __name__ == "__main__":
                 logging.info(f'Failed to upload NDJSON FILE {ndjson_output_path}')
         
         # Set default index
+        index_headers = {**base_headers, 'content-type': 'application/json'}
         if use_tenants and tenant:
-            index_headers = {
-                'content-type': 'application/json',
-                'osd-xsrf': 'true',
-                'x-proxy-roles': 'admin',
-                'x-proxy-user': 'admin',
-                'x-forwarded-for': '127.0.0.1',
-                'securitytenant': tenant,
-            }
-        else:
-            index_headers = {
-                'content-type': 'application/json',
-                'osd-xsrf': 'true',
-                'x-proxy-roles': 'admin',
-                'x-proxy-user': 'admin',
-                'x-forwarded-for': '127.0.0.1',
-            }
+            index_headers['securitytenant'] = tenant
         
         r = session.post(
           '{}/api/opensearch-dashboards/settings'.format(logs_url),
@@ -184,5 +238,4 @@ if __name__ == "__main__":
         if r.status_code == 200:
             logging.info('Successfully Set <%= p('dashboards_objects.default_index') %> as Default Index')
         else:
-            logging.info('Failed to Set <%= p('dashboards_objects.default_index') %> as Default Index')
-
+            logging.info(f'Failed to Set <%= p('dashboards_objects.default_index') %> as Default Index - Status: {r.status_code}')

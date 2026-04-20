@@ -55,6 +55,7 @@ provides:
       - opensearch.oidc.client_secret
       - opensearch.oidc.openid_connect_url
       - opensearch.oidc.redirect_url
+      - opensearch.oidc.token_url
       - opensearch.deployment_type
 
 consumes:
@@ -215,6 +216,8 @@ properties:
     description: "The issuer URL of your OpenID Connect Identity Provider."
   opensearch.oidc.redirect_url:
     description: "The redirect URL registered with your OpenID Connect Identity Provider."
+  opensearch.oidc.token_url:
+    description: "The token url for your OpenID IDP"
   opensearch.multitenancy.private_tenant_enabled:
     description: True to enable private tenant
     default: false

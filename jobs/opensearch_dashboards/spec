@@ -35,6 +35,7 @@ provides:
       - opensearch_dashboards.server.ssl.certificate
       - opensearch_dashboards.server.ssl.private_key
       - opensearch_dashboards.multitenancy.enabled
+      - opensearch_dashboards.oidc.enabled
 
 properties:
   opensearch_dashboards.username:
