@@ -19,6 +19,77 @@ delete_list_visual = delete_list_visual_str.strip('[]').split(',') if delete_lis
 delete_list_search_str = "<%= p('dashboards_objects.delete_list_search') %>"
 delete_list_search = delete_list_search_str.strip('[]').split(',') if delete_list_search_str.strip('[]') else []
 
+# OIDC Configuration
+<% if_link("opensearch") do |opensearch_config| %>
+  <% opensearch_config.if_p('opensearch.oidc.token_url') do %>
+    <% opensearch_config.if_p('opensearch.oidc.client_id') do %>
+oidc_client_id = "<%= opensearch_config.p('opensearch.oidc.client_id') %>"
+    <% end %>
+    <% opensearch_config.if_p('opensearch.oidc.client_secret') do %>
+oidc_client_secret = "<%= opensearch_config.p('opensearch.oidc.client_secret') %>"
+    <% end %>
+token_url = "<%= opensearch_config.p('opensearch.oidc.token_url') %>"
+oidc_enabled = True
+logging.info("DEBUG: Found opensearch.oidc.token_url - OIDC is enabled")
+  <% end.else do %>
+oidc_enabled = False
+oidc_client_id = None
+oidc_client_secret = None
+token_url = None
+logging.info("DEBUG: opensearch.oidc.token_url not found - OIDC disabled")
+  <% end %>
+<% end.else do %>
+oidc_enabled = False
+oidc_client_id = None
+oidc_client_secret = None
+token_url = None
+logging.warning("DEBUG: opensearch link not found - OIDC disabled")
+<% end %>
+
+def get_oidc_token(token_endpoint, client_id, client_secret, scope=None):
+    """
+    Get OIDC token from the token endpoint using client credentials grant
+    """
+    if not all([token_endpoint, client_id, client_secret]):
+        logging.error("Missing required OIDC parameters")
+        return None
+        
+    token_data = {
+        'grant_type': 'client_credentials',
+        'client_id': client_id,
+        'client_secret': client_secret
+    }
+    
+    if scope:
+        token_data['scope'] = scope
+    
+    headers = {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+    
+    try:
+        logging.info(f"Requesting OIDC token from: {token_endpoint}")
+        response = requests.post(token_endpoint, data=token_data, headers=headers, timeout=30)
+        response.raise_for_status()
+        
+        token_response = response.json()
+        access_token = token_response.get('access_token')
+        
+        if not access_token:
+            logging.error("No access token received from token endpoint")
+            logging.error(f"Token response: {token_response}")
+            return None
+            
+        logging.info("Successfully obtained OIDC token")
+        return access_token
+        
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Failed to obtain OIDC token: {e}")
+        return None
+    except ValueError as e:
+        logging.error(f"Failed to parse token response: {e}")
+        return None
+
 def make_authenticated_request(session, method, url, headers, cert_tuple, verify_ca, **kwargs):
     """
     Make an authenticated request with proper error handling
@@ -41,6 +112,24 @@ def make_authenticated_request(session, method, url, headers, cert_tuple, verify
 if __name__ == "__main__":
     session = requests.Session()
     ndjson_output_path = "/var/vcap/jobs/upload-dashboards-objects/dashboard.ndjson"
+    
+    # Get OIDC token if OIDC is enabled
+    oidc_token = None
+    if oidc_enabled and token_url and oidc_client_id and oidc_client_secret:
+        # Try with 'uaa.none' scope first, then without scope
+        oidc_token = get_oidc_token(token_url, oidc_client_id, oidc_client_secret, 'uaa.none')
+        if not oidc_token:
+            logging.info("Retrying OIDC token without scope...")
+            oidc_token = get_oidc_token(token_url, oidc_client_id, oidc_client_secret)
+            
+        if not oidc_token:
+            logging.error("Failed to obtain OIDC token after multiple attempts. Exiting.")
+            exit(1)
+    elif oidc_enabled:
+        logging.error("OIDC is enabled but missing required configuration (token_url, client_id, or client_secret)")
+        exit(1)
+    else:
+        logging.info("OIDC is disabled, proceeding without token authentication")
     
     # Certificate and URL configuration
     ca = '<%= job_dir %>/config/ssl/opensearch.ca'
@@ -88,6 +177,10 @@ if __name__ == "__main__":
             'x-proxy-user': 'admin',
             'x-forwarded-for': '127.0.0.1'
         }
+        
+        # Add OIDC token if available
+        if oidc_token:
+            base_headers['Authorization'] = f'Bearer {oidc_token}'
         
         if use_tenants and tenant:
             headers = {**base_headers, 'securitytenant': tenant}
@@ -172,7 +265,6 @@ if __name__ == "__main__":
                                 logging.error(f"Error details: {error_response}")
                             except ValueError:
                                 logging.error(f"Raw response: {put.text}")
-                        logging.info(f'Failed to upload NDJSON FILE {ndjson_output_path}')
                 else:
                     status = r.status_code if r else 'No Response'
                     logging.error(f"Failed to upload file {ndjson_output_path}, status code: {status}")
@@ -182,7 +274,6 @@ if __name__ == "__main__":
                             logging.error(f"Error details: {error_response}")
                         except ValueError:
                             logging.error(f"Raw response: {r.text}")
-                    logging.info(f'Failed to upload NDJSON FILE {ndjson_output_path}')
         except Exception as e:
             logging.error(f"Exception during file upload: {e}")
         

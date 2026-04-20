@@ -27,6 +27,7 @@ templates:
   bin/generate-tenants: bin/generate-tenants
   bin/generate-ndjson: bin/generate-ndjson
   bin/import-objects: bin/import-objects
+  bin/import-objects-oidc: bin/import-objects-oidc
   bin/run: bin/run
   bin/pre-start.erb: bin/pre-start
 
