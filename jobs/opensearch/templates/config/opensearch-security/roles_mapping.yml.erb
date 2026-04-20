@@ -14,7 +14,6 @@ all_access:
   reserved: false
   backend_roles:
   - "admin"
-  - "platform-opensearch-development"
   - "openid"
   description: "Maps admin to all_access"
 
@@ -79,3 +78,9 @@ kibana_server:
   - "kibanaserver"
   # Give permission for Dashboards to access Opensearch
   - "dashboard.opensearch.internal"
+
+dashboard_client:
+  reserved: false
+  backend_roles:
+  - "uaa.none"
+  hosts: []
