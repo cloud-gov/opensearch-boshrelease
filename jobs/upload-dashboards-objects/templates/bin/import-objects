@@ -20,41 +20,30 @@ delete_list_search_str = "<%= p('dashboards_objects.delete_list_search') %>"
 delete_list_search = delete_list_search_str.strip('[]').split(',') if delete_list_search_str.strip('[]') else []
 
 # OIDC Configuration
-# OIDC Configuration
-<% if_link("opensearch_dashboards") do |opensearch_dashboard| %>
-  <% if p('opensearch_dashboards.oidc.enabled', false) %>
-    <% if_link("opensearch") do |opensearch_config| %>
-      <% opensearch_config.if_p('opensearch.oidc.client_id') do %>
+<% if_link("opensearch") do |opensearch_config| %>
+  <% opensearch_config.if_p('opensearch.oidc.token_url') do %>
+    <% opensearch_config.if_p('opensearch.oidc.client_id') do %>
 oidc_client_id = "<%= opensearch_config.p('opensearch.oidc.client_id') %>"
-      <% end %>
-      <% opensearch_config.if_p('opensearch.oidc.client_secret') do %>
-oidc_client_secret = "<%= opensearch_config.p('opensearch.oidc.client_secret') %>"
-      <% end %>
-      <% opensearch_config.if_p('opensearch.oidc.token_url') do %>
-token_url = "<%= opensearch_config.p('opensearch.oidc.token_url') %>"
-      <% end %>
-logging.info("DEBUG: Found opensearch link - retrieved OIDC configuration")
-    <% end.else do %>
-oidc_client_id = None
-oidc_client_secret = None
-token_url = None
-logging.warning("DEBUG: opensearch link not found - OIDC configuration will be incomplete")
     <% end %>
+    <% opensearch_config.if_p('opensearch.oidc.client_secret') do %>
+oidc_client_secret = "<%= opensearch_config.p('opensearch.oidc.client_secret') %>"
+    <% end %>
+token_url = "<%= opensearch_config.p('opensearch.oidc.token_url') %>"
 oidc_enabled = True
-logging.info("DEBUG: OIDC is enabled in opensearch_dashboards configuration")
-  <% else %>
+logging.info("DEBUG: Found opensearch.oidc.token_url - OIDC is enabled")
+  <% end.else do %>
 oidc_enabled = False
 oidc_client_id = None
 oidc_client_secret = None
 token_url = None
-logging.info("DEBUG: opensearch_dashboards.oidc.enabled is false or not set - OIDC disabled")
+logging.info("DEBUG: opensearch.oidc.token_url not found - OIDC disabled")
   <% end %>
 <% end.else do %>
 oidc_enabled = False
 oidc_client_id = None
 oidc_client_secret = None
 token_url = None
-logging.warning("DEBUG: opensearch_dashboards link not found in deployment - OIDC disabled")
+logging.warning("DEBUG: opensearch link not found - OIDC disabled")
 <% end %>
 
 # Print OIDC configuration status
