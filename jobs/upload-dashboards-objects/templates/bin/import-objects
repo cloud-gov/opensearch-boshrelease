@@ -20,25 +20,36 @@ delete_list_search_str = "<%= p('dashboards_objects.delete_list_search') %>"
 delete_list_search = delete_list_search_str.strip('[]').split(',') if delete_list_search_str.strip('[]') else []
 
 # OIDC Configuration
-<% if p('opensearch_dashboards.oidc.enabled') %>
-  <% if_link("opensearch") do |opensearch_config| %>
-    <% opensearch_config.if_p('opensearch.oidc.client_id') do %>
+<% if_link("opensearch_dashboards") do |opensearch_dashboard| %>
+  <% if_p('opensearch_dashboards.oidc.enabled') do |enabled| %>
+    <% if enabled %>
+      <% if_link("opensearch") do |opensearch_config| %>
+        <% opensearch_config.if_p('opensearch.oidc.client_id') do %>
 oidc_client_id = "<%= opensearch_config.p('opensearch.oidc.client_id') %>"
-    <% end %>
-    <% opensearch_config.if_p('opensearch.oidc.client_secret') do %>
+        <% end %>
+        <% opensearch_config.if_p('opensearch.oidc.client_secret') do %>
 oidc_client_secret = "<%= opensearch_config.p('opensearch.oidc.client_secret') %>"
-    <% end %>
-    <% opensearch_config.if_p('opensearch.oidc.token_url') do %>
+        <% end %>
+        <% opensearch_config.if_p('opensearch.oidc.token_url') do %>
 token_url = "<%= opensearch_config.p('opensearch.oidc.token_url') %>"
-    <% end %>
-  <% end %>
+        <% end %>
+      <% end %>
 oidc_enabled = True
-<% else %>
+    <% else %>
 oidc_enabled = False
 oidc_client_id = None
 oidc_client_secret = None
 token_url = None
+    <% end %>
+  <% end.else do %>
+oidc_enabled = False
+oidc_client_id = None
+oidc_client_secret = None
+token_url = None
+  <% end %>
 <% end %>
+
+
 
 def get_oidc_token(token_endpoint, client_id, client_secret, scope=None):
     """
