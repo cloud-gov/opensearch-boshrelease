@@ -34,6 +34,9 @@ properties:
   smoke_tests.app_log.enabled:
     description: app log smoketest
     default: true
+  smoke_tests.platform_log.enabled:
+    description: platform log smoketest
+    default: false
   smoke_tests.opensearch.ssl.private_key:
     description: opensearch private key
   smoke_tests.opensearch.ssl.certificate:
