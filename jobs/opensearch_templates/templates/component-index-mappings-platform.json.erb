@@ -5,12 +5,9 @@
 #
 # By default all string fields are set as `keyword` (not analyzed values).
 #
-
 require 'json'
 
-
 keyword_default = { "type": "keyword", "index": true }.to_json
-
 %>
 {
   "template": {
@@ -85,5 +82,9 @@ keyword_default = { "type": "keyword", "index": true }.to_json
     }
   }
 }
+  <% else %>
+    <% puts "ERROR: deployment_type does not include 'platform'" %>
   <% end %>
+<% end.else do %>
+  <% puts "ERROR: No opensearch link found" %>
 <% end %>
