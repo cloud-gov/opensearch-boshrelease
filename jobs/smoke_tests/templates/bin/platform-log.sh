@@ -69,7 +69,7 @@ fi
 
 SMOKE_ID=$(LC_ALL=C; cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 id_value="c9b54579-7056-46c3-9870-334330e9be75"
-job_value="smoke_test"
+job_value="smoke-test"
 LOG="<14>1 $(date -u +'%Y-%m-%dT%H:%M:%S.%6NZ') ${id_value}.smoke-test.default.development.bosh smoke_test smoke_test - [instance@47450 director=\"\" deployment=\"development\" group=\"smoke-test\" az=\"z1\" id=\"${id_value}\"] {\"smoke_id\":\"${SMOKE_ID}\"}"
 
 <% if p('smoke_tests.tls.use_tls') %>
