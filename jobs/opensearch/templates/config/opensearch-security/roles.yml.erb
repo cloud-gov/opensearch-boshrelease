@@ -399,13 +399,13 @@ dashboard_client:
   cluster_permissions: []
   index_permissions:
     - index_patterns:
-        - ".opensearch_dashboards*"
+        - "*"
       allowed_actions:
         - "indices:data/write/index"
         - "indices:data/write/update" 
         - "indices:data/read/search"
         - "indices:admin/mapping/put"
-        - "indices:data/write/bulk"
+        - "indices:data/write/bulk*"
   tenant_permissions:
     - tenant_patterns:
         - "*"
