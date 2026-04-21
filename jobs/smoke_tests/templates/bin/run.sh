@@ -9,6 +9,11 @@ export JOB_DIR=/var/vcap/jobs/$JOB_NAME
   ${JOB_DIR}/bin/app-log || exit 1
 <% end %>
 
+# platform logs
+<% if p('smoke_tests.platform_log.enabled') %>
+  ${JOB_DIR}/bin/platform-log || exit 1
+<% end %>
+
 # audit logs
 <% if p('smoke_tests.s3_audit.bucket') %>
   ${JOB_DIR}/bin/audit-log || exit 1

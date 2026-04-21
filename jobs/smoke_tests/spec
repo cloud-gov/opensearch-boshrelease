@@ -13,6 +13,7 @@ templates:
   bin/app-log.sh: bin/app-log
   bin/audit-log.sh: bin/audit-log
   bin/metric-log.sh: bin/metric-log
+  bin/platform-log.sh: bin/platform-log
   bin/cloudwatch-log.sh: bin/cloudwatch-log
   config/smoketest-crt.erb: config/ssl/smoketest.crt
   config/smoketest-pem.erb: config/ssl/smoketest.pem
