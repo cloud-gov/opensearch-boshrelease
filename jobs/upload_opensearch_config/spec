@@ -63,7 +63,7 @@ properties:
   opensearch_config.replica_shard_count:
     description: how many replicas will be on indexs. 
     default: 1
-  opensearch_config.platform_shard_count:
+  opensearch_config.platform_replica_shard_count:
     description: how many replicas will be on platform indexs. 
     default: 1
   opensearch_config.index_prefix:
