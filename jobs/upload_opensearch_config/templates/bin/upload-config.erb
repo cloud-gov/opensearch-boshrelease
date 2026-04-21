@@ -73,6 +73,7 @@ get_oidc_token() {
 
 # Get OIDC token if enabled
 OIDC_TOKEN=""
+AUTH_HEADER=""
 if [[ "$OIDC_ENABLED" == "true" && -n "$OIDC_TOKEN_URL" && -n "$OIDC_CLIENT_ID" && -n "$OIDC_CLIENT_SECRET" ]]; then
     echo "OIDC is enabled, attempting to get token..."
     
@@ -87,6 +88,7 @@ if [[ "$OIDC_ENABLED" == "true" && -n "$OIDC_TOKEN_URL" && -n "$OIDC_CLIENT_ID" 
         fi
     fi
     
+    AUTH_HEADER="-H \"Authorization: Bearer ${OIDC_TOKEN}\""
     echo "OIDC token obtained successfully"
 elif [[ "$OIDC_ENABLED" == "true" ]]; then
     echo "Error: OIDC is enabled but missing required configuration (token_url, client_id, or client_secret)" >&2
@@ -104,13 +106,6 @@ KEY="--key ${JOB_DIR}/config/ssl/opensearch-admin.key"
 ALIAS=<%= aliases %>
 METRIC_ALIAS=<%= metric_aliases %>
 PLATFORM_ALIAS=<%= platform_aliases %>
-
-# Set up auth header if OIDC token is available
-if [[ -n "$OIDC_TOKEN" ]]; then
-    AUTH_HEADER="-H \"Authorization: Bearer ${OIDC_TOKEN}\""
-else
-    AUTH_HEADER=""
-fi
 
 for template in $(curl -s ${CA} ${CERT} ${KEY} ${AUTH_HEADER} ${URL}/_cat/templates | awk '{print $1}'); do
   if ! grep -qw ${template} <(echo "<%= p('opensearch_config.index_templates').map { |template| template.keys.first }.join(' ') %>"); then
@@ -227,4 +222,12 @@ echo "--- Creating ISM policy"
     else
       curl -XPUT ${CA} ${CERT} ${KEY} ${AUTH_HEADER} ${BASEURL}/_plugins/_ism/policies/logs-platform-rollover_policy -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy-platform.json
     fi
-    HTTP_CODE=$(curl -s -o /dev/null -s -w "%{http_code}\n" -I  ${CA} ${CERT
+    HTTP_CODE=$(curl -s -o /dev/null -s -w "%{http_code}\n" -I  ${CA} ${CERT} ${KEY} ${AUTH_HEADER} ${BASEURL}/_alias/${PLATFORM_ALIAS}/ )
+    if [ "$HTTP_CODE" -ge "201" ]; then
+      curl -XPUT ${CA} ${CERT} ${KEY} ${AUTH_HEADER} ${BASEURL}/%3Clogs-platform-%7Bnow%2Fd%7D-01%3E -H 'Content-Type: application/json' -d'{"aliases": {"'${PLATFORM_ALIAS}'": {}}}'
+    fi
+  <% end %>
+<% end %>
+echo "--- Creating Reporting indexs"
+curl -XGET ${CA} ${CERT} ${KEY} ${AUTH_HEADER} ${BASEURL}/_plugins/_reports/definitions
+curl -XGET  ${CA} ${CERT} ${KEY} ${AUTH_HEADER} ${BASEURL}/_plugins/_reports/instances
