@@ -17,9 +17,6 @@ templates:
   config/dashboard-web-crt.erb: config/ssl/dashboard-web.crt
   config/dashboard-web-pem.erb: config/ssl/dashboard-web.pem
   config/ca.erb: config/ssl/opensearch.ca
-  config/oidc-ca.erb: config/ssl/oidc.ca
-  config/oidc-crt.erb: config/ssl/oidc.crt
-  config/oidc-pem.erb: config/ssl/oidc.pem
 
 
 consumes:
