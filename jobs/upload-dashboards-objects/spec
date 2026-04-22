@@ -40,7 +40,7 @@ templates:
   # Index Patterns
   dashboards-objects/app/index-pattern/logs-app.json.erb: dashboards-objects/app/index-pattern/logs-app*.json
   dashboards-objects/metric/index-pattern/logs-metric.json.erb: dashboards-objects/metric/index-pattern/logs-metric*.json
-  dashboards-objects/platform/index-pattern/logs-platform.json.erb: dashboards-objects/platform/index_pattern/logs-platform.json
+  dashboards-objects/platform/index-pattern/logs-platform.json.erb: dashboards-objects/platform/index-pattern/logs-platform.json
 
   # Search Objects
   ## App Search
