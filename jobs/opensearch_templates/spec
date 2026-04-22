@@ -14,6 +14,10 @@ templates:
   index-template-metric.json.erb:                index-template-metrics.json
   index-template-platform.json.erb:              index-template-platform.json
 
+consumes:
+- name: opensearch
+  type: opensearch
+  
 properties:
   opensearch_config.index_prefix:
     description: |
