@@ -124,11 +124,3 @@ properties:
     default: false
   opensearch_dashboards.oidc.redirect:
     description: redirect for oidc
-
-
-  opensearch_dashboards.oidc.ssl.ca:
-    description: oidc certificate authority 
-  opensearch_dashboards.oidc.ssl.certificate:
-    description: oidc certificate
-  opensearch_dashboards.oidc.ssl.private_key:
-    description: oidc key
