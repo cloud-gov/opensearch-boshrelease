@@ -1,3 +1,4 @@
+<% if(p('cloudfoundry.event_types').include? 'platform') %>
 {
     "attributes": {
         "description": "",
@@ -44,3 +45,4 @@
     ],
     "type": "dashboard"
 }
+<% end %>
