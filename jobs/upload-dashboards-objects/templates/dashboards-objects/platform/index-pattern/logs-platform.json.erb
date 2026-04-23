@@ -1,3 +1,5 @@
+<% require 'json' %>
+<% if(p('cloudfoundry.event_types').include? 'Platform') %>
 <%
 require 'json'
 fields_json =
@@ -448,3 +450,4 @@ fields_json =
     "references": [],
     "type": "index-pattern"
 }
+<% end %>

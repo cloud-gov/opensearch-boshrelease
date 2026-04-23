@@ -1,3 +1,4 @@
+<% if(p('cloudfoundry.event_types').include? 'Platform') %>
 {
     "attributes": {
         "columns": [
@@ -33,3 +34,4 @@
     ],
     "type": "search"
 }
+<% end %>
