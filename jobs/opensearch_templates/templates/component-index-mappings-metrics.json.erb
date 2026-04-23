@@ -83,6 +83,9 @@ keyword_default = { "type": "keyword", "index": true }.to_json
                         "cpu_percentage": {
                             "type": "half_float"
                         },
+                        "delta": {
+                            "type": "long"
+                        },
                         "disk_bytes": {
                             "type": "long"
                         },
@@ -97,6 +100,9 @@ keyword_default = { "type": "keyword", "index": true }.to_json
                         },
                         "name": {
                             "type": "text"
+                        },
+                        "total": {
+                            "type": "long"
                         },
                         "unit": {
                             "type": "text"
