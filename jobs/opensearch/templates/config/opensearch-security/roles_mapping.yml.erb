@@ -79,8 +79,10 @@ kibana_server:
   # Give permission for Dashboards to access Opensearch
   - "dashboard.opensearch.internal"
 
+ <% if p('opensearch.oidc.enabled') %>
 dashboard_client:
   reserved: false
   backend_roles:
   - "uaa.none"
   hosts: []
+<% end %>

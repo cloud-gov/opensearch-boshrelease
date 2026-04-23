@@ -394,6 +394,7 @@ auditor_access:
   static: false
 
 
+<% if p('opensearch.oidc.enabled') %>
 dashboard_client:
   reserved: false
   cluster_permissions: []
@@ -411,3 +412,4 @@ dashboard_client:
         - "*"
       allowed_actions:
         - "kibana_all_write"
+<% end %>

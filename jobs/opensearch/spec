@@ -236,4 +236,4 @@ properties:
 
   opensearch.deployment_type:
     description: type of opensearch deployment
-    default: app
+    default: ["app"]
