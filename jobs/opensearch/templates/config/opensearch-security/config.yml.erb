@@ -36,7 +36,7 @@ config:
               client_id: <%= p('opensearch.oidc.client_id') %>
               client_secret: <%= p('opensearch.oidc.client_secret') %>
               response_type: "code"
-              scope: "openid profile email platform_logs.client"
+              scope: "all"
         authentication_backend:
           type: noop
     <% end %>
