@@ -6,6 +6,8 @@ export JQ_PACKAGE_DIR=/var/vcap/packages/jq
 export PATH=$JQ_PACKAGE_DIR/bin:$PATH
 
 
+<% if p('smoke_tests.app_log.enabled') %>
+
 <%
   ingestor_host = nil
   if_link("ingestor") { |ingestor_link| ingestor_host = ingestor_link.instances.first.address }
@@ -120,3 +122,5 @@ done
 echo -e "\nERROR:  Couldn't find app log containing: $SMOKE_ID"
 echo "Last search result: $result"
 exit 1
+
+<% end %>

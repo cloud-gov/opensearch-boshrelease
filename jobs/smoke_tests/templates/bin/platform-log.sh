@@ -1,5 +1,7 @@
 set -eu
 
+<% if p('smoke_tests.platform_log.enabled') %>
+
 JOB_NAME=smoke_tests
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 export JQ_PACKAGE_DIR=/var/vcap/packages/jq
@@ -124,3 +126,5 @@ done
 echo -e "\nERROR: Couldn't find platform log containing: $SMOKE_ID"
 echo "Last search result: $result"
 exit 1
+
+<% end %>
