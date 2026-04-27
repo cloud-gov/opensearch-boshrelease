@@ -2,12 +2,36 @@
 import os
 import json
 
-folders = [
-"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/index-pattern",
-"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/search",
-"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/visualization",
-"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/dashboard"
-]
+<% if_link("opensearch") do |opensearch| %>
+folders = []
+<% if opensearch.p('opensearch.deployment_type').include?('app') %>
+folders.extend([
+"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/app/index-pattern",
+"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/app/search",
+"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/app/visualization",
+"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/app/dashboard"
+])
+<% end %>
+<% if opensearch.p('opensearch.deployment_type').include?('metric') %>
+folders.extend([
+"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/metric/index-pattern",
+"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/metric/search",
+"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/metric/visualization",
+"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/metric/dashboard"
+])
+<% end %>
+<% if opensearch.p('opensearch.deployment_type').include?('platform') %>
+folders.extend([
+"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/platform/index-pattern",
+"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/platform/search",
+"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/platform/visualization",
+"/var/vcap/jobs/upload-dashboards-objects/dashboards-objects/platform/dashboard"
+])
+<% end %>
+<% end %>
+
+
+
 output_file = "/var/vcap/jobs/upload-dashboards-objects/dashboard.ndjson"
 
 

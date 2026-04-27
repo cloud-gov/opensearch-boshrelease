@@ -1,0 +1,298 @@
+#!/var/vcap/packages/python3-requests/venv/bin/python3
+<%
+  job_dir = "/var/vcap/jobs/upload-dashboards-objects"
+  store_dir = "/var/vcap/store/upload-dashboards-objects"
+  dashboards_link = link('opensearch_dashboards')
+%>
+import glob
+import logging
+import os
+import requests
+import ast
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+delete_list_dashboard_str = "<%= p('dashboards_objects.delete_list_dashboard') %>"
+delete_list_dashboard = delete_list_dashboard_str.strip('[]').split(',') if delete_list_dashboard_str.strip('[]') else []
+delete_list_visual_str = "<%= p('dashboards_objects.delete_list_visual') %>"
+delete_list_visual = delete_list_visual_str.strip('[]').split(',') if delete_list_visual_str.strip('[]') else []
+delete_list_search_str = "<%= p('dashboards_objects.delete_list_search') %>"
+delete_list_search = delete_list_search_str.strip('[]').split(',') if delete_list_search_str.strip('[]') else []
+
+# OIDC Configuration
+<% if_link("opensearch") do |opensearch_config| %>
+  <% opensearch_config.if_p('opensearch.oidc.token_url') do %>
+    <% opensearch_config.if_p('opensearch.oidc.client_id') do %>
+oidc_client_id = "<%= opensearch_config.p('opensearch.oidc.client_id') %>"
+    <% end %>
+    <% opensearch_config.if_p('opensearch.oidc.client_secret') do %>
+oidc_client_secret = "<%= opensearch_config.p('opensearch.oidc.client_secret') %>"
+    <% end %>
+token_url = "<%= opensearch_config.p('opensearch.oidc.token_url') %>"
+oidc_enabled = True
+logging.info("DEBUG: Found opensearch.oidc.token_url - OIDC is enabled")
+  <% end.else do %>
+oidc_enabled = False
+oidc_client_id = None
+oidc_client_secret = None
+token_url = None
+logging.info("DEBUG: opensearch.oidc.token_url not found - OIDC disabled")
+  <% end %>
+<% end.else do %>
+oidc_enabled = False
+oidc_client_id = None
+oidc_client_secret = None
+token_url = None
+logging.warning("DEBUG: opensearch link not found - OIDC disabled")
+<% end %>
+
+def get_oidc_token(token_endpoint, client_id, client_secret, scope=None):
+    """
+    Get OIDC token from the token endpoint using client credentials grant
+    """
+    if not all([token_endpoint, client_id, client_secret]):
+        logging.error("Missing required OIDC parameters")
+        return None
+        
+    token_data = {
+        'grant_type': 'client_credentials',
+        'client_id': client_id,
+        'client_secret': client_secret
+    }
+    
+    if scope:
+        token_data['scope'] = scope
+    
+    headers = {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+    
+    try:
+        logging.info(f"Requesting OIDC token from: {token_endpoint}")
+        response = requests.post(token_endpoint, data=token_data, headers=headers, timeout=30)
+        response.raise_for_status()
+        
+        token_response = response.json()
+        access_token = token_response.get('access_token')
+        
+        if not access_token:
+            logging.error("No access token received from token endpoint")
+            logging.error(f"Token response: {token_response}")
+            return None
+            
+        logging.info("Successfully obtained OIDC token")
+        return access_token
+        
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Failed to obtain OIDC token: {e}")
+        return None
+    except ValueError as e:
+        logging.error(f"Failed to parse token response: {e}")
+        return None
+
+def make_authenticated_request(session, method, url, headers, cert_tuple, verify_ca, **kwargs):
+    """
+    Make an authenticated request with proper error handling
+    """
+    try:
+        response = session.request(
+            method=method,
+            url=url, 
+            headers=headers,
+            cert=cert_tuple,
+            verify=verify_ca,
+            timeout=30,
+            **kwargs
+        )
+        return response
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Request failed: {e}")
+        return None
+
+if __name__ == "__main__":
+    session = requests.Session()
+    ndjson_output_path = "/var/vcap/jobs/upload-dashboards-objects/dashboard.ndjson"
+    
+    # Get OIDC token if OIDC is enabled
+    oidc_token = None
+    if oidc_enabled and token_url and oidc_client_id and oidc_client_secret:
+        # Try with 'uaa.none' scope first, then without scope
+        oidc_token = get_oidc_token(token_url, oidc_client_id, oidc_client_secret, 'uaa.none')
+        if not oidc_token:
+            logging.info("Retrying OIDC token without scope...")
+            oidc_token = get_oidc_token(token_url, oidc_client_id, oidc_client_secret)
+            
+        if not oidc_token:
+            logging.error("Failed to obtain OIDC token after multiple attempts. Exiting.")
+            exit(1)
+    elif oidc_enabled:
+        logging.error("OIDC is enabled but missing required configuration (token_url, client_id, or client_secret)")
+        exit(1)
+    else:
+        logging.info("OIDC is disabled, proceeding without token authentication")
+    
+    # Certificate and URL configuration
+    ca = '<%= job_dir %>/config/ssl/opensearch.ca'
+    cert = '<%= job_dir %>/config/ssl/dashboard-web.crt'
+    key = '<%= job_dir %>/config/ssl/dashboard-web.key'
+    cert_tuple = (cert, key)
+    logs_url = 'https://<%= p('opensearch_dashboards.host') %>:<%= dashboards_link.p('opensearch_dashboards.port') %>'
+    
+    logging.info(f"OpenSearch Dashboards URL: {logs_url}")
+    
+    # Check if tenants are enabled
+    <% if_link("opensearch_dashboards") do |opensearch_dashboards| %>
+    use_tenants = <%= opensearch_dashboards.p('opensearch_dashboards.multitenancy.enabled') ? 'True' : 'False' %>
+    <% end %>
+    
+    logging.info(f"Multi-tenancy enabled: {use_tenants}")
+    
+    # Get tenant list or use default
+    if use_tenants:
+        tenant_file = '<%= store_dir %>/org-tenants.txt'
+        try:
+            with open(tenant_file) as orgs:
+                tenant_list = [tenant.strip() for tenant in orgs if tenant.strip()]
+            logging.info(f"Found {len(tenant_list)} tenants: {tenant_list}")
+        except FileNotFoundError:
+            logging.error(f"Tenant file not found: {tenant_file}")
+            exit(1)
+    else:
+        tenant_list = [None]  # Single iteration without tenant
+        logging.info("Processing without tenants")
+    
+    # Check if NDJSON file exists
+    if not os.path.exists(ndjson_output_path):
+        logging.error(f"NDJSON file not found: {ndjson_output_path}")
+        exit(1)
+    
+    for tenant in tenant_list:
+        tenant_msg = f' for tenant {tenant}' if use_tenants and tenant else ''
+        logging.info(f"Processing{tenant_msg}")
+        
+        # Set headers based on whether we're using tenants
+        base_headers = {
+            'osd-xsrf': 'true',
+            'x-proxy-roles': 'admin',
+            'x-proxy-user': 'admin',
+            'x-forwarded-for': '127.0.0.1'
+        }
+        
+        # Add OIDC token if available
+        if oidc_token:
+            base_headers['Authorization'] = f'Bearer {oidc_token}'
+        
+        if use_tenants and tenant:
+            headers = {**base_headers, 'securitytenant': tenant}
+        else:
+            headers = base_headers
+        
+        # Delete dashboards
+        for dashboard in delete_list_dashboard:
+            if not dashboard.strip():
+                continue
+            r = make_authenticated_request(
+                session, 'DELETE',
+                f'{logs_url}/api/saved_objects/dashboard/{dashboard}',
+                headers, cert_tuple, ca
+            )
+            if r and r.status_code == 200:
+                logging.info(f'Successfully deleted dashboard {dashboard}{tenant_msg}')
+            else:
+                status = r.status_code if r else 'No Response'
+                logging.warning(f'Failed to delete dashboard {dashboard}{tenant_msg} - Status: {status}')
+        
+        # Delete visualizations
+        for visual in delete_list_visual:
+            if not visual.strip():
+                continue
+            r = make_authenticated_request(
+                session, 'DELETE',
+                f'{logs_url}/api/saved_objects/visualization/{visual}',
+                headers, cert_tuple, ca
+            )
+            if r and r.status_code == 200:
+                logging.info(f'Successfully deleted visual {visual}{tenant_msg}')
+            else:
+                status = r.status_code if r else 'No Response'
+                logging.warning(f'Failed to delete visual {visual}{tenant_msg} - Status: {status}')
+        
+        # Delete searches
+        for search in delete_list_search:
+            if not search.strip():
+                continue
+            r = make_authenticated_request(
+                session, 'DELETE',
+                f'{logs_url}/api/saved_objects/search/{search}',
+                headers, cert_tuple, ca
+            )
+            if r and r.status_code == 200:
+                logging.info(f'Successfully deleted search {search}{tenant_msg}')
+            else:
+                status = r.status_code if r else 'No Response'
+                logging.warning(f'Failed to delete search {search}{tenant_msg} - Status: {status}')
+        
+        # Upload NDJSON file
+        try:
+            with open(ndjson_output_path, 'rb') as ndjson_file:
+                ndjson_files = {'file': (ndjson_output_path, ndjson_file, 'application/x-ndjson')}
+                r = make_authenticated_request(
+                    session, 'POST',
+                    f'{logs_url}/api/saved_objects/_import?overwrite=true',
+                    headers, cert_tuple, ca,
+                    files=ndjson_files
+                )
+                
+                if r and r.status_code == 200:
+                    logging.info(f'NDJSON FILE {ndjson_output_path} uploaded successfully{tenant_msg}')
+                elif r and r.status_code == 409:
+                    # Reset file pointer for PUT request
+                    ndjson_file.seek(0)
+                    put = make_authenticated_request(
+                        session, 'PUT',
+                        f'{logs_url}/api/saved_objects/_import?overwrite=true',
+                        headers, cert_tuple, ca,
+                        data=ndjson_file
+                    )
+                    if put and put.status_code == 200:
+                        logging.info(f'NDJSON FILE {ndjson_output_path} uploaded successfully via PUT{tenant_msg}')
+                    else:
+                        status = put.status_code if put else 'No Response'
+                        logging.error(f"Failed to upload file via PUT, status code: {status}")
+                        if put:
+                            try:
+                                error_response = put.json()
+                                logging.error(f"Error details: {error_response}")
+                            except ValueError:
+                                logging.error(f"Raw response: {put.text}")
+                else:
+                    status = r.status_code if r else 'No Response'
+                    logging.error(f"Failed to upload file {ndjson_output_path}, status code: {status}")
+                    if r:
+                        try:
+                            error_response = r.json()
+                            logging.error(f"Error details: {error_response}")
+                        except ValueError:
+                            logging.error(f"Raw response: {r.text}")
+        except Exception as e:
+            logging.error(f"Exception during file upload: {e}")
+        
+        # Set default index
+        index_headers = {**base_headers, 'content-type': 'application/json'}
+        if use_tenants and tenant:
+            index_headers['securitytenant'] = tenant
+        
+        r = make_authenticated_request(
+            session, 'POST',
+            f'{logs_url}/api/opensearch-dashboards/settings',
+            index_headers, cert_tuple, ca,
+            data='{"changes":{"defaultIndex":"<%= p('dashboards_objects.default_index') %>", "timeline:es.default_index": "<%= p('dashboards_objects.default_index') %>"}}'
+        )
+        
+        if r and r.status_code == 200:
+            logging.info(f'Successfully set <%= p('dashboards_objects.default_index') %> as Default Index{tenant_msg}')
+        else:
+            status = r.status_code if r else 'No Response'
+            logging.warning(f'Failed to set <%= p('dashboards_objects.default_index') %> as Default Index{tenant_msg} - Status: {status}')
+    
+    logging.info("Dashboard objects upload process completed")

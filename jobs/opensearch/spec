@@ -51,6 +51,12 @@ provides:
       - opensearch.node.ssl.certificate
       - opensearch.node.ssl.private_key
       - opensearch.dashboard_username
+      - opensearch.oidc.client_id
+      - opensearch.oidc.client_secret
+      - opensearch.oidc.openid_connect_url
+      - opensearch.oidc.redirect_url
+      - opensearch.oidc.token_url
+      - opensearch.deployment_type
 
 consumes:
   - name: opensearch
@@ -198,6 +204,20 @@ properties:
   opensearch.dashboard_username:
     description: username for dashboard
     default: "dashboard.opensearch.internal"
+
+  opensearch.oidc.enabled:
+    description: enables oidc
+    default: false
+  opensearch.oidc.client_id: 
+    description: "The client ID for your OpenID Connect application."
+  opensearch.oidc.client_secret: 
+    description: "The client secret for your OpenID Connect application."
+  opensearch.oidc.openid_connect_url:
+    description: "The issuer URL of your OpenID Connect Identity Provider."
+  opensearch.oidc.redirect_url:
+    description: "The redirect URL registered with your OpenID Connect Identity Provider."
+  opensearch.oidc.token_url:
+    description: "The token url for your OpenID IDP"
   opensearch.multitenancy.private_tenant_enabled:
     description: True to enable private tenant
     default: false
@@ -213,3 +233,7 @@ properties:
     description: default password for keystore
   opensearch.notifications.secrets_prefix:
     description: Prefix for name of secrets containing credentials for OpenSearch notifications email senders
+
+  opensearch.deployment_type:
+    description: type of opensearch deployment
+    default: ["app"]

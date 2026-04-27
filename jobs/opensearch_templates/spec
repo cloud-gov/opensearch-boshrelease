@@ -9,11 +9,16 @@ templates:
   component-index-mappings-app.json.erb:         component-index-mappings-app.json
   component-index-mappings-metrics.json.erb:     component-index-mappings-metrics.json
   component-index-mappings-platform.json.erb:    component-index-mappings-platform.json
+
   index-template-base.json.erb:                  index-template.json
   index-template-app.json.erb:                   index-template-app.json
   index-template-metric.json.erb:                index-template-metrics.json
   index-template-platform.json.erb:              index-template-platform.json
 
+consumes:
+- name: opensearch
+  type: opensearch
+  
 properties:
   opensearch_config.index_prefix:
     description: |
@@ -47,9 +52,12 @@ properties:
     description: Name shards-and-replicas component template is uploaded as by upload_opensearch_config
   opensearch_config.metrics_shards_and_replicas_component_name:
     description: Name shards-and-replicas component template is uploaded as by upload_opensearch_config
+  opensearch_config.platform_shards_and_replicas_component_name:
+    description: Name shards-and-replicas component template is uploaded as by upload_opensearch_config
   opensearch_config.index_settings:
     description: Index settings for logs
   opensearch_config.app_index_settings:
     description: Index settings for app logs
   opensearch_config.platform_index_settings:
     description: Index settings for platform logs
+

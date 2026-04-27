@@ -1,3 +1,5 @@
+<% if_link("opensearch") do |opensearch| %>
+<% if opensearch.p('opensearch.deployment_type').include?('app') %>
 {
     "policy": {
         "description": "Rollover to a new index when age or size becomes our target",
@@ -112,3 +114,5 @@
         ]
     }
 }
+<% end %>
+<% end %>

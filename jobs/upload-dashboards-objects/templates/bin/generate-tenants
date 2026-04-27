@@ -1,5 +1,7 @@
 set -eu
 
+<% if_link("opensearch_dashboards") do |opensearch_dashboards| %>
+<% if opensearch_dashboards.p('opensearch_dashboards.multitenancy.enabled') == true %>
 export JOB_NAME="upload-dashboards-objects"
 export STORE_DIR="/var/vcap/store/$JOB_NAME"
 <%
@@ -12,3 +14,5 @@ cf auth "<%= client %>" "<%= password %>" --client-credentials
 mkdir -p $STORE_DIR
 cf orgs| tail -n +4 > "$STORE_DIR/org-tenants.txt"
 echo "admin_tenant" >> "$STORE_DIR/org-tenants.txt"
+<% end %>
+<% end %>

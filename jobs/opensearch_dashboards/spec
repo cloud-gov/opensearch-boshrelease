@@ -18,6 +18,7 @@ templates:
   config/dashboard-web-pem.erb: config/ssl/dashboard-web.pem
   config/ca.erb: config/ssl/opensearch.ca
 
+
 consumes:
   - name: opensearch
     type: opensearch
@@ -30,6 +31,7 @@ provides:
       - opensearch_dashboards.port
       - opensearch_dashboards.server.ssl.certificate
       - opensearch_dashboards.server.ssl.private_key
+      - opensearch_dashboards.multitenancy.enabled
 
 properties:
   opensearch_dashboards.username:
@@ -113,3 +115,9 @@ properties:
   opensearch_dashboards.multitenancy.tenants.enable_private:
     description: "whether the private tenant is available on OpenSearch Dashboards"
     default: false
+
+  opensearch_dashboards.oidc.enabled:
+    description: enables oidc
+    default: false
+  opensearch_dashboards.oidc.redirect:
+    description: redirect for oidc

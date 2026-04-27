@@ -1,18 +1,16 @@
+<% if_link("opensearch") do |opensearch| %>
+  <% if opensearch.p('opensearch.deployment_type').include?('metric') %>
 <%
-# This file contains mappings specific for 'metric' indicies.
+# This file contains mappings specific for 'metric' indices.
 #
 # By default all string fields are set as `keyword` (not analyzed values).
 #
-
 require 'json'
-
 keyword_default = { "type": "keyword", "index": true }.to_json
-
 %>
 {
     "template": {
-        "settings": <%= p('opensearch_config.metric_index_settings',
-        {}).to_json %>,
+        "settings": <%= p('opensearch_config.metric_index_settings', {}).to_json %>,
         "mappings": {
         <%# ------------ App specific fields %>
             "properties": {
@@ -85,6 +83,9 @@ keyword_default = { "type": "keyword", "index": true }.to_json
                         "cpu_percentage": {
                             "type": "half_float"
                         },
+                        "delta": {
+                            "type": "long"
+                        },
                         "disk_bytes": {
                             "type": "long"
                         },
@@ -99,6 +100,9 @@ keyword_default = { "type": "keyword", "index": true }.to_json
                         },
                         "name": {
                             "type": "text"
+                        },
+                        "total": {
+                            "type": "long"
                         },
                         "unit": {
                             "type": "text"
@@ -160,3 +164,5 @@ keyword_default = { "type": "keyword", "index": true }.to_json
         }
     }
 }
+  <% end %>
+<% end %>

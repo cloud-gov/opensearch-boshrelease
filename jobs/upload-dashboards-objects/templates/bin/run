@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
-
 set -eu
-
 source /var/vcap/packages/ruby-3.1/bosh/runtime.env
-
 export PATH=/var/vcap/packages/cf-cli-8-linux/bin:${PATH}
 export PATH=/var/vcap/packages/python3/bin:$PATH
 export PYTHONPATH="/var/vcap/packages/python3/lib/python3.12/site-packages${PYTHONPATH:+:$PYTHONPATH}"
@@ -13,7 +10,17 @@ export REQUESTS_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt"
 echo "[$(date)] Calling 'generate-tenants'..."
 $(dirname $0)/generate-tenants
 
-echo "[$(date)] Calling 'import-objects'..."
+<% if_link("opensearch") do |opensearch_config| %>
+  <% opensearch_config.if_p('opensearch.oidc.token_url') do %>
+echo "[$(date)] OIDC configuration detected, calling 'import-objects-oidc'..."
+$(dirname $0)/import-objects-oidc
+  <% end.else do %>
+echo "[$(date)] No OIDC configuration detected, calling 'import-objects'..."
 $(dirname $0)/import-objects
+  <% end %>
+<% end.else do %>
+echo "[$(date)] No opensearch link found, calling 'import-objects'..."
+$(dirname $0)/import-objects
+<% end %>
 
 exit 0

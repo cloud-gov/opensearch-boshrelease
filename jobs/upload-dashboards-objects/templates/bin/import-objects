@@ -1,152 +1,207 @@
 #!/var/vcap/packages/python3-requests/venv/bin/python3
-
 <%
-
   job_dir = "/var/vcap/jobs/upload-dashboards-objects"
   store_dir = "/var/vcap/store/upload-dashboards-objects"
   dashboards_link = link('opensearch_dashboards')
 %>
-
 import glob
 import logging
 import os
 import requests
 import ast
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 delete_list_dashboard_str = "<%= p('dashboards_objects.delete_list_dashboard') %>"
 delete_list_dashboard = delete_list_dashboard_str.strip('[]').split(',') if delete_list_dashboard_str.strip('[]') else []
-
 delete_list_visual_str = "<%= p('dashboards_objects.delete_list_visual') %>"
 delete_list_visual = delete_list_visual_str.strip('[]').split(',') if delete_list_visual_str.strip('[]') else []
-
 delete_list_search_str = "<%= p('dashboards_objects.delete_list_search') %>"
 delete_list_search = delete_list_search_str.strip('[]').split(',') if delete_list_search_str.strip('[]') else []
+
+def make_authenticated_request(session, method, url, headers, cert_tuple, verify_ca, **kwargs):
+    """
+    Make an authenticated request with proper error handling
+    """
+    try:
+        response = session.request(
+            method=method,
+            url=url, 
+            headers=headers,
+            cert=cert_tuple,
+            verify=verify_ca,
+            timeout=30,
+            **kwargs
+        )
+        return response
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Request failed: {e}")
+        return None
 
 if __name__ == "__main__":
     session = requests.Session()
     ndjson_output_path = "/var/vcap/jobs/upload-dashboards-objects/dashboard.ndjson"
-    # set CA
-    ca =  '<%= job_dir %>/config/ssl/opensearch.ca'
+    
+    # Certificate and URL configuration
+    ca = '<%= job_dir %>/config/ssl/opensearch.ca'
     cert = '<%= job_dir %>/config/ssl/dashboard-web.crt'
     key = '<%= job_dir %>/config/ssl/dashboard-web.key'
-
+    cert_tuple = (cert, key)
     logs_url = 'https://<%= p('opensearch_dashboards.host') %>:<%= dashboards_link.p('opensearch_dashboards.port') %>'
-    with open('<%= store_dir %>/org-tenants.txt') as orgs:
-      for tenant in orgs:
-        headers = {
-          'osd-xsrf': 'true',
-          'x-proxy-roles': 'admin',
-          'x-proxy-user': 'admin',
-          'x-forwarded-for': '127.0.0.1',
-          'securitytenant': tenant.strip()
+    
+    logging.info(f"OpenSearch Dashboards URL: {logs_url}")
+    
+    # Check if tenants are enabled
+    <% if_link("opensearch_dashboards") do |opensearch_dashboards| %>
+    use_tenants = <%= opensearch_dashboards.p('opensearch_dashboards.multitenancy.enabled') ? 'True' : 'False' %>
+    <% end %>
+    
+    logging.info(f"Multi-tenancy enabled: {use_tenants}")
+    
+    # Get tenant list or use default
+    if use_tenants:
+        tenant_file = '<%= store_dir %>/org-tenants.txt'
+        try:
+            with open(tenant_file) as orgs:
+                tenant_list = [tenant.strip() for tenant in orgs if tenant.strip()]
+            logging.info(f"Found {len(tenant_list)} tenants: {tenant_list}")
+        except FileNotFoundError:
+            logging.error(f"Tenant file not found: {tenant_file}")
+            exit(1)
+    else:
+        tenant_list = [None]  # Single iteration without tenant
+        logging.info("Processing without tenants")
+    
+    # Check if NDJSON file exists
+    if not os.path.exists(ndjson_output_path):
+        logging.error(f"NDJSON file not found: {ndjson_output_path}")
+        exit(1)
+    
+    for tenant in tenant_list:
+        tenant_msg = f' for tenant {tenant}' if use_tenants and tenant else ''
+        logging.info(f"Processing{tenant_msg}")
+        
+        # Set headers based on whether we're using tenants
+        base_headers = {
+            'osd-xsrf': 'true',
+            'x-proxy-roles': 'admin',
+            'x-proxy-user': 'admin',
+            'x-forwarded-for': '127.0.0.1'
         }
-
-        for dashboard in delete_list_dashboard:
-          r = session.delete('{}/api/saved_objects/dashboard/{}'.format(
-                logs_url,
-                dashboard
-              ),
-              headers=headers,
-              cert=(cert, key),
-              verify=ca )
-
-          if r.status_code == 200:
-            logging.info(f'delete sucessfully dashboard {dashboard} for tenant {tenant}')
-          else: 
-            logging.info(f'delete failed dashboard {dashboard} for tenant {tenant}')
         
-        for visual in delete_list_visual:
-          r = session.delete('{}/api/saved_objects/visualization/{}'.format(
-                logs_url,
-                visual
-              ),
-              headers=headers,
-              cert=(cert, key),
-              verify=ca )
-
-          if r.status_code == 200:
-            logging.info(f'delete sucessfully visual {visual} for tenant {tenant}')
-          else: 
-            logging.info(f'delete failed visual {visual} for tenant {tenant}')
-
-        for search in delete_list_search:
-          r = session.delete('{}/api/saved_objects/search/{}'.format(
-                logs_url,
-                search
-              ),
-              headers=headers,
-              cert=(cert, key),
-              verify=ca )
-
-          if r.status_code == 200:
-            logging.info(f'delete sucessfully search {search} for tenant {tenant}')
-          else: 
-            logging.info(f'delete failed searcg {search} for tenant {tenant}')
-        
-
-        
-
-        with open(ndjson_output_path, 'rb') as ndjson_file:
-          ndjson_files= {'file':(ndjson_output_path, ndjson_file, 'application/x-ndjson')}
-          r = session.post(
-            '{}/api/saved_objects/_import?overwrite=true'.format(
-              logs_url
-            ),
-            files=ndjson_files,
-            headers=headers,
-            cert=(cert, key),
-            verify=ca
-          )
-          if r.status_code == 200:
-            logging.info(f'NDJSON FILE {ndjson_output_path} uploaded sucessfully for tenant {tenant}')
-          elif r.status_code == 409:
-            put = session.put(
-                  '{}/api/saved_objects/_import?overwrite=true'.format(
-              logs_url
-              ),
-            data=ndjson_file,
-            headers=headers,
-            cert=(cert, key),
-            verify=ca
-            )
-            if put.status_code == 200:
-                logging.info(f'NDJSON FILE {ndjson_output_path} uploaded sucessfully for tenant {tenant}')
-            else:
-                logging.error(f"Failed to upload file {ndjson_output_path}, status code: {put.status_code}")
-                try:
-                   error_response = put.json()
-                   logging.error(f"Error detils: {error_response}")
-                except ValueError:
-                   logging.error(f"raw response: {put.text}")
-                logging.info(f'Failed to upload NDJSON FILE {ndjson_output_path}')
-          else:
-              logging.error(f"Failed to upload file {ndjson_output_path}, status code: {r.status_code}")
-              try:
-                  error_response = r.json()
-                  logging.error(f"Error detils: {error_response}")
-              except ValueError:
-                  logging.error(f"raw response: {r.text}")
-              logging.info(f'Failed to upload NDJSON FILE {ndjson_output_path}')
-
-        index_headers = {
-          'content-type': 'application/json',
-          'osd-xsrf': 'true',
-          'x-proxy-roles': 'admin',
-          'x-proxy-user': 'admin',
-          'x-forwarded-for': '127.0.0.1',
-          'securitytenant': tenant.strip(),
-        }
-        r = session.post(
-          '{}/api/opensearch-dashboards/settings'.format(logs_url),
-          data='{"changes":{"defaultIndex":"<%= p('dashboards_objects.default_index') %>", "timeline:es.default_index": "<%= p('dashboards_objects.default_index') %>"}}',
-          headers=index_headers,
-          cert=(cert, key),
-          verify=ca
-        )
-        if r.status_code == 200:
-            logging.info('Successfully Set <%= p('dashboards_objects.default_index') %> as Default Index')
+        if use_tenants and tenant:
+            headers = {**base_headers, 'securitytenant': tenant}
         else:
-            logging.info('Failed to Set <%= p('dashboards_objects.default_index') %> as Default Index')
-
+            headers = base_headers
+        
+        # Delete dashboards
+        for dashboard in delete_list_dashboard:
+            if not dashboard.strip():
+                continue
+            r = make_authenticated_request(
+                session, 'DELETE',
+                f'{logs_url}/api/saved_objects/dashboard/{dashboard}',
+                headers, cert_tuple, ca
+            )
+            if r and r.status_code == 200:
+                logging.info(f'Successfully deleted dashboard {dashboard}{tenant_msg}')
+            else:
+                status = r.status_code if r else 'No Response'
+                logging.warning(f'Failed to delete dashboard {dashboard}{tenant_msg} - Status: {status}')
+        
+        # Delete visualizations
+        for visual in delete_list_visual:
+            if not visual.strip():
+                continue
+            r = make_authenticated_request(
+                session, 'DELETE',
+                f'{logs_url}/api/saved_objects/visualization/{visual}',
+                headers, cert_tuple, ca
+            )
+            if r and r.status_code == 200:
+                logging.info(f'Successfully deleted visual {visual}{tenant_msg}')
+            else:
+                status = r.status_code if r else 'No Response'
+                logging.warning(f'Failed to delete visual {visual}{tenant_msg} - Status: {status}')
+        
+        # Delete searches
+        for search in delete_list_search:
+            if not search.strip():
+                continue
+            r = make_authenticated_request(
+                session, 'DELETE',
+                f'{logs_url}/api/saved_objects/search/{search}',
+                headers, cert_tuple, ca
+            )
+            if r and r.status_code == 200:
+                logging.info(f'Successfully deleted search {search}{tenant_msg}')
+            else:
+                status = r.status_code if r else 'No Response'
+                logging.warning(f'Failed to delete search {search}{tenant_msg} - Status: {status}')
+        
+        # Upload NDJSON file
+        try:
+            with open(ndjson_output_path, 'rb') as ndjson_file:
+                ndjson_files = {'file': (ndjson_output_path, ndjson_file, 'application/x-ndjson')}
+                r = make_authenticated_request(
+                    session, 'POST',
+                    f'{logs_url}/api/saved_objects/_import?overwrite=true',
+                    headers, cert_tuple, ca,
+                    files=ndjson_files
+                )
+                
+                if r and r.status_code == 200:
+                    logging.info(f'NDJSON FILE {ndjson_output_path} uploaded successfully{tenant_msg}')
+                elif r and r.status_code == 409:
+                    # Reset file pointer for PUT request
+                    ndjson_file.seek(0)
+                    put = make_authenticated_request(
+                        session, 'PUT',
+                        f'{logs_url}/api/saved_objects/_import?overwrite=true',
+                        headers, cert_tuple, ca,
+                        data=ndjson_file
+                    )
+                    if put and put.status_code == 200:
+                        logging.info(f'NDJSON FILE {ndjson_output_path} uploaded successfully via PUT{tenant_msg}')
+                    else:
+                        status = put.status_code if put else 'No Response'
+                        logging.error(f"Failed to upload file via PUT, status code: {status}")
+                        if put:
+                            try:
+                                error_response = put.json()
+                                logging.error(f"Error details: {error_response}")
+                            except ValueError:
+                                logging.error(f"Raw response: {put.text}")
+                        logging.info(f'Failed to upload NDJSON FILE {ndjson_output_path}')
+                else:
+                    status = r.status_code if r else 'No Response'
+                    logging.error(f"Failed to upload file {ndjson_output_path}, status code: {status}")
+                    if r:
+                        try:
+                            error_response = r.json()
+                            logging.error(f"Error details: {error_response}")
+                        except ValueError:
+                            logging.error(f"Raw response: {r.text}")
+                    logging.info(f'Failed to upload NDJSON FILE {ndjson_output_path}')
+        except Exception as e:
+            logging.error(f"Exception during file upload: {e}")
+        
+        # Set default index
+        index_headers = {**base_headers, 'content-type': 'application/json'}
+        if use_tenants and tenant:
+            index_headers['securitytenant'] = tenant
+        
+        r = make_authenticated_request(
+            session, 'POST',
+            f'{logs_url}/api/opensearch-dashboards/settings',
+            index_headers, cert_tuple, ca,
+            data='{"changes":{"defaultIndex":"<%= p('dashboards_objects.default_index') %>", "timeline:es.default_index": "<%= p('dashboards_objects.default_index') %>"}}'
+        )
+        
+        if r and r.status_code == 200:
+            logging.info(f'Successfully set <%= p('dashboards_objects.default_index') %> as Default Index{tenant_msg}')
+        else:
+            status = r.status_code if r else 'No Response'
+            logging.warning(f'Failed to set <%= p('dashboards_objects.default_index') %> as Default Index{tenant_msg} - Status: {status}')
+    
+    logging.info("Dashboard objects upload process completed")

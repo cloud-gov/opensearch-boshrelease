@@ -392,3 +392,24 @@ auditor_access:
     allowed_actions:
     - "kibana_all_read"
   static: false
+
+
+<% if p('opensearch.oidc.enabled') %>
+dashboard_client:
+  reserved: false
+  cluster_permissions: []
+  index_permissions:
+    - index_patterns:
+        - "*"
+      allowed_actions:
+        - "indices:data/write/index"
+        - "indices:data/write/update" 
+        - "indices:data/read/search"
+        - "indices:admin/mapping/put"
+        - "indices:data/write/bulk*"
+  tenant_permissions:
+    - tenant_patterns:
+        - "*"
+      allowed_actions:
+        - "kibana_all_write"
+<% end %>

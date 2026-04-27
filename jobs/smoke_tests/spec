@@ -13,6 +13,7 @@ templates:
   bin/app-log.sh: bin/app-log
   bin/audit-log.sh: bin/audit-log
   bin/metric-log.sh: bin/metric-log
+  bin/platform-log.sh: bin/platform-log
   bin/cloudwatch-log.sh: bin/cloudwatch-log
   config/smoketest-crt.erb: config/ssl/smoketest.crt
   config/smoketest-pem.erb: config/ssl/smoketest.pem
@@ -33,6 +34,9 @@ properties:
   smoke_tests.app_log.enabled:
     description: app log smoketest
     default: true
+  smoke_tests.platform_log.enabled:
+    description: platform log smoketest
+    default: false
   smoke_tests.opensearch.ssl.private_key:
     description: opensearch private key
   smoke_tests.opensearch.ssl.certificate:
@@ -62,6 +66,7 @@ properties:
     description: Index to send smoke_tests to.
   smoke_tests.metric_index:
     description: Index to send metric smoke_tests to.
+    default: ""
   smoke_tests.audit_count_test.minimum:
     description: Minimum expected documents for cloudwatch in the given time window
   smoke_tests.count_test.time_field:
@@ -84,18 +89,26 @@ properties:
     description: region for aws
   smoke_tests.s3_audit.bucket:
     description: name of audit bucket
+    default: false
   smoke_tests.s3_cloudwatch.bucket:
     description: name of cloudwatch bucket
+    default: false
   smoke_tests.s3_metric.bucket:
     description: name of metrics bucket
+    default: false
   smoke_tests.s3_falco.bucket:
     description: name of S3 bucket containing falco logs
+    default: false
   smoke_tests.org_guid:
     description: org guid for opensearch smoketest test org
+    default: ""
   smoke_tests.space_guid:
     description: space guid for opensearch smoketest test space
+    default: ""
   smoke_tests.rds_instance:
     description: rds instance for test
+    default: ""
   smoke_tests.log_group:
     description: log group for test
+    default: ""
   

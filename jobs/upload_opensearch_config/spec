@@ -13,8 +13,10 @@ templates:
   config/ca.erb: config/ssl/opensearch.ca
   config/ism-policy.json.erb: config/ism-policy.json
   config/ism-policy-metrics.json.erb: config/ism-policy-metrics.json
+  config/ism-policy-platform.json.erb: config/ism-policy-platform.json
   index-templates/shards-and-replicas.json.erb: index-templates/shards-and-replicas.json
   index-templates/shards-and-replicas-metrics.json.erb: index-templates/shards-and-replicas-metrics.json
+  index-templates/shards-and-replicas-platform.json.erb: index-templates/shards-and-replicas-platform.json
   index-templates/index-settings.json.erb: index-templates/index-settings.json
   index-templates/index-mappings.json.erb: index-templates/index-mappings.json
 
@@ -39,18 +41,30 @@ properties:
   opensearch_config.metrics_shard_count:
     description: shard count for metrics data in environment, should match the average daily volume expected /50 for for basic logging and /20 for high access
     default: 3
+  opensearch_config.platform_shard_count:
+    description: shard count for metrics data in environment, should match the average daily volume expected /50 for for basic logging and /20 for high access
+    default: 3
   opensearch_config.alias:
     description: alias of default index
   opensearch_config.metric_alias:
     description: alias of metrics index
+    default: []
+  opensearch_config.platform_alias:
+    description: alias of platform index
   opensearch_config.app_delete_index_age:
     description: how old a app index has to be before deletion
     default: 364d
   opensearch_config.metric_delete_index_age:
     description: how old a metric index has to be before deletion
     default: 90d
+  opensearch_config.platform_delete_index_age:
+    description: how old a platform index has to be before deletion
+    default: 364d
   opensearch_config.replica_shard_count:
     description: how many replicas will be on indexs. 
+    default: 1
+  opensearch_config.platform_replica_shard_count:
+    description: how many replicas will be on platform indexs. 
     default: 1
   opensearch_config.index_prefix:
     description: |
