@@ -173,7 +173,7 @@ end
 #
 # wait for opensearch availability
 #
-until curl -f ${KEY} ${CERT} ${CA} ${AUTH_HEADER} "${URL}/_cluster/health?wait_for_status=yellow&timeout=10m"; do :; done
+until curl -f ${KEY} ${CERT} ${CA} -H "${AUTH_HEADER}" "${URL}/_cluster/health?wait_for_status=yellow&timeout=10m"; do :; done
 
 echo "--- Component Templates"
 <%= put_to_es('_component_template', p('opensearch_config.component_templates')) %>
@@ -224,13 +224,13 @@ echo "--- Creating ISM policy"
     TERM=$(echo "$logs_platform_rollover_policy" | grep -o '"_primary_term":[0-9]*' | sed 's/"_primary_term"://')
     SEQ=$(echo "$logs_platform_rollover_policy" | grep -o '"_seq_no":[0-9]*' | sed 's/"_seq_no"://')
     if [[ -n "$TERM" ]]; then
-      curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" "${BASEURL}/_plugins/_ism/policies/logs-platform-rollover_policy?if_seq_no=${SEQ}&if_primary_term=${TERM}" -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy-platform.json
+      curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" -H 'Content-Type: application/json' "${BASEURL}/_plugins/_ism/policies/logs-platform-rollover_policy?if_seq_no=${SEQ}&if_primary_term=${TERM}" -d @${JOB_DIR}/config/ism-policy-platform.json
     else
-      curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/_plugins/_ism/policies/logs-platform-rollover_policy -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy-platform.json
+      curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" -H 'Content-Type: application/json' ${BASEURL}/_plugins/_ism/policies/logs-platform-rollover_policy -d @${JOB_DIR}/config/ism-policy-platform.json
     fi
     HTTP_CODE=$(curl -s -o /dev/null -s -w "%{http_code}\n" -I ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/_alias/${PLATFORM_ALIAS}/)
     if [ "$HTTP_CODE" -ge "201" ]; then
-       curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/%3Clogs-platform-%7Bnow%2Fd%7D-01%3E -H 'Content-Type: application/json' -d'{\"aliases\": {\"${PLATFORM_ALIAS}\": {}}}'
+      curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" -H 'Content-Type: application/json' ${BASEURL}/%3Clogs-platform-%7Bnow%2Fd%7D-01%3E -d'{"aliases": {"'${PLATFORM_ALIAS}'": {}}}'
     fi
   <% end %>
 <% end %>
