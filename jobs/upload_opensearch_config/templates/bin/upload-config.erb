@@ -87,7 +87,7 @@ if [[ "$OIDC_ENABLED" == "true" && -n "$OIDC_TOKEN_URL" && -n "$OIDC_CLIENT_ID" 
         fi
     fi
     
-    AUTH_HEADER="-H \"Authorization: Bearer ${OIDC_TOKEN}\""
+    AUTH_HEADER="Authorization: Bearer ${OIDC_TOKEN}"
     echo "OIDC token obtained successfully"
 elif [[ "$OIDC_ENABLED" == "true" ]]; then
     echo "Error: OIDC is enabled but missing required configuration (token_url, client_id, or client_secret)" >&2
