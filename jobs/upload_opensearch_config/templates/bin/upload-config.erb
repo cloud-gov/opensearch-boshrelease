@@ -154,7 +154,9 @@ BASH
       end
       ret << <<BASH
 HTTP_CODE=$(curl -s -H "${AUTH_HEADER}" -H 'Content-Type: application/json' -w '%{http_code}' -o ${DATA_DIR}/opensearch_config-response.txt -X PUT --data-binary @${CONTENT_PATH} ${CA} ${CERT} ${KEY} ${URL})
-HTTP_CODE=$(echo "$HTTP_CODE" | grep -o '[0-9]\{3\}$')
+if [ ${#HTTP_CODE} -gt 3 ]; then
+  HTTP_CODE=${HTTP_CODE: -3}
+fi
 if grep --quiet "\"errors\":true" ${DATA_DIR}/opensearch_config-response.txt ; then
   cat ${DATA_DIR}/opensearch_config-response.txt >> /dev/stderr
   exit $HTTP_CODE
