@@ -40,7 +40,7 @@ get_oidc_token() {
         return 1
     fi
     
-    local token_data="grant_type=client_credentials&client_id=${client_id}&client_secret=${client_secret}"
+    local token_data="grant_type=client_credentials"
     if [[ -n "$scope" ]]; then
         token_data="${token_data}&scope=${scope}"
     fi
@@ -49,6 +49,7 @@ get_oidc_token() {
     
     local response=$(curl -s -X POST \
         -H "Content-Type: application/x-www-form-urlencoded" \
+        -u "${client_id}:${client_secret}" \
         -d "${token_data}" \
         "${token_url}")
     
@@ -152,7 +153,7 @@ EOF
 BASH
       end
       ret << <<BASH
-HTTP_CODE=$(curl -s -H "${AUTH_HEADER}" 'Content-Type: application/json' -w '%{http_code}' -o ${DATA_DIR}/opensearch_config-response.txt -X PUT --data-binary @${CONTENT_PATH} ${CA} ${CERT} ${KEY} ${URL})
+HTTP_CODE=$(curl -s -H "${AUTH_HEADER}" -H 'Content-Type: application/json' -w '%{http_code}' -o ${DATA_DIR}/opensearch_config-response.txt -X PUT --data-binary @${CONTENT_PATH} ${CA} ${CERT} ${KEY} ${URL})
 if grep --quiet "\"errors\":true" ${DATA_DIR}/opensearch_config-response.txt ; then
   cat ${DATA_DIR}/opensearch_config-response.txt >> /dev/stderr
   exit $HTTP_CODE
@@ -224,13 +225,13 @@ echo "--- Creating ISM policy"
     TERM=$(echo "$logs_platform_rollover_policy" | grep -o '"_primary_term":[0-9]*' | sed 's/"_primary_term"://')
     SEQ=$(echo "$logs_platform_rollover_policy" | grep -o '"_seq_no":[0-9]*' | sed 's/"_seq_no"://')
     if [[ -n "$TERM" ]]; then
-      curl -XPUT ${CA} ${CERT} ${KEY} -H ${AUTH_HEADER}" 'Content-Type: application/json' "${BASEURL}/_plugins/_ism/policies/logs-platform-rollover_policy?if_seq_no=${SEQ}&if_primary_term=${TERM}" -d @${JOB_DIR}/config/ism-policy-platform.json
+      curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" 'Content-Type: application/json' "${BASEURL}/_plugins/_ism/policies/logs-platform-rollover_policy?if_seq_no=${SEQ}&if_primary_term=${TERM}" -d @${JOB_DIR}/config/ism-policy-platform.json
     else
-      curl -XPUT ${CA} ${CERT} ${KEY} -H ${AUTH_HEADER}" 'Content-Type: application/json' ${BASEURL}/_plugins/_ism/policies/logs-platform-rollover_policy -d @${JOB_DIR}/config/ism-policy-platform.json
+      curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" 'Content-Type: application/json' ${BASEURL}/_plugins/_ism/policies/logs-platform-rollover_policy -d @${JOB_DIR}/config/ism-policy-platform.json
     fi
     HTTP_CODE=$(curl -s -o /dev/null -s -w "%{http_code}\n" -I ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/_alias/${PLATFORM_ALIAS}/)
     if [ "$HTTP_CODE" -ge "201" ]; then
-      curl -XPUT ${CA} ${CERT} ${KEY} -H ${AUTH_HEADER}" 'Content-Type: application/json' ${BASEURL}/%3Clogs-platform-%7Bnow%2Fd%7D-01%3E -d'{"aliases": {"'${PLATFORM_ALIAS}'": {}}}'
+      curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" 'Content-Type: application/json' ${BASEURL}/%3Clogs-platform-%7Bnow%2Fd%7D-01%3E -d'{"aliases": {"'${PLATFORM_ALIAS}'": {}}}'
     fi
   <% end %>
 <% end %>
