@@ -154,6 +154,7 @@ BASH
       end
       ret << <<BASH
 HTTP_CODE=$(curl -s -H "${AUTH_HEADER}" -H 'Content-Type: application/json' -w '%{http_code}' -o ${DATA_DIR}/opensearch_config-response.txt -X PUT --data-binary @${CONTENT_PATH} ${CA} ${CERT} ${KEY} ${URL})
+HTTP_CODE=$(echo "$HTTP_CODE" | grep -o '[0-9]\{3\}$')
 if grep --quiet "\"errors\":true" ${DATA_DIR}/opensearch_config-response.txt ; then
   cat ${DATA_DIR}/opensearch_config-response.txt >> /dev/stderr
   exit $HTTP_CODE
@@ -230,6 +231,7 @@ echo "--- Creating ISM policy"
       curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" 'Content-Type: application/json' ${BASEURL}/_plugins/_ism/policies/logs-platform-rollover_policy -d @${JOB_DIR}/config/ism-policy-platform.json
     fi
     HTTP_CODE=$(curl -s -o /dev/null -s -w "%{http_code}\n" -I ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/_alias/${PLATFORM_ALIAS}/)
+    HTTP_CODE=$(echo "$HTTP_CODE" | grep -o '[0-9]\{3\}$')
     if [ "$HTTP_CODE" -ge "201" ]; then
       curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" 'Content-Type: application/json' ${BASEURL}/%3Clogs-platform-%7Bnow%2Fd%7D-01%3E -d'{"aliases": {"'${PLATFORM_ALIAS}'": {}}}'
     fi
