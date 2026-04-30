@@ -116,8 +116,8 @@ if __name__ == "__main__":
     # Get OIDC token if OIDC is enabled
     oidc_token = None
     if oidc_enabled and token_url and oidc_client_id and oidc_client_secret:
-        # Try with 'uaa.none' scope first, then without scope
-        oidc_token = get_oidc_token(token_url, oidc_client_id, oidc_client_secret, 'uaa.none')
+        # Try with 'platform_logs.client' scope first, then without scope
+        oidc_token = get_oidc_token(token_url, oidc_client_id, oidc_client_secret, 'platform_logs.client')
         if not oidc_token:
             logging.info("Retrying OIDC token without scope...")
             oidc_token = get_oidc_token(token_url, oidc_client_id, oidc_client_secret)

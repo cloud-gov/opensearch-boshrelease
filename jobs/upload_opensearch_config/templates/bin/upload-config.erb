@@ -40,7 +40,7 @@ get_oidc_token() {
         return 1
     fi
     
-    local token_data="grant_type=client_credentials&client_id=${client_id}&client_secret=${client_secret}"
+    local token_data="grant_type=client_credentials"
     if [[ -n "$scope" ]]; then
         token_data="${token_data}&scope=${scope}"
     fi
@@ -49,6 +49,7 @@ get_oidc_token() {
     
     local response=$(curl -s -X POST \
         -H "Content-Type: application/x-www-form-urlencoded" \
+        -u "${client_id}:${client_secret}" \
         -d "${token_data}" \
         "${token_url}")
     
@@ -76,8 +77,8 @@ AUTH_HEADER=""
 if [[ "$OIDC_ENABLED" == "true" && -n "$OIDC_TOKEN_URL" && -n "$OIDC_CLIENT_ID" && -n "$OIDC_CLIENT_SECRET" ]]; then
     echo "OIDC is enabled, attempting to get token..."
     
-    # Try with 'uaa.none' scope first, then without scope
-    OIDC_TOKEN=$(get_oidc_token "$OIDC_TOKEN_URL" "$OIDC_CLIENT_ID" "$OIDC_CLIENT_SECRET" "uaa.none")
+    # Try with 'platform_logs.client' scope first, then without scope
+    OIDC_TOKEN=$(get_oidc_token "$OIDC_TOKEN_URL" "$OIDC_CLIENT_ID" "$OIDC_CLIENT_SECRET" "platform_logs.client")
     if [[ $? -ne 0 || -z "$OIDC_TOKEN" ]]; then
         echo "Retrying OIDC token without scope..."
         OIDC_TOKEN=$(get_oidc_token "$OIDC_TOKEN_URL" "$OIDC_CLIENT_ID" "$OIDC_CLIENT_SECRET")
@@ -87,7 +88,7 @@ if [[ "$OIDC_ENABLED" == "true" && -n "$OIDC_TOKEN_URL" && -n "$OIDC_CLIENT_ID" 
         fi
     fi
     
-    AUTH_HEADER="-H \"Authorization: Bearer ${OIDC_TOKEN}\""
+    AUTH_HEADER="Authorization: Bearer ${OIDC_TOKEN}"
     echo "OIDC token obtained successfully"
 elif [[ "$OIDC_ENABLED" == "true" ]]; then
     echo "Error: OIDC is enabled but missing required configuration (token_url, client_id, or client_secret)" >&2
@@ -106,11 +107,11 @@ ALIAS=<%= aliases %>
 METRIC_ALIAS=<%= metric_aliases %>
 PLATFORM_ALIAS=<%= platform_aliases %>
 
-for template in $(curl -s ${CA} ${CERT} ${KEY} ${AUTH_HEADER} ${URL}/_cat/templates | awk '{print $1}'); do
+for template in $(curl -s ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${URL}/_cat/templates | awk '{print $1}'); do
   if ! grep -qw ${template} <(echo "<%= p('opensearch_config.index_templates').map { |template| template.keys.first }.join(' ') %>"); then
     # hit template and index_template so we can try for legacy and component templates
-    curl -s -XDELETE ${CA} ${CERT} ${KEY} ${AUTH_HEADER} ${URL}/_template/${template}
-    curl -s -XDELETE ${CA} ${CERT} ${KEY} ${AUTH_HEADER} ${URL}/_index_template/${template}
+    curl -s -XDELETE ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${URL}/_template/${template}
+    curl -s -XDELETE ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${URL}/_index_template/${template}
   fi
 done
 
@@ -139,7 +140,7 @@ def put_to_es(url_stem_base, es_config, request_params = {})
     opensearch_port = p("opensearch_config.opensearch.port")
     ret << "URL=https://#{opensearch_host}:#{opensearch_port}/#{url_stem}"
     if nil == content
-     ret << 'curl -X DELETE ${CA} ${CERT} ${KEY} ${AUTH_HEADER} "${URL}"'
+     ret << 'curl -X DELETE ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" "${URL}"'
     else
       if content.start_with? '/var/vcap'
         ret << "CONTENT_PATH=\"#{content}\""
@@ -152,7 +153,10 @@ EOF
 BASH
       end
       ret << <<BASH
-HTTP_CODE=$(curl -s -H 'Content-Type: application/json' -w '%{http_code}' -o ${DATA_DIR}/opensearch_config-response.txt -X PUT --data-binary @${CONTENT_PATH} ${CA} ${CERT} ${KEY} ${AUTH_HEADER} ${URL})
+HTTP_CODE=$(curl -s -H "${AUTH_HEADER}" -H 'Content-Type: application/json' -w '%{http_code}' -o ${DATA_DIR}/opensearch_config-response.txt -X PUT --data-binary @${CONTENT_PATH} ${CA} ${CERT} ${KEY} ${URL})
+if [ ${#HTTP_CODE} -gt 3 ]; then
+  HTTP_CODE=${HTTP_CODE: -3}
+fi
 if grep --quiet "\"errors\":true" ${DATA_DIR}/opensearch_config-response.txt ; then
   cat ${DATA_DIR}/opensearch_config-response.txt >> /dev/stderr
   exit $HTTP_CODE
@@ -173,7 +177,7 @@ end
 #
 # wait for opensearch availability
 #
-until curl -f ${KEY} ${CERT} ${CA} ${AUTH_HEADER} "${URL}/_cluster/health?wait_for_status=yellow&timeout=10m"; do :; done
+until curl -f ${KEY} ${CERT} ${CA} -H "${AUTH_HEADER}" "${URL}/_cluster/health?wait_for_status=yellow&timeout=10m"; do :; done
 
 echo "--- Component Templates"
 <%= put_to_es('_component_template', p('opensearch_config.component_templates')) %>
@@ -192,48 +196,49 @@ echo "--- License"
 echo "--- Creating ISM policy"
 <% if_link("opensearch") do |opensearch| %>
   <% if opensearch.p('opensearch.deployment_type').include?('app') %>
-    logs_app_rollover_policy=$(curl -XGET ${CA} ${CERT} ${KEY} ${AUTH_HEADER} ${BASEURL}/_plugins/_ism/policies/logs-app-rollover_policy)
+    logs_app_rollover_policy=$(curl -XGET ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/_plugins/_ism/policies/logs-app-rollover_policy)
     TERM=$(echo "$logs_app_rollover_policy" | grep -o '"_primary_term":[0-9]*' | sed 's/"_primary_term"://')
     SEQ=$(echo "$logs_app_rollover_policy" | grep -o '"_seq_no":[0-9]*' | sed 's/"_seq_no"://')
     if [[ -n "$TERM" ]]; then
-      curl -XPUT ${CA} ${CERT} ${KEY} ${AUTH_HEADER} "${BASEURL}/_plugins/_ism/policies/logs-app-rollover_policy?if_seq_no=${SEQ}&if_primary_term=${TERM}" -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy.json
+      curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" "${BASEURL}/_plugins/_ism/policies/logs-app-rollover_policy?if_seq_no=${SEQ}&if_primary_term=${TERM}" -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy.json
     else
-      curl -XPUT ${CA} ${CERT} ${KEY} ${AUTH_HEADER} ${BASEURL}/_plugins/_ism/policies/logs-app-rollover_policy -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy.json
+      curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/_plugins/_ism/policies/logs-app-rollover_policy -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy.json
     fi
-    HTTP_CODE=$(curl -s -o /dev/null -s -w "%{http_code}\n" -I ${CA} ${CERT} ${KEY} ${AUTH_HEADER} ${BASEURL}/_alias/${ALIAS}/)
+    HTTP_CODE=$(curl -s -o /dev/null -s -w "%{http_code}\n" -I ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/_alias/${ALIAS}/)
     if [ "$HTTP_CODE" -ge "201" ]; then
-      curl -XPUT ${CA} ${CERT} ${KEY} ${AUTH_HEADER} ${BASEURL}/%3Clogs-app-%7Bnow%2Fd%7D-01%3E -H 'Content-Type: application/json' -d'{"aliases": {"'${ALIAS}'": {}}}'
+      curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/%3Clogs-app-%7Bnow%2Fd%7D-01%3E -H 'Content-Type: application/json' -d'{"aliases": {"'${ALIAS}'": {}}}'
     fi
   <% end %>
   <% if opensearch.p('opensearch.deployment_type').include?('metric') %>
-    logs_metric_rollover_policy=$(curl -XGET ${CA} ${CERT} ${KEY} ${AUTH_HEADER} ${BASEURL}/_plugins/_ism/policies/logs-metric-rollover_policy)
+    logs_metric_rollover_policy=$(curl -XGET ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/_plugins/_ism/policies/logs-metric-rollover_policy)
     TERM=$(echo "$logs_metric_rollover_policy" | grep -o '"_primary_term":[0-9]*' | sed 's/"_primary_term"://')
     SEQ=$(echo "$logs_metric_rollover_policy" | grep -o '"_seq_no":[0-9]*' | sed 's/"_seq_no"://')
     if [[ -n "$TERM" ]]; then
-      curl -XPUT ${CA} ${CERT} ${KEY} ${AUTH_HEADER} "${BASEURL}/_plugins/_ism/policies/logs-metric-rollover_policy?if_seq_no=${SEQ}&if_primary_term=${TERM}" -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy-metrics.json
+      curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" "${BASEURL}/_plugins/_ism/policies/logs-metric-rollover_policy?if_seq_no=${SEQ}&if_primary_term=${TERM}" -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy-metrics.json
     else
-      curl -XPUT ${CA} ${CERT} ${KEY} ${AUTH_HEADER} ${BASEURL}/_plugins/_ism/policies/logs-metric-rollover_policy -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy-metrics.json
+      curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/_plugins/_ism/policies/logs-metric-rollover_policy -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy-metrics.json
     fi
-    HTTP_CODE=$(curl -s -o /dev/null -s -w "%{http_code}\n" -I ${CA} ${CERT} ${KEY} ${AUTH_HEADER} ${BASEURL}/_alias/${METRIC_ALIAS}/)
+    HTTP_CODE=$(curl -s -o /dev/null -s -w "%{http_code}\n" -I ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/_alias/${METRIC_ALIAS}/)
     if [ "$HTTP_CODE" -ge "201" ]; then
-      curl -XPUT ${CA} ${CERT} ${KEY} ${AUTH_HEADER} ${BASEURL}/%3Clogs-metrics-%7Bnow%2Fd%7D-01%3E -H 'Content-Type: application/json' -d'{"aliases": {"'${METRIC_ALIAS}'": {}}}'
+      curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/%3Clogs-metrics-%7Bnow%2Fd%7D-01%3E -H 'Content-Type: application/json' -d'{"aliases": {"'${METRIC_ALIAS}'": {}}}'
     fi
   <% end %>
   <% if opensearch.p('opensearch.deployment_type').include?('platform') %>
-    logs_platform_rollover_policy=$(curl -XGET ${CA} ${CERT} ${KEY} ${AUTH_HEADER} ${BASEURL}/_plugins/_ism/policies/logs-platform-rollover_policy)
+    logs_platform_rollover_policy=$(curl -XGET ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/_plugins/_ism/policies/logs-platform-rollover_policy)
     TERM=$(echo "$logs_platform_rollover_policy" | grep -o '"_primary_term":[0-9]*' | sed 's/"_primary_term"://')
     SEQ=$(echo "$logs_platform_rollover_policy" | grep -o '"_seq_no":[0-9]*' | sed 's/"_seq_no"://')
     if [[ -n "$TERM" ]]; then
-      curl -XPUT ${CA} ${CERT} ${KEY} ${AUTH_HEADER} "${BASEURL}/_plugins/_ism/policies/logs-platform-rollover_policy?if_seq_no=${SEQ}&if_primary_term=${TERM}" -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy-platform.json
+      curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" -H 'Content-Type: application/json' "${BASEURL}/_plugins/_ism/policies/logs-platform-rollover_policy?if_seq_no=${SEQ}&if_primary_term=${TERM}" -d @${JOB_DIR}/config/ism-policy-platform.json
     else
-      curl -XPUT ${CA} ${CERT} ${KEY} ${AUTH_HEADER} ${BASEURL}/_plugins/_ism/policies/logs-platform-rollover_policy -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy-platform.json
+      curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" -H 'Content-Type: application/json' ${BASEURL}/_plugins/_ism/policies/logs-platform-rollover_policy -d @${JOB_DIR}/config/ism-policy-platform.json
     fi
-    HTTP_CODE=$(curl -s -o /dev/null -s -w "%{http_code}\n" -I ${CA} ${CERT} ${KEY} ${AUTH_HEADER} ${BASEURL}/_alias/${PLATFORM_ALIAS}/)
+    HTTP_CODE=$(curl -s -o /dev/null -s -w "%{http_code}\n" -I ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/_alias/${PLATFORM_ALIAS}/)
+    HTTP_CODE=$(echo "$HTTP_CODE" | grep -o '[0-9]\{3\}$')
     if [ "$HTTP_CODE" -ge "201" ]; then
-       curl -XPUT ${CA} ${CERT} ${KEY} ${AUTH_HEADER} ${BASEURL}/%3Clogs-platform-%7Bnow%2Fd%7D-01%3E -H 'Content-Type: application/json' -d'{\"aliases\": {\"${PLATFORM_ALIAS}\": {}}}'
+      curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" -H 'Content-Type: application/json' ${BASEURL}/%3Clogs-platform-%7Bnow%2Fd%7D-01%3E -d'{"aliases": {"'${PLATFORM_ALIAS}'": {}}}'
     fi
   <% end %>
 <% end %>
 echo "--- Creating Reporting indexs"
-curl -XGET ${CA} ${CERT} ${KEY} ${AUTH_HEADER} ${BASEURL}/_plugins/_reports/definitions
-curl -XGET ${CA} ${CERT} ${KEY} ${AUTH_HEADER} ${BASEURL}/_plugins/_reports/instances
+curl -XGET ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/_plugins/_reports/definitions
+curl -XGET ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/_plugins/_reports/instances

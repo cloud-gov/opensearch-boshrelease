@@ -5,6 +5,7 @@ set -eu
 # CONFIGURATION AND SETUP
 # =============================================================================
 
+<% if p('smoke_tests.s3_cloudwatch.bucket') %>
 # Job configuration
 JOB_NAME=smoke_tests
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
@@ -196,3 +197,5 @@ done
 echo -e "\nERROR: Timed out waiting for CloudWatch log with $SMOKE_ID"
 echo "Last search result: $result"
 exit 1
+
+<% end %>
