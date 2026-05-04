@@ -237,3 +237,7 @@ properties:
   opensearch.deployment_type:
     description: type of opensearch deployment
     default: ["app"]
+
+  opensearch.reindex.remote.allowlist:
+    description: comma separated list of remote hosts allowed for reindex
+    default: []
