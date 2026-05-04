@@ -84,14 +84,7 @@ properties:
   logstash_ingestor.s3.prefix:
     description: "prefix for aws"
     default: "20"
-  logstash_ingestor.s3.codec:
-    description: |
-      Codec for S3 input. Can be:
-      - Simple string: "json", "plain", "line"
-      - Complex hash: { multiline: { pattern: ".*", what: "previous" } }
-      - Raw codec block: 'multiline { pattern => ".*" }'
-    default: "plain"
-
+    
   logstash_ingestor.relp.port:
     description: Port to listen for RELP messages
     default: 2514
