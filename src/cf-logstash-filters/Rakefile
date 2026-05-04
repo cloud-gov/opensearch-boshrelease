@@ -16,6 +16,7 @@ task :build => :clean do
   build_erb 'src/logstash-filters/cloudwatch.conf.erb', 'target/cloudwatch.conf'
   build_erb 'src/logstash-filters/falco.conf.erb', 'target/falco.conf'
   build_erb 'src/logstash-filters/metrics.conf.erb', 'target/metrics.conf'
+  build_erb 'src/logstash-filters/platform_recovery.conf.erb', 'target/platform_recovery.conf'
 end
 
 def build_erb(source_erb_file, target_file)

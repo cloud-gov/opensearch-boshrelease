@@ -50,6 +50,10 @@ cat /var/vcap/packages/cf-logstash-filters/metrics.conf >> ${JOB_DIR}/config/log
 cat /var/vcap/packages/cf-logstash-filters/cloudwatch.conf >> ${JOB_DIR}/config/logstash.conf
 <% end %>
 
+<% if 'platform_recovery' == p('logstash.type') %>
+cat /var/vcap/packages/cf-logstash-filters/platform_recovery.conf >> ${JOB_DIR}/config/logstash.conf
+<% end %>
+
 echo "} #close filters" >> ${JOB_DIR}/config/logstash.conf
 
 
