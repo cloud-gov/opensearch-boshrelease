@@ -7,7 +7,27 @@ input
     <% if_p("logstash_ingestor.s3.region") do |region_zone| %>
     region => "<%= region_zone %>"
     <% end %>
+
+
+    # Allow options for more advanced codecs
+    <% if_p("logstash_ingestor.s3.codec") do |codec| %>
+      <% case %>
+      <% when codec.is_a?(String) && !codec.match(/[{}]/) %>
+    codec => "<%= codec %>"
+      <% when codec.is_a?(Hash) %>
+    codec => <%= codec.keys.first %> {
+        <% codec[codec.keys.first].each do |key, value| %>
+      <%= key %> => "<%= value %>"
+        <% end %>
+    }
+      <% else %>
+    codec => <%= codec %>
+      <% end %>
+    <% end.else do %>
     codec => "plain"
+    <% end %>
+
+
     <% if_p("logstash_ingestor.s3.prefix") do |prefix| %>
     prefix => "<%= prefix %>"
     <% end %>
