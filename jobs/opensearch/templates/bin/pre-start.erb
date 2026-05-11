@@ -76,7 +76,6 @@ yq -i ".notifications_full_access={\"backend_roles\": [$ORG_GUID_ROLE_LIST]}" "$
     | ${OPENSEARCH_HOME}/bin/opensearch-keystore add --stdin s3.client.default.secret_key
 <% end %>
 
-${OPENSEARCH_HOME}/bin/opensearch-plugin install -b repository-s3
 <% p("opensearch.plugins").each do |plugin| name, path = plugin.first %>
   <% if path.start_with? '/var/vcap' %>
     ${OPENSEARCH_HOME}/bin/opensearch-plugin install -b "file://<%= path %>"
