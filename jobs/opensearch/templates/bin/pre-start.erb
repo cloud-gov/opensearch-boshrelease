@@ -103,4 +103,8 @@ fi
 chown vcap:vcap "$OPENSEARCH_PATH_CONF/opensearch.keystore"
 chmod 600 "$OPENSEARCH_PATH_CONF/opensearch.keystore"
 
+<% if_p('opensearch.repository.s3.region') do |region| %>
+echo "<%= region %>" | /var/vcap/packages/opensearch/bin/opensearch-keystore add -f -x s3.client.default.region
+echo "s3-<%= region %>.amazonaws.com" | /var/vcap/packages/opensearch/bin/opensearch-keystore add -f -x s3.client.default.endpoint
+<% end %>
 
