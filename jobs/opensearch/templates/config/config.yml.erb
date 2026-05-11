@@ -115,8 +115,8 @@ cluster.routing.allocation.disk.watermark.flood_stage: <%= flood_stage %>
 
 reindex.remote.allowlist: <%= p('opensearch.reindex.remote.allowlist')%>
 
-plugins.alerting.filter_by_backend_roles: true
-plugins.alerting.filter_by_backend_roles_access_strategy: "all"
+<%# plugins.alerting.filter_by_backend_roles: true
+plugins.alerting.filter_by_backend_roles_access_strategy: "all" %>
 
 <%# 2.19.5s: true
 2.19.5s_access_strategy: "all"
