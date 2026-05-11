@@ -202,6 +202,10 @@ opensearch/opensearch-notifications-3.5.0.0.zip:
   size: 35057206
   object_id: 27240b68-e6ad-473f-6133-538250c17434
   sha: sha256:d4d24d41abbc6e9ffa7ee6319370c90aac4d6a705800c8f23d51e1cc2fe12d4f
+opensearch/repository-s3-2.19.5.zip:
+  size: 14249200
+  object_id: 286d8393-20e3-4e20-69de-e711d6999e32
+  sha: sha256:7e15e0f112e9f1f6b4db6d4c6378692f48e8f730f92bdc627c40545062dc6589
 opensearch/s3-plugin.zip:
   size: 14238704
   object_id: a13262fd-0ae6-458b-46e3-d87579393e37
