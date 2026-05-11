@@ -6,6 +6,7 @@ export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 export PACKAGE_DIR=/var/vcap/packages/$JOB_NAME
 export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
 export OPENSEARCH_SECURITY_CONFIG_PATH=${OPENSEARCH_PATH_CONF}/opensearch-security
+export OPENSEARCH_JAVA_OPTS="-XX:-UsePerfData -Dnet.bytebuddy.agent.disabled=true"
 export YQ_PACKAGE_DIR=/var/vcap/packages/yq
 export PATH=$YQ_PACKAGE_DIR/bin:$PATH
 export PATH=/var/vcap/packages/cf-cli-8-linux/bin:$PATH
