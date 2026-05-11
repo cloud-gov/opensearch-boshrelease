@@ -41,6 +41,12 @@ if [ -n "$MAX_LOCKED_MEMORY" ]; then
   ulimit -l $MAX_LOCKED_MEMORY
 fi
 
+<% if_p('opensearch.repository.s3.region') do |region| %>
+echo "<%= region %>" | /var/vcap/packages/opensearch/bin/opensearch-keystore add -f -x s3.client.default.region
+echo "s3-<%= region %>.amazonaws.com" | /var/vcap/packages/opensearch/bin/opensearch-keystore add -f -x s3.client.default.endpoint
+<% end %>
+
+
 # PKCS8 keys are required for Opensearch TLS
 # https://opensearch.org/docs/latest/security/configuration/tls/
 <% if_p('opensearch.admin.private_key') do %>
