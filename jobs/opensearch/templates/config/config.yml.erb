@@ -116,6 +116,11 @@ cluster.routing.allocation.disk.watermark.flood_stage: <%= flood_stage %>
 
 reindex.remote.allowlist: <%= p('opensearch.reindex.remote.allowlist')%>
 
+
+<% if_p('opensearch.repository.s3.region') do |region| %>
+s3.client.default.endpoint: "s3-<%= region %>.amazonaws.com"
+<% end %>
+
 <%# plugins.alerting.filter_by_backend_roles: true
 plugins.alerting.filter_by_backend_roles_access_strategy: "all" %>
 
