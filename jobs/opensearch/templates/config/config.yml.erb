@@ -93,12 +93,12 @@ s3.client.default.read_timeout: <%= p('opensearch.repository.s3.read_timeout') %
 s3.client.default.region: <%= region %>
 <% end %>
 
-  <% if_p('opensearch.repository.s3.region') do |region| %>
+<% end %>
+
+<% if_p('opensearch.repository.s3.region') do |region| %>
     echo "<%= region %>" | /var/vcap/packages/opensearch/bin/opensearch-keystore add -f -x s3.client.default.region
     echo "s3-<%= region %>.amazonaws.com" | /var/vcap/packages/opensearch/bin/opensearch-keystore add -f -x s3.client.default.endpoint
   <% end %>
-
-<% end %>
 
 <% if_p('opensearch.config_options') do p("opensearch.config_options", {}).each do | k, v | %>
 <%= k %>: <%= v %><% end %>
