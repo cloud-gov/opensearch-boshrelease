@@ -126,10 +126,10 @@ awscli-exe-linux-x86_64.zip:
   size: 62186639
   object_id: acf3ef43-9e8d-4749-4daf-7c6edf3a5297
   sha: sha256:fca9d80afb77f4cf5f2df6078b30ebb123b40e5b070ee7c1d5c3fba92d6b3755
-jdk-21.0.9_linux-x64_bin.tar.gz:
-  size: 197163309
-  object_id: 702bbc81-f1ef-4e54-6fb8-1971b9d38323
-  sha: sha256:35ee38c78a5e5998cc79e17326aae968dd392d84d1a36c7c8348a5ad8727330d
+jdk-21.0.11_linux-x64_bin.tar.gz:
+  size: 198873794
+  object_id: dc81aab2-ffef-477a-5896-bcdc4f287944
+  sha: sha256:e1c25a83f9e2e374c93e0c29cc3d98a947621ae0fefa4a8d932951eb160c47c3
 jq-linux-amd64-1.8.1.tar.gz:
   size: 995911
   object_id: fa239437-7080-45f1-6e31-3fa88414b51d
@@ -218,7 +218,7 @@ ruby/rake-13.0.6.gem:
   size: 84992
   object_id: ae89e0d2-b8d0-454f-6eff-6673b2956ada
   sha: sha256:5ce4bf5037b4196c24ac62834d8db1ce175470391026bd9e557d669beeb19097
-yq_linux_amd64-4.44.6.tar.gz:
-  size: 4196529
-  object_id: cc6157b3-5ba0-4996-60e3-d90c8a150110
-  sha: sha256:09ea7643cba1cfde4c57abbadbf7fa242d7425db8ee93c0b184d68661cf3b1bd
+yq_linux_amd64-4.53.2.tar.gz:
+  size: 5493468
+  object_id: e3546eef-1259-40c3-687b-1b3a77aac7b7
+  sha: sha256:44c3c6df6c58ef1460d98425954ca5e832926e0e8a1d75c5c8fd261691351510

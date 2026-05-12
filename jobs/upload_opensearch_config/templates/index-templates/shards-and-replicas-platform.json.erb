@@ -7,6 +7,7 @@
       "number_of_replicas" : <%= p('opensearch_config.platform_replica_shard_count')%>,
       "routing.allocation.total_shards_per_node": 2,
       "index.routing.allocation.require.box_type": "hot",
+      "index.mapping.total_fields.limit": 250,
       "plugins.index_state_management.rollover_alias": "<%= p('opensearch_config.platform_alias')%>",
       "refresh_interval": "2s"
     }

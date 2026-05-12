@@ -84,10 +84,10 @@ properties:
   logstash_ingestor.s3.prefix:
     description: "prefix for aws"
     default: "20"
+    
   logstash_ingestor.relp.port:
     description: Port to listen for RELP messages
     default: 2514
-
   logstash_parser.debug:
     description: Debug level logging
     default: false
