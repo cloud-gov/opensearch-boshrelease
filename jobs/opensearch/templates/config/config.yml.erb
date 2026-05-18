@@ -115,9 +115,7 @@ cluster.routing.allocation.disk.watermark.flood_stage: <%= flood_stage %>
 
 <% if p('opensearch.deployment_type').include?('platform') %>
 plugins.alerting.filter_by_backend_roles: false
-plugins.alerting.filter_by_backend_roles_access_strategy: "none"
 opensearch.notifications.general.filter_by_backend_roles: false
-opensearch.notifications.general.filter_by_backend_roles_access_strategy: "none"
 plugins.security.user_attribute_serialization.enabled: false
 <% else %>
 plugins.alerting.filter_by_backend_roles: true
