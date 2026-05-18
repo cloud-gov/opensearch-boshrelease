@@ -113,7 +113,7 @@ cluster.routing.allocation.disk.watermark.high: <%= high %>
 cluster.routing.allocation.disk.watermark.flood_stage: <%= flood_stage %>
 <% end %>
 
-<% if p(opensearch.deployment_type) != 'platform' %>
+<% if p('opensearch.deployment_type') != 'platform' %>
 plugins.alerting.filter_by_backend_roles: true
 plugins.alerting.filter_by_backend_roles_access_strategy: "all"
 opensearch.notifications.general.filter_by_backend_roles: true
