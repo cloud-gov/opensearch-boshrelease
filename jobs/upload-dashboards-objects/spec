@@ -55,7 +55,7 @@ templates:
   dashboards-objects/app/search/app-rtr.json.erb: dashboards-objects/app/search/app-rtr.json
   dashboards-objects/app/search/app-rtr-long-response.json.erb: dashboards-objects/app/search/app-rtr-long-response.json
   dashboards-objects/app/search/audit-logs.json.erb: dashboards-objects/app/search/audit-logs.json
-  # dashboards-objects/app/search/falco-search.json.erb: dashboards-objects/app/search/falco-search.json
+  dashboards-objects/app/search/falco-search.json.erb: dashboards-objects/app/search/falco-search.json
 
   ## Metric Search
   dashboards-objects/metric/search/app-container-metric.json.erb: dashboards-objects/metric/search/app-container-metric.json
@@ -83,7 +83,7 @@ templates:
   dashboards-objects/app/dashboard/App-Overview.json.erb: dashboards-objects/app/dashboard/App-Overview.json
   dashboards-objects/app/dashboard/App-Performance.json.erb: dashboards-objects/app/dashboard/App-Performance.json
   dashboards-objects/app/dashboard/Audit-Overview.json.erb: dashboards-objects/app/dashboard/Audit-Overview.json
-  # dashboards-objects/app/dashboard/Falco-Overview.json.erb: dashboards-objects/app/dashboard/Falco-Overview.json
+  dashboards-objects/app/dashboard/Falco-Overview.json.erb: dashboards-objects/app/dashboard/Falco-Overview.json
 
   ## Metric Dashboards
   dashboards-objects/metric/dashboard/Services-DomainSearch.json.erb: dashboards-objects/metric/dashboard/Services-DomainSearch.json
@@ -117,8 +117,8 @@ templates:
   dashboards-objects/app/visualization/App-RTR-traffic-by-response_time_ms-(first-10-apps).json.erb: dashboards-objects/app/visualization/App-RTR-traffic-by-response_time_ms-(first-10-apps).json
   dashboards-objects/app/visualization/Audit-logs-count.json.erb: dashboards-objects/app/visualization/Audit-logs-count.json
   dashboards-objects/app/visualization/Audit-target-names.json.erb: dashboards-objects/app/visualization/Audit-target-names.json
-  # dashboards-objects/app/visualization/Falco-count.json.erb: dashboards-objects/app/visualization/Falco-count.json
-  # dashboards-objects/app/visualization/Falco-graph.json.erb: dashboards-objects/app/visualization/Falco-graph.json
+  dashboards-objects/app/visualization/Falco-count.json.erb: dashboards-objects/app/visualization/Falco-count.json
+  dashboards-objects/app/visualization/Falco-graph.json.erb: dashboards-objects/app/visualization/Falco-graph.json
 
   ## Metric Visualizations
   dashboards-objects/metric/visualization/App-METRIC-CPU-usage.json.erb: dashboards-objects/metric/visualization/App-METRIC-CPU-usage.json
