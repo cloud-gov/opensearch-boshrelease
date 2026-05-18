@@ -234,6 +234,20 @@ properties:
   opensearch.notifications.secrets_prefix:
     description: Prefix for name of secrets containing credentials for OpenSearch notifications email senders
 
+  opensearch.notifications.channels:
+    description: "Array of notification channels to create"
+    default: []
+    example: |
+      - name: "admin-alerts"
+        type: "email"
+        description: "Administrative alerts channel"
+        sender_name: "admin-sender"
+        subject: "OpenSearch Alert" 
+        enabled: true
+        users:
+          - "admin1@example.com"
+          - "admin2@example.com"
+
   opensearch.deployment_type:
     description: type of opensearch deployment
     default: ["app"]
