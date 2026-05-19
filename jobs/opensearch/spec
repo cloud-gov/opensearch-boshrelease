@@ -253,6 +253,7 @@ properties:
     default: []
     example: |
       - name: jason_performance
+        from_address: testing
         smtp_host: smtp.your-domain.com
         smtp_method: start_tls
         smtp_port: 587
