@@ -61,6 +61,6 @@ fi
   chmod 600 ${JOB_DIR}/config/ssl/opensearch*.key
 <% end %>
 
-OPENSEARCH_FIPS_MODE=true  ${OPENSEARCH_HOME}/bin/opensearch \
+${OPENSEARCH_HOME}/bin/opensearch \
   <%= p("opensearch.exec.options", []).join(' ') %>
 
