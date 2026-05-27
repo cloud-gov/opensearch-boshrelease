@@ -93,6 +93,18 @@
 -Dlog4j2.disable.jmx=true
 -Dlog4j.skipJansi=true
 
+################################################################
+## FIPS Configuration
+################################################################
+# Enable FIPS mode
+-Dcom.redhat.fips=true
+# Use FIPS-compliant keystore/truststore formats
+-Djavax.net.ssl.trustStoreType=PKCS12
+-Djavax.net.ssl.keyStoreType=PKCS12
+# Disable performance data collection and ByteBuddy agent
+-XX:-UsePerfData
+-Dnet.bytebuddy.agent.disabled=true
+
 <% p('opensearch.jvm_options').each do |opt| %>
 <%= opt %>
 <% end %>
