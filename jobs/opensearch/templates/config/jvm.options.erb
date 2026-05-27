@@ -98,12 +98,14 @@
 ################################################################
 # Enable FIPS mode
 -Dcom.redhat.fips=true
-# Use FIPS-compliant keystore/truststore formats
--Djavax.net.ssl.trustStoreType=PKCS12
--Djavax.net.ssl.keyStoreType=PKCS12
+# Use FIPS-compliant keystore/truststore formats (BCFKS or PKCS11)
+-Djavax.net.ssl.trustStoreType=BCFKS
+-Djavax.net.ssl.keyStoreType=BCFKS
 # Disable performance data collection and ByteBuddy agent
 -XX:-UsePerfData
 -Dnet.bytebuddy.agent.disabled=true
+# Set custom temp directory
+-Djava.io.tmpdir=/var/vcap/data/opensearch/
 
 <% p('opensearch.jvm_options').each do |opt| %>
 <%= opt %>
