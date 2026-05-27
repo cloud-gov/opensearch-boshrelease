@@ -261,3 +261,16 @@ properties:
   opensearch.deployment_type:
     description: type of opensearch deployment
     default: ["app"]
+
+
+  opensearch.fips.enabled:
+    description: "Enable FIPS mode for OpenSearch"
+    default: false
+  
+  opensearch.fips.keystore_password:
+    description: "Password for FIPS keystores and truststores"
+    default: "changeme"
+  
+  opensearch.fips.ca_certificate:
+    description: "Optional CA certificate to import into FIPS truststore (PEM format)"
+    default: ""

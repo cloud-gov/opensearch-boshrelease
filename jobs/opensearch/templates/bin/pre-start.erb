@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 export JOB_NAME=opensearch
 export OPENSEARCH_HOME=/var/vcap/packages/opensearch
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
@@ -10,25 +9,20 @@ export OPENSEARCH_JAVA_OPTS="-XX:-UsePerfData -Dnet.bytebuddy.agent.disabled=tru
 export YQ_PACKAGE_DIR=/var/vcap/packages/yq
 export PATH=$YQ_PACKAGE_DIR/bin:$PATH
 export PATH=/var/vcap/packages/cf-cli-8-linux/bin:$PATH
-
 export KEYSTORE="/var/vcap/packages/openjdk-21/lib/security/cacerts"
 STOREPASS=<%= p("opensearch.notification.keystorepass") %>
 DEFAULTPASS=<%= p("opensearch.notification.defaultkeystorepass") %>
-
 /var/vcap/packages/openjdk-21/bin/keytool -storepasswd -new $STOREPASS -cacerts -storepass "$DEFAULTPASS" > /dev/null 2>&1;
-
 sysctl -q -w vm.max_map_count=262144
 mkdir -p ${OPENSEARCH_HOME}/plugins
 if [ -d ${JOB_DIR}/config/ssl ]; then
-	chown vcap ${JOB_DIR}/config/ssl
+    chown vcap ${JOB_DIR}/config/ssl
 fi
-
 source /var/vcap/packages/openjdk-21/bosh/runtime.env
 
 # Copy default security config if it doesn't already exist
 # Have to copy files that don't exist otherwise securityadmin.sh invocation will fail
 cp -u ${OPENSEARCH_HOME}/config/opensearch-security/*.yml "$OPENSEARCH_SECURITY_CONFIG_PATH"
-
 cd ${OPENSEARCH_HOME}
 chown -R vcap:vcap config plugins
 chown -R vcap:vcap "$OPENSEARCH_SECURITY_CONFIG_PATH"
@@ -42,6 +36,7 @@ chown -R vcap:vcap "$OPENSEARCH_SECURITY_CONFIG_PATH"
 %>
 cf api "<%= api %>"
 cf auth "<%= client %>" "<%= password %>" --client-credentials
+
 # Prepare tenants, roles, and role mappings so that they don't get overridden by securityadmin.sh
 # script invocation in post-start
 ORG_GUID_LIST=()
@@ -63,19 +58,15 @@ yq -i ".notifications_full_access={\"backend_roles\": [$ORG_GUID_ROLE_LIST]}" "$
 <% end %>
 <% end %>
 
-# leaving all plugin files and plugins installed for now
-# can revisit https://opensearch.org/docs/latest/install-and-configure/plugins/ for how to
-# allow installing specific plugins
-
-# see https://opensearch.org/docs/latest/tuning-your-cluster/availability-and-recovery/snapshots/snapshot-restore/#amazon-s3
+# Plugin installations
 <% if_p('opensearch.repository.s3.access_key', 'opensearch.repository.s3.secret_key') do %>
   ${OPENSEARCH_HOME}/bin/opensearch-plugin install -b repository-s3
-
   echo '<%= p('opensearch.repository.s3.access_key') %>' \
     | ${OPENSEARCH_HOME}/bin/opensearch-keystore add --stdin s3.client.default.access_key
   echo '<%= p('opensearch.repository.s3.secret_key') %>' \
     | ${OPENSEARCH_HOME}/bin/opensearch-keystore add --stdin s3.client.default.secret_key
 <% end %>
+
 <% p("opensearch.plugins").each do |plugin| name, path = plugin.first %>
   <% if path.start_with? '/var/vcap' %>
     ${OPENSEARCH_HOME}/bin/opensearch-plugin install -b "file://<%= path %>"
@@ -87,7 +78,6 @@ yq -i ".notifications_full_access={\"backend_roles\": [$ORG_GUID_ROLE_LIST]}" "$
 <% end %>
 
 log_dir=${OPENSEARCH_HOME}/logs
-
 if [[ ! -a ${log_dir} ]]; then
   ln -s /var/vcap/sys/log/opensearch ${log_dir}
 fi
@@ -102,4 +92,79 @@ fi
 chown vcap:vcap "$OPENSEARCH_PATH_CONF/opensearch.keystore"
 chmod 600 "$OPENSEARCH_PATH_CONF/opensearch.keystore"
 
+################################################################
+# FIPS Keystore Setup
+################################################################
+<% if p("opensearch.fips.enabled", false) %>
+echo "Setting up FIPS keystores..."
 
+# Create opensearch data directory for FIPS stores
+mkdir -p /var/vcap/data/opensearch
+
+# FIPS keystore/truststore setup
+FIPS_KEYSTORE_PATH="/var/vcap/data/opensearch/keystore.bcfks"
+FIPS_TRUSTSTORE_PATH="/var/vcap/data/opensearch/truststore.bcfks"
+FIPS_STORE_PASSWORD="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
+
+# Check if Java keytool supports BCFKS
+if ! /var/vcap/packages/openjdk-21/bin/keytool -help 2>&1 | grep -q "BCFKS"; then
+    echo "ERROR: Java keytool does not support BCFKS format. Ensure you're using a FIPS-capable JDK."
+    exit 1
+fi
+
+# Create FIPS keystore if it doesn't exist
+if [ ! -f "$FIPS_KEYSTORE_PATH" ]; then
+    echo "Creating FIPS keystore..."
+    /var/vcap/packages/openjdk-21/bin/keytool -genkeypair \
+        -alias opensearch-node \
+        -keyalg RSA \
+        -keysize 2048 \
+        -validity 365 \
+        -keystore "$FIPS_KEYSTORE_PATH" \
+        -storetype BCFKS \
+        -storepass "$FIPS_STORE_PASSWORD" \
+        -keypass "$FIPS_STORE_PASSWORD" \
+        -dname "CN=<%= spec.address || spec.name %>, O=GSA, C=US"
+fi
+
+# Create FIPS truststore if it doesn't exist  
+if [ ! -f "$FIPS_TRUSTSTORE_PATH" ]; then
+    echo "Creating FIPS truststore..."
+    # Export cert from keystore and import to truststore
+    /var/vcap/packages/openjdk-21/bin/keytool -exportcert \
+        -alias opensearch-node \
+        -keystore "$FIPS_KEYSTORE_PATH" \
+        -storetype BCFKS \
+        -storepass "$FIPS_STORE_PASSWORD" \
+        -file /tmp/opensearch-cert.pem
+    
+    /var/vcap/packages/openjdk-21/bin/keytool -importcert \
+        -alias opensearch-ca \
+        -keystore "$FIPS_TRUSTSTORE_PATH" \
+        -storetype BCFKS \
+        -storepass "$FIPS_STORE_PASSWORD" \
+        -file /tmp/opensearch-cert.pem \
+        -noprompt
+    
+    rm -f /tmp/opensearch-cert.pem
+fi
+
+<% if_p('opensearch.fips.ca_certificate') do |ca_cert| %>
+# Import provided CA certificate
+echo "<%= ca_cert %>" > /tmp/ca-cert.pem
+/var/vcap/packages/openjdk-21/bin/keytool -importcert \
+    -alias provided-ca \
+    -keystore "$FIPS_TRUSTSTORE_PATH" \
+    -storetype BCFKS \
+    -storepass "$FIPS_STORE_PASSWORD" \
+    -file /tmp/ca-cert.pem \
+    -noprompt
+rm -f /tmp/ca-cert.pem
+<% end %>
+
+# Set proper permissions for FIPS keystores
+chown vcap:vcap "$FIPS_KEYSTORE_PATH" "$FIPS_TRUSTSTORE_PATH"
+chmod 600 "$FIPS_KEYSTORE_PATH" "$FIPS_TRUSTSTORE_PATH"
+
+echo "FIPS keystores ready"
+<% end %>

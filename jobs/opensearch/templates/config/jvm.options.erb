@@ -96,15 +96,24 @@
 ################################################################
 ## FIPS Configuration
 ################################################################
+<% if p("opensearch.fips.enabled", false) %>
 # Enable FIPS mode
 -Dcom.redhat.fips=true
-# Use FIPS-compliant keystore/truststore formats (BCFKS or PKCS11)
+
+# FIPS Trust Store Configuration
+-Djavax.net.ssl.trustStore=/var/vcap/data/opensearch/truststore.bcfks
 -Djavax.net.ssl.trustStoreType=BCFKS
+-Djavax.net.ssl.trustStorePassword=<%= p('opensearch.fips.keystore_password', 'changeme') %>
+
+# FIPS Key Store Configuration
+-Djavax.net.ssl.keyStore=/var/vcap/data/opensearch/keystore.bcfks
 -Djavax.net.ssl.keyStoreType=BCFKS
-# Disable performance data collection and ByteBuddy agent
+-Djavax.net.ssl.keyStorePassword=<%= p('opensearch.fips.keystore_password', 'changeme') %>
+<% end %>
+
+# Other optimizations
 -XX:-UsePerfData
 -Dnet.bytebuddy.agent.disabled=true
-# Set custom temp directory
 -Djava.io.tmpdir=/var/vcap/data/opensearch/
 
 <% p('opensearch.jvm_options').each do |opt| %>
