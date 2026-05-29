@@ -12,17 +12,71 @@ export PATH=/var/vcap/packages/cf-cli-8-linux/bin:$PATH
 export KEYSTORE="/var/vcap/packages/openjdk-21/lib/security/cacerts"
 STOREPASS=<%= p("opensearch.notification.keystorepass") %>
 DEFAULTPASS=<%= p("opensearch.notification.defaultkeystorepass") %>
+
+################################################################
+# FIPS Configuration
+################################################################
+<% if p("opensearch.fips.enabled", false) %>
+echo "Configuring OpenSearch for FIPS mode..."
+
+# Check if FIPS JAR is available
+FIPS_JAR_PATH="/var/vcap/packages/openjdk-21/lib/bcfips-*.jar"
+if ! ls $FIPS_JAR_PATH 1> /dev/null 2>&1; then
+    echo "ERROR: FIPS enabled but FIPS JAR not found at $FIPS_JAR_PATH"
+    exit 1
+fi
+
+# Create FIPS security properties file
+cat > ${OPENSEARCH_PATH_CONF}/fips.security << 'EOF'
+# FIPS Security Configuration for OpenSearch
+security.provider.1=org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider
+security.provider.2=sun.security.provider.Sun
+security.provider.3=sun.security.rsa.SunRsaSign
+security.provider.4=sun.security.ec.SunEC
+security.provider.5=com.sun.net.ssl.internal.ssl.Provider
+security.provider.6=com.sun.crypto.provider.SunJCE
+
+# FIPS approved algorithms only
+org.bouncycastle.fips.approved_only=<%= p('opensearch.fips.strict', true) %>
+
+# Disable non-FIPS algorithms
+jdk.tls.disabledAlgorithms=SSLv2Hello, SSLv3, TLSv1, TLSv1.1, RC4, DES, MD5withRSA, DH keySize < 2048, EC keySize < 224, 3DES_EDE_CBC, anon, NULL
+jdk.certpath.disabledAlgorithms=MD2, MD5, SHA1 jdkCA & usage TLSServer, RSA keySize < 2048, DSA keySize < 2048, EC keySize < 224
+EOF
+
+# Add FIPS JVM options to existing OPENSEARCH_JAVA_OPTS
+export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Dorg.bouncycastle.fips.approved_only=<%= p('opensearch.fips.strict', true) %>"
+export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security"
+export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djavax.net.ssl.keyStoreType=BCFKS"
+export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djavax.net.ssl.trustStoreType=BCFKS"
+
+# Set FIPS environment variables
+export OPENSEARCH_FIPS_MODE=true
+echo "FIPS mode enabled"
+
+<% else %>
+echo "FIPS mode disabled - using standard configuration"
+export OPENSEARCH_FIPS_MODE=false
+<% end %>
+
+################################################################
+# Existing keystore password change
+################################################################
 /var/vcap/packages/openjdk-21/bin/keytool -storepasswd -new $STOREPASS -cacerts -storepass "$DEFAULTPASS" > /dev/null 2>&1;
+
 sysctl -q -w vm.max_map_count=262144
 mkdir -p ${OPENSEARCH_HOME}/plugins
+
 if [ -d ${JOB_DIR}/config/ssl ]; then
     chown vcap ${JOB_DIR}/config/ssl
 fi
+
 source /var/vcap/packages/openjdk-21/bosh/runtime.env
 
 # Copy default security config if it doesn't already exist
 # Have to copy files that don't exist otherwise securityadmin.sh invocation will fail
 cp -u ${OPENSEARCH_HOME}/config/opensearch-security/*.yml "$OPENSEARCH_SECURITY_CONFIG_PATH"
+
 cd ${OPENSEARCH_HOME}
 chown -R vcap:vcap config plugins
 chown -R vcap:vcap "$OPENSEARCH_SECURITY_CONFIG_PATH"
@@ -165,6 +219,12 @@ rm -f /tmp/ca-cert.pem
 # Set proper permissions for FIPS keystores
 chown vcap:vcap "$FIPS_KEYSTORE_PATH" "$FIPS_TRUSTSTORE_PATH"
 chmod 600 "$FIPS_KEYSTORE_PATH" "$FIPS_TRUSTSTORE_PATH"
+
+# Add FIPS keystore paths to OpenSearch keystore
+echo "$FIPS_STORE_PASSWORD" | ${OPENSEARCH_HOME}/bin/opensearch-keystore add --stdin plugins.security.ssl.transport.keystore_password
+echo "$FIPS_STORE_PASSWORD" | ${OPENSEARCH_HOME}/bin/opensearch-keystore add --stdin plugins.security.ssl.transport.truststore_password
+echo "$FIPS_STORE_PASSWORD" | ${OPENSEARCH_HOME}/bin/opensearch-keystore add --stdin plugins.security.ssl.http.keystore_password
+echo "$FIPS_STORE_PASSWORD" | ${OPENSEARCH_HOME}/bin/opensearch-keystore add --stdin plugins.security.ssl.http.truststore_password
 
 echo "FIPS keystores ready"
 <% end %>
