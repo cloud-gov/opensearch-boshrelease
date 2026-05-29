@@ -126,6 +126,10 @@ awscli-exe-linux-x86_64.zip:
   size: 62186639
   object_id: acf3ef43-9e8d-4749-4daf-7c6edf3a5297
   sha: sha256:fca9d80afb77f4cf5f2df6078b30ebb123b40e5b070ee7c1d5c3fba92d6b3755
+bc-fips-2.1.2.jar:
+  size: 8608495
+  object_id: 20095348-09b0-45f0-590f-5546496d319a
+  sha: sha256:044fcd8a29d236edea8a5b414406cdae63b475f9ad9f05fe2dc904a277941115
 jdk-21.0.11_linux-x64_bin.tar.gz:
   size: 198873794
   object_id: dc81aab2-ffef-477a-5896-bcdc4f287944

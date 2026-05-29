@@ -11,3 +11,26 @@ cp openjdk-21/compile.env ${BOSH_INSTALL_TARGET}/bosh/compile.env
 
 cd ${BOSH_INSTALL_TARGET}
 tar zxvf ${BOSH_COMPILE_TARGET}/*.tar.gz --strip 1
+
+# Add FIPS JAR to the JRE
+if [ -f ${BOSH_COMPILE_TARGET}/bcfips-*.jar ]; then
+    echo "Adding FIPS JAR to JRE..."
+    cp ${BOSH_COMPILE_TARGET}/bcfips-*.jar ${BOSH_INSTALL_TARGET}/lib/
+    
+    # Update java.security file for FIPS mode
+    JAVA_SECURITY_FILE="${BOSH_INSTALL_TARGET}/conf/security/java.security"
+    if [ -f "$JAVA_SECURITY_FILE" ]; then
+        # Backup original file
+        cp "$JAVA_SECURITY_FILE" "${JAVA_SECURITY_FILE}.backup"
+        
+        # Add FIPS provider (example for BouncyCastle FIPS)
+        echo "security.provider.1=org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider" >> "$JAVA_SECURITY_FILE"
+        
+        # Set FIPS mode (if required)
+        echo "org.bouncycastle.fips.approved_only=true" >> "$JAVA_SECURITY_FILE"
+    fi
+    
+    echo "FIPS JAR installation completed"
+else
+    echo "Warning: FIPS JAR not found in compile target"
+fi

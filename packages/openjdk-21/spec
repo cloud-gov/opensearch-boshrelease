@@ -3,5 +3,6 @@ name: openjdk-21
 dependencies: []
 files:
 - jdk-21.0.11_linux-x64_bin.tar.gz
+- bc-fips-2.1.2.jar
 - openjdk-21/compile.env
 - openjdk-21/runtime.env
