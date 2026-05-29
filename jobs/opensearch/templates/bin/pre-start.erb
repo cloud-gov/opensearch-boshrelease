@@ -20,7 +20,7 @@ DEFAULTPASS=<%= p("opensearch.notification.defaultkeystorepass") %>
 echo "Configuring OpenSearch for FIPS mode..."
 
 # Check if FIPS JAR is available
-FIPS_JAR_PATH="/var/vcap/packages/openjdk-21/lib/bcfips-*.jar"
+FIPS_JAR_PATH="/var/vcap/packages/openjdk-21/lib/bc-fips-2.1.2.jar
 if ! ls $FIPS_JAR_PATH 1> /dev/null 2>&1; then
     echo "ERROR: FIPS enabled but FIPS JAR not found at $FIPS_JAR_PATH"
     exit 1
