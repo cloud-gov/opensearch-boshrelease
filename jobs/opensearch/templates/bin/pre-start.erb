@@ -7,6 +7,7 @@ export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
 export OPENSEARCH_SECURITY_CONFIG_PATH=${OPENSEARCH_PATH_CONF}/opensearch-security
 export YQ_PACKAGE_DIR=/var/vcap/packages/yq
 export PATH=$YQ_PACKAGE_DIR/bin:$PATH
+export OPENSEARCH_JAVA_OPTS="-XX:-UsePerfData -Dnet.bytebuddy.agent.disabled=true -Djava.io.tmpdir=/var/vcap/data/opensearch/"
 export PATH=/var/vcap/packages/cf-cli-8-linux/bin:$PATH
 export KEYSTORE="/var/vcap/packages/openjdk-21/lib/security/cacerts"
 STOREPASS=<%= p("opensearch.notification.keystorepass") %>
