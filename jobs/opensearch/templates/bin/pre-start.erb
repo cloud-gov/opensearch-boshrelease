@@ -5,59 +5,12 @@ export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 export PACKAGE_DIR=/var/vcap/packages/$JOB_NAME
 export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
 export OPENSEARCH_SECURITY_CONFIG_PATH=${OPENSEARCH_PATH_CONF}/opensearch-security
-export OPENSEARCH_JAVA_OPTS="-XX:-UsePerfData -Dnet.bytebuddy.agent.disabled=true -Djava.io.tmpdir=/var/vcap/data/opensearch/"
 export YQ_PACKAGE_DIR=/var/vcap/packages/yq
 export PATH=$YQ_PACKAGE_DIR/bin:$PATH
 export PATH=/var/vcap/packages/cf-cli-8-linux/bin:$PATH
 export KEYSTORE="/var/vcap/packages/openjdk-21/lib/security/cacerts"
 STOREPASS=<%= p("opensearch.notification.keystorepass") %>
 DEFAULTPASS=<%= p("opensearch.notification.defaultkeystorepass") %>
-
-################################################################
-# FIPS Configuration
-################################################################
-<% if p("opensearch.fips.enabled", false) %>
-echo "Configuring OpenSearch for FIPS mode..."
-
-# Check if FIPS JAR is available
-FIPS_JAR_PATH="/var/vcap/packages/openjdk-21/lib/bc-fips-2.1.2.jar
-if ! ls $FIPS_JAR_PATH 1> /dev/null 2>&1; then
-    echo "ERROR: FIPS enabled but FIPS JAR not found at $FIPS_JAR_PATH"
-    exit 1
-fi
-
-# Create FIPS security properties file
-cat > ${OPENSEARCH_PATH_CONF}/fips.security << 'EOF'
-# FIPS Security Configuration for OpenSearch
-security.provider.1=org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider
-security.provider.2=sun.security.provider.Sun
-security.provider.3=sun.security.rsa.SunRsaSign
-security.provider.4=sun.security.ec.SunEC
-security.provider.5=com.sun.net.ssl.internal.ssl.Provider
-security.provider.6=com.sun.crypto.provider.SunJCE
-
-# FIPS approved algorithms only
-org.bouncycastle.fips.approved_only=<%= p('opensearch.fips.strict', true) %>
-
-# Disable non-FIPS algorithms
-jdk.tls.disabledAlgorithms=SSLv2Hello, SSLv3, TLSv1, TLSv1.1, RC4, DES, MD5withRSA, DH keySize < 2048, EC keySize < 224, 3DES_EDE_CBC, anon, NULL
-jdk.certpath.disabledAlgorithms=MD2, MD5, SHA1 jdkCA & usage TLSServer, RSA keySize < 2048, DSA keySize < 2048, EC keySize < 224
-EOF
-
-# Add FIPS JVM options to existing OPENSEARCH_JAVA_OPTS
-export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Dorg.bouncycastle.fips.approved_only=<%= p('opensearch.fips.strict', true) %>"
-export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security"
-export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djavax.net.ssl.keyStoreType=BCFKS"
-export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djavax.net.ssl.trustStoreType=BCFKS"
-
-# Set FIPS environment variables
-export OPENSEARCH_FIPS_MODE=true
-echo "FIPS mode enabled"
-
-<% else %>
-echo "FIPS mode disabled - using standard configuration"
-export OPENSEARCH_FIPS_MODE=false
-<% end %>
 
 ################################################################
 # Existing keystore password change
@@ -145,86 +98,3 @@ fi
 # Make sure the keystore has the right ownership and file permissions
 chown vcap:vcap "$OPENSEARCH_PATH_CONF/opensearch.keystore"
 chmod 600 "$OPENSEARCH_PATH_CONF/opensearch.keystore"
-
-################################################################
-# FIPS Keystore Setup
-################################################################
-<% if p("opensearch.fips.enabled", false) %>
-echo "Setting up FIPS keystores..."
-
-# Create opensearch data directory for FIPS stores
-mkdir -p /var/vcap/data/opensearch
-
-# FIPS keystore/truststore setup
-FIPS_KEYSTORE_PATH="/var/vcap/data/opensearch/keystore.bcfks"
-FIPS_TRUSTSTORE_PATH="/var/vcap/data/opensearch/truststore.bcfks"
-FIPS_STORE_PASSWORD="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
-
-# Check if Java keytool supports BCFKS
-if ! /var/vcap/packages/openjdk-21/bin/keytool -help 2>&1 | grep -q "BCFKS"; then
-    echo "ERROR: Java keytool does not support BCFKS format. Ensure you're using a FIPS-capable JDK."
-    exit 1
-fi
-
-# Create FIPS keystore if it doesn't exist
-if [ ! -f "$FIPS_KEYSTORE_PATH" ]; then
-    echo "Creating FIPS keystore..."
-    /var/vcap/packages/openjdk-21/bin/keytool -genkeypair \
-        -alias opensearch-node \
-        -keyalg RSA \
-        -keysize 2048 \
-        -validity 365 \
-        -keystore "$FIPS_KEYSTORE_PATH" \
-        -storetype BCFKS \
-        -storepass "$FIPS_STORE_PASSWORD" \
-        -keypass "$FIPS_STORE_PASSWORD" \
-        -dname "CN=<%= spec.address || spec.name %>, O=GSA, C=US"
-fi
-
-# Create FIPS truststore if it doesn't exist  
-if [ ! -f "$FIPS_TRUSTSTORE_PATH" ]; then
-    echo "Creating FIPS truststore..."
-    # Export cert from keystore and import to truststore
-    /var/vcap/packages/openjdk-21/bin/keytool -exportcert \
-        -alias opensearch-node \
-        -keystore "$FIPS_KEYSTORE_PATH" \
-        -storetype BCFKS \
-        -storepass "$FIPS_STORE_PASSWORD" \
-        -file /tmp/opensearch-cert.pem
-    
-    /var/vcap/packages/openjdk-21/bin/keytool -importcert \
-        -alias opensearch-ca \
-        -keystore "$FIPS_TRUSTSTORE_PATH" \
-        -storetype BCFKS \
-        -storepass "$FIPS_STORE_PASSWORD" \
-        -file /tmp/opensearch-cert.pem \
-        -noprompt
-    
-    rm -f /tmp/opensearch-cert.pem
-fi
-
-<% if_p('opensearch.fips.ca_certificate') do |ca_cert| %>
-# Import provided CA certificate
-echo "<%= ca_cert %>" > /tmp/ca-cert.pem
-/var/vcap/packages/openjdk-21/bin/keytool -importcert \
-    -alias provided-ca \
-    -keystore "$FIPS_TRUSTSTORE_PATH" \
-    -storetype BCFKS \
-    -storepass "$FIPS_STORE_PASSWORD" \
-    -file /tmp/ca-cert.pem \
-    -noprompt
-rm -f /tmp/ca-cert.pem
-<% end %>
-
-# Set proper permissions for FIPS keystores
-chown vcap:vcap "$FIPS_KEYSTORE_PATH" "$FIPS_TRUSTSTORE_PATH"
-chmod 600 "$FIPS_KEYSTORE_PATH" "$FIPS_TRUSTSTORE_PATH"
-
-# Add FIPS keystore paths to OpenSearch keystore
-echo "$FIPS_STORE_PASSWORD" | ${OPENSEARCH_HOME}/bin/opensearch-keystore add --stdin plugins.security.ssl.transport.keystore_password
-echo "$FIPS_STORE_PASSWORD" | ${OPENSEARCH_HOME}/bin/opensearch-keystore add --stdin plugins.security.ssl.transport.truststore_password
-echo "$FIPS_STORE_PASSWORD" | ${OPENSEARCH_HOME}/bin/opensearch-keystore add --stdin plugins.security.ssl.http.keystore_password
-echo "$FIPS_STORE_PASSWORD" | ${OPENSEARCH_HOME}/bin/opensearch-keystore add --stdin plugins.security.ssl.http.truststore_password
-
-echo "FIPS keystores ready"
-<% end %>
