@@ -59,7 +59,7 @@ echo "FIPS mode disabled - using standard configuration"
 export OPENSEARCH_FIPS_MODE=false
 <% end %>
 
-################################################################
+<%# ################################################################
 # Existing keystore password change
 ################################################################
 /var/vcap/packages/openjdk-21/bin/keytool -storepasswd -new $STOREPASS -cacerts -storepass "$DEFAULTPASS" > /dev/null 2>&1;
@@ -79,7 +79,7 @@ cp -u ${OPENSEARCH_HOME}/config/opensearch-security/*.yml "$OPENSEARCH_SECURITY_
 
 cd ${OPENSEARCH_HOME}
 chown -R vcap:vcap config plugins
-chown -R vcap:vcap "$OPENSEARCH_SECURITY_CONFIG_PATH"
+chown -R vcap:vcap "$OPENSEARCH_SECURITY_CONFIG_PATH" %>
 
 <% if_p('opensearch.cf.domain', 'opensearch.cf.client_id', 'opensearch.cf.client_password') do %>
 <% if p("opensearch.node.allow_data") %>
@@ -220,11 +220,11 @@ rm -f /tmp/ca-cert.pem
 chown vcap:vcap "$FIPS_KEYSTORE_PATH" "$FIPS_TRUSTSTORE_PATH"
 chmod 600 "$FIPS_KEYSTORE_PATH" "$FIPS_TRUSTSTORE_PATH"
 
-# Add FIPS keystore paths to OpenSearch keystore
+<%# # Add FIPS keystore paths to OpenSearch keystore
 echo "$FIPS_STORE_PASSWORD" | ${OPENSEARCH_HOME}/bin/opensearch-keystore add --stdin plugins.security.ssl.transport.keystore_password
 echo "$FIPS_STORE_PASSWORD" | ${OPENSEARCH_HOME}/bin/opensearch-keystore add --stdin plugins.security.ssl.transport.truststore_password
 echo "$FIPS_STORE_PASSWORD" | ${OPENSEARCH_HOME}/bin/opensearch-keystore add --stdin plugins.security.ssl.http.keystore_password
-echo "$FIPS_STORE_PASSWORD" | ${OPENSEARCH_HOME}/bin/opensearch-keystore add --stdin plugins.security.ssl.http.truststore_password
+echo "$FIPS_STORE_PASSWORD" | ${OPENSEARCH_HOME}/bin/opensearch-keystore add --stdin plugins.security.ssl.http.truststore_password %>
 
 echo "FIPS keystores ready"
 <% end %>
