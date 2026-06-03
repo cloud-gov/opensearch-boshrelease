@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -e # exit immediately if a simple command exits with a non-zero status
 set -u # report the usage of uninitialized variables
 
@@ -25,23 +24,36 @@ export HEAP_SIZE=$((( $( cat /proc/meminfo | grep MemTotal | awk '{ print $2 }' 
 
 # Set heap size and TMP_DIR
 export OPENSEARCH_JAVA_OPTS="-Xms$HEAP_SIZE -Xmx$HEAP_SIZE -Djava.io.tmpdir=$TMP_DIR"
+
+<% if p("opensearch.fips.enabled", false) %>
+# Add FIPS-specific Java options
+FIPS_JAR_COPY="/var/vcap/data/opensearch/fips-lib/bc-fips-2.1.2.jar"
+export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -cp ${FIPS_JAR_COPY}"
+export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Dorg.bouncycastle.fips.approved_only=<%= p('opensearch.fips.strict', true) %>"
+export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djava.security.properties=${JOB_DIR}/config/fips.security"
+export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djavax.net.ssl.keyStoreType=BCFKS"
+export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djavax.net.ssl.trustStoreType=BCFKS"
+echo "FIPS mode enabled for OpenSearch runtime"
+<% end %>
+
 export OPENSEARCH_HOME=/var/vcap/packages/opensearch
 export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
-
 export MAX_OPEN_FILES=<%= p("opensearch.limits.fd") %>
 export MAX_LOCKED_MEMORY=unlimited  # required to enable opensearch's mlockall setting
 
 ulimit -u 4096
-
 if [ -n "$MAX_OPEN_FILES" ]; then
   ulimit -n $MAX_OPEN_FILES
 fi
-
 if [ -n "$MAX_LOCKED_MEMORY" ]; then
   ulimit -l $MAX_LOCKED_MEMORY
 fi
 
-# PKCS8 keys are required for Opensearch TLS
+<% if p("opensearch.fips.enabled", false) %>
+# In FIPS mode, keys should already be in FIPS-compliant format
+echo "FIPS mode enabled - using pre-formatted keys from FIPS keystores"
+<% else %>
+# PKCS8 keys are required for Opensearch TLS (Non-FIPS mode only)
 # https://opensearch.org/docs/latest/security/configuration/tls/
 <% if_p('opensearch.admin.private_key') do %>
   openssl pkcs8 -v1 "PBE-SHA1-3DES" \
@@ -60,7 +72,12 @@ fi
   -out "${JOB_DIR}/config/ssl/opensearch-http.key" -nocrypt
   chmod 600 ${JOB_DIR}/config/ssl/opensearch*.key
 <% end %>
+<% end %>
 
+# Start OpenSearch with appropriate FIPS mode setting
+<% if p("opensearch.fips.enabled", false) %>
 OPENSEARCH_FIPS_MODE=true ${OPENSEARCH_HOME}/bin/opensearch \
+<% else %>
+${OPENSEARCH_HOME}/bin/opensearch \
+<% end %>
   <%= p("opensearch.exec.options", []).join(' ') %>
-
