@@ -1,5 +1,4 @@
 bootstrap.memory_lock: true
-
 path.logs: "/var/vcap/sys/log/opensearch"
 path.data: "/var/vcap/store/opensearch"
 <% if p('opensearch.path_repo') != '' %>
@@ -7,6 +6,7 @@ path.repo: ["<%= p('opensearch.path_repo') %>"]
 <% end %>
 
 plugins.security.allow_default_init_securityindex: true
+
 <% if_p('opensearch.admin.dn') do %>
 # Defines the DNs (distinguished names) of certificates
 # to which admin privileges should be assigned
@@ -22,7 +22,41 @@ plugins.security.nodes_dn:
 <% end %>
 
 plugins.security.restapi.roles_enabled: ["all_access"]
+
+<% if p("opensearch.fips.enabled", false) %>
+################################################################
+# FIPS Mode Configuration
+################################################################
+plugins.security.ssl.transport.enabled: true
+plugins.security.ssl.http.enabled: true
+
+# Use FIPS keystores instead of PEM files
+plugins.security.ssl.transport.keystore_type: BCFKS
+plugins.security.ssl.transport.keystore_filepath: /var/vcap/data/opensearch/keystore.bcfks
+plugins.security.ssl.transport.keystore_alias: opensearch-node
+plugins.security.ssl.transport.truststore_type: BCFKS
+plugins.security.ssl.transport.truststore_filepath: /var/vcap/data/opensearch/truststore.bcfks
+
+plugins.security.ssl.http.keystore_type: BCFKS
+plugins.security.ssl.http.keystore_filepath: /var/vcap/data/opensearch/keystore.bcfks
+plugins.security.ssl.http.keystore_alias: opensearch-node
+plugins.security.ssl.http.truststore_type: BCFKS
+plugins.security.ssl.http.truststore_filepath: /var/vcap/data/opensearch/truststore.bcfks
+
+# FIPS-compatible protocols
+plugins.security.ssl.transport.enabled_protocols: ["TLSv1.2", "TLSv1.3"]
+plugins.security.ssl.http.enabled_protocols: ["TLSv1.2", "TLSv1.3"]
+
+# Disable hostname verification for initial testing
+plugins.security.ssl.transport.enforce_hostname_verification: false
+plugins.security.ssl.http.clientauth_mode: OPTIONAL
+
+<% else %>
+################################################################
+# Non-FIPS SSL Configuration
+################################################################
 <% if_p('opensearch.node.ssl.certificate') do %>
+plugins.security.ssl.transport.enabled: true
 plugins.security.ssl.transport.enforce_hostname_verification: false
 plugins.security.ssl.transport.pemkey_filepath: ssl/opensearch-node.key
 plugins.security.ssl.transport.pemcert_filepath: ssl/opensearch-node.crt
@@ -35,6 +69,7 @@ plugins.security.ssl.http.clientauth_mode: OPTIONAL
 plugins.security.ssl.http.pemkey_filepath: ssl/opensearch-http.key
 plugins.security.ssl.http.pemcert_filepath: ssl/opensearch-http.crt
 plugins.security.ssl.http.pemtrustedcas_filepath: ssl/opensearch.ca
+<% end %>
 <% end %>
 
 <%
@@ -51,12 +86,12 @@ plugins.security.ssl.http.pemtrustedcas_filepath: ssl/opensearch.ca
     manager_hosts = p("opensearch.manager_hosts").join(',')
   end
 %>
+
 cluster.name: "<%= cluster_name %>"
 <% unless p("opensearch.discovery.single_node") %>
 cluster.initial_cluster_manager_nodes: [<%= manager_hosts %>]
 <% end %>
 
-# https://opensearch.org/docs/latest/tuning-your-cluster/index/#step-4-configure-discovery-hosts-for-a-cluster
 discovery.seed_hosts: [<%= manager_hosts %>]
 <% if p("opensearch.discovery.single_node") %>
 discovery.type: "single-node"
@@ -75,6 +110,7 @@ discovery.type: "single-node"
   end
   node_roles = node_roles.join(',')
 %>
+
 node.name: "<%= name %>/<%= index %>"
 node.roles: [ <%= node_roles %> ]
 <% p("opensearch.node.attributes", {}).each do | k, v | %>
@@ -95,11 +131,9 @@ plugins.anomaly_detection.enabled: false
 <% if_p('opensearch.routing.watermark.low') do |low| %>
 cluster.routing.allocation.disk.watermark.low: <%= low %>
 <% end %>
-
 <% if_p('opensearch.routing.watermark.high') do |high| %>
 cluster.routing.allocation.disk.watermark.high: <%= high %>
 <% end %>
-
 <% if_p('opensearch.routing.watermark.flood_stage') do |flood_stage| %>
 cluster.routing.allocation.disk.watermark.flood_stage: <%= flood_stage %>
 <% end %>
@@ -115,43 +149,4 @@ opensearch.notifications.general.filter_by_backend_roles: true
 opensearch.notifications.general.filter_by_backend_roles_access_strategy: "all" 
 plugins.security.user_attribute_serialization.enabled: true
 plugins.alerting.notification_context_results_allowed_roles: []
-<% end %>
-
-<% if p("opensearch.fips.enabled", false) %>
-################################################################
-# FIPS Mode Configuration
-################################################################
-# Configure security plugin for FIPS mode
-plugins.security.ssl.transport.enabled: true
-
-# Use FIPS keystores instead of PEM files
-plugins.security.ssl.transport.keystore_type: BCFKS
-plugins.security.ssl.transport.keystore_filepath: /var/vcap/data/opensearch/keystore.bcfks
-plugins.security.ssl.transport.keystore_alias: opensearch-node
-plugins.security.ssl.transport.truststore_type: BCFKS
-plugins.security.ssl.transport.truststore_filepath: /var/vcap/data/opensearch/truststore.bcfks
-
-plugins.security.ssl.http.keystore_type: BCFKS
-plugins.security.ssl.http.keystore_filepath: /var/vcap/data/opensearch/keystore.bcfks
-plugins.security.ssl.http.keystore_alias: opensearch-node
-plugins.security.ssl.http.truststore_type: BCFKS
-plugins.security.ssl.http.truststore_filepath: /var/vcap/data/opensearch/truststore.bcfks
-
-# FIPS-compatible protocols and ciphers
-plugins.security.ssl.transport.enabled_protocols: ["TLSv1.2", "TLSv1.3"]
-plugins.security.ssl.http.enabled_protocols: ["TLSv1.2", "TLSv1.3"]
-
-# Disable hostname verification for initial testing
-plugins.security.ssl.transport.enforce_hostname_verification: false
-plugins.security.ssl.http.clientauth_mode: OPTIONAL
-
-<% else %>
-# Non-FIPS mode - use existing PEM certificate configuration
-<% if_p('opensearch.node.ssl.certificate') do %>
-plugins.security.ssl.transport.enforce_hostname_verification: false
-plugins.security.ssl.transport.pemkey_filepath: ssl/opensearch-node.key
-plugins.security.ssl.transport.pemcert_filepath: ssl/opensearch-node.crt
-plugins.security.ssl.transport.pemtrustedcas_filepath: ssl/opensearch.ca
-<% end %>
-
 <% end %>
