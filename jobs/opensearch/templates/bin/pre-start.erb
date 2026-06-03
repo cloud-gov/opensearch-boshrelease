@@ -39,7 +39,7 @@ cat > "${OPENSEARCH_PATH_CONF}/fips.security" << EOF
 # FIPS Security Configuration for OpenSearch
 security.provider.1=org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider
 security.provider.2=sun.security.provider.Sun
-security.provider.3=sun.security.rsa.SunRsaSign
+security.provider.3=sun.security.rsa.SunRsaSign  
 security.provider.4=sun.security.ec.SunEC
 security.provider.5=com.sun.net.ssl.internal.ssl.Provider
 security.provider.6=com.sun.crypto.provider.SunJCE
@@ -47,18 +47,22 @@ security.provider.6=com.sun.crypto.provider.SunJCE
 # FIPS approved algorithms only
 org.bouncycastle.fips.approved_only=<%= p('opensearch.fips.strict', true) %>
 
-# SSL/TLS Configuration for FIPS
+# SSL/TLS Algorithm Configuration
 ssl.SecurityProvider=BCFIPS
 ssl.TrustManagerFactory.algorithm=PKIX
 ssl.KeyManagerFactory.algorithm=NewSunX509
 
+# Default SSL context configuration
+ssl.SocketFactory.provider=org.bouncycastle.jsse.provider.ProvSSLSocketFactory
+ssl.ServerSocketFactory.provider=org.bouncycastle.jsse.provider.ProvSSLServerSocketFactory
+
+# Supported protocols and ciphers
+jdk.tls.client.protocols=TLSv1.2,TLSv1.3
+jdk.tls.server.protocols=TLSv1.2,TLSv1.3
+
 # Disable non-FIPS algorithms
 jdk.tls.disabledAlgorithms=SSLv2Hello, SSLv3, TLSv1, TLSv1.1, RC4, DES, MD5withRSA, DH keySize < 2048, EC keySize < 224, 3DES_EDE_CBC, anon, NULL
 jdk.certpath.disabledAlgorithms=MD2, MD5, SHA1 jdkCA & usage TLSServer, RSA keySize < 2048, DSA keySize < 2048, EC keySize < 224
-
-# Supported TLS protocols in FIPS mode
-jdk.tls.client.protocols=TLSv1.2,TLSv1.3
-jdk.tls.server.protocols=TLSv1.2,TLSv1.3
 EOF
 
 # Set FIPS keystore password
@@ -158,6 +162,9 @@ yq -i ".notifications_full_access={\"backend_roles\": [$ORG_GUID_ROLE_LIST]}" "$
     ${OPENSEARCH_HOME}/bin/opensearch-plugin install -b "<%= path %>"
   <% end %>
 <% end %>
+
+#requested
+${OPENSEARCH_HOME}/bin/opensearch-plugin install -b workload-management 
 
 log_dir=${OPENSEARCH_HOME}/logs
 if [[ ! -a ${log_dir} ]]; then
