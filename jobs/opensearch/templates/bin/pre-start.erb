@@ -63,6 +63,7 @@ export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djavax.net.ssl.trustStoreT
 fips_keytool() {
     /var/vcap/packages/openjdk-21/bin/keytool \
         -J-cp -J"${FIPS_JAR_COPY}" \
+        -J-Djava.io.tmpdir=/var/vcap/data/opensearch/ \
         -J-Djava.security.properties="${OPENSEARCH_PATH_CONF}/fips.security" \
         "$@"
 }
