@@ -116,3 +116,50 @@ opensearch.notifications.general.filter_by_backend_roles_access_strategy: "all"
 plugins.security.user_attribute_serialization.enabled: true
 plugins.alerting.notification_context_results_allowed_roles: []
 <% end %>
+
+<% if p("opensearch.fips.enabled", false) %>
+################################################################
+# FIPS Mode Configuration
+################################################################
+# Configure security plugin for FIPS mode
+plugins.security.ssl.transport.enabled: true
+plugins.security.ssl.http.enabled: true
+
+# Use FIPS keystores instead of PEM files
+plugins.security.ssl.transport.keystore_type: BCFKS
+plugins.security.ssl.transport.keystore_filepath: /var/vcap/data/opensearch/keystore.bcfks
+plugins.security.ssl.transport.keystore_alias: opensearch-node
+plugins.security.ssl.transport.truststore_type: BCFKS
+plugins.security.ssl.transport.truststore_filepath: /var/vcap/data/opensearch/truststore.bcfks
+
+plugins.security.ssl.http.keystore_type: BCFKS
+plugins.security.ssl.http.keystore_filepath: /var/vcap/data/opensearch/keystore.bcfks
+plugins.security.ssl.http.keystore_alias: opensearch-node
+plugins.security.ssl.http.truststore_type: BCFKS
+plugins.security.ssl.http.truststore_filepath: /var/vcap/data/opensearch/truststore.bcfks
+
+# FIPS-compatible protocols and ciphers
+plugins.security.ssl.transport.enabled_protocols: ["TLSv1.2", "TLSv1.3"]
+plugins.security.ssl.http.enabled_protocols: ["TLSv1.2", "TLSv1.3"]
+
+# Disable hostname verification for initial testing
+plugins.security.ssl.transport.enforce_hostname_verification: false
+plugins.security.ssl.http.clientauth_mode: OPTIONAL
+
+<% else %>
+# Non-FIPS mode - use existing PEM certificate configuration
+<% if_p('opensearch.node.ssl.certificate') do %>
+plugins.security.ssl.transport.enforce_hostname_verification: false
+plugins.security.ssl.transport.pemkey_filepath: ssl/opensearch-node.key
+plugins.security.ssl.transport.pemcert_filepath: ssl/opensearch-node.crt
+plugins.security.ssl.transport.pemtrustedcas_filepath: ssl/opensearch.ca
+<% end %>
+
+<% if_p('opensearch.http.ssl.certificate') do %>
+plugins.security.ssl.http.enabled: true
+plugins.security.ssl.http.clientauth_mode: OPTIONAL
+plugins.security.ssl.http.pemkey_filepath: ssl/opensearch-http.key
+plugins.security.ssl.http.pemcert_filepath: ssl/opensearch-http.crt
+plugins.security.ssl.http.pemtrustedcas_filepath: ssl/opensearch.ca
+<% end %>
+<% end %>

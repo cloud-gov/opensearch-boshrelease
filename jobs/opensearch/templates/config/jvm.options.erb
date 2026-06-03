@@ -60,18 +60,17 @@
 
 <% if p("opensearch.fips.enabled", false) %>
 ################################################################
-## FIPS Configuration
+## FIPS Configuration with Security Plugin Support
 ################################################################
-# BouncyCastle FIPS Provider Configuration
+# BouncyCastle FIPS Provider
 -Dorg.bouncycastle.fips.approved_only=<%= p('opensearch.fips.strict', true) %>
 -Djava.security.properties=/var/vcap/jobs/opensearch/config/fips.security
 
-# SSL Context and Provider Configuration
--Djavax.net.ssl.SSLContext=TLS
--Djavax.net.ssl.keyManagerFactory.algorithm=NewSunX509
--Djavax.net.ssl.trustManagerFactory.algorithm=PKIX
+# Default SSL context configuration
+-Djavax.net.ssl.SSLContext=TLSv1.2
+-Djsse.enableSNIExtension=true
 
-# FIPS Trust Store Configuration
+# FIPS Trust Store Configuration  
 -Djavax.net.ssl.trustStore=/var/vcap/data/opensearch/truststore.bcfks
 -Djavax.net.ssl.trustStoreType=BCFKS
 -Djavax.net.ssl.trustStoreProvider=BCFIPS
@@ -83,13 +82,13 @@
 -Djavax.net.ssl.keyStoreProvider=BCFIPS
 -Djavax.net.ssl.keyStorePassword=<%= p('opensearch.fips.keystore_password', 'changeme') %>
 
-# Protocol restrictions
+# Protocol and cipher configuration
 -Dhttps.protocols=TLSv1.2,TLSv1.3
 -Djdk.tls.client.protocols=TLSv1.2,TLSv1.3
 -Djdk.tls.server.protocols=TLSv1.2,TLSv1.3
 
-# FIPS SSL debugging (remove in production)
--Djavax.net.debug=ssl:handshake:verbose
+# Security debugging (remove in production)
+-Djavax.net.debug=ssl:handshake
 <% end %>
 
 # Other optimizations
