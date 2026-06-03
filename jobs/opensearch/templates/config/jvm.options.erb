@@ -31,60 +31,61 @@
 ##
 ################################################################
 
-## GC configuration - Java 21+ uses G1GC by default
+## GC configuration
 -XX:+UseG1GC
 -XX:G1ReservePercent=25
 -XX:InitiatingHeapOccupancyPercent=30
 
-## heap dumps
-
-# generate a heap dump when an allocation from the Java heap fails
-# heap dumps are created in the working directory of the JVM
+## Essential options
 -XX:+HeapDumpOnOutOfMemoryError
+-javaagent:agent/opensearch-agent.jar
 
-## Java 21+ specific options
-21-:-javaagent:agent/opensearch-agent.jar
-21-:--add-opens=java.base/java.nio=org.apache.arrow.memory.core,ALL-UNNAMED
+## Fix warnings for Java 21+
+--add-opens=java.base/java.nio=ALL-UNNAMED
+--add-opens=java.base/sun.nio.ch=ALL-UNNAMED
 --add-modules=jdk.incubator.vector
+--enable-native-access=ALL-UNNAMED
 
-<% if p("opensearch.fips.enabled", false) %>
-################################################################
-## FIPS Mode Configuration
-################################################################
-# FIPS mode - Security Manager is disabled in Java 21+
-<% else %>
-################################################################
-## Standard Mode Configuration  
-################################################################
-# Note: Security Manager support varies by OpenSearch version in Java 21+
-# May need to be removed entirely depending on OpenSearch version
-<% end %>
+## Suppress unsafe warnings (for ByteBuddy)
+--add-opens=java.base/sun.misc=ALL-UNNAMED
 
-## Core optimizations
+## Optimizations
 -Dfile.encoding=UTF-8
 -Djna.nosys=true
 -Dlog4j.shutdownHookEnabled=false
 -Dlog4j2.disable.jmx=true
 -Dlog4j.skipJansi=true
 -XX:-UsePerfData
--Dnet.bytebuddy.agent.disabled=true
 -Djava.io.tmpdir=/var/vcap/data/opensearch/
 
+<% if p("opensearch.fips.enabled", false) %>
 ################################################################
 ## FIPS Configuration
 ################################################################
-<% if p("opensearch.fips.enabled", false) %>
-# BouncyCastle FIPS Provider
+# BouncyCastle FIPS Provider Configuration
 -Dorg.bouncycastle.fips.approved_only=<%= p('opensearch.fips.strict', true) %>
 -Djava.security.properties=/var/vcap/jobs/opensearch/config/fips.security
 
-# FIPS SSL Configuration
+# FIPS SSL Context Configuration
+-Dcom.sun.net.ssl.checkRevocation=false
+-Djdk.tls.useExtendedMasterSecret=false
+-Djsse.enableSNIExtension=true
+
+# FIPS Trust Store Configuration
 -Djavax.net.ssl.trustStore=/var/vcap/data/opensearch/truststore.bcfks
 -Djavax.net.ssl.trustStoreType=BCFKS
+-Djavax.net.ssl.trustStoreProvider=BCFIPS
 -Djavax.net.ssl.trustStorePassword=<%= p('opensearch.fips.keystore_password', 'changeme') %>
+
+# FIPS Key Store Configuration
 -Djavax.net.ssl.keyStore=/var/vcap/data/opensearch/keystore.bcfks
 -Djavax.net.ssl.keyStoreType=BCFKS
+-Djavax.net.ssl.keyStoreProvider=BCFIPS
 -Djavax.net.ssl.keyStorePassword=<%= p('opensearch.fips.keystore_password', 'changeme') %>
+
+# FIPS-compatible TLS protocols
+-Dhttps.protocols=TLSv1.2,TLSv1.3
+-Djdk.tls.client.protocols=TLSv1.2,TLSv1.3
 <% end %>
 
 # Other optimizations

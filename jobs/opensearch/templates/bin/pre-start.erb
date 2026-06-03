@@ -36,6 +36,7 @@ FIPS_JAR_COPY="${FIPS_LIB_DIR}/bc-fips-2.1.2.jar"
 # Create FIPS security properties file
 mkdir -p "${OPENSEARCH_PATH_CONF}"
 cat > "${OPENSEARCH_PATH_CONF}/fips.security" << EOF
+# FIPS Security Configuration for OpenSearch
 security.provider.1=org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider
 security.provider.2=sun.security.provider.Sun
 security.provider.3=sun.security.rsa.SunRsaSign
@@ -43,10 +44,21 @@ security.provider.4=sun.security.ec.SunEC
 security.provider.5=com.sun.net.ssl.internal.ssl.Provider
 security.provider.6=com.sun.crypto.provider.SunJCE
 
+# FIPS approved algorithms only
 org.bouncycastle.fips.approved_only=<%= p('opensearch.fips.strict', true) %>
 
+# SSL/TLS Configuration for FIPS
+ssl.SecurityProvider=BCFIPS
+ssl.TrustManagerFactory.algorithm=PKIX
+ssl.KeyManagerFactory.algorithm=NewSunX509
+
+# Disable non-FIPS algorithms
 jdk.tls.disabledAlgorithms=SSLv2Hello, SSLv3, TLSv1, TLSv1.1, RC4, DES, MD5withRSA, DH keySize < 2048, EC keySize < 224, 3DES_EDE_CBC, anon, NULL
 jdk.certpath.disabledAlgorithms=MD2, MD5, SHA1 jdkCA & usage TLSServer, RSA keySize < 2048, DSA keySize < 2048, EC keySize < 224
+
+# Supported TLS protocols in FIPS mode
+jdk.tls.client.protocols=TLSv1.2,TLSv1.3
+jdk.tls.server.protocols=TLSv1.2,TLSv1.3
 EOF
 
 # Set FIPS keystore password

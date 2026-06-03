@@ -10,6 +10,7 @@ export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 export LOG_DIR=/var/vcap/sys/log/$JOB_NAME
 export PACKAGE_DIR=/var/vcap/packages/$JOB_NAME
 export STORE_DIR=/var/vcap/store/$JOB_NAME
+export KEYSTORE_PASSWORD="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
 
 source /var/vcap/packages/openjdk-21/bosh/runtime.env
 
