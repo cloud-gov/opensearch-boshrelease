@@ -123,7 +123,6 @@ plugins.alerting.notification_context_results_allowed_roles: []
 ################################################################
 # Configure security plugin for FIPS mode
 plugins.security.ssl.transport.enabled: true
-plugins.security.ssl.http.enabled: true
 
 # Use FIPS keystores instead of PEM files
 plugins.security.ssl.transport.keystore_type: BCFKS
@@ -155,11 +154,4 @@ plugins.security.ssl.transport.pemcert_filepath: ssl/opensearch-node.crt
 plugins.security.ssl.transport.pemtrustedcas_filepath: ssl/opensearch.ca
 <% end %>
 
-<% if_p('opensearch.http.ssl.certificate') do %>
-plugins.security.ssl.http.enabled: true
-plugins.security.ssl.http.clientauth_mode: OPTIONAL
-plugins.security.ssl.http.pemkey_filepath: ssl/opensearch-http.key
-plugins.security.ssl.http.pemcert_filepath: ssl/opensearch-http.crt
-plugins.security.ssl.http.pemtrustedcas_filepath: ssl/opensearch.ca
-<% end %>
 <% end %>
