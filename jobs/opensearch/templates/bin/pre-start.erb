@@ -318,7 +318,7 @@ fips_keytool -importcert \
     -keystore "$FIPS_TRUSTSTORE_PATH" \
     -storetype BCFKS \
     -storepass "$FIPS_STORE_PASSWORD" \
-    -file /tmp/ca-cert.pem \
+    -file ${JOB_DIR}/config/ssl/opensearch.ca \
     -noprompt
 
 if [ $? -eq 0 ]; then
