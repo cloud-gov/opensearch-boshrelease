@@ -30,14 +30,26 @@ fi
 mkdir -p /var/vcap/data/opensearch
 FIPS_LIB_DIR="/var/vcap/data/opensearch/fips-lib"
 mkdir -p "${FIPS_LIB_DIR}"
-cp "${FIPS_JAR_PATH}" "${FIPS_LIB_DIR}/"
-FIPS_JAR_COPY="${FIPS_LIB_DIR}/bc-fips-2.1.2.jar"
+JDK_LIB="/var/vcap/packages/openjdk-21/lib"
+
+FIPS_CP=""
+for jar in bc-fips bctls-fips bcutil-fips; do
+    src=$(ls ${JDK_LIB}/${jar}-*.jar 2>/dev/null | head -n1)
+    if [ -z "$src" ] || [ ! -f "$src" ]; then
+       echo "ERROR: FIPS enabled but ${jar}-*.Jason not found in ${JDK_LIB}"
+       exit 1
+    fi
+    cp "$src" "${FIPS_LIB_DIR}/"
+    cp "$src" "${OPENSEARCH_HOME}/lib/"
+    FIPS_CP="${FIPS_CP}:${FIPS_LIB_DIR}/$(basename "$src")"
+done 
+FIPS_CP="${FIPS_CP#:}"
 
 # Create FIPS security properties file
 mkdir -p "${OPENSEARCH_PATH_CONF}"
 cat > "${OPENSEARCH_PATH_CONF}/fips.security" << EOF
 # FIPS Security Configuration with SSL Context Support
-security.provider.1=org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider C:HYBIRD;ENABLE{All};
+security.provider.1=org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider C:HYBRID;ENABLE{All};
 security.provider.2=sun.security.provider.Sun 
 security.provider.3=org.bouncycastle.jsse.provider.BouncyCastleJsseProvider fips:BCFIPS
 security.provider.4=sun.security.rsa.SunRsaSign
@@ -45,7 +57,6 @@ security.provider.5=sun.security.ec.SunEC
 security.provider.6=com.sun.crypto.provider.SunJCE
 
 # SSL/TLS Configuration for Security Plugin Compatibility
-ssl.SecurityProvider=BCFIPS
 ssl.TrustManagerFactory.algorithm=PKIX
 ssl.KeyManagerFactory.algorithm=X509
 keystore.type=BCFKS
@@ -63,7 +74,7 @@ EOF
 export OPENSEARCH_KEYSTORE_PASSWORD="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
 
 # Add FIPS JVM options immediately
-export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -cp ${FIPS_JAR_COPY}"
+export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -cp ${FIPS_CP}"
 export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Dorg.bouncycastle.fips.approved_only=<%= p('opensearch.fips.strict', true) %>"
 export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security"
 export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djavax.net.ssl.keyStoreType=BCFKS"
@@ -72,7 +83,7 @@ export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djavax.net.ssl.trustStoreT
 # Create wrapper function for FIPS-enabled keytool
 fips_keytool() {
     /var/vcap/packages/openjdk-21/bin/keytool \
-        -J-cp -J"${FIPS_JAR_COPY}" \
+        -J-cp -J"${FIPS_CP}" \
         -J-Djava.io.tmpdir=/var/vcap/data/opensearch/ \
         -J-Djava.security.properties="${OPENSEARCH_PATH_CONF}/fips.security" \
         "$@"
@@ -254,7 +265,6 @@ else
     
     # Debug: Try to see what providers are available
     /var/vcap/packages/openjdk-21/bin/java \
-        -cp "${FIPS_JAR_COPY}" \
         -Djava.security.properties="${OPENSEARCH_PATH_CONF}/fips.security" \
         -c "java.security.Security.getProviders(); java.util.Arrays.stream(java.security.Security.getProviders()).forEach(p -> System.out.println(p.getName()));" 2>/dev/null
     

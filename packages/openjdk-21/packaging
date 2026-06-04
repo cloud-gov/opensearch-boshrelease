@@ -18,7 +18,7 @@ found=0
 for jar in bc-fips bctls-fips bcutil-fips; do
     src=$(ls ${BOSH_COMPILE_TARGET}/${jar}-*.jar 2>/dev/null | head -n1)
     if [ -n "$src" ] && [ -f "$src" ]; then
-       cp "$src" "${BOSH_COMPILE_TARGET}/lib/"
+       cp "$src" "${BOSH_INSTALL_TARGET}/lib/"
        echo " found $(basename "$src")"
        found=$((found+1))
     else  
