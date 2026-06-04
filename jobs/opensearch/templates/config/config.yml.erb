@@ -46,7 +46,11 @@ plugins.security.ssl.http.truststore_filepath: /var/vcap/data/opensearch/trustst
 # FIPS-compatible protocols
 plugins.security.ssl.transport.enabled_protocols: ["TLSv1.2", "TLSv1.3"]
 plugins.security.ssl.http.enabled_protocols: ["TLSv1.2", "TLSv1.3"]
+# Enforce FIPS-approved hashing algorithms for the Security plugin (PBKDF2 is FIPS-compliant)
+plugins.security.authcz.internal_users_db_backend: pbkdf2
 
+# Disable non-compliant algorithms (e.g., BLAKE2b) for field masking
+plugins.security.field_masking.hash_algorithm: SHA-512
 # Disable hostname verification for initial testing
 plugins.security.ssl.transport.enforce_hostname_verification: false
 plugins.security.ssl.http.clientauth_mode: OPTIONAL

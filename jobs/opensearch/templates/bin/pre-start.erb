@@ -32,17 +32,37 @@ FIPS_LIB_DIR="/var/vcap/data/opensearch/fips-lib"
 mkdir -p "${FIPS_LIB_DIR}"
 JDK_LIB="/var/vcap/packages/openjdk-21/lib"
 
+
+echo "Removing conflicting BouncyCastle JARs from OpenSearch..."
+for j in $(find /var/vcap/packages/opensearch -name '*bouncycastle*.jar' -o -name '*bcprov*.jar' -o -name '*bcpkix*.jar'); do
+  echo "Removing conflicting JAR: $j"
+  rm -f "$j"
+done
+
+# Also check for BC JARs that might conflict
+find /var/vcap/packages/opensearch -name '*.jar' -exec sh -c '
+  if unzip -l "$1" 2>/dev/null | grep -q "org/bouncycastle" && ! echo "$1" | grep -q fips; then
+    echo "Found non-FIPS BC content in: $1"
+  fi
+' _ {} \;
+
 FIPS_CP=""
 for jar in bc-fips bctls-fips bcutil-fips; do
     src=$(ls ${JDK_LIB}/${jar}-*.jar 2>/dev/null | head -n1)
     if [ -z "$src" ] || [ ! -f "$src" ]; then
-       echo "ERROR: FIPS enabled but ${jar}-*.Jason not found in ${JDK_LIB}"
+       echo "ERROR: FIPS enabled but ${jar}-*.Json not found in ${JDK_LIB}"
        exit 1
     fi
     cp "$src" "${FIPS_LIB_DIR}/"
     cp "$src" "${OPENSEARCH_HOME}/lib/"
     FIPS_CP="${FIPS_CP}:${FIPS_LIB_DIR}/$(basename "$src")"
 done 
+
+for j in $(find /var/vcap/packages/opensearch -name '*.jar'); do 
+  if unzip -l "$j" 2>/dev/null | grep -q 'org/bouncycastle/asn1/ASN1Integer.class'; then
+    echo "$j"
+    fi
+done
 FIPS_CP="${FIPS_CP#:}"
 
 # Create FIPS security properties file
@@ -54,7 +74,6 @@ security.provider.2=sun.security.provider.Sun
 security.provider.3=org.bouncycastle.jsse.provider.BouncyCastleJsseProvider fips:BCFIPS
 security.provider.4=sun.security.rsa.SunRsaSign
 security.provider.5=sun.security.ec.SunEC
-security.provider.6=com.sun.crypto.provider.SunJCE
 
 # SSL/TLS Configuration for Security Plugin Compatibility
 ssl.TrustManagerFactory.algorithm=PKIX
