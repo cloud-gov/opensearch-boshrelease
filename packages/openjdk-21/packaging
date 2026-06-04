@@ -13,8 +13,15 @@ cd ${BOSH_INSTALL_TARGET}
 tar zxvf ${BOSH_COMPILE_TARGET}/*.tar.gz --strip 1
 
 # Add FIPS JAR to JRE lib directory
-if [ -f ${BOSH_COMPILE_TARGET}/bc-fips-*.jar ]; then
-    echo "Adding FIPS JAR to JRE..."
-    cp ${BOSH_COMPILE_TARGET}/bc-fips-*.jar ${BOSH_INSTALL_TARGET}/lib/
-    echo "FIPS JAR installed successfully"
-fi
+echo "Bouncy Castle FIPS"
+found=0
+for jar in bc-fips bctls-fips bcutil-fips; do
+    src=$(ls ${BOSH_COMPILE_TARGET}/${jar}-*.jar 2>/dev/null | head -n1)
+    if [ -n "$src" ] && [ -f "$src" ]; then
+       cp "$src" "${BOSH_COMPILE_TARGET}/lib/"
+       echo " found $(basename "$src")"
+       found=$((found+1))
+    else  
+        echo " WARNING: ${jar}-*.jar not found in compile target"
+    fi
+done 

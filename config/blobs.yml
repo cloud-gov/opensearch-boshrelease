@@ -130,6 +130,14 @@ bc-fips-2.1.2.jar:
   size: 8608495
   object_id: 20095348-09b0-45f0-590f-5546496d319a
   sha: sha256:044fcd8a29d236edea8a5b414406cdae63b475f9ad9f05fe2dc904a277941115
+bctls-fips-2.1.23.jar:
+  size: 1675407
+  object_id: b69d87ff-54c3-4883-461c-461dcf6f0f65
+  sha: sha256:c5649e916d0a2fc589f8943ce04a7cf40642e2cdb62e0f0dd1c919da04e113a3
+bcutil-fips-2.1.6.jar:
+  size: 714222
+  object_id: 6d698ffc-96b6-4c35-5d0c-075fe2d6b977
+  sha: sha256:dc34cd3aeb92f491b8406e687bcdf44312db3d1a6698c4a8ee7e9e88214c9228
 jdk-21.0.11_linux-x64_bin.tar.gz:
   size: 198873794
   object_id: dc81aab2-ffef-477a-5896-bcdc4f287944

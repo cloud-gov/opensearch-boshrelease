@@ -44,17 +44,12 @@ security.provider.4=sun.security.rsa.SunRsaSign
 security.provider.5=sun.security.ec.SunEC
 security.provider.6=com.sun.crypto.provider.SunJCE
 
-# FIPS approved algorithms only
-org.bouncycastle.fips.approved_only=<%= p('opensearch.fips.strict', true) %>
-
 # SSL/TLS Configuration for Security Plugin Compatibility
 ssl.SecurityProvider=BCFIPS
 ssl.TrustManagerFactory.algorithm=PKIX
 ssl.KeyManagerFactory.algorithm=X509
-ssl.SSLContext.TLS=org.bouncycastle.jsse.provider.ProvSSLContext\$TLS
-ssl.SSLContext.TLSv1.2=org.bouncycastle.jsse.provider.ProvSSLContext\$TLSv12
-ssl.SSLContext.TLSv1.3=org.bouncycastle.jsse.provider.ProvSSLContext\$TLSv13
 keystore.type=BCFKS
+
 # Protocol support
 jdk.tls.client.protocols=TLSv1.2,TLSv1.3
 jdk.tls.server.protocols=TLSv1.2,TLSv1.3
