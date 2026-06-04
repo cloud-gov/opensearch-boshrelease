@@ -86,7 +86,7 @@ jdk.tls.server.protocols=TLSv1.2,TLSv1.3
 
 # Disable weak algorithms
 jdk.tls.disabledAlgorithms=SSLv2Hello, SSLv3, TLSv1, TLSv1.1, RC4, DES, MD5withRSA, DH keySize < 2048, EC keySize < 224, 3DES_EDE_CBC, anon, NULL
-jdk.certpath.disabledAlgorithms=MD2, MD5, SHA1 jdkCA & usage TLSServer, RSA keySize < 2048, DSA keySize < 2048, EC keySize < 224
+jdk.certpath.disabledAlgorithms=MD2, MD5, RSA keySize < 2048, DSA keySize < 2048, EC keySize < 224
 EOF
 
 # Set FIPS keystore password
@@ -312,6 +312,9 @@ if [ ! -f "$FIPS_KEYSTORE_PATH" ]; then
         exit 1
     fi
     echo "FIPS keystore created successfully"
+
+    chown vcap:vcap "$FIPS_KEYSTORE_PATH"
+    chmod 600 "$FIPS_KEYSTORE_PATH"
 fi
 
 # Create FIPS truststore if it doesn't exist  
@@ -348,6 +351,9 @@ if [ ! -f "$FIPS_TRUSTSTORE_PATH" ]; then
     
     rm -f /tmp/opensearch-cert.pem
     echo "FIPS truststore created successfully"
+
+    chown vcap:vcap "$FIPS_TRUSTSTORE_PATH"
+    chmod 600 "$FIPS_TRUSTSTORE_PATH"
 fi
 
 <% if_p('opensearch.fips.ca_certificate') do |ca_cert| %>
@@ -365,6 +371,9 @@ fips_keytool -importcert \
 
 if [ $? -eq 0 ]; then
     echo "CA certificate imported successfully"
+
+    chown vcap:vcap "$FIPS_TRUSTSTORE_PATH"
+    chmod 600 "$FIPS_TRUSTSTORE_PATH"
 else
     echo "WARNING: Failed to import CA certificate"
 fi
@@ -379,10 +388,14 @@ chmod 600 "$FIPS_KEYSTORE_PATH" "$FIPS_TRUSTSTORE_PATH" 2>/dev/null
 # Add FIPS keystore passwords to OpenSearch keystore
 echo "Adding FIPS keystore passwords to OpenSearch keystore..."
 
-echo "$FIPS_STORE_PASSWORD" | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin plugins.security.ssl.transport.keystore_password 2>/dev/null
-echo "$FIPS_STORE_PASSWORD" | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin plugins.security.ssl.transport.truststore_password 2>/dev/null
-echo "$FIPS_STORE_PASSWORD" | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin plugins.security.ssl.http.keystore_password 2>/dev/null
-echo "$FIPS_STORE_PASSWORD" | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin plugins.security.ssl.http.truststore_password 2>/dev/null
+echo "$FIPS_STORE_PASSWORD" | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin plugins.security.ssl.transport.keystore_password_secure
+echo "$FIPS_STORE_PASSWORD" | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin plugins.security.ssl.transport.truststore_password_secure
+echo "$FIPS_STORE_PASSWORD" | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin plugins.security.ssl.http.keystore_password_secure
+echo "$FIPS_STORE_PASSWORD" | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin plugins.security.ssl.http.truststore_password_secure
+echo "$FIPS_STORE_PASSWORD" | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin plugins.security.ssl.http.keystore_keypassword_secure
+echo "$FIPS_STORE_PASSWORD" | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin plugins.security.ssl.transport.keystore_keypassword_secure
+
+
 
 # Add the keystore paths as well
 echo "$FIPS_KEYSTORE_PATH" | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin plugins.security.ssl.transport.keystore_filepath 2>/dev/null
