@@ -11,7 +11,7 @@ export OPENSEARCH_JAVA_OPTS="-XX:-UsePerfData -Dnet.bytebuddy.agent.disabled=tru
 export YQ_PACKAGE_DIR=/var/vcap/packages/yq
 export PATH=$YQ_PACKAGE_DIR/bin:$PATH
 export PATH=/var/vcap/packages/cf-cli-8-linux/bin:$PATH
-export KEYSTORE="/var/vcap/packages/openjdk-21/lib/security/cacerts"
+export KEYSTORE="${JAVA_HOME}/lib/security/cacerts"
 STOREPASS=<%= p("opensearch.notification.keystorepass") %>
 DEFAULTPASS=<%= p("opensearch.notification.defaultkeystorepass") %>
 
@@ -21,19 +21,19 @@ DEFAULTPASS=<%= p("opensearch.notification.defaultkeystorepass") %>
 <% if p("opensearch.fips.enabled", false) %>
 echo "Configuring OpenSearch for FIPS mode..."
 
-# Check if FIPS JAR is available
-FIPS_JAR_PATH="${JDK_LIB}/bc-fips-2.1.2.jar"
-if ! ls "$FIPS_JAR_PATH" 1> /dev/null 2>&1; then
-    echo "ERROR: FIPS enabled but FIPS JAR not found at $FIPS_JAR_PATH"
-    exit 1
-fi
 
 # Create directories and copy FIPS JAR early
 mkdir -p /var/vcap/data/opensearch
 FIPS_LIB_DIR="/var/vcap/data/opensearch/fips-lib"
 mkdir -p "${FIPS_LIB_DIR}"
-JDK_LIB="${JAVA_HOME}/lib" 
+JDK_LIB="${OPENSEARCH_HOME}/lib"
 
+# Check if FIPS JAR is available
+FIPS_JAR_PATH="${OPENSEARCH_HOME}/lib/bc-fips-*.jar"
+if ! ls ${OPENSEARCH_HOME}/lib/bc-fips-*.jar 1> /dev/null 2>&1; then
+    echo "ERROR: FIPS enabled but FIPS JAR not found at $FIPS_JAR_PATH"
+    exit 1
+fi
 
 echo "Removing conflicting BouncyCastle JARs from OpenSearch..."
 for j in $(find /var/vcap/packages/opensearch -name '*bouncycastle*.jar' -o -name '*bcprov*.jar' -o -name '*bcpkix*.jar'); do
