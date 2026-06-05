@@ -4,6 +4,8 @@ export OPENSEARCH_HOME=/var/vcap/packages/opensearch
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 export PACKAGE_DIR=/var/vcap/packages/$JOB_NAME
 export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
+export JAVA_HOME="/var/vcap/packages/opensearch/jdk"
+export PATH="${JAVA_HOME}/bin:${PATH}"
 export OPENSEARCH_SECURITY_CONFIG_PATH=${OPENSEARCH_PATH_CONF}/opensearch-security
 export OPENSEARCH_JAVA_OPTS="-XX:-UsePerfData -Dnet.bytebuddy.agent.disabled=true -Djava.io.tmpdir=/var/vcap/data/opensearch/"
 export YQ_PACKAGE_DIR=/var/vcap/packages/yq
@@ -20,7 +22,7 @@ DEFAULTPASS=<%= p("opensearch.notification.defaultkeystorepass") %>
 echo "Configuring OpenSearch for FIPS mode..."
 
 # Check if FIPS JAR is available
-FIPS_JAR_PATH="/var/vcap/packages/openjdk-21/lib/bc-fips-2.1.2.jar"
+FIPS_JAR_PATH="${JDK_LIB}/bc-fips-2.1.2.jar"
 if ! ls "$FIPS_JAR_PATH" 1> /dev/null 2>&1; then
     echo "ERROR: FIPS enabled but FIPS JAR not found at $FIPS_JAR_PATH"
     exit 1
@@ -30,7 +32,7 @@ fi
 mkdir -p /var/vcap/data/opensearch
 FIPS_LIB_DIR="/var/vcap/data/opensearch/fips-lib"
 mkdir -p "${FIPS_LIB_DIR}"
-JDK_LIB="/var/vcap/packages/openjdk-21/lib"
+JDK_LIB="${JAVA_HOME}/lib" 
 
 
 echo "Removing conflicting BouncyCastle JARs from OpenSearch..."
@@ -101,7 +103,7 @@ export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djavax.net.ssl.trustStoreT
 
 # Create wrapper function for FIPS-enabled keytool
 fips_keytool() {
-    /var/vcap/packages/openjdk-21/bin/keytool \
+    ${JAVA_HOME}/bin/keytool \
         -J-cp -J"${FIPS_CP}" \
         -J-Djava.io.tmpdir=/var/vcap/data/opensearch/ \
         -J-Djava.security.properties="${OPENSEARCH_PATH_CONF}/fips.security" \
@@ -118,7 +120,7 @@ export OPENSEARCH_FIPS_MODE=false
 ################################################################
 # Existing keystore password change
 ################################################################
-/var/vcap/packages/openjdk-21/bin/keytool -storepasswd -new $STOREPASS -cacerts -storepass "$DEFAULTPASS" > /dev/null 2>&1;
+${JAVA_HOME}/bin/keytool -storepasswd -new $STOREPASS -cacerts -storepass "$DEFAULTPASS" > /dev/null 2>&1;
 
 sysctl -q -w vm.max_map_count=262144
 mkdir -p ${OPENSEARCH_HOME}/plugins
@@ -127,7 +129,7 @@ if [ -d ${JOB_DIR}/config/ssl ]; then
     chown vcap ${JOB_DIR}/config/ssl
 fi
 
-source /var/vcap/packages/openjdk-21/bosh/runtime.env
+# source /var/vcap/packages/openjdk-21/bosh/runtime.env
 
 # Copy default security config if it doesn't already exist
 # Have to copy files that don't exist otherwise securityadmin.sh invocation will fail
@@ -283,7 +285,7 @@ else
     echo "Debug: Trying to get more information..."
     
     # Debug: Try to see what providers are available
-    /var/vcap/packages/openjdk-21/bin/java \
+    ${JAVA_HOME}/bin/java \
         -Djava.security.properties="${OPENSEARCH_PATH_CONF}/fips.security" \
         -c "java.security.Security.getProviders(); java.util.Arrays.stream(java.security.Security.getProviders()).forEach(p -> System.out.println(p.getName()));" 2>/dev/null
     
