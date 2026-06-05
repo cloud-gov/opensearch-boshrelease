@@ -35,19 +35,6 @@ if ! ls ${OPENSEARCH_HOME}/lib/bc-fips-*.jar 1> /dev/null 2>&1; then
     exit 1
 fi
 
-echo "Removing conflicting BouncyCastle JARs from OpenSearch..."
-for j in $(find /var/vcap/packages/opensearch -name '*bouncycastle*.jar' -o -name '*bcprov*.jar' -o -name '*bcpkix*.jar'); do
-  echo "Removing conflicting JAR: $j"
-  rm -f "$j"
-done
-
-# Also check for BC JARs that might conflict
-find /var/vcap/packages/opensearch -name '*.jar' -exec sh -c '
-  if unzip -l "$1" 2>/dev/null | grep -q "org/bouncycastle" && ! echo "$1" | grep -q fips; then
-    echo "Found non-FIPS BC content in: $1"
-  fi
-' _ {} \;
-
 FIPS_CP=""
 for jar in bc-fips bctls-fips bcutil-fips; do
     src=$(ls ${JDK_LIB}/${jar}-*.jar 2>/dev/null | head -n1)
