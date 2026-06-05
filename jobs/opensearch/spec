@@ -5,7 +5,6 @@ description: This job runs opensearch node (manager or data)
 
 packages:
   - opensearch
-  - openjdk-21
   - yq
   - cf-cli-8-linux
   - jq

@@ -4,6 +4,8 @@ export OPENSEARCH_HOME=/var/vcap/packages/opensearch
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 export PACKAGE_DIR=/var/vcap/packages/$JOB_NAME
 export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
+export JAVA_HOME="/var/vcap/packages/opensearch/jdk"
+export PATH="${JAVA_HOME}/bin:${PATH}"
 export OPENSEARCH_SECURITY_CONFIG_PATH=${OPENSEARCH_PATH_CONF}/opensearch-security
 export OPENSEARCH_JAVA_OPTS="-XX:-UsePerfData -Dnet.bytebuddy.agent.disabled=true -Djava.io.tmpdir=/var/vcap/data/opensearch/"
 export YQ_PACKAGE_DIR=/var/vcap/packages/yq
