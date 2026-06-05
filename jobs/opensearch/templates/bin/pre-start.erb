@@ -21,6 +21,7 @@ DEFAULTPASS=<%= p("opensearch.notification.defaultkeystorepass") %>
 <% if p("opensearch.fips.enabled", false) %>
 echo "Configuring OpenSearch for FIPS mode..."
 
+export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} --enable-native-access=ALL-UNNAMED"
 
 # Create directories and copy FIPS JAR early
 mkdir -p /var/vcap/data/opensearch

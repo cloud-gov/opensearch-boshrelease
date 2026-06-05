@@ -76,6 +76,7 @@ echo "FIPS mode enabled - using pre-formatted keys from FIPS keystores"
 <% end %>
 <% end %>
 
+exit 1
 # Start OpenSearch with appropriate FIPS mode setting
 <% if p("opensearch.fips.enabled", false) %>
 OPENSEARCH_FIPS_MODE=true ${OPENSEARCH_HOME}/bin/opensearch \
