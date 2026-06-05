@@ -1,6 +1,9 @@
 ---
 name: opensearch
 
+dependencies:
+- openjdk-21
+
 files:
 - opensearch-3.6.0-linux-x64.tar.gz
 - opensearch/opensearch-notifications-3.6.0.0.zip
