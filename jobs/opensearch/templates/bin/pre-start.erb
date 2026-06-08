@@ -84,9 +84,7 @@ export OPENSEARCH_KEYSTORE_PASSWORD="<%= p('opensearch.fips.keystore_password', 
 # Create wrapper function for FIPS-enabled keytool
 fips_keytool() {
     ${JAVA_HOME}/bin/keytool \
-        -J-Xbootclasspath/a:"${FIPS_CP}" \
-        -J-Djava.io.tmpdir=/var/vcap/data/opensearch/ \
-        -J-Djava.security.properties="${OPENSEARCH_PATH_CONF}/fips.security" \
+        JAVA_TOOL_OPTIONS="-Xbootclasspath/a:"${FIPS_CP}" -Djava.io.tmpdir=/var/vcap/data/opensearch/ -Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security" \
         "$@"
 }
 
@@ -255,11 +253,6 @@ if fips_keytool -genkeypair \
 else
     echo "ERROR: BCFKS keystore creation test failed"
     echo "Debug: Trying to get more information..."
-    
-    # Debug: Try to see what providers are available
-    ${JAVA_HOME}/bin/java \
-        -Djava.security.properties="${OPENSEARCH_PATH_CONF}/fips.security" \
-        "java.security.Security.getProviders(); java.util.Arrays.stream(java.security.Security.getProviders()).forEach(p -> System.out.println(p.getName()));" 2>/dev/null
     
     exit 1
 fi
