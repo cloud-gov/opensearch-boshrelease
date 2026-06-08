@@ -20,7 +20,7 @@ export <%= k %>=<%= v %>
 <% end %>
 
 <% if p("opensearch.fips.enabled", false) %>
-  FIPS_LIB_DIR="/var/vcap/data/opensearch/fips_lib"
+  FIPS_LIB_DIR="/var/vcap/data/opensearch/fips-lib"
   FIPS_CP=""
   for jar in bc-fips bctls-fips bcutil-fips; do
     src=$(ls ${FIPS_LIB_DIR}/${jar}-*.jar 2>/dev/null | head -n1)
