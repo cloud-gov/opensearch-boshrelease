@@ -406,4 +406,13 @@ echo "FIPS keystores ready"
 echo "Keystore location: $FIPS_KEYSTORE_PATH"
 echo "Truststore location: $FIPS_TRUSTSTORE_PATH"
 
+if [ -f "$OPENSEARCH_PATH_CONF/opensearch.keystore" ]; then
+  chown vcap:vcap "$OPENSEARCH_PATH_CONF/opensearch.keystore"
+  chmod 600 "$OPENSEARCH_PATH_CONF/opensearch.keystore"
+   echo "final permissions set"
+else
+  echo "ERROR: Failed to create OpenSearch keystore"
+  exit 1
+fi
+
 <% end %>
