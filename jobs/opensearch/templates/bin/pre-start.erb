@@ -81,6 +81,9 @@ jdk.tls.disabledAlgorithms=SSLv2Hello, SSLv3, TLSv1, TLSv1.1, RC4, DES, MD5withR
 jdk.certpath.disabledAlgorithms=MD2, MD5, RSA keySize < 2048, DSA keySize < 2048, EC keySize < 224
 EOF
 
+chown vcap:vcap "${OPENSEARCH_PATH_CONF}/fips.security"
+chmod 640 "${OPENSEARCH_PATH_CONF}/fips.security"
+
 # Set FIPS keystore password
 export OPENSEARCH_KEYSTORE_PASSWORD="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
 
