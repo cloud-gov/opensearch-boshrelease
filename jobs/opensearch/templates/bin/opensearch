@@ -20,15 +20,15 @@ export <%= k %>=<%= v %>
 <% end %>
 
 <% if p("opensearch.fips.enabled", false) %>
-  FIPS_LIB_DIR="${JOB_DIR}/lib"
+  FIPS_LIB_DIR="/var/vcap/data/opensearch/fips_lib"
   FIPS_CP=""
   for jar in bc-fips bctls-fips bcutil-fips; do
     src=$(ls ${FIPS_LIB_DIR}/${jar}-*.jar 2>/dev/null | head -n1)
-  if [ -z "$src" ]; then 
-    echo "ERROR: FIPS enabled but ${jar}-*.jar nof found in ${FIPS_LIB_DIR}"
-    exit 1
-  fi
-  FIPS_CP="${FIPS_CP:${src}}"
+    if [ -z "$src" ]; then 
+      echo "ERROR: FIPS enabled but ${jar}-*.jar nof found in ${FIPS_LIB_DIR}"
+      exit 1
+    fi
+    FIPS_CP="${FIPS_CP}:${src}"
 done
 FIPS_CP="${FIPS_CP#:}"
 echo "FIPS classpath: ${FIPS_CP}"
@@ -94,7 +94,6 @@ echo "FIPS mode enabled - using pre-formatted keys from FIPS keystores"
 <% end %>
 <% end %>
 
-exit 1
 # Start OpenSearch with appropriate FIPS mode setting
 <% if p("opensearch.fips.enabled", false) %>
 OPENSEARCH_FIPS_MODE=true ${OPENSEARCH_HOME}/bin/opensearch \
