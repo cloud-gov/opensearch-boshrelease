@@ -19,6 +19,21 @@ export PATH="${JAVA_HOME}/bin:${PATH}"
 export <%= k %>=<%= v %>
 <% end %>
 
+<% if p("opensearch.fips.enabled", false) %>
+  FIPS_LIB_DIR="${JOB_DIR}/lib"
+  FIPS_CP=""
+  for jar in bc-fips bctls-fips bcutil-fips; do
+    src=$(ls ${FIPS_LIB_DIR}/${jar}-*.jar 2>/dev/null | head -n1)
+  if [ -z "$src" ]; then 
+    echo "ERROR: FIPS enabled but ${jar}-*.jar nof found in ${FIPS_LIB_DIR}"
+    exit 1
+  fi
+  FIPS_CP="${FIPS_CP:${src}}"
+done
+FIPS_CP="${FIPS_CP#:}"
+echo "FIPS classpath: ${FIPS_CP}"
+<% end %>
+
 export HEAP_SIZE=$((( $( cat /proc/meminfo | grep MemTotal | awk '{ print $2 }' ) * <%= p("opensearch.heap_percentage") %> ) / 100 ))K
 <% if_p('opensearch.heap_size') do |heap_size| %>
   HEAP_SIZE=<%= heap_size %>
@@ -29,6 +44,9 @@ export OPENSEARCH_JAVA_OPTS="-Xms$HEAP_SIZE -Xmx$HEAP_SIZE -Djava.io.tmpdir=$TMP
 
 <% if p("opensearch.fips.enabled", false) %>
 # Add FIPS-specific Java options
+
+export OPENSEARCH_CLASSPATH="${FIPS_CP}"
+
 export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Dorg.bouncycastle.fips.approved_only=<%= p('opensearch.fips.strict', true) %>"
 export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djava.security.properties=${JOB_DIR}/config/fips.security"
 export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djavax.net.ssl.keyStoreType=BCFKS"
@@ -52,6 +70,8 @@ fi
 <% if p("opensearch.fips.enabled", false) %>
 # In FIPS mode, keys should already be in FIPS-compliant format
 echo "FIPS mode enabled - using pre-formatted keys from FIPS keystores"
+
+
 <% else %>
 # PKCS8 keys are required for Opensearch TLS (Non-FIPS mode only)
 # https://opensearch.org/docs/latest/security/configuration/tls/
