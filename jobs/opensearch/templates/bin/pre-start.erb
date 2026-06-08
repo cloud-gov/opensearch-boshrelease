@@ -177,9 +177,6 @@ yq -i ".notifications_full_access={\"backend_roles\": [$ORG_GUID_ROLE_LIST]}" "$
   <% end %>
 <% end %>
 
-#requested
-${OPENSEARCH_HOME}/bin/opensearch-plugin install -b workload-management 
-
 log_dir=${OPENSEARCH_HOME}/logs
 if [[ ! -a ${log_dir} ]]; then
   ln -s /var/vcap/sys/log/opensearch ${log_dir}
@@ -378,20 +375,27 @@ chmod 600 "$FIPS_KEYSTORE_PATH" "$FIPS_TRUSTSTORE_PATH" 2>/dev/null
 # Add FIPS keystore passwords to OpenSearch keystore
 echo "Adding FIPS keystore passwords to OpenSearch keystore..."
 
-echo "$FIPS_STORE_PASSWORD" | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin plugins.security.ssl.transport.keystore_password_secure
-echo "$FIPS_STORE_PASSWORD" | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin plugins.security.ssl.transport.truststore_password_secure
-echo "$FIPS_STORE_PASSWORD" | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin plugins.security.ssl.http.keystore_password_secure
-echo "$FIPS_STORE_PASSWORD" | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin plugins.security.ssl.http.truststore_password_secure
-echo "$FIPS_STORE_PASSWORD" | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin plugins.security.ssl.http.keystore_keypassword_secure
-echo "$FIPS_STORE_PASSWORD" | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin plugins.security.ssl.transport.keystore_keypassword_secure
+#FIPS keystore needs the password at start time
+fips_keystore_add() {
+  local key="$1"
+  local value="$2"
+  printf '%s\n%s\n' "${OPENSEARCH_KEYSTORE_PASSWORD}" "${value}" \
+    | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin "${key}"
+}
 
+# Add passwords
+fips_keystore_add "plugins.security.ssl.transport.keystore_password_secure" "$FIPS_STORE_PASSWORD"
+fips_keystore_add "plugins.security.ssl.transport.truststore_password_secure" "$FIPS_STORE_PASSWORD"
+fips_keystore_add "plugins.security.ssl.http.keystore_password_secure" "$FIPS_STORE_PASSWORD"
+fips_keystore_add "plugins.security.ssl.http.truststore_password_secure" "$FIPS_STORE_PASSWORD"
+fips_keystore_add "plugins.security.ssl.http.keystore_keypassword_secure" "$FIPS_STORE_PASSWORD"
+fips_keystore_add "plugins.security.ssl.transport.keystore_keypassword_secure" "$FIPS_STORE_PASSWORD"
 
-
-# Add the keystore paths as well
-echo "$FIPS_KEYSTORE_PATH" | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin plugins.security.ssl.transport.keystore_filepath 2>/dev/null
-echo "$FIPS_TRUSTSTORE_PATH" | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin plugins.security.ssl.transport.truststore_filepath 2>/dev/null
-echo "$FIPS_KEYSTORE_PATH" | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin plugins.security.ssl.http.keystore_filepath 2>/dev/null
-echo "$FIPS_TRUSTSTORE_PATH" | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin plugins.security.ssl.http.truststore_filepath 2>/dev/null
+# Add keystore paths
+fips_keystore_add "plugins.security.ssl.transport.keystore_filepath" "$FIPS_KEYSTORE_PATH"
+fips_keystore_add "plugins.security.ssl.transport.truststore_filepath" "$FIPS_TRUSTSTORE_PATH"
+fips_keystore_add "plugins.security.ssl.http.keystore_filepath" "$FIPS_KEYSTORE_PATH"
+fips_keystore_add "plugins.security.ssl.http.truststore_filepath" "$FIPS_TRUSTSTORE_PATH"
 
 echo "FIPS keystores ready"
 echo "Keystore location: $FIPS_KEYSTORE_PATH"
