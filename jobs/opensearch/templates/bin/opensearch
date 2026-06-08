@@ -32,6 +32,10 @@ export <%= k %>=<%= v %>
 done
 FIPS_CP="${FIPS_CP#:}"
 echo "FIPS classpath: ${FIPS_CP}"
+
+chown vcap:vcap "${FIPS_LIB_DIR}"
+chown vcap:vcap "${FIPS_LIB_DIR}"/*.jar
+chmod 600 "${FIPS_LIB_DIR}"/*.jar
 <% end %>
 
 export HEAP_SIZE=$((( $( cat /proc/meminfo | grep MemTotal | awk '{ print $2 }' ) * <%= p("opensearch.heap_percentage") %> ) / 100 ))K
@@ -45,8 +49,7 @@ export OPENSEARCH_JAVA_OPTS="-Xms$HEAP_SIZE -Xmx$HEAP_SIZE -Djava.io.tmpdir=$TMP
 <% if p("opensearch.fips.enabled", false) %>
 # Add FIPS-specific Java options
 
-export OPENSEARCH_CLASSPATH="${FIPS_CP}"
-
+export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Xbootclasspath/a:${FIPS_CP}"
 export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Dorg.bouncycastle.fips.approved_only=<%= p('opensearch.fips.strict', true) %>"
 export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djava.security.properties=${JOB_DIR}/config/fips.security"
 export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djavax.net.ssl.keyStoreType=BCFKS"

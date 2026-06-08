@@ -49,12 +49,7 @@ for jar in bc-fips bctls-fips bcutil-fips; do
 done 
 chown vcap:vcap "${FIPS_LIB_DIR}"/*.jar
 chmod 600 "${FIPS_LIB_DIR}"/*.jar
-
-for j in $(find /var/vcap/packages/opensearch -name '*.jar'); do 
-  if unzip -l "$j" 2>/dev/null | grep -q 'org/bouncycastle/asn1/ASN1Integer.class'; then
-    echo "$j"
-    fi
-done
+chown vcap:vcap "${FIPS_LIB_DIR}"
 FIPS_CP="${FIPS_CP#:}"
 
 # Create FIPS security properties file
@@ -119,11 +114,10 @@ export OPENSEARCH_KEYSTORE_PASSWORD="<%= p('opensearch.fips.keystore_password', 
 
 # Add FIPS JVM options immediately
 export OPENSEARCH_CLASSPATH="${FIPS_CP}"
-export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Dorg.bouncycastle.fips.approved_only=<%= p('opensearch.fips.strict', true) %>"
+export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Dorg.bouncycastle.fips.approved_only=<%= p('opensearch.fips.strict', false) %>"
 export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security"
 export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djavax.net.ssl.keyStoreType=BCFKS"
 export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djavax.net.ssl.trustStoreType=BCFKS"
-export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djava.security.policy=${OPENSEARCH_PATH_CONF}/opensearch-security.policy"
 
 # Create wrapper function for FIPS-enabled keytool
 fips_keytool() {

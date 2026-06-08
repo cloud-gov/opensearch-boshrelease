@@ -63,7 +63,7 @@
 ## FIPS Configuration with Security Plugin Support
 ################################################################
 # BouncyCastle FIPS Provider
--Dorg.bouncycastle.fips.approved_only=<%= p('opensearch.fips.strict', true) %>
+-Dorg.bouncycastle.fips.approved_only=<%= p('opensearch.fips.strict', false) %>
 -Djava.security.properties=/var/vcap/jobs/opensearch/config/fips.security
 
 # Default SSL context configuration
