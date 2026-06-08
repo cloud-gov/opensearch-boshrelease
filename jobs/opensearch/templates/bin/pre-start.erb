@@ -21,8 +21,6 @@ DEFAULTPASS=<%= p("opensearch.notification.defaultkeystorepass") %>
 <% if p("opensearch.fips.enabled", false) %>
 echo "Configuring OpenSearch for FIPS mode..."
 
-export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} --enable-native-access=ALL-UNNAMED"
-
 # Create directories and copy FIPS JAR early
 mkdir -p /var/vcap/data/opensearch
 FIPS_LIB_DIR="/var/vcap/data/opensearch/fips-lib"
@@ -47,9 +45,10 @@ for jar in bc-fips bctls-fips bcutil-fips; do
     cp "$src" "${OPENSEARCH_HOME}/lib/"
     FIPS_CP="${FIPS_CP}:${FIPS_LIB_DIR}/$(basename "$src")"
 done 
+chown vcap:vcap "${FIPS_LIB_DIR}"
+chmod 750 "${FIPS_LIB_DIR}"
 chown vcap:vcap "${FIPS_LIB_DIR}"/*.jar
 chmod 600 "${FIPS_LIB_DIR}"/*.jar
-chown vcap:vcap "${FIPS_LIB_DIR}"
 FIPS_CP="${FIPS_CP#:}"
 
 # Create FIPS security properties file
@@ -175,11 +174,6 @@ if [[ ! -a ${log_dir} ]]; then
   ln -s /var/vcap/sys/log/opensearch ${log_dir}
 fi
 
-<% if p("opensearch.fips.enabled", false) %>
-# Set minimum 6-character password for FIPS mode
-export OPENSEARCH_KEYSTORE_PASSWORD="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
-<% end %>
-
 # Create new OpenSearch keystore
 if [ ! -f "$OPENSEARCH_PATH_CONF/opensearch.keystore" ]; then
   echo "Create new OpenSearch keystore"
@@ -265,7 +259,7 @@ else
     # Debug: Try to see what providers are available
     ${JAVA_HOME}/bin/java \
         -Djava.security.properties="${OPENSEARCH_PATH_CONF}/fips.security" \
-        -c "java.security.Security.getProviders(); java.util.Arrays.stream(java.security.Security.getProviders()).forEach(p -> System.out.println(p.getName()));" 2>/dev/null
+        "java.security.Security.getProviders(); java.util.Arrays.stream(java.security.Security.getProviders()).forEach(p -> System.out.println(p.getName()));" 2>/dev/null
     
     exit 1
 fi
