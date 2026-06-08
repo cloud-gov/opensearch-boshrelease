@@ -47,6 +47,8 @@ for jar in bc-fips bctls-fips bcutil-fips; do
     cp "$src" "${OPENSEARCH_HOME}/lib/"
     FIPS_CP="${FIPS_CP}:${FIPS_LIB_DIR}/$(basename "$src")"
 done 
+chown vcap:vcap "${FIPS_LIB_DIR}"/*.jar
+chmod 600 "${FIPS_LIB_DIR}"/*.jar
 
 for j in $(find /var/vcap/packages/opensearch -name '*.jar'); do 
   if unzip -l "$j" 2>/dev/null | grep -q 'org/bouncycastle/asn1/ASN1Integer.class'; then
