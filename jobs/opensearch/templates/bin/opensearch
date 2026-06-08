@@ -33,6 +33,7 @@ done
 FIPS_CP="${FIPS_CP#:}"
 echo "FIPS classpath: ${FIPS_CP}"
 
+chmod 750 "${FIPS_LIB_DIR}"
 chown vcap:vcap "${FIPS_LIB_DIR}"
 chown vcap:vcap "${FIPS_LIB_DIR}"/*.jar
 chmod 600 "${FIPS_LIB_DIR}"/*.jar
@@ -50,7 +51,7 @@ export OPENSEARCH_JAVA_OPTS="-Xms$HEAP_SIZE -Xmx$HEAP_SIZE -Djava.io.tmpdir=$TMP
 # Add FIPS-specific Java options
 
 export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Xbootclasspath/a:${FIPS_CP}"
-export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Dorg.bouncycastle.fips.approved_only=<%= p('opensearch.fips.strict', true) %>"
+export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Dorg.bouncycastle.fips.approved_only=<%= p('opensearch.fips.strict', false) %>"
 export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djava.security.properties=${JOB_DIR}/config/fips.security"
 export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djavax.net.ssl.keyStoreType=BCFKS"
 export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djavax.net.ssl.trustStoreType=BCFKS"

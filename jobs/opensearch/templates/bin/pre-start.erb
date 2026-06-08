@@ -56,7 +56,7 @@ FIPS_CP="${FIPS_CP#:}"
 mkdir -p "${OPENSEARCH_PATH_CONF}"
 cat > "${OPENSEARCH_PATH_CONF}/fips.security" << EOF
 # FIPS Security Configuration with SSL Context Support
-security.provider.1=org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider C:HYBRID;ENABLE{All};
+security.provider.1=org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider C:HYBRID;
 security.provider.2=sun.security.provider.Sun 
 security.provider.3=org.bouncycastle.jsse.provider.BouncyCastleJsseProvider fips:BCFIPS
 security.provider.4=sun.security.rsa.SunRsaSign
@@ -79,45 +79,8 @@ EOF
 chown vcap:vcap "${OPENSEARCH_PATH_CONF}/fips.security"
 chmod 640 "${OPENSEARCH_PATH_CONF}/fips.security"
 
-echo "Creating security policy for FIPS keystore access..."
-cat > "${OPENSEARCH_PATH_CONF}/opensearch-security.policy" << EOF
-grant {
-    // Allow all code to read FIPS keystores
-    permission java.io.FilePermission "/var/vcap/data/opensearch/keystore.bcfks", "read";
-    permission java.io.FilePermission "/var/vcap/data/opensearch/truststore.bcfks", "read";
-    permission java.io.FilePermission "/var/vcap/data/opensearch/-", "read,write,delete";
-    
-    // Allow access to FIPS libraries
-    permission java.io.FilePermission "/var/vcap/packages/opensearch/lib/bc-fips-*.jar", "read";
-    permission java.io.FilePermission "/var/vcap/packages/opensearch/lib/bctls-fips-*.jar", "read";
-    permission java.io.FilePermission "/var/vcap/packages/opensearch/lib/bcutil-fips-*.jar", "read";
-    
-    // Allow plugins to access keystores
-    permission java.io.FilePermission "/var/vcap/data/packages/opensearch/-", "read";
-    
-    // Allow security manager operations
-    permission java.security.SecurityPermission "getProperty.*";
-    permission java.security.SecurityPermission "putProviderProperty.*";
-    permission java.security.SecurityPermission "insertProvider.*";
-    
-    // Allow keystore operations
-    permission java.security.AllPermission;
-};
-EOF
-
-# Set proper ownership and permissions for the security policy file
-chown vcap:vcap "${OPENSEARCH_PATH_CONF}/opensearch-security.policy"
-chmod 644 "${OPENSEARCH_PATH_CONF}/opensearch-security.policy"
-
 # Set FIPS keystore password
 export OPENSEARCH_KEYSTORE_PASSWORD="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
-
-# Add FIPS JVM options immediately
-export OPENSEARCH_CLASSPATH="${FIPS_CP}"
-export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Dorg.bouncycastle.fips.approved_only=<%= p('opensearch.fips.strict', false) %>"
-export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security"
-export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djavax.net.ssl.keyStoreType=BCFKS"
-export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djavax.net.ssl.trustStoreType=BCFKS"
 
 # Create wrapper function for FIPS-enabled keytool
 fips_keytool() {
@@ -420,12 +383,6 @@ fips_keystore_add "plugins.security.ssl.http.keystore_password_secure" "$FIPS_ST
 fips_keystore_add "plugins.security.ssl.http.truststore_password_secure" "$FIPS_STORE_PASSWORD"
 fips_keystore_add "plugins.security.ssl.http.keystore_keypassword_secure" "$FIPS_STORE_PASSWORD"
 fips_keystore_add "plugins.security.ssl.transport.keystore_keypassword_secure" "$FIPS_STORE_PASSWORD"
-
-# Add keystore paths
-fips_keystore_add "plugins.security.ssl.transport.keystore_filepath" "$FIPS_KEYSTORE_PATH"
-fips_keystore_add "plugins.security.ssl.transport.truststore_filepath" "$FIPS_TRUSTSTORE_PATH"
-fips_keystore_add "plugins.security.ssl.http.keystore_filepath" "$FIPS_KEYSTORE_PATH"
-fips_keystore_add "plugins.security.ssl.http.truststore_filepath" "$FIPS_TRUSTSTORE_PATH"
 
 echo "FIPS keystores ready"
 echo "Keystore location: $FIPS_KEYSTORE_PATH"

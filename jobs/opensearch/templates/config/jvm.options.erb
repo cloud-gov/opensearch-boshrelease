@@ -73,27 +73,21 @@
 -Djavax.net.ssl.trustStore=/var/vcap/data/opensearch/truststore.bcfks
 -Djavax.net.ssl.trustStoreType=BCFKS
 -Djavax.net.ssl.trustStoreProvider=BCFIPS
--Djavax.net.ssl.trustStorePassword=<%= p('opensearch.fips.keystore_password', 'changeme') %>
 
 # FIPS Key Store Configuration
 -Djavax.net.ssl.keyStore=/var/vcap/data/opensearch/keystore.bcfks
 -Djavax.net.ssl.keyStoreType=BCFKS
 -Djavax.net.ssl.keyStoreProvider=BCFIPS
--Djavax.net.ssl.keyStorePassword=<%= p('opensearch.fips.keystore_password', 'changeme') %>
 
 # Protocol and cipher configuration
 -Dhttps.protocols=TLSv1.2,TLSv1.3
 -Djdk.tls.client.protocols=TLSv1.2,TLSv1.3
 -Djdk.tls.server.protocols=TLSv1.2,TLSv1.3
 
-# Security debugging (remove in production)
--Djavax.net.debug=ssl:handshake
 <% end %>
 
 # Other optimizations
--XX:-UsePerfData
 -Dnet.bytebuddy.agent.disabled=true
--Djava.io.tmpdir=/var/vcap/data/opensearch/
 
 <% p('opensearch.jvm_options').each do |opt| %>
 <%= opt %>
