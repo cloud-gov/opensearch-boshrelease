@@ -84,6 +84,36 @@ EOF
 chown vcap:vcap "${OPENSEARCH_PATH_CONF}/fips.security"
 chmod 640 "${OPENSEARCH_PATH_CONF}/fips.security"
 
+echo "Creating security policy for FIPS keystore access..."
+cat > "${OPENSEARCH_PATH_CONF}/opensearch-security.policy" << EOF
+grant {
+    // Allow all code to read FIPS keystores
+    permission java.io.FilePermission "/var/vcap/data/opensearch/keystore.bcfks", "read";
+    permission java.io.FilePermission "/var/vcap/data/opensearch/truststore.bcfks", "read";
+    permission java.io.FilePermission "/var/vcap/data/opensearch/-", "read,write,delete";
+    
+    // Allow access to FIPS libraries
+    permission java.io.FilePermission "/var/vcap/packages/opensearch/lib/bc-fips-*.jar", "read";
+    permission java.io.FilePermission "/var/vcap/packages/opensearch/lib/bctls-fips-*.jar", "read";
+    permission java.io.FilePermission "/var/vcap/packages/opensearch/lib/bcutil-fips-*.jar", "read";
+    
+    // Allow plugins to access keystores
+    permission java.io.FilePermission "/var/vcap/data/packages/opensearch/-", "read";
+    
+    // Allow security manager operations
+    permission java.security.SecurityPermission "getProperty.*";
+    permission java.security.SecurityPermission "putProviderProperty.*";
+    permission java.security.SecurityPermission "insertProvider.*";
+    
+    // Allow keystore operations
+    permission java.security.AllPermission;
+};
+EOF
+
+# Set proper ownership and permissions for the security policy file
+chown vcap:vcap "${OPENSEARCH_PATH_CONF}/opensearch-security.policy"
+chmod 644 "${OPENSEARCH_PATH_CONF}/opensearch-security.policy"
+
 # Set FIPS keystore password
 export OPENSEARCH_KEYSTORE_PASSWORD="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
 
@@ -93,6 +123,8 @@ export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Dorg.bouncycastle.fips.app
 export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security"
 export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djavax.net.ssl.keyStoreType=BCFKS"
 export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djavax.net.ssl.trustStoreType=BCFKS"
+export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djava.security.policy=${OPENSEARCH_PATH_CONF}/opensearch-security.policy"
+export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djava.security.manager=default"
 
 # Create wrapper function for FIPS-enabled keytool
 fips_keytool() {
