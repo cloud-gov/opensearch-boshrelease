@@ -10,9 +10,11 @@ export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 export LOG_DIR=/var/vcap/sys/log/$JOB_NAME
 export PACKAGE_DIR=/var/vcap/packages/$JOB_NAME
 export STORE_DIR=/var/vcap/store/$JOB_NAME
-export KEYSTORE_PASSWORD="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
 export JAVA_HOME="/var/vcap/packages/opensearch/jdk"
 export PATH="${JAVA_HOME}/bin:${PATH}"
+export OPENSEARCH_HOME=/var/vcap/packages/opensearch
+export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
+
 # source /var/vcap/packages/openjdk-21/bosh/runtime.env
 
 <% p("opensearch.exec.environment", {}).each do |k, v| %>
@@ -33,10 +35,137 @@ done
 FIPS_CP="${FIPS_CP#:}"
 echo "FIPS classpath: ${FIPS_CP}"
 
-chmod 750 "${FIPS_LIB_DIR}"
-chown vcap:vcap "${FIPS_LIB_DIR}"
-chown vcap:vcap "${FIPS_LIB_DIR}"/*.jar
-chmod 600 "${FIPS_LIB_DIR}"/*.jar
+export KEYSTORE_PASSWORD="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
+export OPENSEARCH_KEYSTORE_PASSWORD="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
+FIPS_KEYSTORE_PATH="/var/vcap/data/opensearch/keystore.bcfks"
+FIPS_TRUSTSTORE_PATH="/var/vcap/data/opensearch/truststore.bcfks"
+FIPS_STORE_PASSWORD="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
+
+# Validate password length
+if [ ${#FIPS_STORE_PASSWORD} -lt 14 ]; then
+    echo "ERROR: FIPS keystore password must be at least 14 characters long"
+    exit 1
+fi
+
+# Create wrapper function for FIPS-enabled keytool
+fips_keytool() {
+    ${JAVA_HOME}/bin/java \
+        --add-exports java.base/sun.security.tools.keytool=ALL-UNNAMED \
+        -cp "${FIPS_CP}" \
+        -Djava.io.tmpdir=/var/vcap/data/opensearch/ \
+        sun.security.tools.keytool.Main \
+        -providerpath "${FIPS_CP}" \
+        -providerclass org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider \
+        -providerarg "C:HYBRID;" \
+         "$@"
+}
+
+fips_keystore_add() {
+  local key="$1"
+  local value="$2"
+  printf '%s\n%s\n' "${OPENSEARCH_KEYSTORE_PASSWORD}" "${value}" \
+    | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin --force "${key}"
+}
+
+
+if [ ! -f "$FIPS_KEYSTORE_PATH" ]; then
+    echo "Creating FIPS keystore..."
+    fips_keytool -genkeypair \
+        -alias opensearch-node \
+        -keyalg RSA \
+        -keysize 2048 \
+        -validity 365 \
+        -keystore "$FIPS_KEYSTORE_PATH" \
+        -storetype BCFKS \
+        -storepass "$FIPS_STORE_PASSWORD" \
+        -keypass "$FIPS_STORE_PASSWORD" \
+        -dname "CN=<%= spec.address || spec.name %>, O=GSA, C=US"
+    
+    if [ $? -ne 0 ]; then
+        echo "ERROR: Failed to create FIPS keystore"
+        exit 1
+    fi
+    echo "FIPS keystore created successfully"
+
+    chown vcap:vcap "$FIPS_KEYSTORE_PATH"
+    chmod 600 "$FIPS_KEYSTORE_PATH"
+fi
+
+# Create FIPS truststore if it doesn't exist  
+if [ ! -f "$FIPS_TRUSTSTORE_PATH" ]; then
+    echo "Creating FIPS truststore..."
+    
+    # Export cert from keystore
+    fips_keytool -exportcert \
+        -alias opensearch-node \
+        -keystore "$FIPS_KEYSTORE_PATH" \
+        -storetype BCFKS \
+        -storepass "$FIPS_STORE_PASSWORD" \
+        -file /tmp/opensearch-cert.pem
+    
+    if [ $? -ne 0 ]; then
+        echo "ERROR: Failed to export certificate from keystore"
+        exit 1
+    fi
+    
+    # Import cert to truststore
+    fips_keytool -importcert \
+        -alias opensearch-ca \
+        -keystore "$FIPS_TRUSTSTORE_PATH" \
+        -storetype BCFKS \
+        -storepass "$FIPS_STORE_PASSWORD" \
+        -file /tmp/opensearch-cert.pem \
+        -noprompt
+    
+    if [ $? -ne 0 ]; then
+        echo "ERROR: Failed to create FIPS truststore"
+        rm -f /tmp/opensearch-cert.pem
+        exit 1
+    fi
+    
+    rm -f /tmp/opensearch-cert.pem
+    echo "FIPS truststore created successfully"
+
+    chown vcap:vcap "$FIPS_TRUSTSTORE_PATH"
+    chmod 600 "$FIPS_TRUSTSTORE_PATH"
+
+
+fi
+
+<% if_p('opensearch.fips.ca_certificate') do |ca_cert| %>
+    # Import provided CA certificate
+    echo "Importing provided CA certificate..."
+    echo "<%= ca_cert %>" > /tmp/ca-cert.pem
+
+    fips_keytool -importcert \
+        -alias provided-ca \
+        -keystore "$FIPS_TRUSTSTORE_PATH" \
+        -storetype BCFKS \
+        -storepass "$FIPS_STORE_PASSWORD" \
+        -file ${JOB_DIR}/config/ssl/opensearch.ca \
+        -noprompt
+
+    if [ $? -eq 0 ]; then
+        echo "CA certificate imported successfully"
+
+        chown vcap:vcap "$FIPS_TRUSTSTORE_PATH"
+        chmod 600 "$FIPS_TRUSTSTORE_PATH"
+    else
+        echo "WARNING: Failed to import CA certificate"
+    fi
+
+    rm -f /tmp/ca-cert.pem
+    <% end %>
+
+
+echo "Adding FIPS keystore passwords to OpenSearch keystore..."
+# Add passwords
+fips_keystore_add "plugins.security.ssl.transport.keystore_password_secure" "$FIPS_STORE_PASSWORD"
+fips_keystore_add "plugins.security.ssl.transport.truststore_password_secure" "$FIPS_STORE_PASSWORD"
+fips_keystore_add "plugins.security.ssl.http.keystore_password_secure" "$FIPS_STORE_PASSWORD"
+fips_keystore_add "plugins.security.ssl.http.truststore_password_secure" "$FIPS_STORE_PASSWORD"
+fips_keystore_add "plugins.security.ssl.http.keystore_keypassword_secure" "$FIPS_STORE_PASSWORD"
+fips_keystore_add "plugins.security.ssl.transport.keystore_keypassword_secure" "$FIPS_STORE_PASSWORD"
 <% end %>
 
 export HEAP_SIZE=$((( $( cat /proc/meminfo | grep MemTotal | awk '{ print $2 }' ) * <%= p("opensearch.heap_percentage") %> ) / 100 ))K
@@ -56,8 +185,6 @@ export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djavax.net.ssl.trustStoreTyp
 echo "FIPS mode enabled for OpenSearch runtime"
 <% end %>
 
-export OPENSEARCH_HOME=/var/vcap/packages/opensearch
-export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
 export MAX_OPEN_FILES=<%= p("opensearch.limits.fd") %>
 export MAX_LOCKED_MEMORY=unlimited  # required to enable opensearch's mlockall setting
 
