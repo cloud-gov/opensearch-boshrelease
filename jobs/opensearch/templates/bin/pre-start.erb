@@ -38,8 +38,7 @@ if ! ls ${OPENSEARCH_HOME}/lib/bc-fips-*.jar 1> /dev/null 2>&1; then
     exit 1
 fi
 
-# Copy FIPS JARs to separate FIPS lib directory (NOT back to source)
-# Added bcpkix-fips which is required for PKI/certificate operations
+# Build FIPS classpath for keytool operations
 FIPS_CP=""
 for jar in bc-fips bctls-fips bcpkix-fips bcutil-fips; do
     src=$(ls ${JDK_LIB}/${jar}-*.jar 2>/dev/null | head -n1)
@@ -56,8 +55,6 @@ for jar in bc-fips bctls-fips bcpkix-fips bcutil-fips; do
         echo "Copied $(basename "$src") to ${FIPS_LIB_DIR}/"
     fi
     
-    # REMOVED: cp "$src" "${OPENSEARCH_HOME}/lib/"  # This was causing the error!
-    
     FIPS_CP="${FIPS_CP}:${FIPS_LIB_DIR}/$(basename "$src")"
 done
 FIPS_CP="${FIPS_CP#:}"
@@ -68,6 +65,170 @@ echo "FIPS classpath: ${FIPS_CP}"
 chown -R vcap:vcap "${FIPS_LIB_DIR}"
 chmod 750 "${FIPS_LIB_DIR}"
 chmod 640 "${FIPS_LIB_DIR}"/*.jar
+
+################################################################
+# Create BCFKS Truststore and Keystore
+################################################################
+FIPS_KEYSTORE_PASS="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
+BCFKS_TRUSTSTORE="/var/vcap/data/opensearch/truststore.bcfks"
+BCFKS_KEYSTORE="/var/vcap/data/opensearch/keystore.bcfks"
+
+# Path to CA certificates to import
+CA_CERTS_SOURCE="${JAVA_HOME}/lib/security/cacerts"
+DEFAULT_CACERTS_PASS="changeit"
+
+echo "Creating BCFKS truststore and keystore for FIPS mode..."
+
+# Create BCFKS truststore from existing CA certs
+if [ ! -f "${BCFKS_TRUSTSTORE}" ]; then
+    echo "Creating BCFKS truststore..."
+    
+    # Method 1: Convert existing cacerts to BCFKS format
+    ${JAVA_HOME}/bin/keytool -importkeystore \
+        -srckeystore "${CA_CERTS_SOURCE}" \
+        -srcstoretype JKS \
+        -srcstorepass "${DEFAULT_CACERTS_PASS}" \
+        -destkeystore "${BCFKS_TRUSTSTORE}" \
+        -deststoretype BCFKS \
+        -deststorepass "${FIPS_KEYSTORE_PASS}" \
+        -providername BCFIPS \
+        -providerclass org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider \
+        -providerpath "${FIPS_CP}" \
+        -noprompt 2>/dev/null || {
+            echo "Warning: keytool import failed, trying alternative method..."
+            
+            # Method 2: Create empty truststore and import certs individually
+            ${JAVA_HOME}/bin/keytool -genkeypair \
+                -alias temp \
+                -keyalg RSA \
+                -keysize 2048 \
+                -keystore "${BCFKS_TRUSTSTORE}" \
+                -storetype BCFKS \
+                -storepass "${FIPS_KEYSTORE_PASS}" \
+                -providername BCFIPS \
+                -providerclass org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider \
+                -providerpath "${FIPS_CP}" \
+                -dname "CN=temp" \
+                -validity 1 \
+                -noprompt
+            
+            # Delete the temp key
+            ${JAVA_HOME}/bin/keytool -delete \
+                -alias temp \
+                -keystore "${BCFKS_TRUSTSTORE}" \
+                -storetype BCFKS \
+                -storepass "${FIPS_KEYSTORE_PASS}" \
+                -providername BCFIPS \
+                -providerclass org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider \
+                -providerpath "${FIPS_CP}" \
+                -noprompt
+        }
+    
+    echo "BCFKS truststore created at ${BCFKS_TRUSTSTORE}"
+else
+    echo "BCFKS truststore already exists at ${BCFKS_TRUSTSTORE}"
+fi
+
+# Import custom CA certificates if provided
+<% if_p('opensearch.fips.ca_certificate') do |ca_cert| %>
+echo "Importing custom CA certificate into BCFKS truststore..."
+CA_CERT_FILE="${OPENSEARCH_PATH_CONF}/ssl/fips-ca.pem"
+mkdir -p "${OPENSEARCH_PATH_CONF}/ssl"
+cat > "${CA_CERT_FILE}" << 'CACERT'
+<%= ca_cert %>
+CACERT
+
+${JAVA_HOME}/bin/keytool -importcert \
+    -alias custom-ca \
+    -file "${CA_CERT_FILE}" \
+    -keystore "${BCFKS_TRUSTSTORE}" \
+    -storetype BCFKS \
+    -storepass "${FIPS_KEYSTORE_PASS}" \
+    -providername BCFIPS \
+    -providerclass org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider \
+    -providerpath "${FIPS_CP}" \
+    -noprompt || echo "Warning: CA certificate import failed or already exists"
+<% end %>
+
+# Import node/transport certificates into truststore
+<% if_p('opensearch.node.ssl.ca') do |node_ca| %>
+echo "Importing node CA certificate into BCFKS truststore..."
+NODE_CA_FILE="${OPENSEARCH_PATH_CONF}/ssl/node-ca.pem"
+cat > "${NODE_CA_FILE}" << 'NODECA'
+<%= node_ca %>
+NODECA
+
+${JAVA_HOME}/bin/keytool -importcert \
+    -alias node-ca \
+    -file "${NODE_CA_FILE}" \
+    -keystore "${BCFKS_TRUSTSTORE}" \
+    -storetype BCFKS \
+    -storepass "${FIPS_KEYSTORE_PASS}" \
+    -providername BCFIPS \
+    -providerclass org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider \
+    -providerpath "${FIPS_CP}" \
+    -noprompt || echo "Warning: Node CA import failed or already exists"
+<% end %>
+
+# Create BCFKS keystore for node certificates
+if [ ! -f "${BCFKS_KEYSTORE}" ]; then
+    echo "Creating BCFKS keystore..."
+    
+    <% if_p('opensearch.node.ssl.private_key', 'opensearch.node.ssl.certificate') do |key, cert| %>
+    # Create temporary PKCS12 from PEM files
+    NODE_KEY_FILE="${OPENSEARCH_PATH_CONF}/ssl/opensearch-node.pem"
+    NODE_CERT_FILE="${OPENSEARCH_PATH_CONF}/ssl/opensearch-node-cert.pem"
+    TEMP_P12="/tmp/node-temp.p12"
+    
+    # Combine key and cert into PKCS12
+    openssl pkcs12 -export \
+        -in "${NODE_CERT_FILE}" \
+        -inkey "${NODE_KEY_FILE}" \
+        -out "${TEMP_P12}" \
+        -name "node" \
+        -passout "pass:${FIPS_KEYSTORE_PASS}"
+    
+    # Convert PKCS12 to BCFKS
+    ${JAVA_HOME}/bin/keytool -importkeystore \
+        -srckeystore "${TEMP_P12}" \
+        -srcstoretype PKCS12 \
+        -srcstorepass "${FIPS_KEYSTORE_PASS}" \
+        -destkeystore "${BCFKS_KEYSTORE}" \
+        -deststoretype BCFKS \
+        -deststorepass "${FIPS_KEYSTORE_PASS}" \
+        -providername BCFIPS \
+        -providerclass org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider \
+        -providerpath "${FIPS_CP}" \
+        -noprompt
+    
+    rm -f "${TEMP_P12}"
+    <% end %>
+    
+    # If no node certs provided, create empty keystore
+    if [ ! -f "${BCFKS_KEYSTORE}" ]; then
+        ${JAVA_HOME}/bin/keytool -genkeypair \
+            -alias placeholder \
+            -keyalg RSA \
+            -keysize 2048 \
+            -keystore "${BCFKS_KEYSTORE}" \
+            -storetype BCFKS \
+            -storepass "${FIPS_KEYSTORE_PASS}" \
+            -providername BCFIPS \
+            -providerclass org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider \
+            -providerpath "${FIPS_CP}" \
+            -dname "CN=opensearch-node" \
+            -validity 365 \
+            -noprompt
+    fi
+    
+    echo "BCFKS keystore created at ${BCFKS_KEYSTORE}"
+else
+    echo "BCFKS keystore already exists at ${BCFKS_KEYSTORE}"
+fi
+
+# Set permissions on BCFKS stores
+chown vcap:vcap "${BCFKS_TRUSTSTORE}" "${BCFKS_KEYSTORE}"
+chmod 600 "${BCFKS_TRUSTSTORE}" "${BCFKS_KEYSTORE}"
 
 # Create FIPS security properties file
 mkdir -p "${OPENSEARCH_PATH_CONF}"
@@ -98,13 +259,15 @@ chmod 640 "${OPENSEARCH_PATH_CONF}/fips.security"
 
 # Store FIPS keystore password in a file for the startup script to use
 KEYSTORE_PASS_FILE="${OPENSEARCH_PATH_CONF}/.keystore.pass"
-echo "<%= p('opensearch.fips.keystore_password', 'changeme') %>" > "${KEYSTORE_PASS_FILE}"
+echo "${FIPS_KEYSTORE_PASS}" > "${KEYSTORE_PASS_FILE}"
 chown vcap:vcap "${KEYSTORE_PASS_FILE}"
 chmod 600 "${KEYSTORE_PASS_FILE}"
 
-export OPENSEARCH_KEYSTORE_PASSWORD="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
+export OPENSEARCH_KEYSTORE_PASSWORD="${FIPS_KEYSTORE_PASS}"
 
 echo "FIPS mode configuration complete"
+echo "  Truststore: ${BCFKS_TRUSTSTORE}"
+echo "  Keystore: ${BCFKS_KEYSTORE}"
 
 <% else %>
 echo "FIPS mode disabled - using standard configuration"

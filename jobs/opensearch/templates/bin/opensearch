@@ -25,35 +25,35 @@ export <%= k %>=<%= v %>
 <% end %>
 
 <% if p("opensearch.fips.enabled", false) %>
-  # FIPS Library Directory Setup
   FIPS_LIB_DIR="/var/vcap/data/opensearch/fips-lib"
+  BCFKS_TRUSTSTORE="/var/vcap/data/opensearch/truststore.bcfks"
+  BCFKS_KEYSTORE="/var/vcap/data/opensearch/keystore.bcfks"
+  KEYSTORE_PASS_FILE="${OPENSEARCH_PATH_CONF}/.keystore.pass"
   
-  # Ensure FIPS library directory exists
-  mkdir -p "${FIPS_LIB_DIR}"
+  # Verify BCFKS stores exist
+  if [ ! -f "${BCFKS_TRUSTSTORE}" ]; then
+    echo "ERROR: BCFKS truststore not found at ${BCFKS_TRUSTSTORE}"
+    echo "Ensure pre-start script ran successfully"
+    exit 1
+  fi
   
-  # Required Bouncy Castle FIPS JARs
-  # bc-fips: Core FIPS provider
-  # bctls-fips: TLS provider
-  # bcpkix-fips: PKI/X.509 support (required for certificate handling)
+  if [ ! -f "${BCFKS_KEYSTORE}" ]; then
+    echo "ERROR: BCFKS keystore not found at ${BCFKS_KEYSTORE}"
+    echo "Ensure pre-start script ran successfully"
+    exit 1
+  fi
+  
+  # Build FIPS classpath
   FIPS_CP=""
-  for jar in bc-fips bctls-fips bcpkix-fips; do
+  for jar in bc-fips bctls-fips bcpkix-fips bcutil-fips; do
     src=$(ls ${FIPS_LIB_DIR}/${jar}-*.jar 2>/dev/null | head -n1)
-    if [ -z "$src" ]; then
-      echo "ERROR: FIPS enabled but ${jar}-*.jar not found in ${FIPS_LIB_DIR}"
-      exit 1
+    if [ -n "$src" ]; then
+      FIPS_CP="${FIPS_CP}:${src}"
     fi
-    FIPS_CP="${FIPS_CP}:${src}"
   done
   FIPS_CP="${FIPS_CP#:}"
-  echo "FIPS classpath: ${FIPS_CP}"
   
-  # Verify java.security is configured for FIPS
-  JAVA_SECURITY_FILE="${JAVA_HOME}/conf/security/java.security"
-  if [ -f "${JAVA_SECURITY_FILE}" ]; then
-    echo "Using java.security from: ${JAVA_SECURITY_FILE}"
-  else
-    echo "WARNING: java.security not found at ${JAVA_SECURITY_FILE}"
-  fi
+  echo "FIPS classpath: ${FIPS_CP}"
 <% end %>
 
 export HEAP_SIZE=$((( $( cat /proc/meminfo | grep MemTotal | awk '{ print $2 }' ) * <%= p("opensearch.heap_percentage") %> ) / 100 ))K
