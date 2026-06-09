@@ -12,6 +12,7 @@ export YQ_PACKAGE_DIR=/var/vcap/packages/yq
 export PATH=$YQ_PACKAGE_DIR/bin:$PATH
 export PATH=/var/vcap/packages/cf-cli-8-linux/bin:$PATH
 export KEYSTORE="${JAVA_HOME}/lib/security/cacerts"
+
 STOREPASS=<%= p("opensearch.notification.keystorepass") %>
 DEFAULTPASS=<%= p("opensearch.notification.defaultkeystorepass") %>
 
@@ -21,45 +22,59 @@ DEFAULTPASS=<%= p("opensearch.notification.defaultkeystorepass") %>
 <% if p("opensearch.fips.enabled", false) %>
 echo "Configuring OpenSearch for FIPS mode..."
 
-# Create directories and copy FIPS JAR early
+# Create directories
 mkdir -p /var/vcap/data/opensearch
 chown vcap:vcap /var/vcap/data/opensearch
 chmod 750 /var/vcap/data/opensearch
 
-
 FIPS_LIB_DIR="/var/vcap/data/opensearch/fips-lib"
 mkdir -p "${FIPS_LIB_DIR}"
+
 JDK_LIB="${OPENSEARCH_HOME}/lib"
 
+# Verify FIPS JARs exist in source
 if ! ls ${OPENSEARCH_HOME}/lib/bc-fips-*.jar 1> /dev/null 2>&1; then
     echo "ERROR: FIPS enabled but FIPS JAR not found at ${OPENSEARCH_HOME}/lib"
     exit 1
 fi
 
+# Copy FIPS JARs to separate FIPS lib directory (NOT back to source)
+# Added bcpkix-fips which is required for PKI/certificate operations
 FIPS_CP=""
-for jar in bc-fips bctls-fips bcutil-fips; do
+for jar in bc-fips bctls-fips bcpkix-fips bcutil-fips; do
     src=$(ls ${JDK_LIB}/${jar}-*.jar 2>/dev/null | head -n1)
     if [ -z "$src" ] || [ ! -f "$src" ]; then
-       echo "ERROR: FIPS enabled but ${jar}-*.Json not found in ${JDK_LIB}"
+       echo "ERROR: FIPS enabled but ${jar}-*.jar not found in ${JDK_LIB}"
        exit 1
     fi
-    cp "$src" "${FIPS_LIB_DIR}/"
-    cp "$src" "${OPENSEARCH_HOME}/lib/"
+    
+    dest="${FIPS_LIB_DIR}/$(basename "$src")"
+    
+    # Only copy if source and destination are different
+    if [ "$src" != "$dest" ]; then
+        cp "$src" "${FIPS_LIB_DIR}/"
+        echo "Copied $(basename "$src") to ${FIPS_LIB_DIR}/"
+    fi
+    
+    # REMOVED: cp "$src" "${OPENSEARCH_HOME}/lib/"  # This was causing the error!
+    
     FIPS_CP="${FIPS_CP}:${FIPS_LIB_DIR}/$(basename "$src")"
-done 
+done
 FIPS_CP="${FIPS_CP#:}"
 
-chown vcap:vcap "${FIPS_LIB_DIR}"
+echo "FIPS classpath: ${FIPS_CP}"
+
+# Set permissions on FIPS lib directory
+chown -R vcap:vcap "${FIPS_LIB_DIR}"
 chmod 750 "${FIPS_LIB_DIR}"
-chown vcap:vcap "${FIPS_LIB_DIR}"/*.jar
-chmod 600 "${FIPS_LIB_DIR}"/*.jar
+chmod 640 "${FIPS_LIB_DIR}"/*.jar
 
 # Create FIPS security properties file
 mkdir -p "${OPENSEARCH_PATH_CONF}"
 cat > "${OPENSEARCH_PATH_CONF}/fips.security" << EOF
 # FIPS Security Configuration with SSL Context Support
 security.provider.1=org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider C:HYBRID;
-security.provider.2=sun.security.provider.Sun 
+security.provider.2=sun.security.provider.Sun
 security.provider.3=org.bouncycastle.jsse.provider.BouncyCastleJsseProvider fips:BCFIPS
 security.provider.4=sun.security.rsa.SunRsaSign
 security.provider.5=sun.security.ec.SunEC
@@ -81,9 +96,16 @@ EOF
 chown vcap:vcap "${OPENSEARCH_PATH_CONF}/fips.security"
 chmod 640 "${OPENSEARCH_PATH_CONF}/fips.security"
 
-# Set FIPS keystore password
+# Store FIPS keystore password in a file for the startup script to use
+KEYSTORE_PASS_FILE="${OPENSEARCH_PATH_CONF}/.keystore.pass"
+echo "<%= p('opensearch.fips.keystore_password', 'changeme') %>" > "${KEYSTORE_PASS_FILE}"
+chown vcap:vcap "${KEYSTORE_PASS_FILE}"
+chmod 600 "${KEYSTORE_PASS_FILE}"
+
 export OPENSEARCH_KEYSTORE_PASSWORD="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
-echo "FIPS mode enabled"
+
+echo "FIPS mode configuration complete"
+
 <% else %>
 echo "FIPS mode disabled - using standard configuration"
 export OPENSEARCH_FIPS_MODE=false
@@ -95,6 +117,7 @@ export OPENSEARCH_FIPS_MODE=false
 ${JAVA_HOME}/bin/keytool -storepasswd -new $STOREPASS -cacerts -storepass "$DEFAULTPASS" > /dev/null 2>&1;
 
 sysctl -q -w vm.max_map_count=262144
+
 mkdir -p ${OPENSEARCH_HOME}/plugins
 
 if [ -d ${JOB_DIR}/config/ssl ]; then
@@ -108,6 +131,7 @@ fi
 cp -u ${OPENSEARCH_HOME}/config/opensearch-security/*.yml "$OPENSEARCH_SECURITY_CONFIG_PATH"
 
 cd ${OPENSEARCH_HOME}
+
 chown -R vcap:vcap config plugins
 chown -R vcap:vcap "$OPENSEARCH_SECURITY_CONFIG_PATH"
 
@@ -118,6 +142,7 @@ chown -R vcap:vcap "$OPENSEARCH_SECURITY_CONFIG_PATH"
   client = p("opensearch.cf.client_id")
   password = p("opensearch.cf.client_password")
 %>
+
 cf api "<%= api %>"
 cf auth "<%= client %>" "<%= password %>" --client-credentials
 
@@ -139,6 +164,7 @@ yq -i ".cf_user={\"backend_roles\": [$ORG_GUID_ROLE_LIST]}" "$OPENSEARCH_SECURIT
 yq -i ".reports_full_access={\"backend_roles\": [$ORG_GUID_ROLE_LIST]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles_mapping.yml"
 yq -i ".alerting_full_access={\"backend_roles\": [$ORG_GUID_ROLE_LIST]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles_mapping.yml"
 yq -i ".notifications_full_access={\"backend_roles\": [$ORG_GUID_ROLE_LIST]}" "$OPENSEARCH_SECURITY_CONFIG_PATH/roles_mapping.yml"
+
 <% end %>
 <% end %>
 
@@ -168,12 +194,13 @@ fi
 
 # Create new OpenSearch keystore
 if [ ! -f "$OPENSEARCH_PATH_CONF/opensearch.keystore" ]; then
-  echo "Create new OpenSearch keystore"
+  echo "Creating new OpenSearch keystore"
 <% if p("opensearch.fips.enabled", false) %>
   echo "Creating FIPS-compliant password-protected keystore..."
+  KEYSTORE_PASS="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
   {
-    echo "${OPENSEARCH_KEYSTORE_PASSWORD}"
-    echo "${OPENSEARCH_KEYSTORE_PASSWORD}"
+    echo "${KEYSTORE_PASS}"
+    echo "${KEYSTORE_PASS}"
   } | "$PACKAGE_DIR/bin/opensearch-keystore" create --password
 <% else %>
   # Non-FIPS mode
@@ -189,13 +216,24 @@ else
   exit 1
 fi
 
-echo "setting final permissions"
+echo "Setting final permissions..."
+
+# Keystore permissions
 chown vcap:vcap "${OPENSEARCH_PATH_CONF}/opensearch.keystore"
 chmod 600 "${OPENSEARCH_PATH_CONF}/opensearch.keystore"
-chown vcap:vcap "${OPENSEARCH_PATH_CONF}/fips.security"
-chmod 640 "${OPENSEARCH_PATH_CONF}/fips.security"
-chown vcap:vcap "${FIPS_LIB_DIR}"
-chmod 750 "${FIPS_LIB_DIR}"
-chown vcap:vcap "${FIPS_LIB_DIR}"/*.jar
-chmod 600 "${FIPS_LIB_DIR}"/*.jar
-echo "final permissions set"
+
+# FIPS-specific permissions (only if FIPS is enabled)
+<% if p("opensearch.fips.enabled", false) %>
+FIPS_LIB_DIR="/var/vcap/data/opensearch/fips-lib"
+if [ -f "${OPENSEARCH_PATH_CONF}/fips.security" ]; then
+  chown vcap:vcap "${OPENSEARCH_PATH_CONF}/fips.security"
+  chmod 640 "${OPENSEARCH_PATH_CONF}/fips.security"
+fi
+if [ -d "${FIPS_LIB_DIR}" ]; then
+  chown -R vcap:vcap "${FIPS_LIB_DIR}"
+  chmod 750 "${FIPS_LIB_DIR}"
+  chmod 640 "${FIPS_LIB_DIR}"/*.jar 2>/dev/null || true
+fi
+<% end %>
+
+echo "Pre-start complete"

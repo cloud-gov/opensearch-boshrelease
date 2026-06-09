@@ -161,17 +161,23 @@ fi
 
 # Start OpenSearch with appropriate FIPS mode setting
 <% if p("opensearch.fips.enabled", false) %>
-  # Set FIPS mode environment variable
   export OPENSEARCH_FIPS_MODE=true
   
-  # Verify FIPS configuration before starting
   echo "Starting OpenSearch in FIPS mode..."
   echo "  BCFKS Keystore Type: enabled"
   echo "  FIPS Approved Only: true"
-  echo "  FIPS Classpath: ${FIPS_CP}"
   
-  ${OPENSEARCH_HOME}/bin/opensearch \
-    <%= p("opensearch.exec.options", []).join(' ') %>
+  KEYSTORE_PASS_FILE="${OPENSEARCH_PATH_CONF}/.keystore.pass"
+  
+  if [ -f "${KEYSTORE_PASS_FILE}" ]; then
+    echo "Reading keystore password from file..."
+    cat "${KEYSTORE_PASS_FILE}" | ${OPENSEARCH_HOME}/bin/opensearch \
+      <%= p("opensearch.exec.options", []).join(' ') %>
+  else
+    echo "ERROR: Keystore password file not found at ${KEYSTORE_PASS_FILE}"
+    echo "Ensure pre-start script ran successfully."
+    exit 1
+  fi
 <% else %>
   ${OPENSEARCH_HOME}/bin/opensearch \
     <%= p("opensearch.exec.options", []).join(' ') %>
