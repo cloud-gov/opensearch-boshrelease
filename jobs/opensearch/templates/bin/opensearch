@@ -27,7 +27,7 @@ export <%= k %>=<%= v %>
   for jar in bc-fips bctls-fips bcutil-fips; do
     src=$(ls ${FIPS_LIB_DIR}/${jar}-*.jar 2>/dev/null | head -n1)
     if [ -z "$src" ]; then 
-      echo "ERROR: FIPS enabled but ${jar}-*.jar nof found in ${FIPS_LIB_DIR}"
+      echo "ERROR: FIPS enabled but ${jar}-*.jar t found in ${FIPS_LIB_DIR}"
       exit 1
     fi
     FIPS_CP="${FIPS_CP}:${src}"
@@ -179,7 +179,6 @@ export OPENSEARCH_JAVA_OPTS="-Xms$HEAP_SIZE -Xmx$HEAP_SIZE -Djava.io.tmpdir=$TMP
 <% if p("opensearch.fips.enabled", false) %>
 # Add FIPS-specific Java options
 
-export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Xbootclasspath/a:${FIPS_CP}"
 export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djavax.net.ssl.keyStoreType=BCFKS"
 export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djavax.net.ssl.trustStoreType=BCFKS"
 echo "FIPS mode enabled for OpenSearch runtime"

@@ -22,7 +22,8 @@ echo "Configuring OpenSearch for FIPS mode..."
 
 # Create directories and copy FIPS JAR early
 mkdir -p /var/vcap/data/opensearch
-
+chown vcap:vcap /var/vcap/data/opensearch
+chmod 750 /var/vcap/data/opensearch
 
 
 FIPS_LIB_DIR="/var/vcap/data/opensearch/fips-lib"
@@ -186,3 +187,14 @@ else
   echo "ERROR: Failed to create OpenSearch keystore"
   exit 1
 fi
+
+echo "setting final permissions"
+chown vcap:vcap "${OPENSEARCH_PATH_CONF}/opensearch.keystore"
+chmod 600 "${OPENSEARCH_PATH_CONF}/opensearch.keystore"
+chown vcap:vcap "${OPENSEARCH_PATH_CONF}/fips.security"
+chmod 640 "${OPENSEARCH_PATH_CONF}/fips.security"
+chown vcap:vcap "${FIPS_LIB_DIR"
+chmod 750 "${FIPS_LIB_DIR"
+chown vcap:vcap "${FIPS_LIB_DIR"/*.jar
+chmod 600 "${FIPS_LIB_DIR"/*.jar
+echo "final permissions set"
