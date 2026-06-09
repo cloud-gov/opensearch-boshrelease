@@ -12,7 +12,6 @@ export YQ_PACKAGE_DIR=/var/vcap/packages/yq
 export PATH=$YQ_PACKAGE_DIR/bin:$PATH
 export PATH=/var/vcap/packages/cf-cli-8-linux/bin:$PATH
 export KEYSTORE="${JAVA_HOME}/lib/security/cacerts"
-
 STOREPASS=<%= p("opensearch.notification.keystorepass") %>
 DEFAULTPASS=<%= p("opensearch.notification.defaultkeystorepass") %>
 
@@ -29,7 +28,6 @@ chmod 750 /var/vcap/data/opensearch
 
 FIPS_LIB_DIR="/var/vcap/data/opensearch/fips-lib"
 mkdir -p "${FIPS_LIB_DIR}"
-
 JDK_LIB="${OPENSEARCH_HOME}/lib"
 
 # Verify FIPS JARs exist in source
@@ -58,13 +56,23 @@ for jar in bc-fips bctls-fips bcpkix-fips bcutil-fips; do
     FIPS_CP="${FIPS_CP}:${FIPS_LIB_DIR}/$(basename "$src")"
 done
 FIPS_CP="${FIPS_CP#:}"
-
 echo "FIPS classpath: ${FIPS_CP}"
 
 # Set permissions on FIPS lib directory
 chown -R vcap:vcap "${FIPS_LIB_DIR}"
 chmod 750 "${FIPS_LIB_DIR}"
 chmod 640 "${FIPS_LIB_DIR}"/*.jar
+
+# Set FIPS keystore password and JVM options
+export OPENSEARCH_KEYSTORE_PASSWORD="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
+
+# Add FIPS JVM options to existing OPENSEARCH_JAVA_OPTS
+export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -cp ${FIPS_CP}"
+export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Dorg.bouncycastle.fips.approved_only=true"
+export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security"
+export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djavax.net.ssl.keyStoreType=BCFKS"
+export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djavax.net.ssl.trustStoreType=BCFKS"
+export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} --enable-native-access=ALL-UNNAMED"
 
 ################################################################
 # Create BCFKS Truststore and Keystore
@@ -84,7 +92,10 @@ if [ ! -f "${BCFKS_TRUSTSTORE}" ]; then
     echo "Creating BCFKS truststore..."
     
     # Method 1: Convert existing cacerts to BCFKS format
-    ${JAVA_HOME}/bin/keytool -importkeystore \
+    ${JAVA_HOME}/bin/keytool \
+        -J--enable-native-access=ALL-UNNAMED \
+        -J-Djava.io.tmpdir=/var/vcap/data/opensearch/ \
+        -importkeystore \
         -srckeystore "${CA_CERTS_SOURCE}" \
         -srcstoretype JKS \
         -srcstorepass "${DEFAULT_CACERTS_PASS}" \
@@ -98,7 +109,10 @@ if [ ! -f "${BCFKS_TRUSTSTORE}" ]; then
             echo "Warning: keytool import failed, trying alternative method..."
             
             # Method 2: Create empty truststore and import certs individually
-            ${JAVA_HOME}/bin/keytool -genkeypair \
+            ${JAVA_HOME}/bin/keytool \
+                -J--enable-native-access=ALL-UNNAMED \
+                -J-Djava.io.tmpdir=/var/vcap/data/opensearch/ \
+                -genkeypair \
                 -alias temp \
                 -keyalg RSA \
                 -keysize 2048 \
@@ -113,7 +127,10 @@ if [ ! -f "${BCFKS_TRUSTSTORE}" ]; then
                 -noprompt
             
             # Delete the temp key
-            ${JAVA_HOME}/bin/keytool -delete \
+            ${JAVA_HOME}/bin/keytool \
+                -J--enable-native-access=ALL-UNNAMED \
+                -J-Djava.io.tmpdir=/var/vcap/data/opensearch/ \
+                -delete \
                 -alias temp \
                 -keystore "${BCFKS_TRUSTSTORE}" \
                 -storetype BCFKS \
@@ -129,7 +146,7 @@ else
     echo "BCFKS truststore already exists at ${BCFKS_TRUSTSTORE}"
 fi
 
-# Import custom CA certificates if provided
+ Import custom CA certificates if provided
 <% if_p('opensearch.fips.ca_certificate') do |ca_cert| %>
 echo "Importing custom CA certificate into BCFKS truststore..."
 CA_CERT_FILE="${OPENSEARCH_PATH_CONF}/ssl/fips-ca.pem"
@@ -138,7 +155,10 @@ cat > "${CA_CERT_FILE}" << 'CACERT'
 <%= ca_cert %>
 CACERT
 
-${JAVA_HOME}/bin/keytool -importcert \
+${JAVA_HOME}/bin/keytool \
+    -J--enable-native-access=ALL-UNNAMED \
+    -J-Djava.io.tmpdir=/var/vcap/data/opensearch/ \
+    -importcert \
     -alias custom-ca \
     -file "${CA_CERT_FILE}" \
     -keystore "${BCFKS_TRUSTSTORE}" \
@@ -158,7 +178,10 @@ cat > "${NODE_CA_FILE}" << 'NODECA'
 <%= node_ca %>
 NODECA
 
-${JAVA_HOME}/bin/keytool -importcert \
+${JAVA_HOME}/bin/keytool \
+    -J--enable-native-access=ALL-UNNAMED \
+    -J-Djava.io.tmpdir=/var/vcap/data/opensearch/ \
+    -importcert \
     -alias node-ca \
     -file "${NODE_CA_FILE}" \
     -keystore "${BCFKS_TRUSTSTORE}" \
@@ -189,7 +212,10 @@ if [ ! -f "${BCFKS_KEYSTORE}" ]; then
         -passout "pass:${FIPS_KEYSTORE_PASS}"
     
     # Convert PKCS12 to BCFKS
-    ${JAVA_HOME}/bin/keytool -importkeystore \
+    ${JAVA_HOME}/bin/keytool \
+        -J--enable-native-access=ALL-UNNAMED \
+        -J-Djava.io.tmpdir=/var/vcap/data/opensearch/ \
+        -importkeystore \
         -srckeystore "${TEMP_P12}" \
         -srcstoretype PKCS12 \
         -srcstorepass "${FIPS_KEYSTORE_PASS}" \
@@ -206,7 +232,10 @@ if [ ! -f "${BCFKS_KEYSTORE}" ]; then
     
     # If no node certs provided, create empty keystore
     if [ ! -f "${BCFKS_KEYSTORE}" ]; then
-        ${JAVA_HOME}/bin/keytool -genkeypair \
+        ${JAVA_HOME}/bin/keytool \
+            -J--enable-native-access=ALL-UNNAMED \
+            -J-Djava.io.tmpdir=/var/vcap/data/opensearch/ \
+            -genkeypair \
             -alias placeholder \
             -keyalg RSA \
             -keysize 2048 \

@@ -78,7 +78,6 @@ export OPENSEARCH_JAVA_OPTS="-Xms$HEAP_SIZE -Xmx$HEAP_SIZE -Djava.io.tmpdir=/var
   
   # Configure security providers (Bouncy Castle FIPS)
   export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Dorg.bouncycastle.fips.approved_only=true"
-  
   # Disable non-FIPS compliant algorithms
   export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Dcom.sun.net.ssl.checkRevocation=true"
   
@@ -182,3 +181,11 @@ fi
   ${OPENSEARCH_HOME}/bin/opensearch \
     <%= p("opensearch.exec.options", []).join(' ') %>
 <% end %>
+
+select DATE_TRUNC('month', created_at) AS month_start, sum(amount_microcredits) AS sum_microcredits, sum(amount_microcredits) / POWER(10, 6) AS sum_credits
+from measurement
+join resource on measurement.resource_natural_id = resource.natural_id
+join reading on reading.id = measurement.reading_id
+where cf_org_id = 'd7843b4a-5973-4f8c-b067-6d40807fcf0d'
+group by DATE_TRUNC('month', created_at)
+order by month_start;
