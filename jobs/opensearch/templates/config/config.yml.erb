@@ -55,6 +55,18 @@ plugins.security.field_masking.hash_algorithm: SHA-512
 plugins.security.ssl.transport.enforce_hostname_verification: false
 plugins.security.ssl.http.clientauth_mode: OPTIONAL
 
+plugins.security.ssl.http.enabled_ciphers:
+  - TLS_AES_256_GCM_SHA384
+  - TLS_AES_128_GCM_SHA256
+  - TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+  - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+
+plugins.security.ssl.transport.enabled_ciphers:
+  - TLS_AES_256_GCM_SHA384
+  - TLS_AES_128_GCM_SHA256
+  - TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+  - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+
 <% else %>
 ################################################################
 # Non-FIPS SSL Configuration

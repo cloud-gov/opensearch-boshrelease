@@ -274,3 +274,7 @@ properties:
   opensearch.fips.ca_certificate:
     description: "Optional CA certificate to import into FIPS truststore (PEM format)"
     default: ""
+
+  opensearch.fips.debug:
+    description: "Enable FIPS debug logging"
+    default: true

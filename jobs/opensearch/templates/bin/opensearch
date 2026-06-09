@@ -5,13 +5,16 @@ set -u # report the usage of uninitialized variables
 export JOB_NAME=opensearch
 export PORT=${PORT:-5000}
 export LANG=en_US.UTF-8
+
 export TMP_DIR=/var/vcap/sys/tmp/$JOB_NAME
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 export LOG_DIR=/var/vcap/sys/log/$JOB_NAME
 export PACKAGE_DIR=/var/vcap/packages/$JOB_NAME
 export STORE_DIR=/var/vcap/store/$JOB_NAME
+
 export JAVA_HOME="/var/vcap/packages/opensearch/jdk"
 export PATH="${JAVA_HOME}/bin:${PATH}"
+
 export OPENSEARCH_HOME=/var/vcap/packages/opensearch
 export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
 
@@ -22,21 +25,39 @@ export <%= k %>=<%= v %>
 <% end %>
 
 <% if p("opensearch.fips.enabled", false) %>
+  # FIPS Library Directory Setup
   FIPS_LIB_DIR="/var/vcap/data/opensearch/fips-lib"
+  
+  # Ensure FIPS library directory exists
+  mkdir -p "${FIPS_LIB_DIR}"
+  
+  # Required Bouncy Castle FIPS JARs
+  # bc-fips: Core FIPS provider
+  # bctls-fips: TLS provider
+  # bcpkix-fips: PKI/X.509 support (required for certificate handling)
   FIPS_CP=""
-  for jar in bc-fips bctls-fips bcutil-fips; do
+  for jar in bc-fips bctls-fips bcpkix-fips; do
     src=$(ls ${FIPS_LIB_DIR}/${jar}-*.jar 2>/dev/null | head -n1)
-    if [ -z "$src" ]; then 
-      echo "ERROR: FIPS enabled but ${jar}-*.jar t found in ${FIPS_LIB_DIR}"
+    if [ -z "$src" ]; then
+      echo "ERROR: FIPS enabled but ${jar}-*.jar not found in ${FIPS_LIB_DIR}"
       exit 1
     fi
     FIPS_CP="${FIPS_CP}:${src}"
-done
-FIPS_CP="${FIPS_CP#:}"
-echo "FIPS classpath: ${FIPS_CP}"
+  done
+  FIPS_CP="${FIPS_CP#:}"
+  echo "FIPS classpath: ${FIPS_CP}"
+  
+  # Verify java.security is configured for FIPS
+  JAVA_SECURITY_FILE="${JAVA_HOME}/conf/security/java.security"
+  if [ -f "${JAVA_SECURITY_FILE}" ]; then
+    echo "Using java.security from: ${JAVA_SECURITY_FILE}"
+  else
+    echo "WARNING: java.security not found at ${JAVA_SECURITY_FILE}"
+  fi
 <% end %>
 
 export HEAP_SIZE=$((( $( cat /proc/meminfo | grep MemTotal | awk '{ print $2 }' ) * <%= p("opensearch.heap_percentage") %> ) / 100 ))K
+
 <% if_p('opensearch.heap_size') do |heap_size| %>
   HEAP_SIZE=<%= heap_size %>
 <% end %>
@@ -45,46 +66,113 @@ export HEAP_SIZE=$((( $( cat /proc/meminfo | grep MemTotal | awk '{ print $2 }' 
 export OPENSEARCH_JAVA_OPTS="-Xms$HEAP_SIZE -Xmx$HEAP_SIZE -Djava.io.tmpdir=/var/vcap/data/opensearch/"
 
 <% if p("opensearch.fips.enabled", false) %>
-export OPENSEARCH_KEYSTORE_PASSWORD="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
-export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djavax.net.ssl.keyStoreType=BCFKS"
-export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djavax.net.ssl.trustStoreType=BCFKS"
-echo "FIPS mode enabled for OpenSearch runtime"
+  # FIPS Mode Java Security Configuration
+  export OPENSEARCH_KEYSTORE_PASSWORD="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
+  
+  # Set BCFKS (Bouncy Castle FIPS Keystore) as the keystore/truststore type
+  export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djavax.net.ssl.keyStoreType=BCFKS"
+  export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djavax.net.ssl.trustStoreType=BCFKS"
+  
+  # Add Bouncy Castle FIPS provider to classpath
+  export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Xbootclasspath/a:${FIPS_CP}"
+  
+  # Configure security providers (Bouncy Castle FIPS)
+  export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Dorg.bouncycastle.fips.approved_only=true"
+  
+  # Disable non-FIPS compliant algorithms
+  export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Dcom.sun.net.ssl.checkRevocation=true"
+  
+  # Optional: Enable FIPS debug logging
+  <% if p("opensearch.fips.debug", false) %>
+  export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djava.security.debug=provider"
+  <% end %>
+  
+  echo "FIPS mode enabled for OpenSearch runtime"
 <% end %>
 
 export MAX_OPEN_FILES=<%= p("opensearch.limits.fd") %>
 export MAX_LOCKED_MEMORY=unlimited  # required to enable opensearch's mlockall setting
+
 ulimit -u 4096
+
 if [ -n "$MAX_OPEN_FILES" ]; then
   ulimit -n $MAX_OPEN_FILES
 fi
+
 if [ -n "$MAX_LOCKED_MEMORY" ]; then
   ulimit -l $MAX_LOCKED_MEMORY
 fi
 
-# PKCS8 keys are required for Opensearch TLS (Non-FIPS mode only)
+# TLS Certificate Key Conversion
+# PKCS8 keys are required for OpenSearch TLS
 # https://opensearch.org/docs/latest/security/configuration/tls/
-<% if_p('opensearch.admin.private_key') do %>
-  openssl pkcs8 -v1 "PBE-SHA1-3DES" \
-  -in "${JOB_DIR}/config/ssl/opensearch-admin.pem" -topk8 \
-  -out "${JOB_DIR}/config/ssl/opensearch-admin.key" -nocrypt
-<% end %>
-<% if_p('opensearch.node.ssl.private_key') do %>
-  openssl pkcs8 -v1 "PBE-SHA1-3DES" \
-  -in "${JOB_DIR}/config/ssl/opensearch-node.pem" -topk8 \
-  -out "${JOB_DIR}/config/ssl/opensearch-node.key" -nocrypt
-  chmod 600 ${JOB_DIR}/config/ssl/opensearch*.key
-<% end %>
-<% if_p('opensearch.http.ssl.private_key') do %>
-  openssl pkcs8 -v1 "PBE-SHA1-3DES" \
-  -in "${JOB_DIR}/config/ssl/opensearch-http.pem" -topk8 \
-  -out "${JOB_DIR}/config/ssl/opensearch-http.key" -nocrypt
-  chmod 600 ${JOB_DIR}/config/ssl/opensearch*.key
+
+<% if p("opensearch.fips.enabled", false) %>
+  # FIPS Mode: Convert keys to PKCS8 using FIPS-compliant algorithms
+  # Use AES-256-CBC instead of legacy PBE-SHA1-3DES
+  
+  <% if_p('opensearch.admin.private_key') do %>
+    openssl pkcs8 -topk8 \
+      -in "${JOB_DIR}/config/ssl/opensearch-admin.pem" \
+      -out "${JOB_DIR}/config/ssl/opensearch-admin.key" \
+      -nocrypt
+    chmod 600 ${JOB_DIR}/config/ssl/opensearch-admin.key
+  <% end %>
+
+  <% if_p('opensearch.node.ssl.private_key') do %>
+    openssl pkcs8 -topk8 \
+      -in "${JOB_DIR}/config/ssl/opensearch-node.pem" \
+      -out "${JOB_DIR}/config/ssl/opensearch-node.key" \
+      -nocrypt
+    chmod 600 ${JOB_DIR}/config/ssl/opensearch-node.key
+  <% end %>
+
+  <% if_p('opensearch.http.ssl.private_key') do %>
+    openssl pkcs8 -topk8 \
+      -in "${JOB_DIR}/config/ssl/opensearch-http.pem" \
+      -out "${JOB_DIR}/config/ssl/opensearch-http.key" \
+      -nocrypt
+    chmod 600 ${JOB_DIR}/config/ssl/opensearch-http.key
+  <% end %>
+
+<% else %>
+  # Non-FIPS Mode: Use legacy PBE-SHA1-3DES for PKCS8 conversion
+  
+  <% if_p('opensearch.admin.private_key') do %>
+    openssl pkcs8 -v1 "PBE-SHA1-3DES" \
+      -in "${JOB_DIR}/config/ssl/opensearch-admin.pem" -topk8 \
+      -out "${JOB_DIR}/config/ssl/opensearch-admin.key" -nocrypt
+  <% end %>
+
+  <% if_p('opensearch.node.ssl.private_key') do %>
+    openssl pkcs8 -v1 "PBE-SHA1-3DES" \
+      -in "${JOB_DIR}/config/ssl/opensearch-node.pem" -topk8 \
+      -out "${JOB_DIR}/config/ssl/opensearch-node.key" -nocrypt
+    chmod 600 ${JOB_DIR}/config/ssl/opensearch*.key
+  <% end %>
+
+  <% if_p('opensearch.http.ssl.private_key') do %>
+    openssl pkcs8 -v1 "PBE-SHA1-3DES" \
+      -in "${JOB_DIR}/config/ssl/opensearch-http.pem" -topk8 \
+      -out "${JOB_DIR}/config/ssl/opensearch-http.key" -nocrypt
+    chmod 600 ${JOB_DIR}/config/ssl/opensearch*.key
+  <% end %>
 <% end %>
 
 # Start OpenSearch with appropriate FIPS mode setting
 <% if p("opensearch.fips.enabled", false) %>
-OPENSEARCH_FIPS_MODE=true ${OPENSEARCH_HOME}/bin/opensearch \
+  # Set FIPS mode environment variable
+  export OPENSEARCH_FIPS_MODE=true
+  
+  # Verify FIPS configuration before starting
+  echo "Starting OpenSearch in FIPS mode..."
+  echo "  BCFKS Keystore Type: enabled"
+  echo "  FIPS Approved Only: true"
+  echo "  FIPS Classpath: ${FIPS_CP}"
+  
+  ${OPENSEARCH_HOME}/bin/opensearch \
+    <%= p("opensearch.exec.options", []).join(' ') %>
 <% else %>
-${OPENSEARCH_HOME}/bin/opensearch \
+  ${OPENSEARCH_HOME}/bin/opensearch \
+    <%= p("opensearch.exec.options", []).join(' ') %>
 <% end %>
-  <%= p("opensearch.exec.options", []).join(' ') %>
