@@ -88,7 +88,7 @@ fips_keytool() {
         -cp "${FIPS_CP}" \
         -Djava.security.properties="${OPENSEARCH_PATH_CONF}/fips.security" \
         -Djava.io.tmpdir=/var/vcap/data/opensearch/ \
-        "$@"
+        sun.security.tools.keytool.main "$@"
 }
 
 export OPENSEARCH_FIPS_MODE=true
