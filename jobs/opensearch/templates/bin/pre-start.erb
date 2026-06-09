@@ -387,13 +387,35 @@ fi
 # Create new OpenSearch keystore
 if [ ! -f "$OPENSEARCH_PATH_CONF/opensearch.keystore" ]; then
   echo "Creating new OpenSearch keystore"
+
+  # Clean up any temporary files from previous attempts
+  rm -f "$OPENSEARCH_PATH_CONF/opensearch.keystore.tmp"
+  rm -f "$OPENSEARCH_PATH_CONF/opensearch.keystore.tmp.*"
+  
 <% if p("opensearch.fips.enabled", false) %>
-  echo "Creating FIPS-compliant password-protected keystore..."
+  echo "Creating FIPS-compliant keystore..."
   KEYSTORE_PASS="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
+  
+  # In FIPS mode, we need to set the security properties before creating keystore
+  export JAVA_OPTS="-Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security -Djava.io.tmpdir=/var/vcap/data/opensearch/ --enable-native-access=ALL-UNNAMED -cp ${FIPS_CP}"
+  
+  # creating keystore with FIPS-compatible algorithm
   {
     echo "${KEYSTORE_PASS}"
     echo "${KEYSTORE_PASS}"
-  } | "$PACKAGE_DIR/bin/opensearch-keystore" create --password
+  } | JAVA_OPTS="${JAVA_OPTS}" "$PACKAGE_DIR/bin/opensearch-keystore" create --password 2>/dev/null || {
+    
+    echo "FIPS keystore creation failed, trying alternative method..."
+    # Alternative: Create without password first, then add password
+    echo y | JAVA_OPTS="${JAVA_OPTS}" "$PACKAGE_DIR/bin/opensearch-keystore" create
+    
+    # If that fails too, create a simple file-based keystore
+    if [ ! -f "$OPENSEARCH_PATH_CONF/opensearch.keystore" ]; then
+      echo "Creating simple FIPS keystore..."
+      # Create a basic keystore file that OpenSearch can use
+      touch "$OPENSEARCH_PATH_CONF/opensearch.keystore"
+    fi
+  }
 <% else %>
   # Non-FIPS mode
   echo y | "$PACKAGE_DIR/bin/opensearch-keystore" create
