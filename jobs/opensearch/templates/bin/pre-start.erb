@@ -240,7 +240,7 @@ if fips_keytool -genkeypair \
     -storetype BCFKS \
     -storepass "TestPassword123!" \
     -keypass "TestPassword123!" \
-    -dname "CN=test,O=test,C=US" 2>/dev/null; then
+    -dname "CN=test,O=test,C=US"; then
     
     echo "BCFKS keystore creation test: OK"
     
