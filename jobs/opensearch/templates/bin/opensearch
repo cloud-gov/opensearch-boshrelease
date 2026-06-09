@@ -34,6 +34,7 @@ export <%= k %>=<%= v %>
 done
 FIPS_CP="${FIPS_CP#:}"
 echo "FIPS classpath: ${FIPS_CP}"
+<% end %>
 
 export HEAP_SIZE=$((( $( cat /proc/meminfo | grep MemTotal | awk '{ print $2 }' ) * <%= p("opensearch.heap_percentage") %> ) / 100 ))K
 <% if_p('opensearch.heap_size') do |heap_size| %>
