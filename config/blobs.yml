@@ -190,7 +190,7 @@ opensearch-3.7.0-linux-x64.tar.gz:
   size: 1067177646
   object_id: 7896c028-7763-42b7-6928-6aa262f4eba9
   sha: sha256:ae4edf0e80ff38ef9e502a51200c7f54e313cc4275020fff5b60789081546184
-opensearch-dashboards-3.7.0-linux-x64.tar.g:
+opensearch-dashboards-3.7.0-linux-x64.tar.gz:
   size: 437392934
   object_id: 57d75dfb-5783-4709-4280-bc7a20c02916
   sha: sha256:dc99ea5596f1c5b66d5802d1e0902ed7ccea3770d916fd5616a17040b4e46d07
