@@ -394,42 +394,49 @@ if [ ! -f "$OPENSEARCH_PATH_CONF/opensearch.keystore" ]; then
 <% if p("opensearch.fips.enabled", false) %>
 echo "Creating FIPS-compliant keystore..."
 KEYSTORE_PASS="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
+
 # Clean up any existing keystore files first
 rm -f "$OPENSEARCH_PATH_CONF/opensearch.keystore"*
-# Set FIPS environment for keystore creation
-export JAVA_OPTS="-Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security -Djava.io.tmpdir=/var/vcap/data/opensearch/ --enable-native-access=ALL-UNNAMED -cp ${FIPS_CP}"
+
+# Set FIPS environment for keystore creation using OPENSEARCH_JAVA_OPTS
+export KEYSTORE_JAVA_OPTS="-Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security -Djava.io.tmpdir=/var/vcap/data/opensearch/ --enable-native-access=ALL-UNNAMED -cp ${FIPS_CP}"
+
 # Method 1: Try creating keystore with password
 echo "Attempting FIPS keystore creation with password..."
 KEYSTORE_CREATED=false
+
 if {
     echo "${KEYSTORE_PASS}"
     echo "${KEYSTORE_PASS}"
-} | JAVA_OPTS="${JAVA_OPTS}" "$PACKAGE_DIR/bin/opensearch-keystore" create --password 2>/dev/null; then
+} | OPENSEARCH_JAVA_OPTS="${KEYSTORE_JAVA_OPTS}" "$PACKAGE_DIR/bin/opensearch-keystore" create --password 2>/dev/null; then
     echo "✓ FIPS keystore created with password"
     KEYSTORE_CREATED=true
 fi
+
 # Method 2: Try without password if first method failed
 if [ "$KEYSTORE_CREATED" = false ]; then
     echo "Password creation failed, trying without password..."
     rm -f "$OPENSEARCH_PATH_CONF/opensearch.keystore"*
     
-    if echo y | JAVA_OPTS="${JAVA_OPTS}" "$PACKAGE_DIR/bin/opensearch-keystore" create 2>/dev/null; then
+    if echo y | OPENSEARCH_JAVA_OPTS="${KEYSTORE_JAVA_OPTS}" "$PACKAGE_DIR/bin/opensearch-keystore" create 2>/dev/null; then
         echo "✓ FIPS keystore created without password"
         KEYSTORE_CREATED=true
     fi
 fi
+
 # Method 3: Try with relaxed FIPS settings
 if [ "$KEYSTORE_CREATED" = false ]; then
     echo "Standard FIPS creation failed, trying with relaxed settings..."
     rm -f "$OPENSEARCH_PATH_CONF/opensearch.keystore"*
     
-    export RELAXED_JAVA_OPTS="-Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security -Djava.io.tmpdir=/var/vcap/data/opensearch/ --enable-native-access=ALL-UNNAMED -cp ${FIPS_CP} -Dorg.bouncycastle.fips.approved_only=false"
+    export RELAXED_KEYSTORE_JAVA_OPTS="-Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security -Djava.io.tmpdir=/var/vcap/data/opensearch/ --enable-native-access=ALL-UNNAMED -cp ${FIPS_CP} -Dorg.bouncycastle.fips.approved_only=false"
     
-    if echo y | JAVA_OPTS="${RELAXED_JAVA_OPTS}" "$PACKAGE_DIR/bin/opensearch-keystore" create 2>/dev/null; then
+    if echo y | OPENSEARCH_JAVA_OPTS="${RELAXED_KEYSTORE_JAVA_OPTS}" "$PACKAGE_DIR/bin/opensearch-keystore" create 2>/dev/null; then
         echo "✓ FIPS keystore created with relaxed settings"
         KEYSTORE_CREATED=true
     fi
 fi
+
 # Method 4: Fallback to non-FIPS environment temporarily
 if [ "$KEYSTORE_CREATED" = false ]; then
     echo "All FIPS methods failed, using fallback environment..."
@@ -441,11 +448,13 @@ if [ "$KEYSTORE_CREATED" = false ]; then
         KEYSTORE_CREATED=true
     fi
 fi
+
 # Final check and validation
 if [ "$KEYSTORE_CREATED" = false ] || [ ! -f "$OPENSEARCH_PATH_CONF/opensearch.keystore" ]; then
     echo "ERROR: All keystore creation methods failed"
     exit 1
 fi
+
 # Validate keystore is properly formatted (not empty)
 KEYSTORE_SIZE=$(stat -c%s "$OPENSEARCH_PATH_CONF/opensearch.keystore" 2>/dev/null || wc -c < "$OPENSEARCH_PATH_CONF/opensearch.keystore")
 if [ "$KEYSTORE_SIZE" -eq 0 ]; then
@@ -453,14 +462,15 @@ if [ "$KEYSTORE_SIZE" -eq 0 ]; then
     rm -f "$OPENSEARCH_PATH_CONF/opensearch.keystore"
     exit 1
 fi
-# Test keystore can be read
+
+# Test keystore can be read (use the same FIPS environment)
 echo "Validating keystore format..."
-if "$PACKAGE_DIR/bin/opensearch-keystore" list >/dev/null 2>&1; then
+if OPENSEARCH_JAVA_OPTS="${KEYSTORE_JAVA_OPTS}" "$PACKAGE_DIR/bin/opensearch-keystore" list >/dev/null 2>&1; then
     echo "✓ Keystore validation successful (${KEYSTORE_SIZE} bytes)"
 else
-    echo "✗ Keystore validation failed - file may be corrupted"
-    # Don't exit here, let OpenSearch try to use it
+    echo "✗ Keystore validation failed, but proceeding..."
 fi
+
 echo "FIPS keystore setup complete"
 <% else %>
 # Non-FIPS mode
