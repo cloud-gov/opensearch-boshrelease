@@ -62,27 +62,41 @@
 ################################################################
 ## FIPS Configuration with Security Plugin Support
 ################################################################
-# BouncyCastle FIPS Provider
--Dorg.bouncycastle.fips.approved_only=<%= p('opensearch.fips.strict', false) %>
+# FIPS Security Properties - MUST be first
 -Djava.security.properties=/var/vcap/jobs/opensearch/config/fips.security
 
-# Default SSL context configuration
--Djsse.enableSNIExtension=true
+# BouncyCastle FIPS Provider Configuration
+-Dorg.bouncycastle.fips.approved_only=<%= p('opensearch.fips.strict', false) %>
+
+# CRITICAL: Add FIPS JARs to classpath
+-Xbootclasspath/a:/var/vcap/data/opensearch/fips-lib/bc-fips-2.1.2.jar:/var/vcap/data/opensearch/fips-lib/bctls-fips-2.1.20.jar:/var/vcap/data/opensearch/fips-lib/bcpkix-fips-2.1.9.jar:/var/vcap/data/opensearch/fips-lib/bcutil-fips-2.1.4.jar
 
 # FIPS Trust Store Configuration  
 -Djavax.net.ssl.trustStore=/var/vcap/data/opensearch/truststore.bcfks
 -Djavax.net.ssl.trustStoreType=BCFKS
 -Djavax.net.ssl.trustStoreProvider=BCFIPS
+-Djavax.net.ssl.trustStorePassword=<%= p('opensearch.fips.keystore_password', 'changeme') %>
 
 # FIPS Key Store Configuration
 -Djavax.net.ssl.keyStore=/var/vcap/data/opensearch/keystore.bcfks
 -Djavax.net.ssl.keyStoreType=BCFKS
 -Djavax.net.ssl.keyStoreProvider=BCFIPS
+-Djavax.net.ssl.keyStorePassword=<%= p('opensearch.fips.keystore_password', 'changeme') %>
 
 # Protocol and cipher configuration
 -Dhttps.protocols=TLSv1.2,TLSv1.3
 -Djdk.tls.client.protocols=TLSv1.2,TLSv1.3
 -Djdk.tls.server.protocols=TLSv1.2,TLSv1.3
+
+# Additional FIPS compliance
+-Dcom.sun.net.ssl.checkRevocation=false
+-Dcom.redhat.fips=false
+-Djsse.enableSNIExtension=true
+
+<% if p("opensearch.fips.debug", false) %>
+# FIPS Debug logging
+-Djava.security.debug=provider,engine,keymanager,trustmanager
+<% end %>
 
 <% end %>
 

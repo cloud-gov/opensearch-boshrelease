@@ -1,6 +1,6 @@
 #!/bin/bash
-set -e # exit immediately if a simple command exits with a non-zero status
-set -u # report the usage of uninitialized variables
+set -e
+set -u
 
 export JOB_NAME=opensearch
 export PORT=${PORT:-5000}
@@ -20,14 +20,13 @@ export <%= k %>=<%= v %>
 <% end %>
 
 <% if p("opensearch.fips.enabled", false) %>
-echo "Configuring FIPS mode for OpenSearch startup..."
+echo "Starting OpenSearch in FIPS mode..."
 
+# Verify required FIPS files exist
 FIPS_LIB_DIR="/var/vcap/data/opensearch/fips-lib"
 BCFKS_TRUSTSTORE="/var/vcap/data/opensearch/truststore.bcfks"
 BCFKS_KEYSTORE="/var/vcap/data/opensearch/keystore.bcfks"
-KEYSTORE_PASS_FILE="${OPENSEARCH_PATH_CONF}/.keystore.pass"
 
-# Verify FIPS files exist
 if [ ! -f "${BCFKS_TRUSTSTORE}" ]; then
   echo "ERROR: BCFKS truststore not found at ${BCFKS_TRUSTSTORE}"
   exit 1
@@ -39,26 +38,23 @@ if [ ! -f "${BCFKS_KEYSTORE}" ]; then
 fi
 
 if [ ! -f "${OPENSEARCH_PATH_CONF}/fips.security" ]; then
-  echo "ERROR: FIPS security properties not found at ${OPENSEARCH_PATH_CONF}/fips.security"
+  echo "ERROR: FIPS security properties not found"
   exit 1
 fi
 
-# Build FIPS classpath
-FIPS_CP=""
+# Verify FIPS JARs exist
 for jar in bc-fips bctls-fips bcpkix-fips bcutil-fips; do
-  src=$(ls ${FIPS_LIB_DIR}/${jar}-*.jar 2>/dev/null | head -n1)
-  if [ -n "$src" ]; then
-    FIPS_CP="${FIPS_CP}:${src}"
+  if ! ls ${FIPS_LIB_DIR}/${jar}-*.jar 1>/dev/null 2>&1; then
+    echo "ERROR: FIPS JAR ${jar} not found in ${FIPS_LIB_DIR}"
+    exit 1
   fi
 done
-FIPS_CP="${FIPS_CP#:}"
 
-if [ -z "$FIPS_CP" ]; then
-  echo "ERROR: No FIPS JARs found in ${FIPS_LIB_DIR}"
-  exit 1
-fi
+echo "✓ All FIPS files validated"
+export OPENSEARCH_FIPS_MODE=true
 
-echo "FIPS classpath: ${FIPS_CP}"
+<% else %>
+echo "Starting OpenSearch in standard mode..."
 <% end %>
 
 # Set heap size
@@ -67,65 +63,8 @@ export HEAP_SIZE=$((( $( cat /proc/meminfo | grep MemTotal | awk '{ print $2 }' 
 HEAP_SIZE=<%= heap_size %>
 <% end %>
 
-# Base OPENSEARCH_JAVA_OPTS
-export OPENSEARCH_JAVA_OPTS="-Xms$HEAP_SIZE -Xmx$HEAP_SIZE -Djava.io.tmpdir=/var/vcap/data/opensearch/"
-
-<% if p("opensearch.fips.enabled", false) %>
-# CRITICAL: Add FIPS configuration to OPENSEARCH_JAVA_OPTS
-export OPENSEARCH_KEYSTORE_PASSWORD="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
-
-# Add FIPS JARs to classpath - CRITICAL for provider availability
-export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -cp ${FIPS_CP}"
-
-# Set FIPS security properties - MUST be loaded before providers
-export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security"
-
-# Enable native access for BouncyCastle FIPS
-export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS --enable-native-access=ALL-UNNAMED"
-
-# FIPS provider configuration
-export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Dorg.bouncycastle.fips.approved_only=true"
-
-# Set keystore/truststore types
-export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djavax.net.ssl.keyStoreType=BCFKS"
-export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djavax.net.ssl.trustStoreType=BCFKS"
-
-# Point to actual FIPS keystores
-export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djavax.net.ssl.trustStore=${BCFKS_TRUSTSTORE}"
-export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djavax.net.ssl.keyStore=${BCFKS_KEYSTORE}"
-export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djavax.net.ssl.trustStorePassword=${OPENSEARCH_KEYSTORE_PASSWORD}"
-export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djavax.net.ssl.keyStorePassword=${OPENSEARCH_KEYSTORE_PASSWORD}"
-
-# Additional FIPS compliance flags
-export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Dcom.sun.net.ssl.checkRevocation=false"
-export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Dcom.redhat.fips=false"
-
-<% if p("opensearch.fips.debug", false) %>
-export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djava.security.debug=provider,engine,keymanager,trustmanager"
-<% end %>
-
-echo "FIPS mode enabled for OpenSearch runtime"
-echo "Final OPENSEARCH_JAVA_OPTS: ${OPENSEARCH_JAVA_OPTS}"
-
-# Test FIPS provider availability before starting OpenSearch
-echo "Testing FIPS provider availability..."
-${JAVA_HOME}/bin/java \
-    --enable-native-access=ALL-UNNAMED \
-    -Djava.io.tmpdir=/var/vcap/data/opensearch/ \
-    -Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security \
-    -cp "${FIPS_CP}" \
-    -c 'try { 
-        Class.forName("org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider").getDeclaredConstructor().newInstance(); 
-        System.out.println("✓ FIPS provider test passed"); 
-    } catch(Exception e) { 
-        System.out.println("✗ FIPS provider test failed: " + e.getMessage()); 
-        System.exit(1); 
-    }' || {
-    echo "ERROR: FIPS provider test failed - OpenSearch will not start properly"
-    exit 1
-}
-
-<% end %>
+# Set basic JVM options (FIPS options are in jvm.options file)
+export OPENSEARCH_JAVA_OPTS="-Xms$HEAP_SIZE -Xmx$HEAP_SIZE"
 
 # Set system limits
 export MAX_OPEN_FILES=<%= p("opensearch.limits.fd") %>
@@ -138,9 +77,9 @@ if [ -n "$MAX_LOCKED_MEMORY" ]; then
   ulimit -l $MAX_LOCKED_MEMORY
 fi
 
-# TLS Certificate Key Conversion - PKCS8 keys are required for OpenSearch TLS
+# TLS Certificate Key Conversion
 <% if p("opensearch.fips.enabled", false) %>
-# FIPS Mode: Convert keys to PKCS8 using FIPS-compliant algorithms
+# FIPS Mode: Convert keys to PKCS8
 <% if_p('opensearch.admin.private_key') do %>
 openssl pkcs8 -topk8 \
   -in "${JOB_DIR}/config/ssl/opensearch-admin.pem" \
@@ -166,7 +105,7 @@ chmod 600 ${JOB_DIR}/config/ssl/opensearch-http.key
 <% end %>
 
 <% else %>
-# Non-FIPS Mode: Use legacy PBE-SHA1-3DES for PKCS8 conversion
+# Non-FIPS Mode
 <% if_p('opensearch.admin.private_key') do %>
 openssl pkcs8 -v1 "PBE-SHA1-3DES" \
   -in "${JOB_DIR}/config/ssl/opensearch-admin.pem" -topk8 \
@@ -189,14 +128,4 @@ chmod 600 ${JOB_DIR}/config/ssl/opensearch*.key
 <% end %>
 
 # Start OpenSearch
-<% if p("opensearch.fips.enabled", false) %>
-export OPENSEARCH_FIPS_MODE=true
-echo "Starting OpenSearch in FIPS mode..."
-echo "  BCFKS Keystore Type: enabled"
-echo "  FIPS Approved Only: true"
-echo "  Truststore: ${BCFKS_TRUSTSTORE}"
-echo "  Keystore: ${BCFKS_KEYSTORE}"
-<% end %>
-
-# Start OpenSearch with configured environment
 ${OPENSEARCH_HOME}/bin/opensearch <%= p("opensearch.exec.options", []).join(' ') %>
