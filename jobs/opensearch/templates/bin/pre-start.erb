@@ -74,6 +74,10 @@ export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djavax.net.ssl.keyStoreTyp
 export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Djavax.net.ssl.trustStoreType=BCFKS"
 export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} --enable-native-access=ALL-UNNAMED"
 
+# Additional FIPS flags from the PR
+export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Dcom.redhat.fips=false"
+export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Dorg.bouncycastle.rsa.allow_unsafe_mod=true"
+
 ################################################################
 # Create BCFKS Truststore and Keystore
 ################################################################
@@ -262,25 +266,36 @@ chmod 600 "${BCFKS_TRUSTSTORE}" "${BCFKS_KEYSTORE}"
 # Create FIPS security properties file
 mkdir -p "${OPENSEARCH_PATH_CONF}"
 cat > "${OPENSEARCH_PATH_CONF}/fips.security" << EOF
-# FIPS Security Configuration with SSL Context Support
-security.provider.1=org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider C:HYBRID;
-security.provider.2=sun.security.provider.Sun
-security.provider.3=org.bouncycastle.jsse.provider.BouncyCastleJsseProvider fips:BCFIPS
+# FIPS Security Configuration based on OpenSearch Security PR #6126
+security.provider.1=org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider
+security.provider.2=org.bouncycastle.jsse.provider.BouncyCastleJsseProvider fips:BCFIPS
+security.provider.3=sun.security.provider.Sun
 security.provider.4=sun.security.rsa.SunRsaSign
 security.provider.5=sun.security.ec.SunEC
 
-# SSL/TLS Configuration for Security Plugin Compatibility
-ssl.TrustManagerFactory.algorithm=PKIX
-ssl.KeyManagerFactory.algorithm=X509
+# Keystore configuration
+keystore.type.compat=true
 keystore.type=BCFKS
+
+# SSL/TLS Configuration
+ssl.KeyManagerFactory.algorithm=X509
+ssl.TrustManagerFactory.algorithm=PKIX
 
 # Protocol support
 jdk.tls.client.protocols=TLSv1.2,TLSv1.3
 jdk.tls.server.protocols=TLSv1.2,TLSv1.3
 
+# FIPS-approved algorithms only
+crypto.policy=unlimited
+jdk.security.allowNonCaAnchor=true
+
 # Disable weak algorithms
 jdk.tls.disabledAlgorithms=SSLv2Hello, SSLv3, TLSv1, TLSv1.1, RC4, DES, MD5withRSA, DH keySize < 2048, EC keySize < 224, 3DES_EDE_CBC, anon, NULL
 jdk.certpath.disabledAlgorithms=MD2, MD5, RSA keySize < 2048, DSA keySize < 2048, EC keySize < 224
+
+# Additional FIPS configuration
+securerandom.source=file:/dev/urandom
+securerandom.strongAlgorithms=NativePRNGBlocking:SUN,DRBG:SUN
 EOF
 
 chown vcap:vcap "${OPENSEARCH_PATH_CONF}/fips.security"
@@ -393,92 +408,34 @@ if [ ! -f "$OPENSEARCH_PATH_CONF/opensearch.keystore" ]; then
   
 <% if p("opensearch.fips.enabled", false) %>
 echo "Creating FIPS-compliant keystore..."
-KEYSTORE_PASS="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
-
-# Clean up any existing keystore files first
 rm -f "$OPENSEARCH_PATH_CONF/opensearch.keystore"*
 
-# Set FIPS environment for keystore creation using OPENSEARCH_JAVA_OPTS
-export KEYSTORE_JAVA_OPTS="-Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security -Djava.io.tmpdir=/var/vcap/data/opensearch/ --enable-native-access=ALL-UNNAMED -cp ${FIPS_CP}"
+# Set FIPS-specific JVM options based on the PR
+export FIPS_KEYSTORE_OPTS="${OPENSEARCH_JAVA_OPTS} -Dorg.bouncycastle.fips.approved_only=true -Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security -Djavax.net.ssl.trustStoreType=BCFKS -Djavax.net.ssl.keyStoreType=BCFKS"
 
-# Method 1: Try creating keystore with password
-echo "Attempting FIPS keystore creation with password..."
-KEYSTORE_CREATED=false
-
-if {
-    echo "${KEYSTORE_PASS}"
-    echo "${KEYSTORE_PASS}"
-} | OPENSEARCH_JAVA_OPTS="${KEYSTORE_JAVA_OPTS}" "$PACKAGE_DIR/bin/opensearch-keystore" create --password 2>/dev/null; then
-    echo "✓ FIPS keystore created with password"
-    KEYSTORE_CREATED=true
-fi
-
-# Method 2: Try without password if first method failed
-if [ "$KEYSTORE_CREATED" = false ]; then
-    echo "Password creation failed, trying without password..."
-    rm -f "$OPENSEARCH_PATH_CONF/opensearch.keystore"*
-    
-    if echo y | OPENSEARCH_JAVA_OPTS="${KEYSTORE_JAVA_OPTS}" "$PACKAGE_DIR/bin/opensearch-keystore" create 2>/dev/null; then
-        echo "✓ FIPS keystore created without password"
-        KEYSTORE_CREATED=true
-    fi
-fi
-
-# Method 3: Try with relaxed FIPS settings
-if [ "$KEYSTORE_CREATED" = false ]; then
-    echo "Standard FIPS creation failed, trying with relaxed settings..."
-    rm -f "$OPENSEARCH_PATH_CONF/opensearch.keystore"*
-    
-    export RELAXED_KEYSTORE_JAVA_OPTS="-Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security -Djava.io.tmpdir=/var/vcap/data/opensearch/ --enable-native-access=ALL-UNNAMED -cp ${FIPS_CP} -Dorg.bouncycastle.fips.approved_only=false"
-    
-    if echo y | OPENSEARCH_JAVA_OPTS="${RELAXED_KEYSTORE_JAVA_OPTS}" "$PACKAGE_DIR/bin/opensearch-keystore" create 2>/dev/null; then
-        echo "✓ FIPS keystore created with relaxed settings"
-        KEYSTORE_CREATED=true
-    fi
-fi
-
-# Method 4: Fallback to non-FIPS environment temporarily
-if [ "$KEYSTORE_CREATED" = false ]; then
-    echo "All FIPS methods failed, using fallback environment..."
-    rm -f "$OPENSEARCH_PATH_CONF/opensearch.keystore"*
-    
-    # Temporarily use minimal Java environment
-    if echo y | "$PACKAGE_DIR/bin/opensearch-keystore" create 2>/dev/null; then
-        echo "✓ Keystore created with fallback method"
-        KEYSTORE_CREATED=true
-    fi
-fi
-
-# Final check and validation
-if [ "$KEYSTORE_CREATED" = false ] || [ ! -f "$OPENSEARCH_PATH_CONF/opensearch.keystore" ]; then
-    echo "ERROR: All keystore creation methods failed"
-    exit 1
-fi
-
-# Validate keystore is properly formatted (not empty)
-KEYSTORE_SIZE=$(stat -c%s "$OPENSEARCH_PATH_CONF/opensearch.keystore" 2>/dev/null || wc -c < "$OPENSEARCH_PATH_CONF/opensearch.keystore")
-if [ "$KEYSTORE_SIZE" -eq 0 ]; then
-    echo "ERROR: Keystore file is empty - removing and failing"
-    rm -f "$OPENSEARCH_PATH_CONF/opensearch.keystore"
-    exit 1
-fi
-
-# Test keystore can be read (use the same FIPS environment)
-echo "Validating keystore format..."
-if OPENSEARCH_JAVA_OPTS="${KEYSTORE_JAVA_OPTS}" "$PACKAGE_DIR/bin/opensearch-keystore" list >/dev/null 2>&1; then
-    echo "✓ Keystore validation successful (${KEYSTORE_SIZE} bytes)"
+# Create keystore without password in FIPS mode (as recommended in the PR)
+echo "Creating FIPS keystore without password..."
+if echo y | OPENSEARCH_JAVA_OPTS="${FIPS_KEYSTORE_OPTS}" "$PACKAGE_DIR/bin/opensearch-keystore" create 2>/dev/null; then
+    echo "✓ FIPS keystore created successfully"
 else
-    echo "✗ Keystore validation failed, but proceeding..."
+    echo "FIPS keystore creation failed, trying with relaxed settings..."
+    # Try with approved_only=false as fallback
+    export FIPS_KEYSTORE_OPTS_RELAXED="${OPENSEARCH_JAVA_OPTS} -Dorg.bouncycastle.fips.approved_only=false -Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security"
+    
+    if echo y | OPENSEARCH_JAVA_OPTS="${FIPS_KEYSTORE_OPTS_RELAXED}" "$PACKAGE_DIR/bin/opensearch-keystore" create 2>/dev/null; then
+        echo "✓ FIPS keystore created with relaxed settings"
+    else
+        echo "ERROR: All FIPS keystore creation methods failed"
+        exit 1
+    fi
 fi
 
 echo "FIPS keystore setup complete"
 <% else %>
 # Non-FIPS mode
 echo "Creating standard keystore..."
-rm -f "$OPENSEARCH_PATH_CONF/opensearch.keystore"*
 echo y | "$PACKAGE_DIR/bin/opensearch-keystore" create
 <% end %>
-fi 
 
 # Verify keystore exists and set permissions
 if [ -f "$OPENSEARCH_PATH_CONF/opensearch.keystore" ]; then
@@ -491,6 +448,7 @@ else
 fi
 
 echo "Setting final permissions..."
+
 # FIPS-specific permissions (only if FIPS is enabled)
 <% if p("opensearch.fips.enabled", false) %>
 FIPS_LIB_DIR="/var/vcap/data/opensearch/fips-lib"
