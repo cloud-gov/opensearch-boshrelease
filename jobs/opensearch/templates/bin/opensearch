@@ -14,6 +14,7 @@ export JAVA_HOME="/var/vcap/packages/opensearch/jdk"
 export PATH="${JAVA_HOME}/bin:${PATH}"
 export OPENSEARCH_HOME=/var/vcap/packages/opensearch
 export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
+export KEYSTORE_PASSWORD=<%= p('opensearch.fips.keystore_password', 'changeme') %>
 
 <% p("opensearch.exec.environment", {}).each do |k, v| %>
 export <%= k %>=<%= v %>
