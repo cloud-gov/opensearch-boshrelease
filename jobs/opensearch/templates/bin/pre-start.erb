@@ -405,7 +405,8 @@ if [ ! -f "$OPENSEARCH_PATH_CONF/opensearch.keystore" ]; then
   # Clean up any temporary files from previous attempts
   rm -f "$OPENSEARCH_PATH_CONF/opensearch.keystore.tmp"
   rm -f "$OPENSEARCH_PATH_CONF/opensearch.keystore.tmp.*"
-  
+fi 
+
 <% if p("opensearch.fips.enabled", false) %>
 echo "Creating FIPS-compliant keystore..."
 rm -f "$OPENSEARCH_PATH_CONF/opensearch.keystore"*
