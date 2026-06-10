@@ -411,24 +411,58 @@ fi
 echo "Creating FIPS-compliant keystore..."
 rm -f "$OPENSEARCH_PATH_CONF/opensearch.keystore"*
 
-# Set FIPS-specific JVM options based on the PR
-export FIPS_KEYSTORE_OPTS="${OPENSEARCH_JAVA_OPTS} -Dorg.bouncycastle.fips.approved_only=true -Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security -Djavax.net.ssl.trustStoreType=BCFKS -Djavax.net.ssl.keyStoreType=BCFKS"
+# FIPS requires passwords to be at least 112 bits (14 characters)
+KEYSTORE_PASS="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
+FIPS_MIN_PASSWORD="changeme123456"  # 14+ characters for FIPS compliance
 
-# Create keystore without password in FIPS mode (as recommended in the PR)
-echo "Creating FIPS keystore without password..."
-if echo y | OPENSEARCH_JAVA_OPTS="${FIPS_KEYSTORE_OPTS}" "$PACKAGE_DIR/bin/opensearch-keystore" create 2>/dev/null; then
-    echo "✓ FIPS keystore created successfully"
-else
-    echo "FIPS keystore creation failed, trying with relaxed settings..."
-    # Try with approved_only=false as fallback
-    export FIPS_KEYSTORE_OPTS_RELAXED="${OPENSEARCH_JAVA_OPTS} -Dorg.bouncycastle.fips.approved_only=false -Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security"
+# Check if provided password meets FIPS requirements (14+ characters)
+if [ ${#KEYSTORE_PASS} -lt 14 ]; then
+    echo "Warning: FIPS requires passwords of at least 14 characters, using default FIPS-compliant password"
+    KEYSTORE_PASS="${FIPS_MIN_PASSWORD}"
+fi
+
+# Set FIPS environment
+export FIPS_KEYSTORE_OPTS="${OPENSEARCH_JAVA_OPTS} -Dorg.bouncycastle.fips.approved_only=true -Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security"
+
+echo "Creating FIPS keystore with compliant password (${#KEYSTORE_PASS} characters)..."
+KEYSTORE_CREATED=false
+
+# Try with FIPS-compliant password
+if {
+    echo "${KEYSTORE_PASS}"
+    echo "${KEYSTORE_PASS}"
+} | OPENSEARCH_JAVA_OPTS="${FIPS_KEYSTORE_OPTS}" "$PACKAGE_DIR/bin/opensearch-keystore" create --password 2>/dev/null; then
+    echo "✓ FIPS keystore created with password"
+    KEYSTORE_CREATED=true
+fi
+
+# Fallback: Create without password if password creation fails
+if [ "$KEYSTORE_CREATED" = false ]; then
+    echo "Password creation failed, creating keystore without password..."
+    rm -f "$OPENSEARCH_PATH_CONF/opensearch.keystore"*
     
-    if echo y | OPENSEARCH_JAVA_OPTS="${FIPS_KEYSTORE_OPTS_RELAXED}" "$PACKAGE_DIR/bin/opensearch-keystore" create 2>/dev/null; then
-        echo "✓ FIPS keystore created with relaxed settings"
-    else
-        echo "ERROR: All FIPS keystore creation methods failed"
-        exit 1
+    if echo y | OPENSEARCH_JAVA_OPTS="${FIPS_KEYSTORE_OPTS}" "$PACKAGE_DIR/bin/opensearch-keystore" create 2>/dev/null; then
+        echo "✓ FIPS keystore created without password"
+        KEYSTORE_CREATED=true
     fi
+fi
+
+# Final fallback: Relaxed FIPS mode
+if [ "$KEYSTORE_CREATED" = false ]; then
+    echo "Trying with relaxed FIPS settings..."
+    rm -f "$OPENSEARCH_PATH_CONF/opensearch.keystore"*
+    
+    export FIPS_RELAXED_OPTS="${OPENSEARCH_JAVA_OPTS} -Dorg.bouncycastle.fips.approved_only=false -Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security"
+    
+    if echo y | OPENSEARCH_JAVA_OPTS="${FIPS_RELAXED_OPTS}" "$PACKAGE_DIR/bin/opensearch-keystore" create 2>/dev/null; then
+        echo "✓ FIPS keystore created with relaxed settings"
+        KEYSTORE_CREATED=true
+    fi
+fi
+
+if [ "$KEYSTORE_CREATED" = false ]; then
+    echo "ERROR: All FIPS keystore creation methods failed"
+    exit 1
 fi
 
 echo "FIPS keystore setup complete"
