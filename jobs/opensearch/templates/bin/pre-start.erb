@@ -146,7 +146,7 @@ else
     echo "BCFKS truststore already exists at ${BCFKS_TRUSTSTORE}"
 fi
 
- Import custom CA certificates if provided
+# import custom CA certificates if provided
 <% if_p('opensearch.fips.ca_certificate') do |ca_cert| %>
 echo "Importing custom CA certificate into BCFKS truststore..."
 CA_CERT_FILE="${OPENSEARCH_PATH_CONF}/ssl/fips-ca.pem"
@@ -391,7 +391,7 @@ if [ ! -f "$OPENSEARCH_PATH_CONF/opensearch.keystore" ]; then
   # Clean up any temporary files from previous attempts
   rm -f "$OPENSEARCH_PATH_CONF/opensearch.keystore.tmp"
   rm -f "$OPENSEARCH_PATH_CONF/opensearch.keystore.tmp.*"
-  
+
 <% if p("opensearch.fips.enabled", false) %>
 echo "Creating FIPS-compliant keystore..."
 KEYSTORE_PASS="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
