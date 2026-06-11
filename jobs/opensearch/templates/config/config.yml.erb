@@ -32,16 +32,16 @@ plugins.security.ssl.http.enabled: true
 
 # Use FIPS keystores instead of PEM files
 plugins.security.ssl.transport.keystore_type: BCFKS
-plugins.security.ssl.transport.keystore_filepath: /var/vcap/data/opensearch/keystore.bcfks
+plugins.security.ssl.transport.keystore_filepath: /var/vcap/jobs/opensearch/config/keystore.bcfks
 plugins.security.ssl.transport.keystore_alias: opensearch-node
 plugins.security.ssl.transport.truststore_type: BCFKS
-plugins.security.ssl.transport.truststore_filepath: /var/vcap/data/opensearch/truststore.bcfks
+plugins.security.ssl.transport.truststore_filepath: /var/vcap/jobs/opensearch/config/truststore.bcfks
 
 plugins.security.ssl.http.keystore_type: BCFKS
-plugins.security.ssl.http.keystore_filepath: /var/vcap/data/opensearch/keystore.bcfks
+plugins.security.ssl.http.keystore_filepath: /var/vcap/jobs/opensearch/config/keystore.bcfks
 plugins.security.ssl.http.keystore_alias: opensearch-node
 plugins.security.ssl.http.truststore_type: BCFKS
-plugins.security.ssl.http.truststore_filepath: /var/vcap/data/opensearch/truststore.bcfks
+plugins.security.ssl.http.truststore_filepath: /var/vcap/jobs/opensearch/config/truststore.bcfks
 
 # FIPS-compatible protocols
 plugins.security.ssl.transport.enabled_protocols: ["TLSv1.2", "TLSv1.3"]

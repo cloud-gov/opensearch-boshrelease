@@ -72,13 +72,13 @@
 -Xbootclasspath/a:/var/vcap/data/opensearch/fips-lib/bc-fips-2.1.2.jar:/var/vcap/data/opensearch/fips-lib/bctls-fips-2.1.20.jar:/var/vcap/data/opensearch/fips-lib/bcpkix-fips-2.1.9.jar:/var/vcap/data/opensearch/fips-lib/bcutil-fips-2.1.4.jar
 
 # FIPS Trust Store Configuration  
--Djavax.net.ssl.trustStore=/var/vcap/data/opensearch/truststore.bcfks
+-Djavax.net.ssl.trustStore=/var/vcap/jobs/opensearch/config/truststore.bcfks
 -Djavax.net.ssl.trustStoreType=BCFKS
 -Djavax.net.ssl.trustStoreProvider=BCFIPS
 -Djavax.net.ssl.trustStorePassword=<%= p('opensearch.fips.keystore_password', 'changeme') %>
 
 # FIPS Key Store Configuration
--Djavax.net.ssl.keyStore=/var/vcap/data/opensearch/keystore.bcfks
+-Djavax.net.ssl.keyStore=/var/vcap/jobs/opensearch/config/keystore.bcfks
 -Djavax.net.ssl.keyStoreType=BCFKS
 -Djavax.net.ssl.keyStoreProvider=BCFIPS
 -Djavax.net.ssl.keyStorePassword=<%= p('opensearch.fips.keystore_password', 'changeme') %>
