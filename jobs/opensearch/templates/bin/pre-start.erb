@@ -82,8 +82,8 @@ export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Dorg.bouncycastle.rsa.allo
 # Create BCFKS Truststore and Keystore
 ################################################################
 FIPS_KEYSTORE_PASS="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
-BCFKS_TRUSTSTORE="/var/vcap/data/opensearch/truststore.bcfks"
-BCFKS_KEYSTORE="/var/vcap/data/opensearch/keystore.bcfks"
+BCFKS_TRUSTSTORE="${OPENSEARCH_PATH_CONF}/truststore.bcfks"
+BCFKS_KEYSTORE="${OPENSEARCH_PATH_CONF}/keystore.bcfks"
 
 # Path to CA certificates to import
 CA_CERTS_SOURCE="${JAVA_HOME}/lib/security/cacerts"

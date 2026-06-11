@@ -25,8 +25,8 @@ echo "Starting OpenSearch in FIPS mode..."
 
 # Verify required FIPS files exist
 FIPS_LIB_DIR="/var/vcap/data/opensearch/fips-lib"
-BCFKS_TRUSTSTORE="/var/vcap/data/opensearch/truststore.bcfks"
-BCFKS_KEYSTORE="/var/vcap/data/opensearch/keystore.bcfks"
+BCFKS_TRUSTSTORE="${OPENSEARCH_PATH_CONF}/truststore.bcfks"
+BCFKS_KEYSTORE="${OPENSEARCH_PATH_CONF}/keystore.bcfks"
 
 if [ ! -f "${BCFKS_TRUSTSTORE}" ]; then
   echo "ERROR: BCFKS truststore not found at ${BCFKS_TRUSTSTORE}"
@@ -65,7 +65,14 @@ HEAP_SIZE=<%= heap_size %>
 <% end %>
 
 # Set basic JVM options (FIPS options are in jvm.options file)
-export OPENSEARCH_JAVA_OPTS="-Xms$HEAP_SIZE -Xmx$HEAP_SIZE"
+export OPENSEARCH_JAVA_OPTS="-Xms$HEAP_SIZE -Xmx$HEAP_SIZE \
+                             -Dorg.bouncycastle.fips.approved_only=true \
+                             -Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security \
+                             -Djavax.net.ssl.keyStoreType=BCFKS \
+                             -Djavax.net.ssl.trustStoreType=BCFKS \
+                             -XX:-UsePerfData \
+                             -Dnet.bytebuddy.agent.disabled=true \
+                             -Djava.io.tmpdir=$TMP_DIR"
 
 # Set system limits
 export MAX_OPEN_FILES=<%= p("opensearch.limits.fd") %>
