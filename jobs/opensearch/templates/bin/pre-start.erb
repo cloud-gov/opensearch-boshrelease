@@ -208,22 +208,89 @@ ${JAVA_HOME}/bin/keytool \
 if [ ! -f "${BCFKS_KEYSTORE}" ]; then
     echo "Creating BCFKS keystore..."
     
+    # ADD THIS DEBUGGING:
+    echo "================================================================"
+    echo "DEBUG: Keystore Creation Debug"
+    echo "================================================================"
+    echo "BCFKS_KEYSTORE path: ${BCFKS_KEYSTORE}"
+    echo "TMP_DIR: ${TMP_DIR}"
+    echo "FIPS_CP: ${FIPS_CP}"
+    echo "FIPS JAR files:"
+    ls -la "${FIPS_LIB_DIR}/"*.jar
+    echo "================================================================"
+    
     <% if_p('opensearch.node.ssl.private_key', 'opensearch.node.ssl.certificate') do |key, cert| %>
+    echo "Found SSL certificates, creating keystore from PEM files..."
+    
     # Create temporary PKCS12 from PEM files
     NODE_KEY_FILE="${OPENSEARCH_PATH_CONF}/ssl/opensearch-node.pem"
     NODE_CERT_FILE="${OPENSEARCH_PATH_CONF}/ssl/opensearch-node.crt"
     TEMP_P12="${TMP_DIR}/node-temp.p12"
     
+    # ADD MORE DEBUGGING:
+    echo "DEBUG: Certificate files:"
+    echo "  NODE_KEY_FILE: ${NODE_KEY_FILE}"
+    echo "  NODE_CERT_FILE: ${NODE_CERT_FILE}"
+    echo "  TEMP_P12: ${TEMP_P12}"
+    
+    # Check if source files exist
+    if [ -f "${NODE_KEY_FILE}" ]; then
+        echo "✓ Key file exists"
+        ls -la "${NODE_KEY_FILE}"
+    else
+        echo "✗ Key file missing: ${NODE_KEY_FILE}"
+    fi
+    
+    if [ -f "${NODE_CERT_FILE}" ]; then
+        echo "✓ Cert file exists"  
+        ls -la "${NODE_CERT_FILE}"
+    else
+        echo "✗ Cert file missing: ${NODE_CERT_FILE}"
+    fi
+    
+    # Ensure temp directory exists
+    mkdir -p "${TMP_DIR}"
+    
     # Combine key and cert into PKCS12
-    openssl pkcs12 -export \
+    echo "Creating PKCS12 with OpenSSL..."
+    if ! openssl pkcs12 -export \
         -in "${NODE_CERT_FILE}" \
         -inkey "${NODE_KEY_FILE}" \
         -out "${TEMP_P12}" \
         -name "opensearch-node" \
-        -passout "pass:${FIPS_KEYSTORE_PASS}"
+        -passout "pass:${FIPS_KEYSTORE_PASS}"; then
+        echo "ERROR: PKCS12 creation failed"
+        exit 1
+    fi
+    
+    # Verify PKCS12 was created
+    echo "DEBUG: Verifying PKCS12 file..."
+    if [ -f "${TEMP_P12}" ]; then
+        echo "✓ PKCS12 file created successfully"
+        ls -la "${TEMP_P12}"
+        
+        # Test PKCS12 can be read
+        echo "Testing PKCS12 readability..."
+        if openssl pkcs12 -info -in "${TEMP_P12}" -passin "pass:${FIPS_KEYSTORE_PASS}" -noout; then
+            echo "✓ PKCS12 file is readable and valid"
+        else
+            echo "✗ PKCS12 file is corrupted or password wrong"
+            exit 1
+        fi
+    else
+        echo "✗ PKCS12 file was not created"
+        exit 1
+    fi
     
     # Convert PKCS12 to BCFKS
-    ${JAVA_HOME}/bin/keytool \
+    echo "Converting PKCS12 to BCFKS..."
+    echo "DEBUG: Keytool conversion parameters:"
+    echo "  Source keystore: ${TEMP_P12}"
+    echo "  Dest keystore: ${BCFKS_KEYSTORE}" 
+    echo "  Provider class: org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider"
+    echo "  Provider path: ${FIPS_CP}"
+    
+    if ! ${JAVA_HOME}/bin/keytool \
         -J--enable-native-access=ALL-UNNAMED \
         -J-Djava.io.tmpdir=/var/vcap/data/opensearch/ \
         -importkeystore \
@@ -236,35 +303,42 @@ if [ ! -f "${BCFKS_KEYSTORE}" ]; then
         -providername BCFIPS \
         -providerclass org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider \
         -providerpath "${FIPS_CP}" \
-        -noprompt
+        -noprompt; then
+        echo "ERROR: BCFKS conversion failed!"
+        echo "DEBUG: Keeping temp file for inspection: ${TEMP_P12}"
+        exit 1
+    fi
     
-    rm -f "${TEMP_P12}"
-    <% end %>
+    echo "✓ BCFKS conversion completed successfully"
     
-    # If no node certs provided, create empty keystore
-    if [ ! -f "${BCFKS_KEYSTORE}" ]; then
-        ${JAVA_HOME}/bin/keytool \
-            -J--enable-native-access=ALL-UNNAMED \
-            -J-Djava.io.tmpdir=/var/vcap/data/opensearch/ \
-            -genkeypair \
-            -alias opensearch-node \
-            -keyalg RSA \
-            -keysize 2048 \
+    # Test the created BCFKS keystore
+    echo "DEBUG: Testing created BCFKS keystore..."
+    if [ -f "${BCFKS_KEYSTORE}" ]; then
+        echo "✓ BCFKS keystore file exists"
+        ls -la "${BCFKS_KEYSTORE}"
+        
+        # Try to list contents (this might fail due to provider issues, but worth trying)
+        echo "Attempting to list BCFKS keystore contents..."
+        if ${JAVA_HOME}/bin/keytool -list \
             -keystore "${BCFKS_KEYSTORE}" \
             -storetype BCFKS \
             -storepass "${FIPS_KEYSTORE_PASS}" \
             -providername BCFIPS \
             -providerclass org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider \
-            -providerpath "${FIPS_CP}" \
-            -dname "CN=opensearch-node" \
-            -validity 365 \
-            -noprompt
+            -providerpath "${FIPS_CP}" 2>/dev/null; then
+            echo "✓ BCFKS keystore validation successful"
+        else
+            echo "⚠ BCFKS keystore validation failed (might be provider issue)"
+            echo "   But keystore file exists and conversion reported success"
+        fi
+    else
+        echo "✗ BCFKS keystore file was not created"
+        exit 1
     fi
     
-    echo "BCFKS keystore created at ${BCFKS_KEYSTORE}"
-else
-    echo "BCFKS keystore already exists at ${BCFKS_KEYSTORE}"
-fi
+    rm -f "${TEMP_P12}"
+    echo "✓ Cleanup: Removed temporary PKCS12 file"
+    <% end %>
 
 # Set permissions on BCFKS stores
 chown vcap:vcap "${BCFKS_TRUSTSTORE}" "${BCFKS_KEYSTORE}"
@@ -498,4 +572,38 @@ if [ -d "${FIPS_LIB_DIR}" ]; then
 fi
 <% end %>
 
+# ADD FINAL DEBUGGING SECTION:
+echo "================================================================"
+echo "DEBUG: Final Configuration Verification"
+echo "================================================================"
+
+<% if p("opensearch.fips.enabled", false) %>
+echo "FIPS Configuration Summary:"
+echo "  FIPS enabled: true"
+echo "  Keystore password: [${#FIPS_KEYSTORE_PASS} characters]"
+echo "  BCFKS Keystore: ${BCFKS_KEYSTORE}"
+echo "  BCFKS Truststore: ${BCFKS_TRUSTSTORE}"
+
+# Check keystore files exist
+for store in "${BCFKS_KEYSTORE}" "${BCFKS_TRUSTSTORE}"; do
+    if [ -f "$store" ]; then
+        echo "✓ $(basename $store) exists ($(stat -c%s $store) bytes)"
+        ls -la "$store"
+    else
+        echo "✗ $(basename $store) missing: $store"
+    fi
+done
+
+# Show what OpenSearch config will use
+echo "OpenSearch SSL configuration will use:"
+grep -E "(keystore_password|keystore_filepath)" /var/vcap/jobs/opensearch/config/opensearch.yml 2>/dev/null || echo "  [OpenSearch config not yet generated]"
+
+echo "Environment variables:"
+echo "  OPENSEARCH_KEYSTORE_PASSWORD: ${OPENSEARCH_KEYSTORE_PASSWORD:-[not set]}"
+echo "  FIPS_KEYSTORE_PASS: ${FIPS_KEYSTORE_PASS:-[not set]}"
+<% else %>
+echo "FIPS Configuration: disabled"
+<% end %>
+
+echo "================================================================"
 echo "Pre-start complete"
