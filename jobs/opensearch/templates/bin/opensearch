@@ -52,6 +52,103 @@ for jar in bc-fips bctls-fips bcpkix-fips bcutil-fips; do
 done
 
 echo "✓ All FIPS files validated"
+
+
+x--
+
+public class keystore_test {
+    public static void main(String[] args) {
+        try {
+            String keystoreFile = args[0];
+            String keystorePass = args[1];
+            String keystoreType = args[2];
+            
+            System.out.println("Testing keystore: " + keystoreFile);
+            System.out.println("Password length: " + keystorePass.length());
+            System.out.println("Keystore type: " + keystoreType);
+            
+            // Load the keystore
+            KeyStore ks = KeyStore.getInstance(keystoreType);
+            FileInputStream fis = new FileInputStream(keystoreFile);
+            ks.load(fis, keystorePass.toCharArray());
+            fis.close();
+            
+            System.out.println("✓ Java KeyStore.load() successful");
+            System.out.println("✓ Aliases in keystore:");
+            java.util.Enumeration<String> aliases = ks.aliases();
+            while (aliases.hasMoreElements()) {
+                String alias = aliases.nextElement();
+                System.out.println("  - " + alias);
+            }
+            
+        } catch (Exception e) {
+            System.out.println("✗ Java KeyStore.load() failed: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+}
+EOF
+
+# Compile and run the test
+if ${JAVA_HOME}/bin/javac -cp "${FIPS_CP}" /tmp/keystore_test.java 2>/dev/null; then
+    echo "Running Java keystore test..."
+    ${JAVA_HOME}/bin/java \
+        -cp "${FIPS_CP}:/tmp" \
+        -Dorg.bouncycastle.fips.approved_only=false \
+        -Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security \
+        --enable-native-access=ALL-UNNAMED \
+        keystore_test "${BCFKS_KEYSTORE}" "${KEYSTORE_PASSWORD}" "BCFKS" 2>&1
+else
+    echo "Could not compile Java test"
+fi
+
+# Test 3: Check what OpenSearch configuration will actually use
+echo "Test 3: OpenSearch configuration verification..."
+echo "OpenSearch config file keystore settings:"
+grep -E "(keystore_password|keystore_filepath|keystore_alias)" "${OPENSEARCH_PATH_CONF}/opensearch.yml" || echo "  No keystore config found"
+
+echo "Environment variables OpenSearch will see:"
+echo "  KEYSTORE_PASSWORD: ${KEYSTORE_PASSWORD:-[not set]}"
+echo "  OPENSEARCH_PATH_CONF: ${OPENSEARCH_PATH_CONF}"
+
+# Test 4: Different password attempts
+echo "Test 4: Testing alternative passwords..."
+
+# Try with empty password
+echo "Testing with empty password..."
+if ${JAVA_HOME}/bin/keytool -list \
+    -keystore "${BCFKS_KEYSTORE}" \
+    -storetype BCFKS \
+    -storepass "" \
+    -providername BCFIPS \
+    -providerclass org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider \
+    -providerpath "${FIPS_CP}" 2>/dev/null; then
+    echo "✓ Empty password works!"
+    echo "  ERROR: Keystore was created with empty password but OpenSearch expects: '${KEYSTORE_PASSWORD}'"
+fi
+
+# Try with 'changeme'
+echo "Testing with default 'changeme'..."
+if ${JAVA_HOME}/bin/keytool -list \
+    -keystore "${BCFKS_KEYSTORE}" \
+    -storetype BCFKS \
+    -storepass "changeme" \
+    -providername BCFIPS \
+    -providerclass org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider \
+    -providerpath "${FIPS_CP}" 2>/dev/null; then
+    echo "✓ 'changeme' password works!"
+    if [ "${KEYSTORE_PASSWORD}" != "changeme" ]; then
+        echo "  ERROR: Keystore uses 'changeme' but OpenSearch expects: '${KEYSTORE_PASSWORD}'"
+    fi
+fi
+
+# Cleanup
+rm -f /tmp/keystore_test.java /tmp/keystore_test.class
+
+echo "================================================================"
+echo "Starting OpenSearch with FIPS configuration..."
+echo "================================================================"
+
 export OPENSEARCH_FIPS_MODE=true
 
 <% else %>
@@ -134,6 +231,17 @@ openssl pkcs8 -v1 "PBE-SHA1-3DES" \
 chmod 600 ${JOB_DIR}/config/ssl/opensearch*.key
 <% end %>
 <% end %>
+
+
+# ADD FINAL DEBUG BEFORE STARTUP:
+echo "================================================================"
+echo "DEBUG: Final Startup Parameters"
+echo "================================================================"
+echo "OPENSEARCH_JAVA_OPTS: ${OPENSEARCH_JAVA_OPTS}"
+echo "KEYSTORE_PASSWORD: [${#KEYSTORE_PASSWORD} characters]"
+echo "OPENSEARCH_PATH_CONF: ${OPENSEARCH_PATH_CONF}"
+echo "Starting OpenSearch process..."
+echo "================================================================"
 
 # Start OpenSearch
 ${OPENSEARCH_HOME}/bin/opensearch <%= p("opensearch.exec.options", []).join(' ') %>
