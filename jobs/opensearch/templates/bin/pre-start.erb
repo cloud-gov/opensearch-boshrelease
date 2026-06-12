@@ -82,6 +82,12 @@ export OPENSEARCH_JAVA_OPTS="${OPENSEARCH_JAVA_OPTS} -Dorg.bouncycastle.rsa.allo
 # Create BCFKS Truststore and Keystore
 ################################################################
 FIPS_KEYSTORE_PASS="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
+if [ ${#FIPS_KEYSTORE_PASS} -lt 14 ]; then 
+  echo "WARN: Keystore password has to be at least 14 charafcters"
+  exit 1
+fi
+export FIPS_KEYSTORE_PASS
+
 BCFKS_TRUSTSTORE="${OPENSEARCH_PATH_CONF}/truststore.bcfks"
 BCFKS_KEYSTORE="${OPENSEARCH_PATH_CONF}/keystore.bcfks"
 
@@ -212,7 +218,7 @@ if [ ! -f "${BCFKS_KEYSTORE}" ]; then
         -in "${NODE_CERT_FILE}" \
         -inkey "${NODE_KEY_FILE}" \
         -out "${TEMP_P12}" \
-        -name "node" \
+        -name "opensearch_node" \
         -passout "pass:${FIPS_KEYSTORE_PASS}"
     
     # Convert PKCS12 to BCFKS
@@ -240,7 +246,7 @@ if [ ! -f "${BCFKS_KEYSTORE}" ]; then
             -J--enable-native-access=ALL-UNNAMED \
             -J-Djava.io.tmpdir=/var/vcap/data/opensearch/ \
             -genkeypair \
-            -alias placeholder \
+            -alias opensearch_node \
             -keyalg RSA \
             -keysize 2048 \
             -keystore "${BCFKS_KEYSTORE}" \
@@ -412,14 +418,7 @@ echo "Creating FIPS-compliant keystore..."
 rm -f "$OPENSEARCH_PATH_CONF/opensearch.keystore"*
 
 # FIPS requires passwords to be at least 112 bits (14 characters)
-KEYSTORE_PASS="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
-FIPS_MIN_PASSWORD="changeme123456"  # 14+ characters for FIPS compliance
-
-# Check if provided password meets FIPS requirements (14+ characters)
-if [ ${#KEYSTORE_PASS} -lt 14 ]; then
-    echo "Warning: FIPS requires passwords of at least 14 characters, using default FIPS-compliant password"
-    KEYSTORE_PASS="${FIPS_MIN_PASSWORD}"
-fi
+KEYSTORE_PASS="${FIPS_KEYSTORE_PASS}"
 
 # Set FIPS environment
 export FIPS_KEYSTORE_OPTS="${OPENSEARCH_JAVA_OPTS} -Dorg.bouncycastle.fips.approved_only=true -Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security"
