@@ -219,7 +219,7 @@ if [ ! -f "${BCFKS_KEYSTORE}" ]; then
     ls -la "${FIPS_LIB_DIR}/"*.jar
     echo "================================================================"
     
-    <% if_p('opensearch.node.ssl.private_key', 'opensearch.node.ssl.certificate') do |key, cert| %>
+   <% if_p('opensearch.node.ssl.private_key', 'opensearch.node.ssl.certificate') do |key, cert| %>
     echo "Found SSL certificates, creating keystore from PEM files..."
     
     # Create temporary PKCS12 from PEM files
@@ -338,8 +338,8 @@ if [ ! -f "${BCFKS_KEYSTORE}" ]; then
     
     rm -f "${TEMP_P12}"
     echo "✓ Cleanup: Removed temporary PKCS12 file"
-    <% end %>
-
+<% end %>
+fi
 # Set permissions on BCFKS stores
 chown vcap:vcap "${BCFKS_TRUSTSTORE}" "${BCFKS_KEYSTORE}"
 chmod 600 "${BCFKS_TRUSTSTORE}" "${BCFKS_KEYSTORE}"
