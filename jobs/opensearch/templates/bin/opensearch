@@ -66,7 +66,7 @@ HEAP_SIZE=<%= heap_size %>
 
 # Set basic JVM options (FIPS options are in jvm.options file)
 export OPENSEARCH_JAVA_OPTS="-Xms$HEAP_SIZE -Xmx$HEAP_SIZE \
-                             -Dorg.bouncycastle.fips.approved_only=true \
+                             -Dorg.bouncycastle.fips.approved_only=false \
                              -Djava.security.properties=${OPENSEARCH_PATH_CONF}/fips.security \
                              -Djavax.net.ssl.keyStoreType=BCFKS \
                              -Djavax.net.ssl.trustStoreType=BCFKS \
