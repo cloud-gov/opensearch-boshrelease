@@ -211,7 +211,7 @@ if [ ! -f "${BCFKS_KEYSTORE}" ]; then
     <% if_p('opensearch.node.ssl.private_key', 'opensearch.node.ssl.certificate') do |key, cert| %>
     # Create temporary PKCS12 from PEM files
     NODE_KEY_FILE="${OPENSEARCH_PATH_CONF}/ssl/opensearch-node.pem"
-    NODE_CERT_FILE="${OPENSEARCH_PATH_CONF}/ssl/opensearch-node-cert.pem"
+    NODE_CERT_FILE="${OPENSEARCH_PATH_CONF}/ssl/opensearch-node.crt"
     TEMP_P12="${TMP_DIR}/node-temp.p12"
     
     # Combine key and cert into PKCS12
