@@ -10,6 +10,7 @@ export OPENSEARCH_SECURITY_CONFIG_PATH=${OPENSEARCH_PATH_CONF}/opensearch-securi
 export OPENSEARCH_JAVA_OPTS="-XX:-UsePerfData -Dnet.bytebuddy.agent.disabled=true -Djava.io.tmpdir=/var/vcap/data/opensearch/"
 export YQ_PACKAGE_DIR=/var/vcap/packages/yq
 export PATH=$YQ_PACKAGE_DIR/bin:$PATH
+export TMP_DIR=/var/vcap/sys/tmp/$JOB_NAME
 export PATH=/var/vcap/packages/cf-cli-8-linux/bin:$PATH
 export KEYSTORE="${JAVA_HOME}/lib/security/cacerts"
 STOREPASS=<%= p("opensearch.notification.keystorepass") %>
@@ -211,7 +212,7 @@ if [ ! -f "${BCFKS_KEYSTORE}" ]; then
     # Create temporary PKCS12 from PEM files
     NODE_KEY_FILE="${OPENSEARCH_PATH_CONF}/ssl/opensearch-node.pem"
     NODE_CERT_FILE="${OPENSEARCH_PATH_CONF}/ssl/opensearch-node-cert.pem"
-    TEMP_P12="/tmp/node-temp.p12"
+    TEMP_P12="${TMP_DIR}/node-temp.p12"
     
     # Combine key and cert into PKCS12
     openssl pkcs12 -export \
