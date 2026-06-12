@@ -219,7 +219,7 @@ if [ ! -f "${BCFKS_KEYSTORE}" ]; then
         -in "${NODE_CERT_FILE}" \
         -inkey "${NODE_KEY_FILE}" \
         -out "${TEMP_P12}" \
-        -name "opensearch_node" \
+        -name "opensearch-node" \
         -passout "pass:${FIPS_KEYSTORE_PASS}"
     
     # Convert PKCS12 to BCFKS
@@ -247,7 +247,7 @@ if [ ! -f "${BCFKS_KEYSTORE}" ]; then
             -J--enable-native-access=ALL-UNNAMED \
             -J-Djava.io.tmpdir=/var/vcap/data/opensearch/ \
             -genkeypair \
-            -alias opensearch_node \
+            -alias opensearch-node \
             -keyalg RSA \
             -keysize 2048 \
             -keystore "${BCFKS_KEYSTORE}" \
