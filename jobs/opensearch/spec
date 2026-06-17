@@ -18,6 +18,7 @@ templates:
   bin/post-deploy.erb: bin/post-deploy
   bin/post-start.erb: bin/post-start
   bin/add-keystore-credentials.sh.erb: bin/add-keystore-credentials.sh
+  bin/add-snapshot.sh.erb: bin/snapshot.sh
   config/bpm.yml.erb: config/bpm.yml
   config/config.yml.erb: config/opensearch.yml
   config/ca.erb: config/ssl/opensearch.ca
@@ -195,9 +196,13 @@ properties:
   opensearch.repository.s3.bucket:
     description: Bucket name on S3 where to keep snapshots
     default: ""
-  opensearch.repository.name:
+  opensearch.repository.s3.name:
     description: Repository name for automatic snapshots
     default: ""
+  opensearch.repository.s3.path:
+    description: path for s3 snapshots
+    default: "snapshot/"
+
   opensearch.discovery.single_node:
     description: True to run cluster as a single node
     default: false

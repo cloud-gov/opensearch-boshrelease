@@ -1,0 +1,103 @@
+#!/bin/bash
+# OpenSearch S3 Snapshot Repository Creation Script
+set -e
+
+# Configuration
+OPENSEARCH_URL="https://localhost:9200"  # Changed to https since you're using SSL certs
+REPOSITORY_NAME="<%= p("opensearch.repository.s3.name") %>" 
+S3_BUCKET="<%= p("opensearch.repository.s3.bucket") %>" 
+S3_PATH="<%= p("opensearch.repository.s3.path") %>"  # Removed extra space after =
+AWS_REGION="<%= p("opensearch.repository.s3.region") %>"  # Removed extra space after =
+
+# SSL Certificate options
+CA="--cacert ${JOB_DIR}/config/ssl/opensearch.ca"
+CERT="--cert ${JOB_DIR}/config/ssl/opensearch-admin.crt"
+KEY="--key ${JOB_DIR}/config/ssl/opensearch-admin.key"
+
+echo "=== Creating OpenSearch S3 Snapshot Repository ==="
+
+# Add credentials to keystore
+<% if_p('opensearch.repository.s3.region') do |region| %>
+echo "Adding S3 credentials to keystore..."
+
+
+# Add new entries
+echo "<%= region %>" | "${PACKAGE_DIR}/bin/opensearch-keystore" add --stdin --force s3.client.default.region
+echo "<%= p('opensearch.repository.s3.access_key') %>" | "${PACKAGE_DIR}/bin/opensearch-keystore" add --stdin --force s3.client.default.access_key
+echo "<%= p('opensearch.repository.s3.secret_key') %>" | "${PACKAGE_DIR}/bin/opensearch-keystore" add --stdin --force s3.client.default.secret_key
+
+echo "✓ S3 credentials added to keystore"
+<% end %>
+
+# Wait for OpenSearch to be ready
+echo "Waiting for OpenSearch to be ready..."
+until curl -s ${CA} ${CERT} ${KEY} "${OPENSEARCH_URL}/_cluster/health" > /dev/null 2>&1; do
+    echo "Waiting for OpenSearch..."
+    sleep 5
+done
+echo "✓ OpenSearch is ready"
+
+# Create the repository
+echo "Creating repository..."
+RESPONSE=$(curl -s -w "%{http_code}" -o /tmp/create_repo_response.json \
+  -X PUT "${OPENSEARCH_URL}/_snapshot/${REPOSITORY_NAME}" \
+  ${CA} ${CERT} ${KEY} \
+  -H "Content-Type: application/json" \
+  -d '{
+    "type": "s3",
+    "settings": {
+      "bucket": "'$S3_BUCKET'",
+      "base_path": "'$S3_PATH'",
+      "region": "'$AWS_REGION'",
+      "compress": true,
+      "server_side_encryption": true
+    }
+  }')
+
+# Check if request was successful
+if [ "$RESPONSE" = "200" ]; then
+    echo "Repository created successfully"
+    cat /tmp/create_repo_response.json
+else
+    echo "Failed to create repository (HTTP $RESPONSE)"
+    cat /tmp/create_repo_response.json
+    exit 1
+fi
+
+echo ""
+echo "=== Verifying Repository ==="
+
+# Verify the repository was created
+VERIFY_RESPONSE=$(curl -s -w "%{http_code}" -o /tmp/verify_repo_response.json \
+  -X GET "${OPENSEARCH_URL}/_snapshot/${REPOSITORY_NAME}?pretty" \
+  ${CA} ${CERT} ${KEY})
+
+if [ "$VERIFY_RESPONSE" = "200" ]; then
+    echo "Repository verification successful"
+    cat /tmp/verify_repo_response.json
+else
+    echo "Repository verification failed (HTTP $VERIFY_RESPONSE)"
+    cat /tmp/verify_repo_response.json
+fi
+
+echo ""
+echo "=== Testing Repository Connection ==="
+
+# Test the repository
+TEST_RESPONSE=$(curl -s -w "%{http_code}" -o /tmp/test_repo_response.json \
+  -X POST "${OPENSEARCH_URL}/_snapshot/${REPOSITORY_NAME}/_verify?pretty" \
+  ${CA} ${CERT} ${KEY})
+
+if [ "$TEST_RESPONSE" = "200" ]; then
+    echo "Repository connection test successful"
+    cat /tmp/test_repo_response.json
+else
+    echo "Repository connection test failed (HTTP $TEST_RESPONSE)"
+    cat /tmp/test_repo_response.json
+fi
+
+# Cleanup temp files
+rm -f /tmp/create_repo_response.json /tmp/verify_repo_response.json /tmp/test_repo_response.json
+
+echo ""
+echo "Repository creation completed!"
