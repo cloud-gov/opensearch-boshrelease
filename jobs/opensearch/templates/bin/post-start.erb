@@ -108,6 +108,9 @@ echo "Disable post start script property is set to <%= p("opensearch.health.disa
   export TMPDIR=${TEMP_DIR}
   export TMP=${TEMP_DIR}
   export TEMP=${TEMP_DIR}
+
+  # Allow security admin to run against mixed cluster versions
+  export OPENDISTRO_SECURITY_ADMIN_ALLOW_MIXED_CLUSTER=true
   
   echo "=== Applying SSL config:"
   chmod +x ${ODS}/tools/securityadmin.sh
