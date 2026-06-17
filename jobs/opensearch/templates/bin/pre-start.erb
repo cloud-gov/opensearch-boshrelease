@@ -63,9 +63,18 @@ yq -i ".notifications_full_access={\"backend_roles\": [$ORG_GUID_ROLE_LIST]}" "$
 <% end %>
 <% end %>
 
-# leaving all plugin files and plugins installed for now
-# can revisit https://opensearch.org/docs/latest/install-and-configure/plugins/ for how to
-# allow installing specific plugins
+
+log_dir=${OPENSEARCH_HOME}/logs
+
+if [[ ! -a ${log_dir} ]]; then
+  ln -s /var/vcap/sys/log/opensearch ${log_dir}
+fi
+
+# Create new Opensearch keystore in persistent storage, if necessary
+if [ ! -f "$OPENSEARCH_PATH_CONF/opensearch.keystore" ]; then
+  echo "Create new OpenSearch keystore"
+  echo y | "$PACKAGE_DIR/bin/opensearch-keystore" create
+fi
 
 # see https://opensearch.org/docs/latest/tuning-your-cluster/availability-and-recovery/snapshots/snapshot-restore/#amazon-s3
 <% if_p('opensearch.repository.s3.access_key', 'opensearch.repository.s3.secret_key') do %>
@@ -85,18 +94,6 @@ yq -i ".notifications_full_access={\"backend_roles\": [$ORG_GUID_ROLE_LIST]}" "$
     ${OPENSEARCH_HOME}/bin/opensearch-plugin install -b "<%= path %>"
   <% end %>
 <% end %>
-
-log_dir=${OPENSEARCH_HOME}/logs
-
-if [[ ! -a ${log_dir} ]]; then
-  ln -s /var/vcap/sys/log/opensearch ${log_dir}
-fi
-
-# Create new Opensearch keystore in persistent storage, if necessary
-if [ ! -f "$OPENSEARCH_PATH_CONF/opensearch.keystore" ]; then
-  echo "Create new OpenSearch keystore"
-  echo y | "$PACKAGE_DIR/bin/opensearch-keystore" create
-fi
 
 # Make sure the keystore has the right ownership and file permissions
 chown vcap:vcap "$OPENSEARCH_PATH_CONF/opensearch.keystore"
