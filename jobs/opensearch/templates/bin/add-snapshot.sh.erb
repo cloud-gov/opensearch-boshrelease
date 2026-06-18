@@ -3,6 +3,10 @@
 set -e
 
 # Configuration
+export JOB_NAME=opensearch
+export JOB_DIR=/var/vcap/jobs/$JOB_NAME
+export PACKAGE_DIR=/var/vcap/packages/$JOB_NAME
+export OPENSEARCH_JAVA_OPTS="-XX:-UsePerfData -Dnet.bytebuddy.agent.disabled=true -Djava.io.tmpdir=/var/vcap/data/opensearch/"
 OPENSEARCH_URL="https://localhost:9200"  # Changed to https since you're using SSL certs
 REPOSITORY_NAME="<%= p("opensearch.repository.s3.name") %>" 
 S3_BUCKET="<%= p("opensearch.repository.s3.bucket") %>" 

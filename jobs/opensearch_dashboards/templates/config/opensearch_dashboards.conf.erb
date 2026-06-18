@@ -54,7 +54,8 @@ server.ssl.certificateAuthorities: [ "/var/vcap/jobs/opensearch_dashboards/confi
 # ==============================================================================
 
 csp.rules:
-  - "img-src 'self' data: raw.githubusercontent.com/cloud-gov/opensearch-boshrelease/"
+  - "img-src 'self' data: https://opensearch.org https://docs.opensearch.org https://maps.opensearch.org https://vectors.maps.opensearch.org https://tiles.maps.opensearch.org https://raw.githubusercontent.com"
+
   
 <%
   # Determine the OpenSearch port:
