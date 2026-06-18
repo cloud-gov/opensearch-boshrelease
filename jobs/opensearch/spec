@@ -18,7 +18,7 @@ templates:
   bin/post-deploy.erb: bin/post-deploy
   bin/post-start.erb: bin/post-start
   bin/add-keystore-credentials.sh.erb: bin/add-keystore-credentials.sh
-  bin/add-snapshot.sh.erb: bin/add-snapshot.sh
+  # bin/add-snapshot.sh.erb: bin/add-snapshot.sh
   config/bpm.yml.erb: config/bpm.yml
   config/config.yml.erb: config/opensearch.yml
   config/ca.erb: config/ssl/opensearch.ca
