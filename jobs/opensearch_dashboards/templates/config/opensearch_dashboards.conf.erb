@@ -53,8 +53,8 @@ server.ssl.certificateAuthorities: [ "/var/vcap/jobs/opensearch_dashboards/confi
 #    Settings for how OpenSearch Dashboards connects to the OpenSearch cluster.
 # ==============================================================================
 
-csp.rules:
-  - "img-src 'self' data: https://opensearch.org https://docs.opensearch.org https://maps.opensearch.org https://vectors.maps.opensearch.org https://tiles.maps.opensearch.org https://raw.githubusercontent.com"
+csp.rules: ["default-src 'self'; script-src 'unsafe-eval' 'self'; worker-src blob: 'self'; style-src 'unsafe-inline' 'self'; frame-ancestors 'self'; img-src 'self' data: https://opensearch.org https://docs.opensearch.org https://maps.opensearch.org https://vectors.maps.opensearch.org https://tiles.maps.opensearch.org https://raw.githubusercontent.com; connect-src 'self' https://opensearch.org https://docs.opensearch.org https://maps.opensearch.org https://vectors.maps.opensearch.org https://tiles.maps.opensearch.org; form-action 'self'; object-src 'none';"]
+
 
   
 <%
