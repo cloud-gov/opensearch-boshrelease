@@ -7,36 +7,60 @@ require 'json'
 #########################
 fields_json =
   [
-    {"name":"_id","type":"text","count":0,"scripted":false,"indexed":false,"analyzed":false,"doc_values":false},
-    {"name":"_type","type":"text","count":0,"scripted":false,"indexed":false,"analyzed":false,"doc_values":false},
-    {"name":"_score","type":"number","count":0,"scripted":false,"indexed":false,"analyzed":false,"doc_values":false},
-    {"name":"_source","type":"_source","count":0,"scripted":false,"indexed":false,"analyzed":false,"doc_values":false},
-    {"name":"_index","type":"text","count":0,"scripted":false,"indexed":false,"analyzed":false,"doc_values":false},
+    {"count":0,"name":"_id","type":"string","esTypes":["_id"],"scripted":false,"searchable":true,"aggregatable":false,"readFromDocValues":false},
+    {"count":0,"name":"_index","type":"string","esTypes":["_index"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":false},
+    {"count":0,"name":"_score","type":"number","esTypes":[],"scripted":false,"searchable":false,"aggregatable":false,"readFromDocValues":false},
+    {"count":0,"name":"_source","type":"_source","esTypes":["_source"],"scripted":false,"searchable":false,"aggregatable":false,"readFromDocValues":false},
 
-    {"name":"tags","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+    {"count":0,"name":"tags","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
 
-    {"name":"@input","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-    {"name":"@index_type","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-    {"name":"@type","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+    {"count":0,"name":"@input","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@index_type","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@type","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
 
-    {"name":"@timestamp","type":"date","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-    {"name":"@raw","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":true,"doc_values":false},
-    {"name":"@message","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":true,"doc_values":false},
-    {"name":"@message.raw","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-    {"name":"@level","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+    {"count":0,"name":"@timestamp","type":"date","esTypes":["date"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@raw","type":"string","esTypes":["text"],"scripted":false,"searchable":true,"aggregatable":false,"readFromDocValues":false},
+    {"count":0,"name":"@message","type":"string","esTypes":["text"],"scripted":false,"searchable":true,"aggregatable":false,"readFromDocValues":false},
+    {"count":0,"name":"@message.raw","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@level","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
 
-    {"name":"@shipper.name","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-    {"name":"@shipper.priority","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+    {"count":0,"name":"@shipper.name","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@shipper.priority","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
 
-    {"name":"@source.deployment","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-    {"name":"@source.host","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-    {"name":"@source.job","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-    {"name":"@source.job_index","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-    {"name":"@source.index","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-    {"name":"@source.component","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-    {"name":"@source.type","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-    {"name":"@source.vm","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+    {"count":0,"name":"@source.deployment","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@source.host","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@source.job","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@source.job_index","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@source.index","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@source.component","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@source.type","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@source.vm","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
   ]
+###########################
+## -- @cf fields -- ##
+###########################
+# These fields are always included for app logs as they are core to Cloud Foundry log filtering
+fields_json.concat(
+  [
+    {"count":0,"name":"@cf.app","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@cf.app_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@cf.app_instance","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@cf.instance","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@cf.instance_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@cf.org","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@cf.org_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@cf.plan_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@cf.process_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@cf.process_instance_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@cf.process_type","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@cf.service","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@cf.service_instance_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@cf.service_offering","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@cf.service_plan","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@cf.space","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"@cf.space_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  ]
+)
 
 ###########################
 ## -- App fields -- ##
@@ -49,102 +73,121 @@ error_enabled = p('cloudfoundry.event_types').include? 'Error'
 audit_enabled = p('cloudfoundry.event_types').include? 'Audit'
 falco_enabled = p('cloudfoundry.event_types').include? 'Falco'
 
-# Only LogMessage, ContainerMetric, Http* events contain `app_id` field so other app-related `@cf.*` fields are set for them too. See protocol definition https://github.com/cloudfoundry/dropsonde-protocol/blob/master/events/README.md.
-if(logmessage_enabled == true or containermetric_enabled == true or http_enabled == true)
-  fields_json.concat(
-    [
-      {"name":"@cf.org","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"@cf.org_id","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"@cf.space","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"@cf.space_id","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"@cf.app","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"@cf.app_id","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"@cf.app_instance","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true}
-    ]
-  )
-end
-
 if(logmessage_enabled == true)
   fields_json.concat(
     [
-      {"name":"logmessage.message_type","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
+      {"count":0,"name":"logmessage.message_type","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
 
-      {"name":"rtr.response_time_sec","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"rtr.response_time_ms","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"rtr.remote_addr","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"rtr.x_forwarded_proto","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"rtr.x_forwarded_for","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"rtr.vcap_request_id","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"rtr.body_bytes_sent","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"rtr.hostname","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"rtr.timestamp","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"rtr.request_bytes_received","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"rtr.verb","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"rtr.path","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"rtr.http_spec","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"rtr.referer","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"rtr.http_user_agent","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"rtr.status","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"rtr.src.host","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"rtr.src.port","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"rtr.dst.host","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"rtr.dst.port","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"rtr.app.id","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"rtr.app.index","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true}
+      {"count":0,"name":"rtr.response_time_sec","type":"number","esTypes":["float"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.response_time_ms","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.remote_addr","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.x_forwarded_proto","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.x_forwarded_for","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.vcap_request_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.body_bytes_sent","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.hostname","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.timestamp","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.request_bytes_received","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.verb","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.path","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.http_spec","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.referer","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.http_user_agent","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.status","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.src.host","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.src.port","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.dst.host","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.dst.port","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.app.id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.app.index","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.gorouter_time_sec","type":"number","esTypes":["float"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.extra.b3","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.extra.instance_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.extra.x_b3_parentspanid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.extra.x_b3_spanid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.extra.x_b3_traceid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"rtr.extra.x_cf_routererror","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true}
     ]
   )
 
   # http.request fields
-
   fields_json.concat(
     [
-      {"name":"http.request","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":false},
-      {"name":"http.request.body.bytes","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"http.request.body.content","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":false},
-      {"name":"http.request.body.content.text","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":false},
-      {"name":"http.request.bytes","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"http.request.bytes_read","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"http.request.client_ip","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"http.request.duration","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"http.request.headers","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"http.request.host","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"http.request.id","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"http.request.level","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"http.request.logger","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"http.request.method","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"http.request.mime_type","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"http.request.message","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"http.request.protocol","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"http.request.referrer","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"http.request.remote_ip","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"http.request.remote_port","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"http.request.size","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"http.request.status","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"http.request.uri","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"http.request.user_id","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"http.request.user_agent","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"http.response.body.bytes","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"http.response.body.content","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":false},
-      {"name":"http.response.body.content.text","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":false},
-      {"name":"http.response.bytes","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"http.response.mime_type","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"http.response.status_code","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"http.version","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true}
+      {"count":0,"name":"http.request.body.bytes","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.body.content","type":"string","esTypes":["wildcard"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.body.content.text","type":"string","esTypes":["match_only_text"],"scripted":false,"searchable":true,"aggregatable":false,"readFromDocValues":false},
+      {"count":0,"name":"http.request.bytes","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.bytes_read","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.client_ip","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.duration","type":"number","esTypes":["double"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.host","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.level","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.logger","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.method","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.mime_type","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.msg","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.proto","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.protocol","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.referer","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.referrer","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.remote_ip","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.remote_port","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.size","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.status","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.timestamp","type":"date","esTypes":["date"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.ts","type":"date","esTypes":["date"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.uri","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.url","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.user_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.user_agent","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.response.body.bytes","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.response.body.content","type":"string","esTypes":["wildcard"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.response.body.content.text","type":"string","esTypes":["match_only_text"],"scripted":false,"searchable":true,"aggregatable":false,"readFromDocValues":false},
+      {"count":0,"name":"http.response.bytes","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.response.mime_type","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.response.status_code","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.version","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true}
+    ]
+  )
+
+  # httpstartstop fields
+  fields_json.concat(
+    [
+      {"count":0,"name":"httpstartstop.content_length","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"httpstartstop.duration_ms","type":"number","esTypes":["float"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"httpstartstop.forwarded","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"httpstartstop.instance_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"httpstartstop.instance_index","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"httpstartstop.method","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"httpstartstop.peer_type","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"httpstartstop.remote_addr","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"httpstartstop.request_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"httpstartstop.start_timestamp","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"httpstartstop.status_code","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"httpstartstop.stop_timestamp","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"httpstartstop.uri","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"httpstartstop.user_agent","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true}
     ]
   )
 
   # geoip fields
   fields_json.concat(
     [
-      {"name":"geoip.location","type":"geo_point","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"geoip.timezone","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"geoip.longitude","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"geoip.latitude","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"geoip.continent_code","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"geoip.ip","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"geoip.country_code3","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"geoip.country_code2","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"geoip.country_name","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true}
+      {"count":0,"name":"geoip.location","type":"geo_point","esTypes":["geo_point"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"geoip.timezone","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"geoip.longitude","type":"number","esTypes":["float"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"geoip.latitude","type":"number","esTypes":["float"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"geoip.continent_code","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"geoip.ip","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"geoip.country_code3","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"geoip.country_code2","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"geoip.country_name","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"geoip.city_name","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"geoip.dma_code","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"geoip.postal_code","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"geoip.region_code","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"geoip.region_name","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true}
     ]
   )
 
@@ -153,11 +196,11 @@ end
 if(containermetric_enabled == true)
   fields_json.concat(
     [
-      {"name":"containermetric.memory_bytes_quota","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"containermetric.memory_bytes","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"containermetric.disk_bytes_quota","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"containermetric.disk_bytes","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"containermetric.cpu_percentage","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true}
+      {"count":0,"name":"containermetric.memory_bytes_quota","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"containermetric.memory_bytes","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"containermetric.disk_bytes_quota","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"containermetric.disk_bytes","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"containermetric.cpu_percentage","type":"number","esTypes":["float"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true}
     ]
   )
 end
@@ -165,9 +208,9 @@ end
 if(valuemetric_enabled == true)
   fields_json.concat(
     [
-      {"name":"valuemetric.unit","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"valuemetric.name","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"valuemetric.value","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true}
+      {"count":0,"name":"valuemetric.unit","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"valuemetric.name","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"valuemetric.value","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true}
     ]
   )
 end
@@ -175,9 +218,9 @@ end
 if(counterevent_enabled == true)
   fields_json.concat(
     [
-      {"name":"counterevent.delta","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"counterevent.name","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"counterevent.total","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true}
+      {"count":0,"name":"counterevent.delta","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"counterevent.name","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"counterevent.total","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true}
     ]
   )
 end
@@ -185,8 +228,8 @@ end
 if(error_enabled == true)
   fields_json.concat(
     [
-      {"name":"error.source","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"error.code","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true}
+      {"count":0,"name":"error.source","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"error.code","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true}
     ]
   )
 end
@@ -194,26 +237,27 @@ end
 if(audit_enabled == true)
   fields_json.concat(
     [
-      {"name":"actor.guid","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"actor.name","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"actor.type","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"target.guid","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"target.name","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"target.type","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"created_at","type":"date","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"updated_at","type":"date","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"type","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"guid","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true}
+      {"count":0,"name":"actor.guid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"actor.name","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"actor.type","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"target.guid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"target.name","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"target.type","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"created_at","type":"date","esTypes":["date"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"updated_at","type":"date","esTypes":["date"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"type","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"guid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true}
     ]
   )
 end
 
-#falco fields
-if(falco_enabled ==true)
+# falco fields
+if(falco_enabled == true)
   fields_json.concat(
     [
-      {"name":"falco_priority","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true},
-      {"name":"falco_rule","type":"text","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true}
+      {"count":0,"name":"falco_priority","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"falco_rule","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"falco_data","type":"string","esTypes":["flat_object"],"scripted":false,"searchable":true,"aggregatable":false,"readFromDocValues":false}
     ]
   )
 end
@@ -225,5 +269,9 @@ end
     "fields": "<%= fields_json.to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"') %>"
   },
   "id": "<%= p('opensearch_config.app_index_prefix') %>*",
-  "type":"index-pattern"
+  "migrationVersion": {
+    "index-pattern": "7.6.0"
+  },
+  "references": [],
+  "type": "index-pattern"
 }
