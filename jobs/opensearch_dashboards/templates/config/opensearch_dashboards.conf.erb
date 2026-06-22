@@ -53,13 +53,6 @@ server.ssl.certificateAuthorities: [ "/var/vcap/jobs/opensearch_dashboards/confi
 #    Settings for how OpenSearch Dashboards connects to the OpenSearch cluster.
 # ==============================================================================
 
-# ==============================================================================
-# Content Security Policy (CSP) Configuration
-# OpenSearch Dashboards 3.x uses granular CSP settings instead of csp.rules
-# ==============================================================================
-csp.allowedImgSources: ["https://opensearch.org", "https://docs.opensearch.org", "https://maps.opensearch.org", "https://vectors.maps.opensearch.org", "https://tiles.maps.opensearch.org", "https://raw.githubusercontent.com"]
-
-
   
 <%
   # Determine the OpenSearch port:
