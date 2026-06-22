@@ -6,10 +6,19 @@ set -x
 export JOB_NAME=opensearch
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 
+# SSL Certificate options
+CA="--cacert ${JOB_DIR}/config/ssl/opensearch.ca"
+CERT="--cert ${JOB_DIR}/config/ssl/opensearch-admin.crt"
+KEY="--key ${JOB_DIR}/config/ssl/opensearch-admin.key"
+OPENSEARCH_URL="https://localhost:9200"
+
 curl -X PUT \
-  --key ${JOB_DIR}/config/ssl/opensearch-admin.key \
-  --cert ${JOB_DIR}/config/ssl/opensearch-admin.crt  \
-  --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
-  https://localhost:9200/_cluster/settings \
+  ${KEY} ${CERT} ${CA} \
+  ${OPENSEARCH_URL}/_cluster/settings \
   -H 'Content-Type: application/json' \
   -d '{"persistent":{"search_backpressure":{"mode":"enforced"}}}'
+
+<% if_p('opensearch.repository.s3.region', 'opensearch.repository.s3.access_key', 'opensearch.repository.s3.secret_key') do %>
+# Run snapshot setup
+${JOB_DIR}/bin/add-snapshot.sh
+<% end %>

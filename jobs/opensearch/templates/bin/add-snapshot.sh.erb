@@ -4,13 +4,10 @@
 <% if_p('opensearch.repository.s3.region', 'opensearch.repository.s3.bucket', 'opensearch.repository.s3.name', 'opensearch.repository.s3.access_key', 'opensearch.repository.s3.secret_key', 'opensearch.repository.s3.path') do |region, bucket, repo_name, access_key, secret_key, s3_path| %>
 set -e
 
-# Configuration
 export JOB_NAME=opensearch
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
-export PACKAGE_DIR=/var/vcap/packages/$JOB_NAME
-export OPENSEARCH_JAVA_OPTS="-XX:-UsePerfData -Dnet.bytebuddy.agent.disabled=true -Djava.io.tmpdir=/var/vcap/data/opensearch/"
-OPENSEARCH_URL="https://localhost:9200"
 
+OPENSEARCH_URL="https://localhost:9200"
 REPOSITORY_NAME="<%= repo_name %>"
 S3_BUCKET="<%= bucket %>"
 S3_PATH="<%= s3_path %>"
@@ -23,22 +20,14 @@ KEY="--key ${JOB_DIR}/config/ssl/opensearch-admin.key"
 
 echo "=== Creating OpenSearch S3 Snapshot Repository ==="
 
-echo "Adding S3 credentials to keystore..."
+# Reload secure settings to pick up keystore changes from all nodes
+echo "Reloading secure settings..."
+curl -s -X POST "${OPENSEARCH_URL}/_nodes/reload_secure_settings" \
+  ${CA} ${CERT} ${KEY} \
+  -H "Content-Type: application/json" \
+  -d '{}'
 
-# Add new entries
-echo "<%= region %>" | "${PACKAGE_DIR}/bin/opensearch-keystore" add --stdin --force s3.client.default.region
-echo "<%= access_key %>" | "${PACKAGE_DIR}/bin/opensearch-keystore" add --stdin --force s3.client.default.access_key
-echo "<%= secret_key %>" | "${PACKAGE_DIR}/bin/opensearch-keystore" add --stdin --force s3.client.default.secret_key
-
-echo "S3 credentials added to keystore"
-
-# Wait for OpenSearch to be ready
-echo "Waiting for OpenSearch to be ready..."
-until curl -s ${CA} ${CERT} ${KEY} "${OPENSEARCH_URL}/_cluster/health" > /dev/null 2>&1; do
-    echo "Waiting for OpenSearch..."
-    sleep 5
-done
-echo "OpenSearch is ready"
+sleep 5
 
 # Create the repository
 echo "Creating repository..."
@@ -53,7 +42,8 @@ RESPONSE=$(curl -s -w "%{http_code}" -o /tmp/create_repo_response.json \
       "base_path": "'$S3_PATH'",
       "region": "'$AWS_REGION'",
       "compress": true,
-      "server_side_encryption": true
+      "server_side_encryption": true,
+      "storage_class": "standard"
     }
   }')
 

@@ -125,7 +125,6 @@ echo "Disable post start script property is set to <%= p("opensearch.health.disa
 # Add credentials to keystore
 $JOB_DIR/bin/add-keystore-credentials.sh
 
-
 <% if !p("opensearch.health.disable_post_start") %>
 # Add snapshot
 $JOB_DIR/bin/add-snapshot.sh
