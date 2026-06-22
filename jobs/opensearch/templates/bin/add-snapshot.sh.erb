@@ -1,5 +1,7 @@
 #!/bin/bash
 # OpenSearch S3 Snapshot Repository and SM Policy Creation Script
+
+<% if_p('opensearch.repository.s3.region', 'opensearch.repository.s3.bucket', 'opensearch.repository.s3.name', 'opensearch.repository.s3.access_key', 'opensearch.repository.s3.secret_key', 'opensearch.repository.s3.path') do |region, bucket, repo_name, access_key, secret_key, s3_path| %>
 set -e
 
 # Configuration
@@ -8,10 +10,11 @@ export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 export PACKAGE_DIR=/var/vcap/packages/$JOB_NAME
 export OPENSEARCH_JAVA_OPTS="-XX:-UsePerfData -Dnet.bytebuddy.agent.disabled=true -Djava.io.tmpdir=/var/vcap/data/opensearch/"
 OPENSEARCH_URL="https://localhost:9200"
-REPOSITORY_NAME="<%= p("opensearch.repository.s3.name") %>" 
-S3_BUCKET="<%= p("opensearch.repository.s3.bucket") %>" 
-S3_PATH="<%= p("opensearch.repository.s3.path") %>"
-AWS_REGION="<%= p("opensearch.repository.s3.region") %>"
+
+REPOSITORY_NAME="<%= repo_name %>"
+S3_BUCKET="<%= bucket %>"
+S3_PATH="<%= s3_path %>"
+AWS_REGION="<%= region %>"
 
 # SSL Certificate options
 CA="--cacert ${JOB_DIR}/config/ssl/opensearch.ca"
@@ -20,17 +23,14 @@ KEY="--key ${JOB_DIR}/config/ssl/opensearch-admin.key"
 
 echo "=== Creating OpenSearch S3 Snapshot Repository ==="
 
-# Add credentials to keystore
-<% if_p('opensearch.repository.s3.region') do |region| %>
 echo "Adding S3 credentials to keystore..."
 
 # Add new entries
 echo "<%= region %>" | "${PACKAGE_DIR}/bin/opensearch-keystore" add --stdin --force s3.client.default.region
-echo "<%= p('opensearch.repository.s3.access_key') %>" | "${PACKAGE_DIR}/bin/opensearch-keystore" add --stdin --force s3.client.default.access_key
-echo "<%= p('opensearch.repository.s3.secret_key') %>" | "${PACKAGE_DIR}/bin/opensearch-keystore" add --stdin --force s3.client.default.secret_key
+echo "<%= access_key %>" | "${PACKAGE_DIR}/bin/opensearch-keystore" add --stdin --force s3.client.default.access_key
+echo "<%= secret_key %>" | "${PACKAGE_DIR}/bin/opensearch-keystore" add --stdin --force s3.client.default.secret_key
 
 echo "S3 credentials added to keystore"
-<% end %>
 
 # Wait for OpenSearch to be ready
 echo "Waiting for OpenSearch to be ready..."
@@ -57,7 +57,6 @@ RESPONSE=$(curl -s -w "%{http_code}" -o /tmp/create_repo_response.json \
     }
   }')
 
-# Check if request was successful
 if [ "$RESPONSE" = "200" ]; then
     echo "Repository created successfully"
     cat /tmp/create_repo_response.json
@@ -67,9 +66,9 @@ else
     exit 1
 fi
 
+echo ""
 echo "=== Verifying Repository ==="
 
-# Verify the repository was created
 VERIFY_RESPONSE=$(curl -s -w "%{http_code}" -o /tmp/verify_repo_response.json \
   -X GET "${OPENSEARCH_URL}/_snapshot/${REPOSITORY_NAME}?pretty" \
   ${CA} ${CERT} ${KEY})
@@ -82,9 +81,9 @@ else
     cat /tmp/verify_repo_response.json
 fi
 
+echo ""
 echo "=== Testing Repository Connection ==="
 
-# Test the repository
 TEST_RESPONSE=$(curl -s -w "%{http_code}" -o /tmp/test_repo_response.json \
   -X POST "${OPENSEARCH_URL}/_snapshot/${REPOSITORY_NAME}/_verify?pretty" \
   ${CA} ${CERT} ${KEY})
@@ -97,6 +96,7 @@ else
     cat /tmp/test_repo_response.json
 fi
 
+echo ""
 echo "=== Creating Snapshot Management (SM) Policies ==="
 
 # Create SM Policy for logs-app (1 year / 365 days retention)
@@ -219,9 +219,9 @@ else
     cat /tmp/sm_policy_metric_response.json
 fi
 
+echo ""
 echo "=== Listing All SM Policies ==="
 
-# List all SM policies to verify
 LIST_RESPONSE=$(curl -s -w "%{http_code}" -o /tmp/sm_list_response.json \
   -X GET "${OPENSEARCH_URL}/_plugins/_sm/policies?pretty" \
   ${CA} ${CERT} ${KEY})
@@ -245,3 +245,5 @@ echo "Summary:"
 echo "  - Repository: ${REPOSITORY_NAME}"
 echo "  - logs-app* snapshots: Daily at 00:00 UTC, retained for 365 days"
 echo "  - logs-metric* snapshots: Daily at 00:00 UTC, retained for 90 days"
+
+<% end %>
