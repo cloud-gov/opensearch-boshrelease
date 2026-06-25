@@ -268,9 +268,13 @@ properties:
     default: false
   
   opensearch.fips.keystore_password:
-    description: "Password for FIPS keystores and truststores"
-    default: "changeme"
+    description: "Password for FIPS keystores and truststores (must be at least 14 characters)"
+    default: "fips-changeme-14!"
   
   opensearch.fips.ca_certificate:
     description: "Optional CA certificate to import into FIPS truststore (PEM format)"
     default: ""
+
+  opensearch.fips.strict:
+    description: "Enable strict FIPS-approved-only mode (recommended for federal compliance)"
+    default: true

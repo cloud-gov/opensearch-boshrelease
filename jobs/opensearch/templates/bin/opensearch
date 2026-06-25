@@ -27,9 +27,10 @@ export HEAP_SIZE=$((( $( cat /proc/meminfo | grep MemTotal | awk '{ print $2 }' 
 export OPENSEARCH_JAVA_OPTS="-Xms$HEAP_SIZE -Xmx$HEAP_SIZE -Djava.io.tmpdir=$TMP_DIR"
 
 <% if p("opensearch.fips.enabled", false) %>
-# Add FIPS-specific Java options
-FIPS_JAR_COPY="/var/vcap/data/opensearch/fips-lib/bc-fips-2.1.2.jar"
-export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -cp ${FIPS_JAR_COPY}"
+# Add FIPS-specific Java options - include all BC FIPS jars
+FIPS_LIB_DIR="/var/vcap/data/opensearch/fips-lib"
+FIPS_CP="${FIPS_LIB_DIR}/bc-fips-2.1.2.jar:${FIPS_LIB_DIR}/bctls-fips-2.1.23.jar:${FIPS_LIB_DIR}/bcutil-fips-2.1.6.jar"
+export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -cp ${FIPS_CP}"
 export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Dorg.bouncycastle.fips.approved_only=<%= p('opensearch.fips.strict', true) %>"
 export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djava.security.properties=${JOB_DIR}/config/fips.security"
 export OPENSEARCH_JAVA_OPTS="$OPENSEARCH_JAVA_OPTS -Djavax.net.ssl.keyStoreType=BCFKS"

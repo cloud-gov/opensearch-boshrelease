@@ -50,7 +50,7 @@ FIPS_CP=""
 for jar in bc-fips bctls-fips bcutil-fips; do
     src=$(ls ${JDK_LIB}/${jar}-*.jar 2>/dev/null | head -n1)
     if [ -z "$src" ] || [ ! -f "$src" ]; then
-       echo "ERROR: FIPS enabled but ${jar}-*.Json not found in ${JDK_LIB}"
+       echo "ERROR: FIPS enabled but ${jar}-*.jar not found in ${JDK_LIB}"
        exit 1
     fi
     cp "$src" "${FIPS_LIB_DIR}/"
@@ -379,6 +379,120 @@ else
 fi
 
 rm -f /tmp/ca-cert.pem
+<% end %>
+
+# Import deployment SSL certificates into FIPS keystores if provided
+<% if_p('opensearch.node.ssl.certificate', 'opensearch.node.ssl.private_key', 'opensearch.node.ssl.ca') do %>
+echo "Importing deployment node SSL certificates into FIPS keystore..."
+
+# Create a temporary PKCS12 from PEM files, then import to BCFKS
+NODE_CERT="${JOB_DIR}/config/ssl/opensearch-node.crt"
+NODE_KEY="${JOB_DIR}/config/ssl/opensearch-node.pem"
+NODE_CA="${JOB_DIR}/config/ssl/opensearch.ca"
+TEMP_P12="/tmp/opensearch-node.p12"
+
+# Convert PEM to PKCS12
+openssl pkcs12 -export \
+    -in "$NODE_CERT" \
+    -inkey "$NODE_KEY" \
+    -certfile "$NODE_CA" \
+    -name "opensearch-node" \
+    -out "$TEMP_P12" \
+    -passout "pass:${FIPS_STORE_PASSWORD}"
+
+if [ $? -eq 0 ]; then
+    # Delete existing self-signed entry if present
+    fips_keytool -delete -alias opensearch-node \
+        -keystore "$FIPS_KEYSTORE_PATH" \
+        -storetype BCFKS \
+        -storepass "$FIPS_STORE_PASSWORD" 2>/dev/null || true
+
+    # Import PKCS12 into BCFKS keystore
+    fips_keytool -importkeystore \
+        -srckeystore "$TEMP_P12" \
+        -srcstoretype PKCS12 \
+        -srcstorepass "$FIPS_STORE_PASSWORD" \
+        -destkeystore "$FIPS_KEYSTORE_PATH" \
+        -deststoretype BCFKS \
+        -deststorepass "$FIPS_STORE_PASSWORD" \
+        -destkeypass "$FIPS_STORE_PASSWORD" \
+        -noprompt
+
+    if [ $? -eq 0 ]; then
+        echo "Node SSL certificate imported to FIPS keystore successfully"
+    else
+        echo "WARNING: Failed to import node certificate to FIPS keystore"
+    fi
+
+    # Import CA cert to truststore
+    fips_keytool -delete -alias opensearch-ca \
+        -keystore "$FIPS_TRUSTSTORE_PATH" \
+        -storetype BCFKS \
+        -storepass "$FIPS_STORE_PASSWORD" 2>/dev/null || true
+
+    fips_keytool -importcert \
+        -alias opensearch-node-ca \
+        -keystore "$FIPS_TRUSTSTORE_PATH" \
+        -storetype BCFKS \
+        -storepass "$FIPS_STORE_PASSWORD" \
+        -file "$NODE_CA" \
+        -noprompt
+
+    if [ $? -eq 0 ]; then
+        echo "Node CA certificate imported to FIPS truststore successfully"
+    else
+        echo "WARNING: Failed to import node CA to FIPS truststore"
+    fi
+else
+    echo "WARNING: Failed to create PKCS12 from PEM certificates"
+fi
+
+rm -f "$TEMP_P12"
+
+chown vcap:vcap "$FIPS_KEYSTORE_PATH" "$FIPS_TRUSTSTORE_PATH" 2>/dev/null
+chmod 600 "$FIPS_KEYSTORE_PATH" "$FIPS_TRUSTSTORE_PATH" 2>/dev/null
+<% end %>
+
+# Import HTTP SSL certificates if different from node certs
+<% if_p('opensearch.http.ssl.certificate', 'opensearch.http.ssl.private_key') do %>
+echo "Importing deployment HTTP SSL certificates into FIPS keystore..."
+
+HTTP_CERT="${JOB_DIR}/config/ssl/opensearch-http.crt"
+HTTP_KEY="${JOB_DIR}/config/ssl/opensearch-http.pem"
+HTTP_CA="${JOB_DIR}/config/ssl/opensearch.ca"
+TEMP_HTTP_P12="/tmp/opensearch-http.p12"
+
+# Convert PEM to PKCS12
+openssl pkcs12 -export \
+    -in "$HTTP_CERT" \
+    -inkey "$HTTP_KEY" \
+    -certfile "$HTTP_CA" \
+    -name "opensearch-http" \
+    -out "$TEMP_HTTP_P12" \
+    -passout "pass:${FIPS_STORE_PASSWORD}"
+
+if [ $? -eq 0 ]; then
+    # Import PKCS12 into BCFKS keystore
+    fips_keytool -importkeystore \
+        -srckeystore "$TEMP_HTTP_P12" \
+        -srcstoretype PKCS12 \
+        -srcstorepass "$FIPS_STORE_PASSWORD" \
+        -destkeystore "$FIPS_KEYSTORE_PATH" \
+        -deststoretype BCFKS \
+        -deststorepass "$FIPS_STORE_PASSWORD" \
+        -destkeypass "$FIPS_STORE_PASSWORD" \
+        -noprompt
+
+    if [ $? -eq 0 ]; then
+        echo "HTTP SSL certificate imported to FIPS keystore successfully"
+    else
+        echo "WARNING: Failed to import HTTP certificate to FIPS keystore"
+    fi
+else
+    echo "WARNING: Failed to create PKCS12 from HTTP PEM certificates"
+fi
+
+rm -f "$TEMP_HTTP_P12"
 <% end %>
 
 # Set proper permissions for FIPS keystores

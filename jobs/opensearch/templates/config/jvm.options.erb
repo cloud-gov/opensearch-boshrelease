@@ -90,11 +90,6 @@
 -Djavax.net.debug=ssl:handshake
 <% end %>
 
-# Other optimizations
--XX:-UsePerfData
--Dnet.bytebuddy.agent.disabled=true
--Djava.io.tmpdir=/var/vcap/data/opensearch/
-
 <% p('opensearch.jvm_options').each do |opt| %>
 <%= opt %>
 <% end %>
