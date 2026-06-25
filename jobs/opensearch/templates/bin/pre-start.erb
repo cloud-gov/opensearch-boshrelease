@@ -77,7 +77,7 @@ if [ ! -f "$OPENSEARCH_PATH_CONF/opensearch.keystore" ]; then
 fi
 
 # see https://opensearch.org/docs/latest/tuning-your-cluster/availability-and-recovery/snapshots/snapshot-restore/#amazon-s3
-<% if_p('opensearch.repository.s3.access_key', 'opensearch.repository.s3.secret_key') do %>
+<% if p('opensearch.repository.s3.enabled') %>
   ${OPENSEARCH_HOME}/bin/opensearch-plugin install -b repository-s3
 <% end %>
 <% p("opensearch.plugins").each do |plugin| name, path = plugin.first %>

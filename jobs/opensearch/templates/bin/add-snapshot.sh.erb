@@ -1,7 +1,8 @@
 #!/bin/bash
 # OpenSearch S3 Snapshot Repository and SM Policy Creation Script
 
-<% if_p('opensearch.repository.s3.region', 'opensearch.repository.s3.bucket', 'opensearch.repository.s3.name', 'opensearch.repository.s3.access_key', 'opensearch.repository.s3.secret_key', 'opensearch.repository.s3.path') do |region, bucket, repo_name, access_key, secret_key, s3_path| %>
+<% if p('opensearch.repository.s3.enabled') %>
+<% if_p('opensearch.repository.s3.region', 'opensearch.repository.s3.bucket', 'opensearch.repository.s3.name', 'opensearch.repository.s3.path') do |region, bucket, repo_name, s3_path| %>
 set -e
 
 export JOB_NAME=opensearch
@@ -252,4 +253,5 @@ rm -f /tmp/create_repo_response.json /tmp/check_repo_response.json /tmp/verify_r
 rm -f /tmp/sm_policy_app_response.json /tmp/sm_policy_metric_response.json /tmp/sm_list_response.json
 rm -f /tmp/check_app_policy.json /tmp/check_metric_policy.json
 
+<% end %>
 <% end %>

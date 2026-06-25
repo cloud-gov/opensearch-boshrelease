@@ -181,10 +181,11 @@ properties:
   opensearch.health.disable_post_start:
     description: Allow node to run post-start script? (true / false)
     default: false
-  opensearch.repository.s3.access_key:
-    description: Access key ID for AWS account
-  opensearch.repository.s3.secret_key:
-    description: Secret access key for AWS account
+  opensearch.repository.s3.enabled:
+    description: Enable S3 snapshot repository
+    default: false
+  opensearch.repository.s3.secret_name:
+    description: Name of the AWS Secrets Manager secret containing S3 credentials (must have 'access_key' and 'secret_key' fields)
   opensearch.repository.s3.region:
     description: Specify the AWS region to use for S3 repository
   opensearch.repository.s3.protocol:

@@ -18,7 +18,9 @@ curl -X PUT \
   -H 'Content-Type: application/json' \
   -d '{"persistent":{"search_backpressure":{"mode":"enforced"}}}'
 
-<% if_p('opensearch.repository.s3.region', 'opensearch.repository.s3.access_key', 'opensearch.repository.s3.secret_key') do %>
+<% if p('opensearch.repository.s3.enabled') %>
+<% if_p('opensearch.repository.s3.region') do %>
 # Run snapshot setup
 ${JOB_DIR}/bin/add-snapshot.sh
+<% end %>
 <% end %>
