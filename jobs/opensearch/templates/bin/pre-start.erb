@@ -169,12 +169,8 @@ yq -i ".notifications_full_access={\"backend_roles\": [$ORG_GUID_ROLE_LIST]}" "$
 <% end %>
 
 # Plugin installations
-<% if_p('opensearch.repository.s3.access_key', 'opensearch.repository.s3.secret_key') do %>
+<% if p('opensearch.repository.s3.enabled') %>
   ${OPENSEARCH_HOME}/bin/opensearch-plugin install -b repository-s3
-  echo '<%= p('opensearch.repository.s3.access_key') %>' \
-    | ${OPENSEARCH_HOME}/bin/opensearch-keystore add --stdin s3.client.default.access_key
-  echo '<%= p('opensearch.repository.s3.secret_key') %>' \
-    | ${OPENSEARCH_HOME}/bin/opensearch-keystore add --stdin s3.client.default.secret_key
 <% end %>
 
 <% p("opensearch.plugins").each do |plugin| name, path = plugin.first %>
