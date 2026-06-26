@@ -186,26 +186,30 @@ openjdk-21/runtime.env:
   size: 79
   object_id: 8bbe6656-9842-4a9b-5831-4cecaa2867cb
   sha: sha256:4e7340040fc0bef1b1657e51221a6a45b1816f7594fface8c204cc0ce5400e6f
-opensearch-3.6.0-linux-x64.tar.gz:
-  size: 1043009891
-  object_id: e9f2f179-3482-4c5e-5ce6-b42d8b37f7b3
-  sha: sha256:73618b075b595a7e1ad8652ea92e03d1ef7be2b9037e0e6abf58214ae1adc5c7
-opensearch-dashboards-3.6.0-linux-x64.tar.gz:
-  size: 466827681
-  object_id: a375fc1f-c53e-4ecb-662d-cb8627667e0b
-  sha: sha256:af946dcf52060db4f75a6be38815a22586297cc02ce957496e19ae084f691a2e
+opensearch-3.7.0-linux-x64.tar.gz:
+  size: 1067177646
+  object_id: 7896c028-7763-42b7-6928-6aa262f4eba9
+  sha: sha256:ae4edf0e80ff38ef9e502a51200c7f54e313cc4275020fff5b60789081546184
+opensearch-dashboards-3.7.0-linux-x64.tar.gz:
+  size: 437392934
+  object_id: 57d75dfb-5783-4709-4280-bc7a20c02916
+  sha: sha256:dc99ea5596f1c5b66d5802d1e0902ed7ccea3770d916fd5616a17040b4e46d07
 opensearch-dashboards-cf-auth-proxy-0.0.15.tar.gz:
   size: 36375
   object_id: 6f04b95c-a649-45af-5a5f-c49520cb4e0a
   sha: sha256:1fc0d78857d543683ce2a8b518f72dc85014bd79624414b85d54915921918eec
-opensearch/opensearch-alerting-3.6.0.0.zip:
-  size: 8627583
-  object_id: 2ff362ff-9638-4143-65c8-e781f4a58c26
-  sha: sha256:80e40bf8c1455f57ec4fa1a65d5d0aaab398c7ae41ef58dca78bc5d522ef8981
-opensearch/opensearch-notifications-3.6.0.0.zip:
-  size: 35133948
-  object_id: 2b372791-48d4-463c-7a83-6bf230a0236e
-  sha: sha256:9b348647c2d3c937f3d7067533efe4311001bb9387730ea46c0e80805674d142
+opensearch-dashboards-cf-auth-proxy.tar.gz:
+  size: 76242539
+  object_id: 4b3141ba-a2a3-47b4-4dfa-52ac656095e0
+  sha: sha256:d870bc22b02e5ddfd563c56e7a2e7b6d0cd1aebff6d26dec3b4c2c4637b2cdc2
+opensearch/opensearch-alerting-3.7.0.0.zip:
+  size: 20393487
+  object_id: 40f1bca6-1533-4542-46b8-5e9c9321c678
+  sha: sha256:809f5321664e47e6b792ddb106af6737381a87d63dc4841dd5b55cd212134a54
+opensearch/opensearch-notifications-3.7.0.0.zip:
+  size: 36803306
+  object_id: 084ee77a-595f-45fd-48c0-540614bc8e89
+  sha: sha256:a5c75305e32094c8716e2ad7a52b6116423891c42788a0736ede3fe5d3d4bb82
 requests/certifi-2023.11.17-py3-none-any.whl:
   size: 162530
   object_id: f2afff72-e415-4390-61c1-eb8010ed4e4a

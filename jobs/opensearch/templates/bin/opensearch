@@ -11,6 +11,7 @@ export LOG_DIR=/var/vcap/sys/log/$JOB_NAME
 export PACKAGE_DIR=/var/vcap/packages/$JOB_NAME
 export STORE_DIR=/var/vcap/store/$JOB_NAME
 export KEYSTORE_PASSWORD="<%= p('opensearch.fips.keystore_password', 'changeme') %>"
+export OPENSEARCH_JAVA_OPTS="-XX:-UsePerfData -Dnet.bytebuddy.agent.disabled=true -Djava.io.tmpdir=/var/vcap/data/opensearch/"
 
 source /var/vcap/packages/openjdk-21/bosh/runtime.env
 

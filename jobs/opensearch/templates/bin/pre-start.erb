@@ -508,6 +508,23 @@ echo "$FIPS_STORE_PASSWORD" | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin
 echo "$FIPS_STORE_PASSWORD" | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin plugins.security.ssl.http.truststore_password_secure
 echo "$FIPS_STORE_PASSWORD" | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin plugins.security.ssl.http.keystore_keypassword_secure
 echo "$FIPS_STORE_PASSWORD" | ${PACKAGE_DIR}/bin/opensearch-keystore add --stdin plugins.security.ssl.transport.keystore_keypassword_secure
+# see https://opensearch.org/docs/latest/tuning-your-cluster/availability-and-recovery/snapshots/snapshot-restore/#amazon-s3
+<% if p('opensearch.repository.s3.enabled') %>
+  ${OPENSEARCH_HOME}/bin/opensearch-plugin install -b repository-s3
+<% end %>
+<% p("opensearch.plugins").each do |plugin| name, path = plugin.first %>
+  <% if path.start_with? '/var/vcap' %>
+    ${OPENSEARCH_HOME}/bin/opensearch-plugin install -b "file://<%= path %>"
+  <% elsif path.start_with? 'http' %>
+    ${OPENSEARCH_HOME}/bin/opensearch-plugin install -b "<%= path %>"
+  <% else %>
+    ${OPENSEARCH_HOME}/bin/opensearch-plugin install -b "<%= path %>"
+  <% end %>
+<% end %>
+
+# Make sure the keystore has the right ownership and file permissions
+chown vcap:vcap "$OPENSEARCH_PATH_CONF/opensearch.keystore"
+chmod 600 "$OPENSEARCH_PATH_CONF/opensearch.keystore"
 
 
 

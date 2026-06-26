@@ -375,7 +375,6 @@ cf_user:
     - "logs-app-*"
     - "logs-metrics-*"
     dls: "{\"bool\": {\"should\": [{\"terms\": { \"@cf.space_id\": [${attr.proxy.spaceids}] }}, {\"terms\": {\"@cf.org_id\": [${attr.proxy.orgids}]}}]}}"
-    fls:
     allowed_actions:
     - "read"
     - "indices:monitor/settings/get"

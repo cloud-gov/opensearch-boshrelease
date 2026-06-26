@@ -154,3 +154,8 @@ opensearch.notifications.general.filter_by_backend_roles_access_strategy: "all"
 plugins.security.user_attribute_serialization.enabled: true
 plugins.alerting.notification_context_results_allowed_roles: []
 <% end %>
+
+<% if_p('opensearch.repository.s3.region') do |region| %>
+s3.client.default.endpoint: "s3-<%= region %>.amazonaws.com"
+s3.client.default.region: "<%= region %>"
+<% end %>

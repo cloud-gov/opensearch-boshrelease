@@ -53,6 +53,7 @@ server.ssl.certificateAuthorities: [ "/var/vcap/jobs/opensearch_dashboards/confi
 #    Settings for how OpenSearch Dashboards connects to the OpenSearch cluster.
 # ==============================================================================
 
+  
 <%
   # Determine the OpenSearch port:
   # First, attempt to get the port from a BOSH link named "opensearch".
@@ -85,6 +86,7 @@ opensearchDashboards.defaultAppId: <%= p('opensearch_dashboards.defaultAppId') %
 # 3. Branding Configuration
 #    Customizes the look and feel of the OpenSearch Dashboards interface.
 # ==============================================================================
+
 opensearchDashboards.branding:
   # logo: Configuration for the main logo displayed in the header.
   logo:
@@ -111,6 +113,10 @@ opensearchDashboards.branding:
   # useExpandedHeader: If true, uses a larger, more prominent header style.
   useExpandedHeader: false
 
+# ==============================================================================
+# Content Security Policy (CSP) Configuration
+# ==============================================================================
+csp.allowedImgSources: ["https://opensearch.org", "https://docs.opensearch.org", "https://maps.opensearch.org", "https://vectors.maps.opensearch.org", "https://tiles.maps.opensearch.org", "https://raw.githubusercontent.com"]
 # ==============================================================================
 # 4. OpenSearch Authentication (Dashboards <-> OpenSearch)
 #    Credentials and SSL settings for OpenSearch Dashboards to authenticate

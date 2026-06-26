@@ -5,4 +5,4 @@ dependencies:
 - openjdk-21
 
 files:
-- opensearch-dashboards-3.6.0-linux-x64.tar.gz
+- opensearch-dashboards-3.7.0-linux-x64.tar.gz
