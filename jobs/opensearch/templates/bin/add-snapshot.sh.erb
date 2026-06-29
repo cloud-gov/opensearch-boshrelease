@@ -119,6 +119,65 @@ fi
 echo ""
 echo "=== Creating Snapshot Management (SM) Policies ==="
 
+<% if p('opensearch.deployment_type').include?('platform') %>
+# Platform deployment: Create logs-platform* policy with 365 day retention
+EXISTING_PLATFORM_POLICY=$(curl -s -w "%{http_code}" -o /tmp/check_platform_policy.json \
+  -X GET "${OPENSEARCH_URL}/_plugins/_sm/policies/logs-platform-snapshot-policy" \
+  ${CA} ${CERT} ${KEY})
+
+if [ "$EXISTING_PLATFORM_POLICY" = "200" ]; then
+    echo "SM policy for logs-platform already exists"
+else
+    echo "Creating SM policy for logs-platform* indices (365 day retention)..."
+    LOGS_PLATFORM_POLICY_RESPONSE=$(curl -s -w "%{http_code}" -o /tmp/sm_policy_platform_response.json \
+      -X POST "${OPENSEARCH_URL}/_plugins/_sm/policies/logs-platform-snapshot-policy" \
+      ${CA} ${CERT} ${KEY} \
+      -H "Content-Type: application/json" \
+      -d '{
+        "description": "Daily snapshots of logs-platform indices with 1 year retention",
+        "creation": {
+          "schedule": {
+            "cron": {
+              "expression": "0 0 * * *",
+              "timezone": "UTC"
+            }
+          },
+          "time_limit": "1h"
+        },
+        "deletion": {
+          "schedule": {
+            "cron": {
+              "expression": "0 1 * * *",
+              "timezone": "UTC"
+            }
+          },
+          "condition": {
+            "max_age": "365d",
+            "max_count": 400,
+            "min_count": 1
+          },
+          "time_limit": "1h"
+        },
+        "snapshot_config": {
+          "repository": "'${REPOSITORY_NAME}'",
+          "indices": "logs-platform*",
+          "ignore_unavailable": true,
+          "include_global_state": false,
+          "partial": true
+        },
+        "enabled": true
+      }')
+
+    if [ "$LOGS_PLATFORM_POLICY_RESPONSE" = "200" ] || [ "$LOGS_PLATFORM_POLICY_RESPONSE" = "201" ]; then
+        echo "SM policy for logs-platform created successfully"
+        cat /tmp/sm_policy_platform_response.json
+    else
+        echo "Failed to create SM policy for logs-platform (HTTP $LOGS_PLATFORM_POLICY_RESPONSE)"
+        cat /tmp/sm_policy_platform_response.json
+    fi
+fi
+<% else %>
+# Non-platform deployment: Create logs-app* and logs-metric* policies
 EXISTING_APP_POLICY=$(curl -s -w "%{http_code}" -o /tmp/check_app_policy.json \
   -X GET "${OPENSEARCH_URL}/_plugins/_sm/policies/logs-app-snapshot-policy" \
   ${CA} ${CERT} ${KEY})
@@ -232,12 +291,13 @@ else
         cat /tmp/sm_policy_metric_response.json
     fi
 fi
+<% end %>
 
 
 # Cleanup temp files
 rm -f /tmp/create_repo_response.json /tmp/check_repo_response.json /tmp/verify_repo_response.json /tmp/test_repo_response.json
-rm -f /tmp/sm_policy_app_response.json /tmp/sm_policy_metric_response.json /tmp/sm_list_response.json
-rm -f /tmp/check_app_policy.json /tmp/check_metric_policy.json
+rm -f /tmp/sm_policy_app_response.json /tmp/sm_policy_metric_response.json /tmp/sm_policy_platform_response.json /tmp/sm_list_response.json
+rm -f /tmp/check_app_policy.json /tmp/check_metric_policy.json /tmp/check_platform_policy.json
 
 <% end %>
 <% end %>
