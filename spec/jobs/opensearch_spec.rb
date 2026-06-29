@@ -29,7 +29,7 @@ describe 'opensearch job' do
         expect(config['plugins.security.nodes_dn']).to be_nil
         expect(config['plugins.security.ssl.transport.enforce_hostname_verification']).to be_nil
         expect(config['plugins.security.ssl.http.enabled']).to be_nil
-        expect(config['s3.client.default.protocol']).to be_nil
+        expect(config['opensearch.repository.s3.protocol']).to be_nil
       end
     end
 
@@ -356,11 +356,11 @@ describe 'opensearch job' do
         end
 
         it 'sets the protocol to the default' do
-          expect(config['s3.client.default.protocol']).to eq('https')
+          expect(config[' opensearch.repository.s3.protocol']).to eq('https')
         end
 
         it 'sets the read timeout to the default' do
-          expect(config['s3.client.default.read_timeout']).to eq('50s')
+          expect(config[' opensearch.repository.s3.read_timeout']).to eq('50s')
         end
       end
 
@@ -386,15 +386,15 @@ describe 'opensearch job' do
         end
 
         it 'sets the protocol correctly' do
-          expect(config['s3.client.default.protocol']).to eq('http')
+          expect(config[' opensearch.repository.s3.protocol']).to eq('http')
         end
 
         it 'sets the read timeout correctly' do
-          expect(config['s3.client.default.read_timeout']).to eq('30s')
+          expect(config[' opensearch.repository.s3.read_timeout']).to eq('30s')
         end
 
         it 'sets the region correctly' do
-          expect(config['s3.client.default.region']).to eq('region-1')
+          expect(config['  opensearch.repository.s3.region']).to eq('region-1')
         end
       end
     end
