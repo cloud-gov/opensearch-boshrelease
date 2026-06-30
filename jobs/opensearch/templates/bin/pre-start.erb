@@ -26,7 +26,7 @@ fi
 source /var/vcap/packages/openjdk-21/bosh/runtime.env
 
 # Copy default security config files that we don't provide custom templates for
-# Only copy files that don't exist - never overwrite our custom config
+# Only copy files that don't exist
 for default_file in ${OPENSEARCH_HOME}/config/opensearch-security/*.yml; do
   filename=$(basename "$default_file")
   target_file="$OPENSEARCH_SECURITY_CONFIG_PATH/$filename"
