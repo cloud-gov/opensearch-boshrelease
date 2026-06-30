@@ -23,7 +23,7 @@ plugins.security.nodes_dn:
 
 plugins.security.restapi.roles_enabled: ["all_access"]
 <% if_p('opensearch.node.ssl.certificate') do %>
-transport.ssl.enforce_hostname_verification: false
+transport.ssl.enforce_hostname_verification: true
 plugins.security.ssl.transport.pemkey_filepath: ssl/opensearch-node.key
 plugins.security.ssl.transport.pemcert_filepath: ssl/opensearch-node.crt
 plugins.security.ssl.transport.pemtrustedcas_filepath: ssl/opensearch.ca
