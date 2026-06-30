@@ -23,9 +23,10 @@ plugins.security.nodes_dn:
 
 plugins.security.restapi.roles_enabled: ["all_access"]
 <% if_p('opensearch.node.ssl.certificate') do %>
-# Disable hostname verification for transport layer - BOSH DNS names are dynamic
+# Disable hostname verification for transport layer - BOSH DNS names and IPs are dynamic
 # and typically not included in certificate SANs
 plugins.security.ssl.transport.resolve_hostname: false
+plugins.security.ssl.transport.enforce_hostname_verification: false
 plugins.security.ssl.transport.pemkey_filepath: ssl/opensearch-node.key
 plugins.security.ssl.transport.pemcert_filepath: ssl/opensearch-node.crt
 plugins.security.ssl.transport.pemtrustedcas_filepath: ssl/opensearch.ca
