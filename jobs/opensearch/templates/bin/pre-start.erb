@@ -25,9 +25,16 @@ fi
 
 source /var/vcap/packages/openjdk-21/bosh/runtime.env
 
-# Copy default security config if it doesn't already exist
-# Have to copy files that don't exist otherwise securityadmin.sh invocation will fail
-cp -u ${OPENSEARCH_HOME}/config/opensearch-security/*.yml "$OPENSEARCH_SECURITY_CONFIG_PATH"
+# Copy default security config files that we don't provide custom templates for
+# Only copy files that don't exist - never overwrite our custom config
+for default_file in ${OPENSEARCH_HOME}/config/opensearch-security/*.yml; do
+  filename=$(basename "$default_file")
+  target_file="$OPENSEARCH_SECURITY_CONFIG_PATH/$filename"
+  if [ ! -f "$target_file" ]; then
+    echo "Copying default security config: $filename"
+    cp "$default_file" "$target_file"
+  fi
+done
 
 cd ${OPENSEARCH_HOME}
 chown -R vcap:vcap config plugins
