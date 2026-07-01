@@ -48,9 +48,13 @@ plugins.security.ssl.http.pemtrustedcas_filepath: ssl/opensearch.ca
   manager_hosts = nil
 
   if_link("opensearch") do |opensearch_link|
-    # When BOSH DNS is enabled, instance.address returns DNS name; otherwise IP
-    # The use_dns property signals intent to use DNS-based discovery
-    manager_hosts = opensearch_link.instances.map { |e| "'#{e.address}'" }.join(',')
+    # Use DNS names or IP addresses based on the use_dns property
+    # This is critical for enforce_hostname_verification to work correctly
+    if use_dns
+      manager_hosts = opensearch_link.instances.map { |e| "'#{e.address}'" }.join(',')
+    else
+      manager_hosts = opensearch_link.instances.map { |e| "'#{e.ip}'" }.join(',')
+    end
   end
 
   unless manager_hosts
