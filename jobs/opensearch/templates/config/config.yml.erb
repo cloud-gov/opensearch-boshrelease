@@ -23,7 +23,7 @@ plugins.security.nodes_dn:
 
 plugins.security.restapi.roles_enabled: ["all_access"]
 <% if_p('opensearch.node.ssl.certificate') do %>
-transport.ssl.enforce_hostname_verification: true
+transport.ssl.enforce_hostname_verification: <%= p('opensearch.transport.ssl.enforce_hostname_verification') %>
 plugins.security.ssl.transport.pemkey_filepath: ssl/opensearch-node.key
 plugins.security.ssl.transport.pemcert_filepath: ssl/opensearch-node.crt
 plugins.security.ssl.transport.pemtrustedcas_filepath: ssl/opensearch.ca
@@ -43,12 +43,25 @@ plugins.security.ssl.http.pemtrustedcas_filepath: ssl/opensearch.ca
   unless cluster_name
     cluster_name = p("opensearch.cluster_name")
   end
+
+  use_dns = p("opensearch.discovery.use_dns")
   manager_hosts = nil
+
   if_link("opensearch") do |opensearch_link|
-    manager_hosts = opensearch_link.instances.map {|e| "'#{e.address}'" }.join(',')
+    # When BOSH DNS is enabled, instance.address returns DNS name; otherwise IP
+    # The use_dns property signals intent to use DNS-based discovery
+    manager_hosts = opensearch_link.instances.map { |e| "'#{e.address}'" }.join(',')
   end
+
   unless manager_hosts
-    manager_hosts = p("opensearch.manager_hosts").join(',')
+    manager_hosts = p("opensearch.manager_hosts").map { |h| "'#{h}'" }.join(',')
+  end
+
+  # Determine publish_host: use DNS address if use_dns is enabled, otherwise IP
+  if use_dns
+    publish_host = spec.address
+  else
+    publish_host = spec.ip
   end
 %>
 cluster.name: "<%= cluster_name %>"
@@ -82,7 +95,7 @@ node.attr.<%= k %>: "<%= v %>"
 <% end %>
 
 network.bind_host: "0.0.0.0"
-network.publish_host: <%= spec.ip %>
+network.publish_host: <%= publish_host %>
 http.host: <%= p("opensearch.http_host") %>
 
 <% if_p('opensearch.config_options') do p("opensearch.config_options", {}).each do | k, v | %>

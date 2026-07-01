@@ -207,6 +207,20 @@ properties:
   opensearch.discovery.single_node:
     description: True to run cluster as a single node
     default: false
+  opensearch.discovery.use_dns:
+    description: |
+      Use BOSH DNS names for node discovery instead of IP addresses.
+      When enabled, nodes will be discovered using DNS names like:
+      <index>.<instance-group>.<network>.<deployment>.bosh
+      This is required when transport.ssl.enforce_hostname_verification is enabled.
+    default: false
+  opensearch.transport.ssl.enforce_hostname_verification:
+    description: |
+      Enforce hostname verification for transport SSL connections between nodes.
+      When enabled, node certificates must include Subject Alternative Names (SANs)
+      that match the BOSH DNS names used for discovery.
+      Requires opensearch.discovery.use_dns to be enabled.
+    default: false
   opensearch.dashboard_username:
     description: username for dashboard
     default: "dashboard.opensearch.internal"

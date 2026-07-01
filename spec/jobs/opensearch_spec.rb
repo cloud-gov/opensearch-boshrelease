@@ -92,6 +92,29 @@ describe 'opensearch job' do
         expect(config['plugins.security.ssl.transport.pemtrustedcas_filepath']).to eq('ssl/opensearch.ca')
       end
 
+      context 'when hostname verification is enabled' do
+        let(:manifest) do
+          {
+            'opensearch' => {
+              'node' => {
+                'ssl' => {
+                  'certificate' => 'node-certificate',
+                }
+              },
+              'transport' => {
+                'ssl' => {
+                  'enforce_hostname_verification' => true
+                }
+              }
+            }
+          }
+        end
+
+        it 'enables hostname verification' do
+          expect(config['transport.ssl.enforce_hostname_verification']).to eq(true)
+        end
+      end
+
       it 'configures http SSL settings' do
         expect(config['plugins.security.ssl.http.enabled']).to eq(true)
         expect(config['plugins.security.ssl.http.clientauth_mode']).to eq('OPTIONAL')
@@ -333,6 +356,27 @@ describe 'opensearch job' do
 
       it 'sets the http host' do
         expect(config['http.host']).to eq('localhost')
+      end
+
+      context 'when DNS discovery is enabled' do
+        let(:instance) do
+          Bosh::Template::Test::InstanceSpec.new(ip: '127.0.0.1', address: 'opensearch.default.my-deployment.bosh')
+        end
+
+        let(:manifest) do
+          {
+            'opensearch' => {
+              'http_host' => 'localhost',
+              'discovery' => {
+                'use_dns' => true
+              }
+            }
+          }
+        end
+
+        it 'sets the publish host to DNS address' do
+          expect(config['network.publish_host']).to eq('opensearch.default.my-deployment.bosh')
+        end
       end
     end
 
