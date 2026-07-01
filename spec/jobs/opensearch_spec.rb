@@ -27,7 +27,7 @@ describe 'opensearch job' do
         expect(config['path.repo']).to be_nil
         expect(config['plugins.security.authcz.admin_dn']).to be_nil
         expect(config['plugins.security.nodes_dn']).to be_nil
-        expect(config['plugins.security.ssl.transport.enforce_hostname_verification']).to be_nil
+        expect(config['transport.ssl.enforce_hostname_verification']).to be_nil
         expect(config['plugins.security.ssl.http.enabled']).to be_nil
         expect(config['opensearch.repository.s3.protocol']).to be_nil
       end
@@ -86,7 +86,7 @@ describe 'opensearch job' do
       end
 
       it 'configures node SSL settings' do
-        expect(config['plugins.security.ssl.transport.enforce_hostname_verification']).to eq(false)
+        expect(config['transport.ssl.enforce_hostname_verification']).to eq(false)
         expect(config['plugins.security.ssl.transport.pemkey_filepath']).to eq('ssl/opensearch-node.key')
         expect(config['plugins.security.ssl.transport.pemcert_filepath']).to eq('ssl/opensearch-node.crt')
         expect(config['plugins.security.ssl.transport.pemtrustedcas_filepath']).to eq('ssl/opensearch.ca')
