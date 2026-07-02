@@ -796,18 +796,18 @@ http_enabled = p('cloudfoundry.event_types').include? 'HttpStartStop'
 if(http_enabled == true)
   fields_json.concat(
     [
-    {"name":"httpstartstop.content_length","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true,"searchable":true,"aggregatable":true},
-    {"name":"httpstartstop.duration_in_ms","type":"number","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true,"searchable":true,"aggregatable":true},
-    {"name":"httpstartstop.forwarded","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true,"searchable":true,"aggregatable":true},
-    {"name":"httpstartstop.method","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true,"searchable":true,"aggregatable":true},
-    {"name":"httpstartstop.peer_type","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true,"searchable":true,"aggregatable":true},
-    {"name":"httpstartstop.remote_addr","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true,"searchable":true,"aggregatable":true},
-    {"name":"httpstartstop.request_id","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true,"searchable":true,"aggregatable":true},
-    {"name":"httpstartstop.start_timestamp","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true,"searchable":true,"aggregatable":true},
-    {"name":"httpstartstop.status_code","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true,"searchable":true,"aggregatable":true},
-    {"name":"httpstartstop.stop_timestamp","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true,"searchable":true,"aggregatable":true},
-    {"name":"httpstartstop.uri","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true,"searchable":true,"aggregatable":true},
-    {"name":"httpstartstop.user_agent","type":"string","count":0,"scripted":false,"indexed":true,"analyzed":false,"doc_values":true,"searchable":true,"aggregatable":true}
+    {"count":0,"name":"httpstartstop.content_length","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"httpstartstop.duration_in_ms","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"httpstartstop.forwarded","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"httpstartstop.method","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"httpstartstop.peer_type","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"httpstartstop.remote_addr","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"httpstartstop.request_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"httpstartstop.start_timestamp","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"httpstartstop.status_code","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"httpstartstop.stop_timestamp","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"httpstartstop.uri","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+    {"count":0,"name":"httpstartstop.user_agent","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true}
     ]
   )
 end
@@ -820,6 +820,9 @@ end
         "fields": "<%= fields_json.to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"') %>"
     },
     "id": "logs-metrics-*",
-    "title": "logs-metrics-*",
-    "type": "index-pattern"
+    "typeMigrationVersion": "8.0.0",
+    "references": [],
+    "type": "index-pattern",
+    "version": "1"
+}
 }

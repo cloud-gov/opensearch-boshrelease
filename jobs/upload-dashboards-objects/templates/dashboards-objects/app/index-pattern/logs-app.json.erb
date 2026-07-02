@@ -269,9 +269,8 @@ end
     "fields": "<%= fields_json.to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"') %>"
   },
   "id": "<%= p('opensearch_config.app_index_prefix') %>*",
-  "migrationVersion": {
-    "index-pattern": "7.6.0"
-  },
+  "typeMigrationVersion": "8.0.0",
   "references": [],
-  "type": "index-pattern"
+  "type": "index-pattern",
+  "version": "1"
 }
