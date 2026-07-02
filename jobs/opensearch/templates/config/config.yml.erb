@@ -71,7 +71,9 @@ plugins.security.ssl.http.pemtrustedcas_filepath: ssl/opensearch.ca
         if sample_address =~ /^[^.]+\.([^.]+)\.(.+)$/
           # $1 is the source instance group, $2 is the rest (network.deployment.bosh)
           dns_suffix = $2
-          my_dns_address = "#{spec.id}.#{spec.name}.#{dns_suffix}"
+          # BOSH DNS converts underscores to hyphens in instance group names
+          my_instance_group = spec.name.gsub('_', '-')
+          my_dns_address = "#{spec.id}.#{my_instance_group}.#{dns_suffix}"
         end
       end
     else
