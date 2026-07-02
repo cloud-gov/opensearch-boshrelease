@@ -1,439 +1,224 @@
 <%
+# OpenSearch 3.0 compatible index pattern for logs-platform-*
+# Updated field definitions from OpenSearch Dashboards export
+
 require 'json'
-fields_json =
-    [
-            {
-                "count": 0,
-                "name": "@index_type",
-                "type": "string",
-                "esTypes": [
-                    "keyword"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "@input",
-                "type": "string",
-                "esTypes": [
-                    "keyword"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "@level",
-                "type": "string",
-                "esTypes": [
-                    "keyword"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "@message",
-                "type": "string",
-                "esTypes": [
-                    "text"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": false,
-                "readFromDocValues": false
-            },
-            {
-                "count": 0,
-                "name": "@message.raw",
-                "type": "string",
-                "esTypes": [
-                    "keyword"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true,
-                "subType": {
-                    "multi": {
-                        "parent": "@message"
-                    }
-                }
-            },
-            {
-                "count": 0,
-                "name": "@raw",
-                "type": "string",
-                "esTypes": [
-                    "text"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": false,
-                "readFromDocValues": false
-            },
-            {
-                "count": 0,
-                "name": "@shipper.name",
-                "type": "string",
-                "esTypes": [
-                    "keyword"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "@shipper.priority",
-                "type": "number",
-                "esTypes": [
-                    "long"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "@source.az",
-                "type": "string",
-                "esTypes": [
-                    "keyword"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "@source.component",
-                "type": "string",
-                "esTypes": [
-                    "keyword"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "@source.deployment",
-                "type": "string",
-                "esTypes": [
-                    "keyword"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "@source.director",
-                "type": "string",
-                "esTypes": [
-                    "keyword"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "@source.host",
-                "type": "string",
-                "esTypes": [
-                    "keyword"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "@source.id",
-                "type": "string",
-                "esTypes": [
-                    "keyword"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "@source.index",
-                "type": "number",
-                "esTypes": [
-                    "long"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "@source.job",
-                "type": "string",
-                "esTypes": [
-                    "keyword"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "@source.job_index",
-                "type": "string",
-                "esTypes": [
-                    "keyword"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "@source.origin",
-                "type": "string",
-                "esTypes": [
-                    "keyword"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "@source.type",
-                "type": "string",
-                "esTypes": [
-                    "keyword"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "@source.vm",
-                "type": "string",
-                "esTypes": [
-                    "keyword"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "@timestamp",
-                "type": "date",
-                "esTypes": [
-                    "date"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "@type",
-                "type": "string",
-                "esTypes": [
-                    "keyword"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "@version",
-                "type": "string",
-                "esTypes": [
-                    "keyword"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "_id",
-                "type": "string",
-                "esTypes": [
-                    "_id"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": false
-            },
-            {
-                "count": 0,
-                "name": "_index",
-                "type": "string",
-                "esTypes": [
-                    "_index"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": false
-            },
-            {
-                "count": 0,
-                "name": "_score",
-                "type": "number",
-                "scripted": false,
-                "searchable": false,
-                "aggregatable": false,
-                "readFromDocValues": false
-            },
-            {
-                "count": 0,
-                "name": "_source",
-                "type": "_source",
-                "esTypes": [
-                    "_source"
-                ],
-                "scripted": false,
-                "searchable": false,
-                "aggregatable": false,
-                "readFromDocValues": false
-            },
-            {
-                "count": 0,
-                "name": "_type",
-                "type": "string",
-                "scripted": false,
-                "searchable": false,
-                "aggregatable": false,
-                "readFromDocValues": false
-            },
-            {
-                "count": 0,
-                "name": "geoip.location",
-                "type": "geo_point",
-                "esTypes": [
-                    "geo_point"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "syslog_msgid",
-                "type": "string",
-                "esTypes": [
-                    "keyword"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "syslog_procid",
-                "type": "string",
-                "esTypes": [
-                    "keyword"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "syslog_sd_params.az",
-                "type": "string",
-                "esTypes": [
-                    "keyword"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "syslog_sd_params.deployment",
-                "type": "string",
-                "esTypes": [
-                    "keyword"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "syslog_sd_params.group",
-                "type": "string",
-                "esTypes": [
-                    "keyword"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "syslog_sd_params.id",
-                "type": "string",
-                "esTypes": [
-                    "keyword"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            },
-            {
-                "count": 0,
-                "name": "tags",
-                "type": "string",
-                "esTypes": [
-                    "keyword"
-                ],
-                "scripted": false,
-                "searchable": true,
-                "aggregatable": true,
-                "readFromDocValues": true
-            }
-        ]
+
+#############################
+## -- OpenSearch fields -- ##
+#############################
+fields_json = [
+  {"count":0,"name":"_id","type":"string","esTypes":["_id"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":false},
+  {"count":0,"name":"_index","type":"string","esTypes":["_index"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":false},
+  {"count":0,"name":"_score","type":"number","scripted":false,"searchable":false,"aggregatable":false,"readFromDocValues":false},
+  {"count":0,"name":"_source","type":"_source","esTypes":["_source"],"scripted":false,"searchable":false,"aggregatable":false,"readFromDocValues":false},
+  {"count":0,"name":"_type","type":"string","scripted":false,"searchable":false,"aggregatable":false,"readFromDocValues":false},
+
+  {"count":0,"name":"tags","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+
+  #########################
+  ## -- Common fields -- ##
+  #########################
+  {"count":0,"name":"@index_type","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"@input","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"@level","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"@type","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"@version","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+
+  {"count":0,"name":"@timestamp","type":"date","esTypes":["date"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"@message","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"@raw","type":"string","esTypes":["text"],"scripted":false,"searchable":true,"aggregatable":false,"readFromDocValues":false},
+
+  ######################
+  ## -- @shipper.* -- ##
+  ######################
+  {"count":0,"name":"@shipper.name","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"@shipper.priority","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+
+  #####################
+  ## -- @source.* -- ##
+  #####################
+  {"count":0,"name":"@source.az","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"@source.component","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"@source.deployment","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"@source.director","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"@source.host","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"@source.id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"@source.job","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"@source.type","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+
+  ######################
+  ## -- data.* (CF) -- ##
+  ######################
+  {"count":0,"name":"data.addr","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.application_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.attempt","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.backend","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.bytes_written","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.conn-reused","type":"boolean","esTypes":["boolean"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.dial-time","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.dns-lookup-time","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.error","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.got-connection","type":"boolean","esTypes":["boolean"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.host","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.instance_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.isTLS","type":"boolean","esTypes":["boolean"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.isolation_segment","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.local-address","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.modification_tag.guid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.modification_tag.index","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.num-endpoints","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.protocol","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.retriable","type":"boolean","esTypes":["boolean"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.route-endpoint.AZ","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.route-endpoint.Addr","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.route-endpoint.ApplicationId","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.route-endpoint.RouteServiceUrl","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.route-endpoint.Tags.component","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.route_service_url","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.server_cert_domain_san","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.session","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.span-id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.status","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.timeout_seconds","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.tls-handshake-time","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.total_size","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.trace-id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.uri","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.vcap_request_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.wait_seconds","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"data.wrote-headers","type":"boolean","esTypes":["boolean"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+
+  ##################################
+  ## -- garden.* (Garden/Diego) -- ##
+  ##################################
+  {"count":0,"name":"garden.data.action","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.data.error","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.data.handle","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.data.original_timestamp","type":"date","esTypes":["date"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.data.path","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.data.payload.process_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.data.payload.signal","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.data.peaHandle","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.data.session","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.data.span-id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.data.spec.Namespaced","type":"boolean","esTypes":["boolean"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.data.spec.QuotaScope","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.data.spec.QuotaSize","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.data.spec.RootFS.ForceQuery","type":"boolean","esTypes":["boolean"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.data.spec.RootFS.Fragment","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.data.spec.RootFS.Host","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.data.spec.RootFS.OmitHost","type":"boolean","esTypes":["boolean"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.data.spec.RootFS.Opaque","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.data.spec.RootFS.Path","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.data.spec.RootFS.RawFragment","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.data.spec.RootFS.RawPath","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.data.spec.RootFS.RawQuery","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.data.spec.RootFS.Scheme","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.data.stdout","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.data.trace-id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.level","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.source","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"garden.timestamp","type":"date","esTypes":["date"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+
+  ###################
+  ## -- geoip.* -- ##
+  ###################
+  {"count":0,"name":"geoip.location","type":"geo_point","esTypes":["geo_point"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+
+  ######################
+  ## -- haproxy.* -- ##
+  ######################
+  {"count":0,"name":"haproxy.accept_date","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.actconn","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.backend_name","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.backend_queue","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.beconn","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.bind_name","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.bytes_read","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.captured_request_cookie","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.captured_request_headers","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.captured_response_cookie","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.captured_response_headers","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.client_ip","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.client_port","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.feconn","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.frontend_name","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.http_request","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.http_request_verb","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.http_status_code","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.retries","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.server_name","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.srv_queue","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.srvconn","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.termination_state","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.time_backend_connect","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.time_backend_response","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.time_duration","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.time_queue","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"haproxy.time_request","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+
+  ################################
+  ## -- Miscellaneous fields -- ##
+  ################################
+  {"count":0,"name":"invalid_fields.@timestamp","type":"date","esTypes":["date"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"kvpairs","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"level","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"log_level","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"message","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"source","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"timestamp","type":"date","esTypes":["date"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+
+  ##############################
+  ## -- rtr.* (CF Gorouter) -- ##
+  ##############################
+  {"count":0,"name":"rtr.app.id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"rtr.app.index","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"rtr.body_bytes_sent","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"rtr.dst.host","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"rtr.dst.port","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"rtr.gorouter_time_sec","type":"number","esTypes":["float"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"rtr.hostname","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"rtr.http_spec","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"rtr.http_user_agent","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"rtr.path","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"rtr.referer","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"rtr.request_bytes_received","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"rtr.response_time_sec","type":"number","esTypes":["float"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"rtr.src.host","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"rtr.src.port","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"rtr.status","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"rtr.vcap_request_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"rtr.verb","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"rtr.x_forwarded_for","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"rtr.x_forwarded_proto","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"rtr_time","type":"date","esTypes":["date"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+
+  #######################
+  ## -- syslog_* fields ##
+  #######################
+  {"count":0,"name":"syslog_msgid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"syslog_procid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"syslog_sd_params.az","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"syslog_sd_params.deployment","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"syslog_sd_params.director","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"syslog_sd_params.group","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"syslog_sd_params.id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+
+  #######################
+  ## -- uaa.* (UAA) -- ##
+  #######################
+  {"count":0,"name":"uaa.audit.data","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"uaa.audit.identity_zone_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"uaa.audit.origin","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"uaa.audit.principal","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"uaa.audit.remote_address","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"uaa.audit.type","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"uaa.log_category","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"uaa.pid","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"uaa.thread","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+  {"count":0,"name":"uaa.timestamp","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true}
+]
 %>
 {
     "attributes": {
@@ -442,9 +227,8 @@ fields_json =
         "title": "logs-platform-*"
     },
     "id": "logs-platform-*",
-    "migrationVersion": {
-        "index-pattern": "7.6.0"
-    },
+    "typeMigrationVersion": "8.0.0",
     "references": [],
-    "type": "index-pattern"
+    "type": "index-pattern",
+    "version": "1"
 }

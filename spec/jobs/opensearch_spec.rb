@@ -27,9 +27,9 @@ describe 'opensearch job' do
         expect(config['path.repo']).to be_nil
         expect(config['plugins.security.authcz.admin_dn']).to be_nil
         expect(config['plugins.security.nodes_dn']).to be_nil
-        expect(config['plugins.security.ssl.transport.enforce_hostname_verification']).to be_nil
+        expect(config['transport.ssl.enforce_hostname_verification']).to be_nil
         expect(config['plugins.security.ssl.http.enabled']).to be_nil
-        expect(config['s3.client.default.protocol']).to be_nil
+        expect(config['opensearch.repository.s3.protocol']).to be_nil
       end
     end
 
@@ -86,7 +86,7 @@ describe 'opensearch job' do
       end
 
       it 'configures node SSL settings' do
-        expect(config['plugins.security.ssl.transport.enforce_hostname_verification']).to eq(false)
+        expect(config['transport.ssl.enforce_hostname_verification']).to eq(false)
         expect(config['plugins.security.ssl.transport.pemkey_filepath']).to eq('ssl/opensearch-node.key')
         expect(config['plugins.security.ssl.transport.pemcert_filepath']).to eq('ssl/opensearch-node.crt')
         expect(config['plugins.security.ssl.transport.pemtrustedcas_filepath']).to eq('ssl/opensearch.ca')
@@ -337,14 +337,13 @@ describe 'opensearch job' do
     end
 
     describe 'with s3 repository settings' do
-      context 'using defaults' do
+      context 'without region configured' do
         let(:manifest) do
           {
             'opensearch' => {
               'repository' => {
                 's3' => {
-                  'access_key' => 'fake-access-key',
-                  'secret_key' => 'fake-secret-key',
+                  'enabled' => true
                 }
               }
             }
@@ -355,26 +354,23 @@ describe 'opensearch job' do
           config = YAML.load(template.render(manifest))
         end
 
-        it 'sets the protocol to the default' do
-          expect(config['s3.client.default.protocol']).to eq('https')
+        it 'does not set s3 client endpoint' do
+          expect(config['s3.client.default.endpoint']).to be_nil
         end
 
-        it 'sets the read timeout to the default' do
-          expect(config['s3.client.default.read_timeout']).to eq('50s')
+        it 'does not set s3 client region' do
+          expect(config['s3.client.default.region']).to be_nil
         end
       end
 
-      context 'with configured settings' do
+      context 'with region configured' do
         let(:manifest) do
           {
             'opensearch' => {
               'repository' => {
                 's3' => {
-                  'access_key' => 'fake-access-key',
-                  'secret_key' => 'fake-secret-key',
-                  'protocol' => 'http',
-                  'read_timeout' => '30s',
-                  'region' => 'region-1'
+                  'enabled' => true,
+                  'region' => 'us-east-1'
                 }
               }
             }
@@ -385,16 +381,12 @@ describe 'opensearch job' do
           config = YAML.load(template.render(manifest))
         end
 
-        it 'sets the protocol correctly' do
-          expect(config['s3.client.default.protocol']).to eq('http')
+        it 'sets the s3 client endpoint correctly' do
+          expect(config['s3.client.default.endpoint']).to eq('s3-us-east-1.amazonaws.com')
         end
 
-        it 'sets the read timeout correctly' do
-          expect(config['s3.client.default.read_timeout']).to eq('30s')
-        end
-
-        it 'sets the region correctly' do
-          expect(config['s3.client.default.region']).to eq('region-1')
+        it 'sets the s3 client region correctly' do
+          expect(config['s3.client.default.region']).to eq('us-east-1')
         end
       end
     end

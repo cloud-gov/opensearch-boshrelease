@@ -10,11 +10,9 @@ export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 export LOG_DIR=/var/vcap/sys/log/$JOB_NAME
 export PACKAGE_DIR=/var/vcap/packages/$JOB_NAME
 export STORE_DIR=/var/vcap/store/$JOB_NAME
-export JAVA_HOME="/var/vcap/packages/opensearch/jdk"
-export PATH="${JAVA_HOME}/bin:${PATH}"
-export OPENSEARCH_HOME=/var/vcap/packages/opensearch
-export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
-export KEYSTORE_PASSWORD=<%= p('opensearch.fips.keystore_password', 'changeme') %>
+export OPENSEARCH_JAVA_OPTS="-XX:-UsePerfData -Dnet.bytebuddy.agent.disabled=true -Djava.io.tmpdir=/var/vcap/data/opensearch/"
+
+source /var/vcap/packages/openjdk-21/bosh/runtime.env
 
 <% p("opensearch.exec.environment", {}).each do |k, v| %>
 export <%= k %>=<%= v %>

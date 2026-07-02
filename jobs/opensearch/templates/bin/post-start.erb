@@ -101,6 +101,17 @@ echo "Disable post start script property is set to <%= p("opensearch.health.disa
   source /var/vcap/packages/openjdk-21/bosh/runtime.env
   ODS="${OS}/plugins/opensearch-security"
   CNF="/var/vcap/jobs/opensearch/config"
+  
+  # Use the same temp directory that was set earlier
+  TEMP_DIR="/var/vcap/data/opensearch/temp"
+  export JAVA_OPTS="-Djava.io.tmpdir=${TEMP_DIR} -Djna.tmpdir=${TEMP_DIR} -Djava.library.path=${TEMP_DIR}"
+  export TMPDIR=${TEMP_DIR}
+  export TMP=${TEMP_DIR}
+  export TEMP=${TEMP_DIR}
+
+  # Allow security admin to run against mixed cluster versions
+  export OPENDISTRO_SECURITY_ADMIN_ALLOW_MIXED_CLUSTER=true
+  
   echo "=== Applying SSL config:"
   chmod +x ${ODS}/tools/securityadmin.sh
   ${ODS}/tools/securityadmin.sh -cd $CNF/opensearch-security \

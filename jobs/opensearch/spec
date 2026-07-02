@@ -18,6 +18,7 @@ templates:
   bin/post-deploy.erb: bin/post-deploy
   bin/post-start.erb: bin/post-start
   bin/add-keystore-credentials.sh.erb: bin/add-keystore-credentials.sh
+  bin/add-snapshot.sh.erb: bin/add-snapshot.sh
   config/bpm.yml.erb: config/bpm.yml
   config/config.yml.erb: config/opensearch.yml
   config/ca.erb: config/ssl/opensearch.ca
@@ -180,10 +181,11 @@ properties:
   opensearch.health.disable_post_start:
     description: Allow node to run post-start script? (true / false)
     default: false
-  opensearch.repository.s3.access_key:
-    description: Access key ID for AWS account
-  opensearch.repository.s3.secret_key:
-    description: Secret access key for AWS account
+  opensearch.repository.s3.enabled:
+    description: Enable S3 snapshot repository
+    default: false
+  opensearch.repository.s3.secret_name:
+    description: Name of the AWS Secrets Manager secret containing S3 credentials (must have 'access_key' and 'secret_key' fields)
   opensearch.repository.s3.region:
     description: Specify the AWS region to use for S3 repository
   opensearch.repository.s3.protocol:
@@ -195,9 +197,13 @@ properties:
   opensearch.repository.s3.bucket:
     description: Bucket name on S3 where to keep snapshots
     default: ""
-  opensearch.repository.name:
+  opensearch.repository.s3.name:
     description: Repository name for automatic snapshots
     default: ""
+  opensearch.repository.s3.path:
+    description: path for s3 snapshots
+    default: "snapshot/"
+
   opensearch.discovery.single_node:
     description: True to run cluster as a single node
     default: false

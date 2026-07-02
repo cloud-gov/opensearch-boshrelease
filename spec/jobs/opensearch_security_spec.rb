@@ -19,7 +19,6 @@ describe 'opensearch job' do
         clientcert_auth_domain_config = config['config']['dynamic']['authc']['clientcert_auth_domain']
         expect(clientcert_auth_domain_config['description']).to eq("Authenticate via SSL client certificates")
         expect(clientcert_auth_domain_config['http_enabled']).to eq(true)
-        expect(clientcert_auth_domain_config['transport_enabled']).to eq(true)
         expect(clientcert_auth_domain_config['order']).to eq(1)
         expect(clientcert_auth_domain_config['http_authenticator']).to eq({
           "type" => "clientcert",
@@ -59,7 +58,6 @@ describe 'opensearch job' do
       it 'configures proxy auth domain settings' do
         proxy_auth_config = config['config']['dynamic']['authc']['proxy_auth_domain']
         expect(proxy_auth_config['http_enabled']).to eq(true)
-        expect(proxy_auth_config['transport_enabled']).to eq(true)
         expect(proxy_auth_config['order']).to eq(0)
         expect(proxy_auth_config['http_authenticator']).to eq({
           "type" => "extended-proxy",

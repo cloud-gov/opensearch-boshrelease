@@ -74,8 +74,7 @@ plugins.security.ssl.transport.enabled_ciphers:
 # Non-FIPS SSL Configuration
 ################################################################
 <% if_p('opensearch.node.ssl.certificate') do %>
-plugins.security.ssl.transport.enabled: true
-plugins.security.ssl.transport.enforce_hostname_verification: false
+transport.ssl.enforce_hostname_verification: false
 plugins.security.ssl.transport.pemkey_filepath: ssl/opensearch-node.key
 plugins.security.ssl.transport.pemcert_filepath: ssl/opensearch-node.crt
 plugins.security.ssl.transport.pemtrustedcas_filepath: ssl/opensearch.ca
@@ -167,4 +166,9 @@ opensearch.notifications.general.filter_by_backend_roles: true
 opensearch.notifications.general.filter_by_backend_roles_access_strategy: "all" 
 plugins.security.user_attribute_serialization.enabled: true
 plugins.alerting.notification_context_results_allowed_roles: []
+<% end %>
+
+<% if_p('opensearch.repository.s3.region') do |region| %>
+s3.client.default.endpoint: "s3-<%= region %>.amazonaws.com"
+s3.client.default.region: "<%= region %>"
 <% end %>
