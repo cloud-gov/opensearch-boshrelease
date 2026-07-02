@@ -24,6 +24,10 @@ plugins.security.nodes_dn:
 plugins.security.restapi.roles_enabled: ["all_access"]
 <% if_p('opensearch.node.ssl.certificate') do %>
 transport.ssl.enforce_hostname_verification: <%= p('opensearch.transport.ssl.enforce_hostname_verification') %>
+<% if p('opensearch.transport.ssl.enforce_hostname_verification') && p('opensearch.discovery.use_dns') %>
+# When hostname verification is enabled, resolve hostnames instead of using IPs for cert validation
+plugins.security.ssl.transport.resolve_hostname: true
+<% end %>
 plugins.security.ssl.transport.pemkey_filepath: ssl/opensearch-node.key
 plugins.security.ssl.transport.pemcert_filepath: ssl/opensearch-node.crt
 plugins.security.ssl.transport.pemtrustedcas_filepath: ssl/opensearch.ca
@@ -46,12 +50,30 @@ plugins.security.ssl.http.pemtrustedcas_filepath: ssl/opensearch.ca
 
   use_dns = p("opensearch.discovery.use_dns")
   manager_hosts = nil
+  my_dns_address = nil
 
   if_link("opensearch") do |opensearch_link|
     # Use DNS names or IP addresses based on the use_dns property
     # This is critical for enforce_hostname_verification to work correctly
     if use_dns
       manager_hosts = opensearch_link.instances.map { |e| "'#{e.address}'" }.join(',')
+      # Find the current instance's DNS address from the link
+      my_instance = opensearch_link.instances.find { |e| e.id == spec.id }
+      if my_instance
+        my_dns_address = my_instance.address
+      else
+        # Instance not in the consumed link (e.g., data node consuming manager link)
+        # Construct DNS address using the same pattern as the link instances
+        # Extract the DNS suffix from any link instance address
+        sample_address = opensearch_link.instances.first.address
+        # Pattern: <guid>.<instance-group>.<network>.<deployment>.bosh
+        # We replace the instance-group with our own
+        if sample_address =~ /^[^.]+\.([^.]+)\.(.+)$/
+          # $1 is the source instance group, $2 is the rest (network.deployment.bosh)
+          dns_suffix = $2
+          my_dns_address = "#{spec.id}.#{spec.name}.#{dns_suffix}"
+        end
+      end
     else
       manager_hosts = opensearch_link.instances.map { |e| "'#{e.ip}'" }.join(',')
     end
@@ -62,7 +84,10 @@ plugins.security.ssl.http.pemtrustedcas_filepath: ssl/opensearch.ca
   end
 
   # Determine publish_host: use DNS address if use_dns is enabled, otherwise IP
-  if use_dns
+  if use_dns && my_dns_address
+    publish_host = my_dns_address
+  elsif use_dns
+    # Fallback to spec.address if we couldn't find ourselves in the link
     publish_host = spec.address
   else
     publish_host = spec.ip
