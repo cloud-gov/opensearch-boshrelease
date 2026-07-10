@@ -90,7 +90,7 @@ http.host: <%= p("opensearch.http_host") %>
 <% end %>
 
 plugins.security.system_indices.enabled: true
-plugins.anomaly_detection.enabled: false
+plugins.anomaly_detection.enabled: <%= p('opensearch.anomaly_detection.enabled') %>
 
 <% if_p('opensearch.routing.watermark.low') do |low| %>
 cluster.routing.allocation.disk.watermark.low: <%= low %>
@@ -107,12 +107,14 @@ cluster.routing.allocation.disk.watermark.flood_stage: <%= flood_stage %>
 <% if p('opensearch.deployment_type').include?('platform') %>
 plugins.alerting.filter_by_backend_roles: false
 opensearch.notifications.general.filter_by_backend_roles: false
+plugins.anomaly_detection.filter_by_backend_roles: false
 plugins.security.user_attribute_serialization.enabled: false
 <% else %>
 plugins.alerting.filter_by_backend_roles: true
 plugins.alerting.filter_by_backend_roles_access_strategy: "all"
 opensearch.notifications.general.filter_by_backend_roles: true
-opensearch.notifications.general.filter_by_backend_roles_access_strategy: "all" 
+opensearch.notifications.general.filter_by_backend_roles_access_strategy: "all"
+plugins.anomaly_detection.filter_by_backend_roles: true
 plugins.security.user_attribute_serialization.enabled: true
 plugins.alerting.notification_context_results_allowed_roles: []
 <% end %>

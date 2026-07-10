@@ -67,6 +67,18 @@ auditor_access:
   backend_roles:
   - "auditor"
 
+anomaly_full_access:
+  reserved: false
+  backend_roles:
+  - "user"
+  description: "Maps CF users to anomaly detection full access"
+
+anomaly_read_access:
+  reserved: false
+  backend_roles:
+  - "admin"
+  description: "Maps admin to anomaly detection read access"
+
 manage_snapshots:
   reserved: false
   backend_roles:

@@ -267,3 +267,7 @@ properties:
   opensearch.deployment_type:
     description: type of opensearch deployment
     default: ["app"]
+
+  opensearch.anomaly_detection.enabled:
+    description: Enable anomaly detection plugin functionality
+    default: false

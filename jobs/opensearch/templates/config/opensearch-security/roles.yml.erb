@@ -70,6 +70,13 @@ anomaly_read_access:
     - 'cluster:admin/opendistro/ad/tasks/search'
     - 'cluster:admin/opendistro/ad/detector/validate'
     - 'cluster:admin/opendistro/ad/result/topAnomalies'
+  index_permissions:
+    - index_patterns:
+        - 'logs-*'
+      allowed_actions:
+        - 'indices:data/read/search'
+        - 'indices:admin/mappings/get'
+        - 'indices:admin/aliases/get'
 
 # Allows users to use all Anomaly Detection functionality
 anomaly_full_access:
@@ -79,11 +86,12 @@ anomaly_full_access:
     - 'cluster:admin/opendistro/ad/*'
   index_permissions:
     - index_patterns:
-        - '*'
+        - 'logs-*'
       allowed_actions:
         - 'indices_monitor'
         - 'indices:admin/aliases/get'
         - 'indices:admin/mappings/get'
+        - 'indices:data/read/search'
 
 # Allow users to execute read only k-NN actions
 knn_read_access:
