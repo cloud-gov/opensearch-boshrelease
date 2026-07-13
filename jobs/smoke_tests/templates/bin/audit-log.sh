@@ -19,6 +19,8 @@ export PATH=$JQ_PACKAGE_DIR/bin:$AWS_PACKAGE_DIR/bin:$PATH
   opensearch_host = p("smoke_tests.opensearch_manager.host")
   opensearch_port = p("smoke_tests.opensearch_manager.port")
   index = p("smoke_tests.index")
+  org_guid = p("smoke_tests.org_guid")
+  space_guid = p("smoke_tests.space_guid")
 %>
 
 # Service configuration
@@ -27,6 +29,8 @@ INDEX="<%= index %>*"
 S3_BUCKET="<%= p('smoke_tests.s3_audit.bucket') %>"
 S3_REGION="<%= p('smoke_tests.s3.region') %>"
 ENVIRONMENT="<%= p('smoke_tests.s3.environment') %>"
+ORG_GUID="<%= org_guid %>"
+SPACE_GUID="<%= space_guid %>"
 
 # Validate required properties
 if [ -z "$S3_BUCKET" ] || [ -z "$S3_REGION" ] || [ -z "$ENVIRONMENT" ]; then
@@ -48,14 +52,12 @@ current_time=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 # =============================================================================
 # CREATE AND UPLOAD LOG
 # =============================================================================
-org_value="c9b54579-7056-46c3-9870-334330e9be75"
-space_value="5db8fd06-ac53-4ed0-a224-b0bad2e463d2"
 # Construct the LOG JSON object (using jq for proper formatting)
 LOG=$(jq -nc \
     --arg timestamp "$current_time" \
     --arg smoke_id "$SMOKE_ID" \
-    --arg org_value "$org_value" \
-    --arg space_value "$space_value" \
+    --arg org_value "$ORG_GUID" \
+    --arg space_value "$SPACE_GUID" \
     '{
         "guid": "024d7b3a-1732-4ae4-9e2a-f36eaa2c741c",
         "created_at": $timestamp,
@@ -140,7 +142,7 @@ while [ $TRIES -gt 0 ]; do
         org_opensearch=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["org_id"]')
         space_opensearch=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["space_id"]')
         
-        if [[ "$org_opensearch" == "$org_value" && "$space_opensearch" == "$space_value" ]]; then
+        if [[ "$org_opensearch" == "$ORG_GUID" && "$space_opensearch" == "$SPACE_GUID" ]]; then
             echo "SUCCESS: Actor log contains 'org id' and 'space id' fields."
             
             # Parse and validate Actor fields

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -x
+set -ex
 JOB_NAME=smoke_tests
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 

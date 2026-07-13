@@ -121,17 +121,17 @@ if command -v aws &> /dev/null; then
     fi
 
     if [ $? -eq 0 ]; then
-        echo "✅ Successfully uploaded smoke test log to CloudWatch"
+        echo "SUCCESS: Uploaded smoke test log to CloudWatch"
         echo "   Log Group: $LOG_GROUP"
         echo "   Log Stream: $LOG_STREAM"
         echo "   Smoke ID: $SMOKE_ID"
         echo "   Message: $LOG_MESSAGE"
     else
-        echo "❌ Failed to upload log to CloudWatch Logs"
+        echo "ERROR: Failed to upload log to CloudWatch Logs"
         exit 1
     fi
 else
-    echo "❌ AWS CLI not found, cannot upload to CloudWatch Logs"
+    echo "ERROR: AWS CLI not found, cannot upload to CloudWatch Logs"
     exit 1
 fi
 

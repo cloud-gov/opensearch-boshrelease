@@ -1,3 +1,4 @@
+#!/bin/bash
 set -eu
 
 JOB_NAME=smoke_tests
@@ -24,12 +25,16 @@ export PATH=$JQ_PACKAGE_DIR/bin:$PATH
   opensearch_host = p("smoke_tests.opensearch_manager.host")
   opensearch_port = p("smoke_tests.opensearch_manager.port")
   index = p("smoke_tests.index")
+  org_guid = p("smoke_tests.org_guid")
+  space_guid = p("smoke_tests.space_guid")
 %>
 
 MASTER_URL="https://<%= opensearch_host %>:<%= opensearch_port %>"
 INGESTOR_HOST="<%= ingestor_host %>"
 INGESTOR_PORT="<%= ingestor_port %>"
 INDEX="<%= index %>*"
+ORG_GUID="<%= org_guid %>"
+SPACE_GUID="<%= space_guid %>"
 
 
 <% if p('smoke_tests.count_test.run') %>
@@ -70,9 +75,7 @@ fi
 <% end %>
 
 SMOKE_ID=$(LC_ALL=C; cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
-org_value="c9b54579-7056-46c3-9870-334330e9be75"
-space_value="5db8fd06-ac53-4ed0-a224-b0bad2e463d2"
-LOG="1090 <14>1 $(date -u +'%Y-%m-%dT%H:%M:%SZ') 0.0.0.0 d20d2020-d200-d200-d200-d20d20d20d20 [SMOKE/TEST/ERRAND/0] - [tags@47450 app_id=\"8675309e-f567-4d58-9649-ba24fad5344c\" app_name=\"smoke_tests\" organization_id=\"${org_value}\" organization_name=\"smoke-tests\" job=\"smoke_tests\" space_id=\"${space_value}\" space_name=\"app\" source_type=\"APP/PROC/WEB\"] {\"smoke-id\":\"${SMOKE_ID}\"}"
+LOG="1090 <14>1 $(date -u +'%Y-%m-%dT%H:%M:%SZ') 0.0.0.0 d20d2020-d200-d200-d200-d20d20d20d20 [SMOKE/TEST/ERRAND/0] - [tags@47450 app_id=\"8675309e-f567-4d58-9649-ba24fad5344c\" app_name=\"smoke_tests\" organization_id=\"${ORG_GUID}\" organization_name=\"smoke-tests\" job=\"smoke_tests\" space_id=\"${SPACE_GUID}\" space_name=\"app\" source_type=\"APP/PROC/WEB\"] {\"smoke-id\":\"${SMOKE_ID}\"}"
 
 <% if p('smoke_tests.tls.use_tls') %>
 INGEST="openssl s_client -cert $JOB_DIR/config/ssl/ingestor.crt -key $JOB_DIR/config/ssl/ingestor.key -CAfile ${JOB_DIR}/config/ssl/opensearch.ca -connect $INGESTOR_HOST:$INGESTOR_PORT"
@@ -104,7 +107,7 @@ while [ $TRIES -gt 0 ]; do
     space_opensearch=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["space_id"]')
 
     # Validate that the fields exist and have cf values
-    if [[ "$org_opensearch" == "$org_value" && "$space_opensearch" == "$space_value" ]]; then
+    if [[ "$org_opensearch" == "$ORG_GUID" && "$space_opensearch" == "$SPACE_GUID" ]]; then
       echo "SUCCESS: App Log contains 'org id' and 'space id' fields."
       exit 0
     else

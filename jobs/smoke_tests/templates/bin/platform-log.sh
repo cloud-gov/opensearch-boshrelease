@@ -1,3 +1,4 @@
+#!/bin/bash
 set -eu
 
 <% if p('smoke_tests.platform_log.enabled') %>
