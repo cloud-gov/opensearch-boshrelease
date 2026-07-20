@@ -54,9 +54,33 @@
                 ],
                 "transitions": [
                     {
-                        "state_name": "Old_index",
+                        "state_name": "Shrink_index",
                         "conditions": {
                             "min_index_age": "90d"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "Shrink_index",
+                "actions": [
+                    {
+                        "retry": {
+                            "count": 3,
+                            "backoff": "exponential",
+                            "delay": "1m"
+                        },
+                        "shrink": {
+                            "num_new_shards": 9,
+                            "force_unsafe": true
+                        }
+                    }
+                ],
+                "transitions": [
+                    {
+                        "state_name": "Old_index",
+                        "conditions": {
+                            "min_index_age": "91d"
                         }
                     }
                 ]

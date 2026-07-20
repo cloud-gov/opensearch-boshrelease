@@ -120,7 +120,7 @@ echo ""
 echo "=== Creating Snapshot Management (SM) Policies ==="
 
 <% if p('opensearch.deployment_type').include?('platform') %>
-# Platform deployment: Create logs-platform* policy with 365 day retention
+# Platform deployment: Create logs-platform* policy with 186 snapshot retention
 EXISTING_PLATFORM_POLICY=$(curl -s -w "%{http_code}" -o /tmp/check_platform_policy.json \
   -X GET "${OPENSEARCH_URL}/_plugins/_sm/policies/logs-platform-snapshot-policy" \
   ${CA} ${CERT} ${KEY})
@@ -128,13 +128,14 @@ EXISTING_PLATFORM_POLICY=$(curl -s -w "%{http_code}" -o /tmp/check_platform_poli
 if [ "$EXISTING_PLATFORM_POLICY" = "200" ]; then
     echo "SM policy for logs-platform already exists"
 else
-    echo "Creating SM policy for logs-platform* indices (365 day retention)..."
+    # 183 days active in OpenSearch + 186 daily snapshots = ~369 days total coverage (1 year+)
+    echo "Creating SM policy for logs-platform* indices (186 snapshot retention)..."
     LOGS_PLATFORM_POLICY_RESPONSE=$(curl -s -w "%{http_code}" -o /tmp/sm_policy_platform_response.json \
       -X POST "${OPENSEARCH_URL}/_plugins/_sm/policies/logs-platform-snapshot-policy" \
       ${CA} ${CERT} ${KEY} \
       -H "Content-Type: application/json" \
       -d '{
-        "description": "Daily snapshots of logs-platform indices with 1 year retention",
+        "description": "Daily snapshots of logs-platform indices with 186 snapshot retention",
         "creation": {
           "schedule": {
             "cron": {
@@ -152,8 +153,7 @@ else
             }
           },
           "condition": {
-            "max_age": "365d",
-            "max_count": 400,
+            "max_count": 186,
             "min_count": 1
           },
           "time_limit": "1h"
@@ -185,13 +185,14 @@ EXISTING_APP_POLICY=$(curl -s -w "%{http_code}" -o /tmp/check_app_policy.json \
 if [ "$EXISTING_APP_POLICY" = "200" ]; then
     echo "SM policy for logs-app already exists"
 else
-    echo "Creating SM policy for logs-app* indices (365 day retention)..."
+    # 183 days active in OpenSearch + 186 daily snapshots = ~369 days total coverage (1 year+)
+    echo "Creating SM policy for logs-app* indices (186 snapshot retention)..."
     LOGS_APP_POLICY_RESPONSE=$(curl -s -w "%{http_code}" -o /tmp/sm_policy_app_response.json \
       -X POST "${OPENSEARCH_URL}/_plugins/_sm/policies/logs-app-snapshot-policy" \
       ${CA} ${CERT} ${KEY} \
       -H "Content-Type: application/json" \
       -d '{
-        "description": "Daily snapshots of logs-app indices with 1 year retention",
+        "description": "Daily snapshots of logs-app indices with 186 snapshot retention",
         "creation": {
           "schedule": {
             "cron": {
@@ -209,8 +210,7 @@ else
             }
           },
           "condition": {
-            "max_age": "365d",
-            "max_count": 400,
+            "max_count": 186,
             "min_count": 1
           },
           "time_limit": "1h"
@@ -242,14 +242,14 @@ EXISTING_METRIC_POLICY=$(curl -s -w "%{http_code}" -o /tmp/check_metric_policy.j
 if [ "$EXISTING_METRIC_POLICY" = "200" ]; then
     echo "SM policy for logs-metric already exists"
 else
-    # Create SM Policy for logs-metric (90 days retention)
-    echo "Creating SM policy for logs-metric* indices (90 day retention)..."
+    # Keep only 4 snapshots for metrics - minimal retention needed
+    echo "Creating SM policy for logs-metric* indices (4 snapshot retention)..."
     LOGS_METRIC_POLICY_RESPONSE=$(curl -s -w "%{http_code}" -o /tmp/sm_policy_metric_response.json \
       -X POST "${OPENSEARCH_URL}/_plugins/_sm/policies/logs-metric-snapshot-policy" \
       ${CA} ${CERT} ${KEY} \
       -H "Content-Type: application/json" \
       -d '{
-        "description": "Daily snapshots of logs-metric indices with 90 day retention",
+        "description": "Daily snapshots of logs-metric indices with 4 snapshot retention",
         "creation": {
           "schedule": {
             "cron": {
@@ -267,8 +267,7 @@ else
             }
           },
           "condition": {
-            "max_age": "90d",
-            "max_count": 100,
+            "max_count": 4,
             "min_count": 1
           },
           "time_limit": "1h"
