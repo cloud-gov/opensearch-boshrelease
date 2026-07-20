@@ -120,7 +120,7 @@ echo ""
 echo "=== Creating Snapshot Management (SM) Policies ==="
 
 <% if p('opensearch.deployment_type').include?('platform') %>
-# Platform deployment: Create logs-platform* policy with 186 snapshot retention
+# Platform deployment: Create logs-platform* policy with 186 day snapshot retention
 EXISTING_PLATFORM_POLICY=$(curl -s -w "%{http_code}" -o /tmp/check_platform_policy.json \
   -X GET "${OPENSEARCH_URL}/_plugins/_sm/policies/logs-platform-snapshot-policy" \
   ${CA} ${CERT} ${KEY})
