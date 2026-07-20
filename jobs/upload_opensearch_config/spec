@@ -53,7 +53,7 @@ properties:
     description: alias of platform index
   opensearch_config.app_delete_index_age:
     description: how old a app index has to be before deletion
-    default: 364d
+    default: 183d
   opensearch_config.metric_delete_index_age:
     description: how old a metric index has to be before deletion
     default: 90d
