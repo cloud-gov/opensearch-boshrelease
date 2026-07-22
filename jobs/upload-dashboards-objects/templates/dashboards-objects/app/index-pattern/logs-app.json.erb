@@ -28,6 +28,8 @@ fields_json =
     {"count":0,"name":"@shipper.name","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
     {"count":0,"name":"@shipper.priority","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
 
+    {"count":0,"name":"broker","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+
     {"count":0,"name":"@source.az","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
     {"count":0,"name":"@source.component","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
     {"count":0,"name":"@source.deployment","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
@@ -83,8 +85,6 @@ fields_json.concat(
 ## -- App fields -- ##
 ###########################
 logmessage_enabled = p('cloudfoundry.event_types').include? 'LogMessage'
-containermetric_enabled = p('cloudfoundry.event_types').include? 'ContainerMetric'
-valuemetric_enabled = p('cloudfoundry.event_types').include? 'ValueMetric'
 counterevent_enabled = p('cloudfoundry.event_types').include? 'CounterEvent'
 error_enabled = p('cloudfoundry.event_types').include? 'Error'
 audit_enabled = p('cloudfoundry.event_types').include? 'Audit'
@@ -151,19 +151,21 @@ if(logmessage_enabled == true)
       {"count":0,"name":"http.request.remote_ip","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
       {"count":0,"name":"http.request.remote_port","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
       {"count":0,"name":"http.request.size","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
-      {"count":0,"name":"http.request.status","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
-      {"count":0,"name":"http.request.timestamp","type":"date","esTypes":["date"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.status","type":"conflict","esTypes":["keyword","long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":false},
+      {"count":0,"name":"http.request.timestamp","type":"conflict","esTypes":["date","float","keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":false},
       {"count":0,"name":"http.request.ts","type":"date","esTypes":["date"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
       {"count":0,"name":"http.request.uri","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
       {"count":0,"name":"http.request.url","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
       {"count":0,"name":"http.request.user_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
       {"count":0,"name":"http.request.user_agent","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.headers","type":"string","esTypes":["flat_object"],"scripted":false,"searchable":true,"aggregatable":false,"readFromDocValues":false},
       {"count":0,"name":"http.response.body.bytes","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
       {"count":0,"name":"http.response.body.content","type":"string","esTypes":["wildcard"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
       {"count":0,"name":"http.response.body.content.text","type":"string","esTypes":["match_only_text"],"scripted":false,"searchable":true,"aggregatable":false,"readFromDocValues":false},
       {"count":0,"name":"http.response.bytes","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
       {"count":0,"name":"http.response.mime_type","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
       {"count":0,"name":"http.response.status_code","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.response.headers","type":"string","esTypes":["flat_object"],"scripted":false,"searchable":true,"aggregatable":false,"readFromDocValues":false},
       {"count":0,"name":"http.version","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true}
     ]
   )
@@ -210,28 +212,6 @@ if(logmessage_enabled == true)
 
 end
 
-if(containermetric_enabled == true)
-  fields_json.concat(
-    [
-      {"count":0,"name":"containermetric.memory_bytes_quota","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
-      {"count":0,"name":"containermetric.memory_bytes","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
-      {"count":0,"name":"containermetric.disk_bytes_quota","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
-      {"count":0,"name":"containermetric.disk_bytes","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
-      {"count":0,"name":"containermetric.cpu_percentage","type":"number","esTypes":["float"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true}
-    ]
-  )
-end
-
-if(valuemetric_enabled == true)
-  fields_json.concat(
-    [
-      {"count":0,"name":"valuemetric.unit","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
-      {"count":0,"name":"valuemetric.name","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
-      {"count":0,"name":"valuemetric.value","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true}
-    ]
-  )
-end
-
 if(counterevent_enabled == true)
   fields_json.concat(
     [
@@ -263,7 +243,63 @@ if(audit_enabled == true)
       {"count":0,"name":"created_at","type":"date","esTypes":["date"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
       {"count":0,"name":"updated_at","type":"date","esTypes":["date"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
       {"count":0,"name":"type","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
-      {"count":0,"name":"guid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true}
+      {"count":0,"name":"guid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.index","type":"conflict","esTypes":["keyword","long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":false},
+      {"count":0,"name":"data.request","type":"string","esTypes":["flat_object"],"scripted":false,"searchable":true,"aggregatable":false,"readFromDocValues":false},
+      {"count":0,"name":"data.active","type":"boolean","esTypes":["boolean"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.allow_context_updates","type":"boolean","esTypes":["boolean"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.app_port","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.bindable","type":"boolean","esTypes":["boolean"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.bindings_retrievable","type":"boolean","esTypes":["boolean"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.build_guid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.buildpacks.buildpack_name","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.buildpacks.name","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.buildpacks.version","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.cell_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.crash_count","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.crash_timestamp","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.deployment_guid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.description","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.destination_guid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.droplet_guid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.error_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.error_message","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.exit_description","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.extra","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.free","type":"boolean","esTypes":["boolean"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.instance","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.instances_retrievable","type":"boolean","esTypes":["boolean"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.label","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.maintenance_info.description","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.maintenance_info.version","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.manifest_triggered","type":"boolean","esTypes":["boolean"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.name","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.organization_guid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.organization_name","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.package_guid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.plan_updateable","type":"boolean","esTypes":["boolean"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.process_guid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.process_type","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.protocol","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.public","type":"boolean","esTypes":["boolean"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.ready","type":"boolean","esTypes":["boolean"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.reason","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.revision_guid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.revision_version","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.route_guid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.route_mapping_guid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.service_broker_guid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.service_guid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.space_guid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.space_name","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.strategy","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.tags","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.target_space_guid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.target_space_guids","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.task_guid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.type","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.unique_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"data.version","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true}
     ]
   )
 end
