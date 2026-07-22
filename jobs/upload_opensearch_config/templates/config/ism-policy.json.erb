@@ -54,7 +54,7 @@
                 ],
                 "transitions": [
                     {
-                        "state_name": "Shrink_index",
+                        "state_name": "Old_index",
                         "conditions": {
                             "min_index_age": "90d"
                         }
@@ -62,7 +62,7 @@
                 ]
             },
             {
-                "name": "Shrink_index",
+                "name": "Old_index",
                 "actions": [
                     {
                         "retry": {
@@ -70,24 +70,10 @@
                             "backoff": "exponential",
                             "delay": "1m"
                         },
-                        "shrink": {
-                            "num_new_shards": 9,
-                            "force_unsafe": true
+                        "index_settings": {
+                            "index.routing.allocation.total_shards_per_node": "3"
                         }
-                    }
-                ],
-                "transitions": [
-                    {
-                        "state_name": "Old_index",
-                        "conditions": {
-                            "min_index_age": "91d"
-                        }
-                    }
-                ]
-            },
-            {
-                "name": "Old_index",
-                "actions": [
+                    },
                     {
                         "retry": {
                             "count": 3,
