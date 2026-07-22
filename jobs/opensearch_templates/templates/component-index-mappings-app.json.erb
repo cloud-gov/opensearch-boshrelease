@@ -134,6 +134,25 @@ keyword_default = { "type": "keyword", "index": true }.to_json
           }
         },
         "updated_at": { "type": "date" },
+        "data": {
+          "type": "object",
+          "dynamic": true,
+          "properties": {
+            "index": <%= keyword_default %>,
+            "request": {
+              "type": "object",
+              "dynamic": true,
+              "properties": {
+                "data": {
+                  "type": "flat_object"
+                },
+                "parameters": {
+                  "type": "flat_object"
+                }
+              }
+            }
+          }
+        },
         "valuemetric": {
           "type": "object",
           "dynamic": true,
@@ -217,7 +236,8 @@ keyword_default = { "type": "keyword", "index": true }.to_json
                 "user_id": <%= keyword_default %>,
                 "duration": { "type": "double" },
                 "size": { "type": "long" },
-                "status": { "type": "long" }
+                "status": { "type": "long" },
+                "timestamp": <%= keyword_default %>
               }
             },
             "response": {
