@@ -135,14 +135,7 @@ keyword_default = { "type": "keyword", "index": true }.to_json
         },
         "updated_at": { "type": "date" },
         "data": {
-          "type": "object",
-          "dynamic": true,
-          "properties": {
-            "index": <%= keyword_default %>,
-            "request": {
-              "type": "flat_object"
-            }
-          }
+          "type": "flat_object"
         },
         "valuemetric": {
           "type": "object",
