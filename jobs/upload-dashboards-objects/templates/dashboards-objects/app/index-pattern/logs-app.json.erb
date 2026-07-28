@@ -183,12 +183,7 @@ if(logmessage_enabled == true)
   # app fields (extracted from application logs)
   fields_json.concat(
     [
-      {"count":0,"name":"app.logger","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
-      {"count":0,"name":"app.thread","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
-      {"count":0,"name":"app.framework","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
-      {"count":0,"name":"app.line","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
-      {"count":0,"name":"app.timestamp","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
-      {"count":0,"name":"app._raw","type":"string","esTypes":["flat_object"],"scripted":false,"searchable":true,"aggregatable":false,"readFromDocValues":false}
+      {"count":0,"name":"app","type":"string","esTypes":["flat_object"],"scripted":false,"searchable":true,"aggregatable":false,"readFromDocValues":false}
     ]
   )
 
