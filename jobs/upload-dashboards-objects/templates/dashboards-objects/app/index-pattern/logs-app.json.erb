@@ -165,8 +165,30 @@ if(logmessage_enabled == true)
       {"count":0,"name":"http.response.bytes","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
       {"count":0,"name":"http.response.mime_type","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
       {"count":0,"name":"http.response.status_code","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.response.status_text","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
       {"count":0,"name":"http.response.headers","type":"string","esTypes":["flat_object"],"scripted":false,"searchable":true,"aggregatable":false,"readFromDocValues":false},
-      {"count":0,"name":"http.version","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true}
+      {"count":0,"name":"http.version","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"http.request.message","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true}
+    ]
+  )
+
+  # trace fields (for distributed tracing / correlation IDs)
+  fields_json.concat(
+    [
+      {"count":0,"name":"trace.id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"trace.span_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true}
+    ]
+  )
+
+  # app fields (extracted from application logs)
+  fields_json.concat(
+    [
+      {"count":0,"name":"app.logger","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"app.thread","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"app.framework","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"app.line","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"app.timestamp","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"app._raw","type":"string","esTypes":["flat_object"],"scripted":false,"searchable":true,"aggregatable":false,"readFromDocValues":false}
     ]
   )
 
