@@ -1,0 +1,8 @@
+# This file contains the filters for platform logs from S3
+# Assumes incoming messages are JSON format
+
+# Platform S3 parsing (JSON)
+<%= File.read('src/logstash-filters/snippets/platform-s3.conf') %>
+
+# Teardown - truncate long messages for S3 ingestion
+<%= File.read('src/logstash-filters/snippets/teardown-s3.conf') %>

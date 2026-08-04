@@ -39,7 +39,7 @@ properties:
   opensearch_config.base_index_component_name:
     description: Name that component template component-index-mappings-base.json is uploaded as by upload_opensearch_config
   opensearch_config.metric_index_component_name:
-    description: Name that compenent-index-mappings-metrics.json is uploaded as by upload_opensearch_config
+    description: Name that component-index-mappings-metrics.json is uploaded as by upload_opensearch_config
   opensearch_config.app_index_component_name:
     description: Name that component-index-mappings-app.json is uploaded as by upload_opensearch_config
   opensearch_config.platform_index_component_name:

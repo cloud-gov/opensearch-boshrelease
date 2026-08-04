@@ -1,0 +1,92 @@
+<% if_link("opensearch") do |opensearch| %>
+<% if opensearch.p('opensearch.deployment_type').include?('platform') %>
+<%
+alert_destination_id = p('opensearch_config.alert_destination_id', '')
+%>
+{
+  "name": "opensearch-index-error",
+  "type": "monitor",
+  "monitor_type": "query_level_monitor",
+  "enabled": true,
+  "schedule": {
+    "period": {
+      "interval": 15,
+      "unit": "MINUTES"
+    }
+  },
+  "inputs": [
+    {
+      "search": {
+        "indices": [
+          "logs-platform*"
+        ],
+        "query": {
+          "size": 0,
+          "query": {
+            "bool": {
+              "filter": [
+                {
+                  "match_phrase": {
+                    "@message": {
+                      "query": "Could not index event to OpenSearch",
+                      "slop": 0,
+                      "zero_terms_query": "NONE",
+                      "boost": 1
+                    }
+                  }
+                },
+                {
+                  "range": {
+                    "@timestamp": {
+                      "from": "{{period_end}}||-15m",
+                      "to": "{{period_end}}",
+                      "include_lower": true,
+                      "include_upper": true,
+                      "format": "epoch_millis",
+                      "boost": 1
+                    }
+                  }
+                }
+              ],
+              "adjust_pure_negative": true,
+              "boost": 1
+            }
+          }
+        }
+      }
+    }
+  ],
+  "triggers": [
+    {
+      "query_level_trigger": {
+        "name": "opensearchIndexError",
+        "severity": "1",
+        "condition": {
+          "script": {
+            "source": "ctx.results[0].hits.total.value > 0",
+            "lang": "painless"
+          }
+        },
+        "actions": [
+<% if alert_destination_id && !alert_destination_id.empty? %>
+          {
+            "name": "Customer alert",
+            "destination_id": "<%= alert_destination_id %>",
+            "message_template": {
+              "source": "Monitor {{ctx.monitor.name}} just entered alert status. Please investigate the issue.\n  - Trigger: {{ctx.trigger.name}}\n  - Severity: {{ctx.trigger.severity}}\n  - Period start: {{ctx.periodStart}} UTC\n  - Period end: {{ctx.periodEnd}} UTC",
+              "lang": "mustache"
+            },
+            "throttle_enabled": false,
+            "subject_template": {
+              "source": "Alerting Notification action",
+              "lang": "mustache"
+            }
+          }
+<% end %>
+        ]
+      }
+    }
+  ]
+}
+<% end %>
+<% end %>
