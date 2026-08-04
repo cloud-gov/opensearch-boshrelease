@@ -134,9 +134,6 @@ keyword_default = { "type": "keyword", "index": true }.to_json
           }
         },
         "updated_at": { "type": "date" },
-        "data": {
-          "type": "flat_object"
-        },
         "valuemetric": {
           "type": "object",
           "dynamic": true,
@@ -212,14 +209,15 @@ keyword_default = { "type": "keyword", "index": true }.to_json
                 "remote_port": <%= keyword_default %>,
                 "uri": <%= keyword_default %>,
                 "headers": {
-                  "type": "flat_object"
+                  "type": "object",
+                  "dynamic": true,
+                  "properties": {}
                 },
                 "bytes_read": { "type": "long" },
                 "user_id": <%= keyword_default %>,
                 "duration": { "type": "double" },
                 "size": { "type": "long" },
-                "status": { "type": "long" },
-                "timestamp": <%= keyword_default %>
+                "status": { "type": "long" }
               }
             },
             "response": {
@@ -239,7 +237,9 @@ keyword_default = { "type": "keyword", "index": true }.to_json
                 "mime_type": <%= keyword_default %>,
                 "status_code": { "type": "long" },
                 "headers": {
-                  "type": "flat_object"
+                  "type": "object",
+                  "dynamic": true,
+                  "properties": {}
                 }
               }
             },
