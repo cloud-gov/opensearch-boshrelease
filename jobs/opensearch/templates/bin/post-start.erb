@@ -104,7 +104,7 @@ echo "Disable post start script property is set to <%= p("opensearch.health.disa
   
   # Use the same temp directory that was set earlier
   TEMP_DIR="/var/vcap/data/opensearch/temp"
-  export JAVA_OPTS="-Djava.io.tmpdir=${TEMP_DIR} -Djna.tmpdir=${TEMP_DIR} -Djava.library.path=${TEMP_DIR}"
+  export OPENSEARCH_JAVA_OPTS="-Djava.io.tmpdir=${TEMP_DIR} -Djna.tmpdir=${TEMP_DIR} -Djava.library.path=${TEMP_DIR}"
   export TMPDIR=${TEMP_DIR}
   export TMP=${TEMP_DIR}
   export TEMP=${TEMP_DIR}
