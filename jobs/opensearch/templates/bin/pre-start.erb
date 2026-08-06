@@ -6,7 +6,16 @@ export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 export PACKAGE_DIR=/var/vcap/packages/$JOB_NAME
 export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
 export OPENSEARCH_SECURITY_CONFIG_PATH=${OPENSEARCH_PATH_CONF}/opensearch-security
-export OPENSEARCH_JAVA_OPTS="-XX:-UsePerfData -Dnet.bytebuddy.agent.disabled=true -Djava.io.tmpdir=/var/vcap/data/opensearch/"
+# BouncyCastle-FIPS (used by opensearch-plugin/plugin-cli and the keystore tools)
+# extracts and mmaps a native probe lib with exec perms; /tmp is often noexec.
+export TEMP_DIR=/var/vcap/data/opensearch/temp
+mkdir -p "${TEMP_DIR}"
+chown vcap:vcap "${TEMP_DIR}"
+chmod 700 "${TEMP_DIR}"
+export TMPDIR="${TEMP_DIR}"
+export TMP="${TEMP_DIR}"
+export TEMP="${TEMP_DIR}"
+export OPENSEARCH_JAVA_OPTS="-XX:-UsePerfData -Dnet.bytebuddy.agent.disabled=true -Djava.io.tmpdir=${TEMP_DIR} -Djna.tmpdir=${TEMP_DIR} -Dorg.bouncycastle.native.tmpdir=${TEMP_DIR}"
 export YQ_PACKAGE_DIR=/var/vcap/packages/yq
 export PATH=$YQ_PACKAGE_DIR/bin:$PATH
 export PATH=/var/vcap/packages/cf-cli-8-linux/bin:$PATH

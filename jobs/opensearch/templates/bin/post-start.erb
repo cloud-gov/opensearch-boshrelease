@@ -104,7 +104,9 @@ echo "Disable post start script property is set to <%= p("opensearch.health.disa
   
   # Use the same temp directory that was set earlier
   TEMP_DIR="/var/vcap/data/opensearch/temp"
-  export OPENSEARCH_JAVA_OPTS="-Djava.io.tmpdir=${TEMP_DIR} -Djna.tmpdir=${TEMP_DIR} -Djava.library.path=${TEMP_DIR}"
+  mkdir -p "${TEMP_DIR}"
+  # BouncyCastle-FIPS mmaps a native probe lib with exec perms; /tmp is often noexec.
+  export OPENSEARCH_JAVA_OPTS="-Djava.io.tmpdir=${TEMP_DIR} -Djna.tmpdir=${TEMP_DIR} -Djava.library.path=${TEMP_DIR} -Dorg.bouncycastle.native.tmpdir=${TEMP_DIR}"
   export TMPDIR=${TEMP_DIR}
   export TMP=${TEMP_DIR}
   export TEMP=${TEMP_DIR}

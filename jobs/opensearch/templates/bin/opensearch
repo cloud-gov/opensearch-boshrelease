@@ -11,7 +11,18 @@ export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 export LOG_DIR=/var/vcap/sys/log/$JOB_NAME
 export PACKAGE_DIR=/var/vcap/packages/$JOB_NAME
 export STORE_DIR=/var/vcap/store/$JOB_NAME
-export OPENSEARCH_JAVA_OPTS="-XX:-UsePerfData -Dnet.bytebuddy.agent.disabled=true -Djava.io.tmpdir=/var/vcap/data/opensearch/"
+
+# BouncyCastle-FIPS extracts a native probe library (libbc-probe.so) and mmaps it
+# with exec permissions. /tmp is frequently mounted noexec on BOSH VMs which makes
+# the load fail. Point all temp/native dirs at a writable+executable location.
+export TEMP_DIR=/var/vcap/data/opensearch/temp
+mkdir -p "${TEMP_DIR}"
+chown vcap:vcap "${TEMP_DIR}"
+chmod 700 "${TEMP_DIR}"
+export TMPDIR="${TEMP_DIR}"
+export TMP="${TEMP_DIR}"
+export TEMP="${TEMP_DIR}"
+export OPENSEARCH_JAVA_OPTS="-XX:-UsePerfData -Dnet.bytebuddy.agent.disabled=true -Djava.io.tmpdir=${TEMP_DIR} -Djna.tmpdir=${TEMP_DIR} -Dorg.bouncycastle.native.tmpdir=${TEMP_DIR}"
 
 source /var/vcap/packages/openjdk-21/bosh/runtime.env
 
@@ -25,7 +36,7 @@ export HEAP_SIZE=$((( $( cat /proc/meminfo | grep MemTotal | awk '{ print $2 }' 
 <% end %>
 
 # Set heap size and TMP_DIR
-export OPENSEARCH_JAVA_OPTS="-Xms$HEAP_SIZE -Xmx$HEAP_SIZE -Djava.io.tmpdir=$TMP_DIR"
+export OPENSEARCH_JAVA_OPTS="-Xms$HEAP_SIZE -Xmx$HEAP_SIZE -Djava.io.tmpdir=${TEMP_DIR} -Djna.tmpdir=${TEMP_DIR} -Dorg.bouncycastle.native.tmpdir=${TEMP_DIR}"
 export OPENSEARCH_HOME=/var/vcap/packages/opensearch
 export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
 
