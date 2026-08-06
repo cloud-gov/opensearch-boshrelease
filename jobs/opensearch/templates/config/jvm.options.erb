@@ -77,6 +77,12 @@
 21-:-javaagent:agent/opensearch-agent.jar
 21-:--add-opens=java.base/java.nio=org.apache.arrow.memory.core,ALL-UNNAMED
 
+# BouncyCastle-FIPS loads a native probe library via System.load() from the
+# classpath (unnamed module). On JDK 21+ this triggers a "restricted method"
+# warning and will be blocked in a future release unless native access is
+# explicitly granted. See https://openjdk.org/jeps/472
+21-:--enable-native-access=ALL-UNNAMED
+
 # HDFS ForkJoinPool.common() support by SecurityManager
 -Djava.util.concurrent.ForkJoinPool.common.threadFactory=org.opensearch.secure_sm.SecuredForkJoinWorkerThreadFactory
 
