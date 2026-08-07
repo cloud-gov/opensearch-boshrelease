@@ -111,16 +111,47 @@ echo "Disable post start script property is set to <%= p("opensearch.health.disa
   export TMP=${TEMP_DIR}
   export TEMP=${TEMP_DIR}
 
-  # Allow security admin to run against mixed cluster versions
   export OPENDISTRO_SECURITY_ADMIN_ALLOW_MIXED_CLUSTER=true
-  
+
   echo "=== Applying SSL config:"
   chmod +x ${ODS}/tools/securityadmin.sh
-  ${ODS}/tools/securityadmin.sh -cd $CNF/opensearch-security \
-    -cacert ${CNF}/ssl/opensearch.ca \
-    -cert ${CNF}/ssl/opensearch-admin.crt \
-    -key ${CNF}/ssl/opensearch-admin.key \
-    -icl -nhnv
+
+  set +e
+  SA_OUT="$(OPENDISTRO_SECURITY_ADMIN_ALLOW_MIXED_CLUSTER=true \
+    ${ODS}/tools/securityadmin.sh -cd $CNF/opensearch-security \
+      -cacert ${CNF}/ssl/opensearch.ca \
+      -cert ${CNF}/ssl/opensearch-admin.crt \
+      -key ${CNF}/ssl/opensearch-admin.key \
+      -icl -nhnv 2>&1)"
+  SA_RC=$?
+  set -e
+  echo "${SA_OUT}"
+
+  if [ ${SA_RC} -ne 0 ]; then
+    is_mixed=false
+    if echo "${SA_OUT}" | grep -q "It is not allowed to run securityadmin against a mixed cluster"; then
+      is_mixed=true
+    fi
+
+    # A real upload failure prints this; if present, do not tolerate.
+    upload_failed=false
+    if echo "${SA_OUT}" | grep -q "ERR: cannot upload configuration"; then
+      upload_failed=true
+    fi
+
+    # The broadcast timeout manifests as a configupdate reload failure.
+    broadcast_timeout=false
+    if echo "${SA_OUT}" | grep -qi "Timeout after .* while retrieving configuration"; then
+      broadcast_timeout=true
+    fi
+
+    if [ "${is_mixed}" = "true" ] && [ "${upload_failed}" = "false" ] && [ "${broadcast_timeout}" = "true" ]; then
+      echo "WARN: securityadmin config was persisted, but the configupdate broadcast timed out on older-version nodes during a mixed-cluster rolling upgrade. Tolerating (exit ${SA_RC}); the final node will re-run against a homogeneous cluster."
+    else
+      echo "ERR: securityadmin failed (exit ${SA_RC}) for a reason other than a mixed-cluster broadcast timeout. Aborting post-start."
+      exit ${SA_RC}
+    fi
+  fi
   <% end %>
 <% end %>
 
