@@ -18,6 +18,31 @@ curl -X PUT \
   -H 'Content-Type: application/json' \
   -d '{"persistent":{"search_backpressure":{"mode":"enforced"}}}'
 
+<% if_p("opensearch.node.ssl.private_key") do %>
+  <% if p("opensearch.node.allow_data") %>
+  OS="/var/vcap/packages/opensearch"
+  source /var/vcap/packages/openjdk-21/bosh/runtime.env
+  ODS="${OS}/plugins/opensearch-security"
+  CNF="${JOB_DIR}/config"
+
+  # BouncyCastle-FIPS mmaps a native probe lib with exec perms; /tmp is often noexec.
+  TEMP_DIR="/var/vcap/data/opensearch/temp"
+  mkdir -p "${TEMP_DIR}"
+  export OPENSEARCH_JAVA_OPTS="-Djava.io.tmpdir=${TEMP_DIR} -Djna.tmpdir=${TEMP_DIR} -Djava.library.path=${TEMP_DIR} -Dorg.bouncycastle.native.tmpdir=${TEMP_DIR}"
+  export TMPDIR=${TEMP_DIR}
+  export TMP=${TEMP_DIR}
+  export TEMP=${TEMP_DIR}
+
+  echo "=== post-deploy: reconciling OpenSearch security config against the converged cluster"
+  chmod +x ${ODS}/tools/securityadmin.sh
+  ${ODS}/tools/securityadmin.sh -cd ${CNF}/opensearch-security \
+    -cacert ${CNF}/ssl/opensearch.ca \
+    -cert ${CNF}/ssl/opensearch-admin.crt \
+    -key ${CNF}/ssl/opensearch-admin.key \
+    -icl -nhnv
+  <% end %>
+<% end %>
+
 <% if p('opensearch.repository.s3.enabled') %>
 <% if_p('opensearch.repository.s3.region') do %>
 # Run snapshot setup
