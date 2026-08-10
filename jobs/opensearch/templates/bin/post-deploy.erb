@@ -28,10 +28,7 @@ curl -X PUT \
   # BouncyCastle-FIPS mmaps a native probe lib with exec perms; /tmp is often noexec.
   TEMP_DIR="/var/vcap/data/opensearch/temp"
   mkdir -p "${TEMP_DIR}"
-  export OPENSEARCH_JAVA_OPTS="-Djava.io.tmpdir=${TEMP_DIR} -Djna.tmpdir=${TEMP_DIR} -Djava.library.path=${TEMP_DIR} -Dorg.bouncycastle.native.tmpdir=${TEMP_DIR}"
-  export TMPDIR=${TEMP_DIR}
-  export TMP=${TEMP_DIR}
-  export TEMP=${TEMP_DIR}
+  export JAVA_OPTS="-Djava.io.tmpdir=${TEMP_DIR} -Djna.tmpdir=${TEMP_DIR} -Djava.library.path=${TEMP_DIR}"
 
   echo "=== post-deploy: reconciling OpenSearch security config against the converged cluster"
   chmod +x ${ODS}/tools/securityadmin.sh
