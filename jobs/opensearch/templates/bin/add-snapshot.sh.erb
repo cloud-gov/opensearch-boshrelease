@@ -7,6 +7,7 @@ set -e
 
 export JOB_NAME=opensearch
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
+export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
 
 OPENSEARCH_URL="https://localhost:9200"
 REPOSITORY_NAME="<%= repo_name %>"
@@ -15,9 +16,9 @@ S3_PATH="<%= s3_path %>"
 AWS_REGION="<%= region %>"
 
 # SSL Certificate options
-CA="--cacert ${JOB_DIR}/config/ssl/opensearch.ca"
-CERT="--cert ${JOB_DIR}/config/ssl/opensearch-admin.crt"
-KEY="--key ${JOB_DIR}/config/ssl/opensearch-admin.key"
+CA="--cacert ${OPENSEARCH_PATH_CONF}/ssl/opensearch.ca"
+CERT="--cert ${OPENSEARCH_PATH_CONF}/ssl/opensearch-admin.crt"
+KEY="--key ${OPENSEARCH_PATH_CONF}/ssl/opensearch-admin.key"
 
 echo "=== Creating OpenSearch S3 Snapshot Repository ==="
 

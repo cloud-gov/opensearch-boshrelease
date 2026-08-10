@@ -46,20 +46,20 @@ fi
 # https://opensearch.org/docs/latest/security/configuration/tls/
 <% if_p('opensearch.admin.private_key') do %>
   openssl pkcs8 -v1 "PBE-SHA1-3DES" \
-  -in "${JOB_DIR}/config/ssl/opensearch-admin.pem" -topk8 \
-  -out "${JOB_DIR}/config/ssl/opensearch-admin.key" -nocrypt
+  -in "${OPENSEARCH_PATH_CONF}/ssl/opensearch-admin.pem" -topk8 \
+  -out "${OPENSEARCH_PATH_CONF}/ssl/opensearch-admin.key" -nocrypt
 <% end %>
 <% if_p('opensearch.node.ssl.private_key') do %>
   openssl pkcs8 -v1 "PBE-SHA1-3DES" \
-  -in "${JOB_DIR}/config/ssl/opensearch-node.pem" -topk8 \
-  -out "${JOB_DIR}/config/ssl/opensearch-node.key" -nocrypt
-  chmod 600 ${JOB_DIR}/config/ssl/opensearch*.key
+  -in "${OPENSEARCH_PATH_CONF}/ssl/opensearch-node.pem" -topk8 \
+  -out "${OPENSEARCH_PATH_CONF}/ssl/opensearch-node.key" -nocrypt
+  chmod 600 ${OPENSEARCH_PATH_CONF}/ssl/opensearch*.key
 <% end %>
 <% if_p('opensearch.http.ssl.private_key') do %>
   openssl pkcs8 -v1 "PBE-SHA1-3DES" \
-  -in "${JOB_DIR}/config/ssl/opensearch-http.pem" -topk8 \
-  -out "${JOB_DIR}/config/ssl/opensearch-http.key" -nocrypt
-  chmod 600 ${JOB_DIR}/config/ssl/opensearch*.key
+  -in "${OPENSEARCH_PATH_CONF}/ssl/opensearch-http.pem" -topk8 \
+  -out "${OPENSEARCH_PATH_CONF}/ssl/opensearch-http.key" -nocrypt
+  chmod 600 ${OPENSEARCH_PATH_CONF}/ssl/opensearch*.key
 <% end %>
 
 ${OPENSEARCH_HOME}/bin/opensearch \

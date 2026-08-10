@@ -6,7 +6,11 @@ export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 export PACKAGE_DIR=/var/vcap/packages/$JOB_NAME
 export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
 export OPENSEARCH_SECURITY_CONFIG_PATH=${OPENSEARCH_PATH_CONF}/opensearch-security
-export OPENSEARCH_JAVA_OPTS="-XX:-UsePerfData -Dnet.bytebuddy.agent.disabled=true -Djava.io.tmpdir=/var/vcap/data/opensearch/"
+# BouncyCastle-FIPS extracts and mmaps a native probe lib with exec perms;
+# /tmp is often noexec so use a writable+executable dir instead.
+export TEMP_DIR=<%= p('opensearch.temp_dir') %>
+mkdir -p "${TEMP_DIR}"
+export OPENSEARCH_JAVA_OPTS="-XX:-UsePerfData -Dnet.bytebuddy.agent.disabled=true -Djava.io.tmpdir=${TEMP_DIR} -Djna.tmpdir=${TEMP_DIR} -Dorg.bouncycastle.native.tmpdir=${TEMP_DIR}"
 export YQ_PACKAGE_DIR=/var/vcap/packages/yq
 export PATH=$YQ_PACKAGE_DIR/bin:$PATH
 export PATH=/var/vcap/packages/cf-cli-8-linux/bin:$PATH
@@ -19,8 +23,8 @@ DEFAULTPASS=<%= p("opensearch.notification.defaultkeystorepass") %>
 
 sysctl -q -w vm.max_map_count=262144
 mkdir -p ${OPENSEARCH_HOME}/plugins
-if [ -d ${JOB_DIR}/config/ssl ]; then
-	chown vcap ${JOB_DIR}/config/ssl
+if [ -d ${OPENSEARCH_PATH_CONF}/ssl ]; then
+	chown vcap ${OPENSEARCH_PATH_CONF}/ssl
 fi
 
 source /var/vcap/packages/openjdk-21/bosh/runtime.env
