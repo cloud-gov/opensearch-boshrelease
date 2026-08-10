@@ -42,6 +42,13 @@ keyword_default = { "type": "keyword", "index": true }.to_json
             "type": <%= keyword_default %>
           }
         },
+        "data": {
+          "type": "object",
+          "dynamic": true,
+          "properties": {
+            "audit_details": { "type": "flat_object" }
+          }
+        },
         "app": {
           "type": "flat_object"
         },
