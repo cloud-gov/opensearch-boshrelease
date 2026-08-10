@@ -93,6 +93,13 @@ properties:
   opensearch.jvm_options:
     description: Additional Java Virtual Machine options
     default: []
+  opensearch.temp_dir:
+    description: |
+      Writable and executable directory used as java.io.tmpdir / jna.tmpdir /
+      org.bouncycastle.native.tmpdir. BouncyCastle-FIPS extracts and mmaps a
+      native probe lib with exec perms, and /tmp is often mounted noexec, so a
+      dedicated exec-capable directory is used instead.
+    default: "/var/vcap/data/opensearch/temp"
   opensearch.heap_size:
     description: sets jvm heap sized
   opensearch.heap_percentage:

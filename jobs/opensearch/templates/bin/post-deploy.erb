@@ -5,11 +5,12 @@ set -x
 
 export JOB_NAME=opensearch
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
+export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
 
 # SSL Certificate options
-CA="--cacert ${JOB_DIR}/config/ssl/opensearch.ca"
-CERT="--cert ${JOB_DIR}/config/ssl/opensearch-admin.crt"
-KEY="--key ${JOB_DIR}/config/ssl/opensearch-admin.key"
+CA="--cacert ${OPENSEARCH_PATH_CONF}/ssl/opensearch.ca"
+CERT="--cert ${OPENSEARCH_PATH_CONF}/ssl/opensearch-admin.crt"
+KEY="--key ${OPENSEARCH_PATH_CONF}/ssl/opensearch-admin.key"
 OPENSEARCH_URL="https://localhost:9200"
 
 curl -X PUT \
@@ -17,6 +18,27 @@ curl -X PUT \
   ${OPENSEARCH_URL}/_cluster/settings \
   -H 'Content-Type: application/json' \
   -d '{"persistent":{"search_backpressure":{"mode":"enforced"}}}'
+
+<% if_p("opensearch.node.ssl.private_key") do %>
+  <% if p("opensearch.node.allow_data") %>
+  export OPENSEARCH_HOME=/var/vcap/packages/opensearch
+  source /var/vcap/packages/openjdk-21/bosh/runtime.env
+  ODS="${OPENSEARCH_HOME}/plugins/opensearch-security"
+
+  # BouncyCastle-FIPS mmaps a native probe lib with exec perms; /tmp is often noexec.
+  TEMP_DIR="<%= p('opensearch.temp_dir') %>"
+  mkdir -p "${TEMP_DIR}"
+  export JAVA_OPTS="-Djava.io.tmpdir=${TEMP_DIR} -Djna.tmpdir=${TEMP_DIR} -Djava.library.path=${TEMP_DIR}"
+
+  echo "=== post-deploy: reconciling OpenSearch security config against the converged cluster"
+  chmod +x ${ODS}/tools/securityadmin.sh
+  ${ODS}/tools/securityadmin.sh -cd ${OPENSEARCH_PATH_CONF}/opensearch-security \
+    -cacert ${OPENSEARCH_PATH_CONF}/ssl/opensearch.ca \
+    -cert ${OPENSEARCH_PATH_CONF}/ssl/opensearch-admin.crt \
+    -key ${OPENSEARCH_PATH_CONF}/ssl/opensearch-admin.key \
+    -icl -nhnv
+  <% end %>
+<% end %>
 
 <% if p('opensearch.repository.s3.enabled') %>
 <% if_p('opensearch.repository.s3.region') do %>
