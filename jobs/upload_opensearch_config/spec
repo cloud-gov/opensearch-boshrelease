@@ -19,7 +19,7 @@ templates:
   index-templates/shards-and-replicas-platform.json.erb: index-templates/shards-and-replicas-platform.json
   index-templates/index-settings.json.erb: index-templates/index-settings.json
   index-templates/index-mappings.json.erb: index-templates/index-mappings.json
-  config/platform-deployment-monitor.json.erb: config/platform-deployment-monitor.json
+  config/uaa-dual-origin-monitor.json.erb: config/uaa-dual-origin-monitor.json
   config/opensearch-index-error-monitor.json.erb: config/opensearch-index-error-monitor.json
 
 consumes:
