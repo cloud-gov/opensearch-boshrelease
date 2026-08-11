@@ -239,6 +239,56 @@ echo "--- Creating ISM policy"
     fi
   <% end %>
 <% end %>
-echo "--- Creating Reporting indexs"
+echo "--- Creating Reporting indexes"
 curl -XGET ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/_plugins/_reports/definitions
 curl -XGET ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/_plugins/_reports/instances
+
+echo "--- Creating Platform Deployment Monitors"
+<% if_link("opensearch") do |opensearch| %>
+  <% if opensearch.p('opensearch.deployment_type').include?('platform') %>
+    <%
+    alert_destination_id = p('opensearch_config.alert_destination_id', '')
+    %>
+    echo "--- Processing platform monitor: UAA dual-origin"
+    
+    # Check if monitor already exists
+    PLATFORM_MONITOR_RESPONSE=$(curl -s ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" -H 'Content-Type: application/json' \
+      "${BASEURL}/_plugins/_alerting/monitors/_search" \
+      -d '{"query": {"term": {"monitor.name.keyword": "dual-origin"}}}')
+    
+    EXISTING_PLATFORM_MONITOR_ID=$(echo "$PLATFORM_MONITOR_RESPONSE" | grep -o '"_id":"[^"]*"' | head -1 | sed 's/"_id":"//;s/"//')
+    
+    if [[ -n "$EXISTING_PLATFORM_MONITOR_ID" && "$EXISTING_PLATFORM_MONITOR_ID" != "null" ]]; then
+      echo "Updating existing platform monitor: $EXISTING_PLATFORM_MONITOR_ID"
+      curl -s -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" -H 'Content-Type: application/json' \
+        "${BASEURL}/_plugins/_alerting/monitors/${EXISTING_PLATFORM_MONITOR_ID}" \
+        -d @${JOB_DIR}/config/uaa-dual-origin-monitor.json
+    else
+      echo "Creating new platform monitor: dual-origin"
+      curl -s -XPOST ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" -H 'Content-Type: application/json' \
+        "${BASEURL}/_plugins/_alerting/monitors" \
+        -d @${JOB_DIR}/config/uaa-dual-origin-monitor.json
+    fi
+
+    echo "--- Processing platform monitor: opensearch-index-error"
+    
+    # Check if monitor already exists
+    INDEX_ERROR_MONITOR_RESPONSE=$(curl -s ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" -H 'Content-Type: application/json' \
+      "${BASEURL}/_plugins/_alerting/monitors/_search" \
+      -d '{"query": {"term": {"monitor.name.keyword": "opensearch-index-error"}}}')
+    
+    EXISTING_INDEX_ERROR_MONITOR_ID=$(echo "$INDEX_ERROR_MONITOR_RESPONSE" | grep -o '"_id":"[^"]*"' | head -1 | sed 's/"_id":"//;s/"//')
+    
+    if [[ -n "$EXISTING_INDEX_ERROR_MONITOR_ID" && "$EXISTING_INDEX_ERROR_MONITOR_ID" != "null" ]]; then
+      echo "Updating existing platform monitor: $EXISTING_INDEX_ERROR_MONITOR_ID"
+      curl -s -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" -H 'Content-Type: application/json' \
+        "${BASEURL}/_plugins/_alerting/monitors/${EXISTING_INDEX_ERROR_MONITOR_ID}" \
+        -d @${JOB_DIR}/config/opensearch-index-error-monitor.json
+    else
+      echo "Creating new platform monitor: opensearch-index-error"
+      curl -s -XPOST ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" -H 'Content-Type: application/json' \
+        "${BASEURL}/_plugins/_alerting/monitors" \
+        -d @${JOB_DIR}/config/opensearch-index-error-monitor.json
+    fi
+  <% end %>
+<% end %>

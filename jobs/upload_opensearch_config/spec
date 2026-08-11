@@ -19,6 +19,8 @@ templates:
   index-templates/shards-and-replicas-platform.json.erb: index-templates/shards-and-replicas-platform.json
   index-templates/index-settings.json.erb: index-templates/index-settings.json
   index-templates/index-mappings.json.erb: index-templates/index-mappings.json
+  config/uaa-dual-origin-monitor.json.erb: config/uaa-dual-origin-monitor.json
+  config/opensearch-index-error-monitor.json.erb: config/opensearch-index-error-monitor.json
 
 consumes:
 - name: opensearch
@@ -61,10 +63,10 @@ properties:
     description: how old a platform index has to be before deletion
     default: 364d
   opensearch_config.replica_shard_count:
-    description: how many replicas will be on indexs. 
+    description: how many replicas will be on indices
     default: 1
   opensearch_config.platform_replica_shard_count:
-    description: how many replicas will be on platform indexs. 
+    description: how many replicas will be on platform indices
     default: 1
   opensearch_config.index_prefix:
     description: |
@@ -87,3 +89,8 @@ properties:
     description: size of a shard before the index will rollover
   opensearch_config.rollover_index_age:
     description: age of index before the index will rollover
+  opensearch_config.alert_destination_id:
+    description: |
+      ID of the OpenSearch Alerting destination that platform monitors send notifications to.
+      When empty, monitors still raise in-cluster alerts but take no notification action.
+    default: ""
