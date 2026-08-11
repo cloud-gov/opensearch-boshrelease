@@ -22,6 +22,7 @@ keyword_default = { "type": "keyword", "index": true }.to_json
             "location" : { "type" : "geo_point" }
           }
         },
+        "router_fields": { "type": "flat_object" },
         "uaa": {
           "type": "object",
           "dynamic": true,
