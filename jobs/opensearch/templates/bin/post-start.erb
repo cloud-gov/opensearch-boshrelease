@@ -5,10 +5,16 @@ set -x
 
 export JQ_PACKAGE_DIR=/var/vcap/packages/jq
 export PATH=$JQ_PACKAGE_DIR/bin:$PATH
-
 export JOB_NAME=opensearch
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 export OPENSEARCH_PATH_CONF=${JOB_DIR}/config
+
+OPENSEARCH_URL="https://localhost:9200"
+
+# SSL Certificate options
+CA="--cacert ${OPENSEARCH_PATH_CONF}/ssl/opensearch.ca"
+CERT="--cert ${OPENSEARCH_PATH_CONF}/ssl/opensearch-admin.crt"
+KEY="--key ${OPENSEARCH_PATH_CONF}/ssl/opensearch-admin.key"
 
 wait_for_listening() {
   echo -n "=== Waiting <%= p("opensearch.health.connect_timeout") %>s for opensearch to accept connections..."
@@ -35,16 +41,12 @@ wait_for_greenstate() {
   until [ "${remaining}" -le 0 ]; do
     <% if p("opensearch.node.allow_data") and not p("opensearch.node.allow_cluster_manager") %>
     curl -sw '\n%{http_code}' \
-      --key ${JOB_DIR}/config/ssl/opensearch-admin.key \
-      --cert ${JOB_DIR}/config/ssl/opensearch-admin.crt  \
-      --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
-      https://localhost:9200/_cluster/health > ${out}
+      ${KEY} ${CERT} ${CA} \
+      ${OPENSEARCH_URL}/_cluster/health > ${out}
     <% else %>
     curl -sw '\n%{http_code}' \
-      --key ${JOB_DIR}/config/ssl/opensearch-admin.key \
-      --cert ${JOB_DIR}/config/ssl/opensearch-admin.crt  \
-      --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
-      https://localhost:9200/_cluster/health?local=true > ${out}
+      ${KEY} ${CERT} ${CA} \
+      ${OPENSEARCH_URL}/_cluster/health?local=true > ${out}
     <% end %>
     body=$(cat ${out} | head -n -1)
     status=$(cat ${out} | tail -n 1)
@@ -70,10 +72,8 @@ wait_for_greenstate() {
   if [ "${remaining}" -le 0 ]; then
     echo "Node failed to join the cluster"
     curl -sw '\n%{http_code}' \
-      --key ${JOB_DIR}/config/ssl/opensearch-admin.key \
-      --cert ${JOB_DIR}/config/ssl/opensearch-admin.crt  \
-      --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
-      https://localhost:9200/_cluster/health > ${out}
+      ${KEY} ${CERT} ${CA} \
+      ${OPENSEARCH_URL}/_cluster/health > ${out}
     body=$(cat ${out} | head -n -1)
     status=$(cat ${out} | tail -n 1)
     if [ ${status} = "200" ] && echo ${body} | grep '"unassigned_shards":0'; then
@@ -92,34 +92,6 @@ wait_for_greenstate() {
 
 echo "Disable post start script property is set to <%= p("opensearch.health.disable_post_start") %>. Skipping post-start..."
 
-<% end %>
-
-<% if_p("opensearch.node.ssl.private_key") do %>
-  <% if p("opensearch.node.allow_data") %>
-  wait_for_listening
-  OS="/var/vcap/packages/opensearch"
-  source /var/vcap/packages/openjdk-21/bosh/runtime.env
-  ODS="${OS}/plugins/opensearch-security"
-  CNF="/var/vcap/jobs/opensearch/config"
-  
-  # Use the same temp directory that was set earlier
-  TEMP_DIR="/var/vcap/data/opensearch/temp"
-  export JAVA_OPTS="-Djava.io.tmpdir=${TEMP_DIR} -Djna.tmpdir=${TEMP_DIR} -Djava.library.path=${TEMP_DIR}"
-  export TMPDIR=${TEMP_DIR}
-  export TMP=${TEMP_DIR}
-  export TEMP=${TEMP_DIR}
-
-  # Allow security admin to run against mixed cluster versions
-  export OPENDISTRO_SECURITY_ADMIN_ALLOW_MIXED_CLUSTER=true
-  
-  echo "=== Applying SSL config:"
-  chmod +x ${ODS}/tools/securityadmin.sh
-  ${ODS}/tools/securityadmin.sh -cd $CNF/opensearch-security \
-    -cacert ${CNF}/ssl/opensearch.ca \
-    -cert ${CNF}/ssl/opensearch-admin.crt \
-    -key ${CNF}/ssl/opensearch-admin.key \
-    -icl -nhnv
-  <% end %>
 <% end %>
 
 # Add credentials to keystore

@@ -85,6 +85,8 @@ fields_json.concat(
 ## -- App fields -- ##
 ###########################
 logmessage_enabled = p('cloudfoundry.event_types').include? 'LogMessage'
+containermetric_enabled = p('cloudfoundry.event_types').include? 'ContainerMetric'
+valuemetric_enabled = p('cloudfoundry.event_types').include? 'ValueMetric'
 counterevent_enabled = p('cloudfoundry.event_types').include? 'CounterEvent'
 error_enabled = p('cloudfoundry.event_types').include? 'Error'
 audit_enabled = p('cloudfoundry.event_types').include? 'Audit'
@@ -158,7 +160,7 @@ if(logmessage_enabled == true)
       {"count":0,"name":"http.request.url","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
       {"count":0,"name":"http.request.user_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
       {"count":0,"name":"http.request.user_agent","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
-      {"count":0,"name":"http.request.headers","type":"string","esTypes":["flat_object"],"scripted":false,"searchable":true,"aggregatable":false,"readFromDocValues":false},
+      {"count":0,"name":"http.request.headers.details","type":"string","esTypes":["flat_object"],"scripted":false,"searchable":true,"aggregatable":false,"readFromDocValues":false},
       {"count":0,"name":"http.response.body.bytes","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
       {"count":0,"name":"http.response.body.content","type":"string","esTypes":["wildcard"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
       {"count":0,"name":"http.response.body.content.text","type":"string","esTypes":["match_only_text"],"scripted":false,"searchable":true,"aggregatable":false,"readFromDocValues":false},
@@ -166,7 +168,7 @@ if(logmessage_enabled == true)
       {"count":0,"name":"http.response.mime_type","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
       {"count":0,"name":"http.response.status_code","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
       {"count":0,"name":"http.response.status_text","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
-      {"count":0,"name":"http.response.headers","type":"string","esTypes":["flat_object"],"scripted":false,"searchable":true,"aggregatable":false,"readFromDocValues":false},
+      {"count":0,"name":"http.response.headers.details","type":"string","esTypes":["flat_object"],"scripted":false,"searchable":true,"aggregatable":false,"readFromDocValues":false},
       {"count":0,"name":"http.version","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
       {"count":0,"name":"http.request.message","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true}
     ]
@@ -177,13 +179,6 @@ if(logmessage_enabled == true)
     [
       {"count":0,"name":"trace.id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
       {"count":0,"name":"trace.span_id","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true}
-    ]
-  )
-
-  # app fields (extracted from application logs)
-  fields_json.concat(
-    [
-      {"count":0,"name":"app","type":"string","esTypes":["flat_object"],"scripted":false,"searchable":true,"aggregatable":false,"readFromDocValues":false}
     ]
   )
 
@@ -229,6 +224,28 @@ if(logmessage_enabled == true)
 
 end
 
+if(containermetric_enabled == true)
+  fields_json.concat(
+    [
+      {"count":0,"name":"containermetric.memory_bytes_quota","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"containermetric.memory_bytes","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"containermetric.disk_bytes_quota","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"containermetric.disk_bytes","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"containermetric.cpu_percentage","type":"number","esTypes":["float"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true}
+    ]
+  )
+end
+
+if(valuemetric_enabled == true)
+  fields_json.concat(
+    [
+      {"count":0,"name":"valuemetric.unit","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"valuemetric.name","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
+      {"count":0,"name":"valuemetric.value","type":"number","esTypes":["long"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true}
+    ]
+  )
+end
+
 if(counterevent_enabled == true)
   fields_json.concat(
     [
@@ -261,7 +278,7 @@ if(audit_enabled == true)
       {"count":0,"name":"updated_at","type":"date","esTypes":["date"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
       {"count":0,"name":"type","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
       {"count":0,"name":"guid","type":"string","esTypes":["keyword"],"scripted":false,"searchable":true,"aggregatable":true,"readFromDocValues":true},
-      {"count":0,"name":"data","type":"string","esTypes":["flat_object"],"scripted":false,"searchable":true,"aggregatable":false,"readFromDocValues":false}
+      {"count":0,"name":"data.audit_details","type":"string","esTypes":["flat_object"],"scripted":false,"searchable":true,"aggregatable":false,"readFromDocValues":false}
     ]
   )
 end
