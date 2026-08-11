@@ -249,7 +249,7 @@ echo "--- Creating Platform Deployment Monitors"
     <%
     alert_destination_id = p('opensearch_config.alert_destination_id', '')
     %>
-    echo "--- Processing platform monitor: dual-origin"
+    echo "--- Processing platform monitor: UAA dual-origin"
     
     # Check if monitor already exists
     PLATFORM_MONITOR_RESPONSE=$(curl -s ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" -H 'Content-Type: application/json' \
