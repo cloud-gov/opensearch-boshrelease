@@ -89,3 +89,8 @@ properties:
     description: size of a shard before the index will rollover
   opensearch_config.rollover_index_age:
     description: age of index before the index will rollover
+  opensearch_config.alert_destination_id:
+    description: |
+      ID of the OpenSearch Alerting destination that platform monitors send notifications to.
+      When empty, monitors still raise in-cluster alerts but take no notification action.
+    default: ""
