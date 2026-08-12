@@ -27,7 +27,7 @@ alert_destination_id = p('opensearch_config.alert_destination_id', '')
               "filter": [
                 {
                   "match_phrase": {
-                    "@message": {
+                    "@raw": {
                       "query": "Could not index event to OpenSearch",
                       "slop": 0,
                       "zero_terms_query": "NONE",
