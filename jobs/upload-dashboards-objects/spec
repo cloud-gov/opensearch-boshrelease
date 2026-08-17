@@ -150,6 +150,9 @@ templates:
   dashboards-objects/metric/visualization/Services-Search-ThreadpoolWriteRejected.json.erb: dashboards-objects/metric/visualization/Services-Search-ThreadpoolWriteRejected.json
   dashboards-objects/metric/visualization/Services-Search-MasterCPUUtilization.json.erb: dashboards-objects/metric/visualization/Services-Search-MasterCPUUtilization.json
   dashboards-objects/metric/visualization/Services-Search-MasterJVMMemoryPressure.json.erb: dashboards-objects/metric/visualization/Services-Search-MasterJVMMemoryPressure.json
+  dashboards-objects/metric/visualization/Services-Search-MasterOldGenJVMMemoryPressure.json.erb: dashboards-objects/metric/visualization/Services-Search-MasterOldGenJVMMemoryPressure.json
+  dashboards-objects/metric/visualization/Services-Search-OldGenJVMMemoryPressure.json.erb: dashboards-objects/metric/visualization/Services-Search-OldGenJVMMemoryPressure.json
+  dashboards-objects/metric/visualization/Services-S3-weekly-usage.json.erb: dashboards-objects/metric/visualization/Services-S3-weekly-usage.json
 
   ## Platform Visualizations
   dashboards-objects/platform/visualization/Platform-components-with-errors.json.erb: dashboards-objects/platform/visualization/Platform-components-with-errors.json
