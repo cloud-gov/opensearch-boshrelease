@@ -166,7 +166,7 @@ properties:
         - plugin: rabbitmq
           options:
             host: 192.168.1.1
-            user: logsearch
+            user: opensearch
             password: c1oudbunny
   logstash_parser.outputs:
     description: |
@@ -176,7 +176,7 @@ properties:
         - plugin: mongodb
           options:
             uri: 192.168.1.1
-            database: logsearch
+            database: opensearch
             collection: logs
     default: [{ plugin: "opensearch", options: {} }]
   logstash_parser.workers:

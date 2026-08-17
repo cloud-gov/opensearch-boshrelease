@@ -105,7 +105,7 @@ properties:
         - plugin: mongodb
           options:
             uri: 192.168.1.1
-            database: logsearch
+            database: opensearch
             collection: logs
     default: [ { plugin: "opensearch", options: {} } ]
   logstash_parser.workers:
