@@ -227,6 +227,7 @@ keyword_default = { "type": "keyword", "index": true }.to_json
                 "duration": { "type": "double" },
                 "size": { "type": "long" },
                 "status": { "type": "long" },
+                "status_text": <%= keyword_default %>,
                 "timestamp": <%= keyword_default %>
               }
             },
