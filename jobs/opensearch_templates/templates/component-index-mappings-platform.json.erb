@@ -23,6 +23,10 @@ keyword_default = { "type": "keyword", "index": true }.to_json
           }
         },
         "router_fields": { "type": "flat_object" },
+        "rtr_extra": {
+          "type": "object",
+          "dynamic": true
+        },
         "garden_fields": { "type": "flat_object" },
         "uaa": {
           "type": "object",
