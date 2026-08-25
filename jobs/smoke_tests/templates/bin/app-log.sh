@@ -135,7 +135,6 @@ while [ $TRIES -gt 0 ]; do
     host_opensearch=$(echo "$result" | jq -r '.hits.hits[0]._source["http"]["request"]["host"] // "null"')
     uri_opensearch=$(echo "$result" | jq -r '.hits.hits[0]._source["http"]["request"]["uri"] // "null"')
     status_text_opensearch=$(echo "$result" | jq -r '.hits.hits[0]._source["http"]["request"]["status_text"] // "null"')
-    duration_opensearch=$(echo "$result" | jq -r '.hits.hits[0]._source["http"]["request"]["duration"] // "null"')
     duration_text_opensearch=$(echo "$result" | jq -r '.hits.hits[0]._source["http"]["request"]["duration_text"] // "null"')
     req_header_opensearch=$(echo "$result" | jq -r '.hits.hits[0]._source["http"]["request"]["headers"]["details"]["accept"] // "null"')
     resp_header_opensearch=$(echo "$result" | jq -r '.hits.hits[0]._source["http"]["response"]["headers"]["details"]["content-type"] // "null"')
