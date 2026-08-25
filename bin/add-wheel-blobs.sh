@@ -16,4 +16,5 @@ fi
 find "$WHEEL_SRC_DIR" \
   -type f \
   -name "*.whl" \
+  -maxdepth 1 \
   -exec bash -c 'path="$1"; blob_prefix="$2"; file_name=$(basename $1); bosh add-blob $path "$blob_prefix/$file_name"' shell {} "$BLOB_PREFIX" \;
