@@ -185,8 +185,7 @@ while [ $TRIES -gt 0 ]; do
 
     # Non-numeric [app][duration] (e.g. Go-style "1m31.087861816s") is routed to
     # [http][request][duration_text] (keyword). A plain number would instead land
-    # in the [http][request][duration] double field. This reproduces the
-    # number_format parse error that occurs when a text duration hits the double.
+    # in the [http][request][duration] double field.
     if [[ "$duration_text_opensearch" == "$duration_text_value" ]]; then
       echo "SUCCESS: http.request.duration_text matches expected value '$duration_text_value'."
     else
