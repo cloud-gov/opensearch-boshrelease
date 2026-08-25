@@ -97,7 +97,14 @@ status_text_value="yellow"
 req_header_value="text/csv"
 resp_header_value="application/json"
 
-MSG="{\"smoke-id\":\"${SMOKE_ID}\",\"request\":{\"method\":\"${method_value}\",\"host\":\"${host_value}\",\"uri\":\"${uri_value}\",\"headers\":{\"accept\":\"${req_header_value}\"}},\"resp_headers\":{\"content-type\":\"${resp_header_value}\"},\"status\":\"${status_text_value}\"}"
+# Numeric [app][duration] is routed to [http][request][duration] (double).
+duration_value="123.45"
+
+# Non-numeric [app][duration] (e.g. Go-style "1m31.087861816s") is routed to
+# [http][request][duration_text] (keyword) to avoid the double parse error.
+duration_text_value="1m31.087861816s"
+
+MSG="{\"smoke-id\":\"${SMOKE_ID}\",\"request\":{\"method\":\"${method_value}\",\"host\":\"${host_value}\",\"uri\":\"${uri_value}\",\"headers\":{\"accept\":\"${req_header_value}\"}},\"resp_headers\":{\"content-type\":\"${resp_header_value}\"},\"status\":\"${status_text_value}\",\"duration\":\"${duration_text_value}\"}"
 LOG="1090 <14>1 $(date -u +'%Y-%m-%dT%H:%M:%SZ') 0.0.0.0 d20d2020-d200-d200-d200-d20d20d20d20 [SMOKE/TEST/ERRAND/0] - [tags@47450 app_id=\"8675309e-f567-4d58-9649-ba24fad5344c\" app_name=\"smoke_tests\" organization_id=\"${org_value}\" organization_name=\"smoke-tests\" job=\"smoke_tests\" space_id=\"${space_value}\" space_name=\"app\" source_type=\"APP/PROC/WEB\"] ${MSG}"
 
 <% if p('smoke_tests.tls.use_tls') %>
@@ -134,6 +141,8 @@ while [ $TRIES -gt 0 ]; do
     host_opensearch=$(echo "$result" | jq -r '.hits.hits[0]._source["http"]["request"]["host"] // "null"')
     uri_opensearch=$(echo "$result" | jq -r '.hits.hits[0]._source["http"]["request"]["uri"] // "null"')
     status_text_opensearch=$(echo "$result" | jq -r '.hits.hits[0]._source["http"]["request"]["status_text"] // "null"')
+    duration_opensearch=$(echo "$result" | jq -r '.hits.hits[0]._source["http"]["request"]["duration"] // "null"')
+    duration_text_opensearch=$(echo "$result" | jq -r '.hits.hits[0]._source["http"]["request"]["duration_text"] // "null"')
     req_header_opensearch=$(echo "$result" | jq -r '.hits.hits[0]._source["http"]["request"]["headers"]["details"]["accept"] // "null"')
     resp_header_opensearch=$(echo "$result" | jq -r '.hits.hits[0]._source["http"]["response"]["headers"]["details"]["content-type"] // "null"')
 
@@ -178,6 +187,17 @@ while [ $TRIES -gt 0 ]; do
       echo "SUCCESS: http.request.status_text matches expected value '$status_text_value'."
     else
       echo "ERROR: http.request.status_text mismatch. Expected '$status_text_value', got '$status_text_opensearch' (non-numeric status should route here)."
+      errors=$((errors + 1))
+    fi
+
+    # Non-numeric [app][duration] (e.g. Go-style "1m31.087861816s") is routed to
+    # [http][request][duration_text] (keyword). A plain number would instead land
+    # in the [http][request][duration] double field. This reproduces the
+    # number_format parse error that occurs when a text duration hits the double.
+    if [[ "$duration_text_opensearch" == "$duration_text_value" ]]; then
+      echo "SUCCESS: http.request.duration_text matches expected value '$duration_text_value'."
+    else
+      echo "ERROR: http.request.duration_text mismatch. Expected '$duration_text_value', got '$duration_text_opensearch' (non-numeric duration should route here)."
       errors=$((errors + 1))
     fi
 
