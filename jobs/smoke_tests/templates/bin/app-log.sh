@@ -96,12 +96,6 @@ uri_value="https://aapple.jacks"
 status_text_value="yellow"
 req_header_value="text/csv"
 resp_header_value="application/json"
-
-# Numeric [app][duration] is routed to [http][request][duration] (double).
-duration_value="123.45"
-
-# Non-numeric [app][duration] (e.g. Go-style "1m31.087861816s") is routed to
-# [http][request][duration_text] (keyword) to avoid the double parse error.
 duration_text_value="1m31.087861816s"
 
 MSG="{\"smoke-id\":\"${SMOKE_ID}\",\"request\":{\"method\":\"${method_value}\",\"host\":\"${host_value}\",\"uri\":\"${uri_value}\",\"headers\":{\"accept\":\"${req_header_value}\"}},\"resp_headers\":{\"content-type\":\"${resp_header_value}\"},\"status\":\"${status_text_value}\",\"duration\":\"${duration_text_value}\"}"
