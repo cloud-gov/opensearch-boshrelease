@@ -73,7 +73,7 @@
                         "index_settings": {
                             "index.routing.allocation.total_shards_per_node": "3"
                         }
-                    },
+                    }<% if p('opensearch_config.app_warm_conversion_enabled') %>,
                     {
                         "retry": {
                             "count": 3,
@@ -88,7 +88,7 @@
                             "exclude": {},
                             "wait_for": false
                         }
-                    }
+                    }<% end %>
                 ],
                 "transitions": [
                     {
