@@ -67,7 +67,7 @@ properties:
     default: 90d
   opensearch_config.platform_delete_index_age:
     description: how old a platform index has to be before deletion
-    default: 364d
+    default: 90d
   opensearch_config.replica_shard_count:
     description: how many replicas will be on indices
     default: 1
