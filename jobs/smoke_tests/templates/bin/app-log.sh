@@ -70,6 +70,8 @@ fi
 <% end %>
 
 SMOKE_ID=$(LC_ALL=C; cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+# Separate smoke-id for the "differ log" document (numeric-status regression guard).
+DIFFER_SMOKE_ID=$(LC_ALL=C; cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 org_value="c9b54579-7056-46c3-9870-334330e9be75"
 space_value="5db8fd06-ac53-4ed0-a224-b0bad2e463d2"
 
@@ -101,6 +103,14 @@ duration_text_value="1m31.087861816s"
 MSG="{\"smoke-id\":\"${SMOKE_ID}\",\"request\":{\"method\":\"${method_value}\",\"host\":\"${host_value}\",\"uri\":\"${uri_value}\",\"headers\":{\"accept\":\"${req_header_value}\"}},\"resp_headers\":{\"content-type\":\"${resp_header_value}\"},\"status\":\"${status_text_value}\",\"duration\":\"${duration_text_value}\"}"
 LOG="1090 <14>1 $(date -u +'%Y-%m-%dT%H:%M:%SZ') 0.0.0.0 d20d2020-d200-d200-d200-d20d20d20d20 [SMOKE/TEST/ERRAND/0] - [tags@47450 app_id=\"8675309e-f567-4d58-9649-ba24fad5344c\" app_name=\"smoke_tests\" organization_id=\"${org_value}\" organization_name=\"smoke-tests\" job=\"smoke_tests\" space_id=\"${space_value}\" space_name=\"app\" source_type=\"APP/PROC/WEB\"] ${MSG}"
 
+# DIFFER LOG: a second document whose goal is to differ in field type to test differences
+# status and duration are sent as bare numbers (not strings) so they should land
+# in the numeric http.request.status / http.request.duration fields, not the *_text ones.
+status_num_value="404"
+duration_num_value="0.12"
+DIFFER_MSG="{\"smoke-id\":\"${DIFFER_SMOKE_ID}\",\"request\":{\"method\":\"${method_value}\",\"host\":\"${host_value}\",\"uri\":\"${uri_value}\"},\"status\":${status_num_value},\"duration\":${duration_num_value}}"
+DIFFER_LOG="1090 <14>1 $(date -u +'%Y-%m-%dT%H:%M:%SZ') 0.0.0.0 d20d2020-d200-d200-d200-d20d20d20d20 [SMOKE/TEST/ERRAND/0] - [tags@47450 app_id=\"8675309e-f567-4d58-9649-ba24fad5344c\" app_name=\"smoke_tests\" organization_id=\"${org_value}\" organization_name=\"smoke-tests\" job=\"smoke_tests\" space_id=\"${space_value}\" space_name=\"app\" source_type=\"APP/PROC/WEB\"] ${DIFFER_MSG}"
+
 <% if p('smoke_tests.tls.use_tls') %>
 INGEST="openssl s_client -cert $JOB_DIR/config/ssl/ingestor.crt -key $JOB_DIR/config/ssl/ingestor.key -CAfile ${JOB_DIR}/config/ssl/opensearch.ca -connect $INGESTOR_HOST:$INGESTOR_PORT"
 <% else %>
@@ -110,6 +120,10 @@ INGEST="nc -q 5 $INGESTOR_HOST $INGESTOR_PORT"
 # Send the log
 echo "SENDING APP LOG :$LOG"
 echo "$LOG" | $INGEST > /dev/null
+
+# Send the differ log at the same time.
+echo "SENDING DIFFER LOG :$DIFFER_LOG"
+echo "$DIFFER_LOG" | $INGEST > /dev/null
 
 # Polling configuration
 TRIES=${1:-300}  # Default to 300 seconds if not specified
@@ -206,6 +220,52 @@ while [ $TRIES -gt 0 ]; do
       echo "SUCCESS: http.response.headers.details.content-type matches expected value '$resp_header_value'."
     else
       echo "ERROR: http.response.headers.details.content-type mismatch. Expected '$resp_header_value', got '$resp_header_opensearch'."
+      errors=$((errors + 1))
+    fi
+
+    # DIFFER LOG: fetch the numeric doc and check status/duration landed in the
+    # numeric fields (not the *_text ones).
+    differ_result=$(curl --key ${JOB_DIR}/config/ssl/smoketest.key \
+      --cert ${JOB_DIR}/config/ssl/smoketest.crt  \
+      --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
+      -s $MASTER_URL/_search?q=$DIFFER_SMOKE_ID)
+
+    if [[ $differ_result == *"$DIFFER_SMOKE_ID"* ]]; then
+      status_num_opensearch=$(echo "$differ_result" | jq -r '.hits.hits[0]._source["http"]["request"]["status"] // "null"')
+      status_text_from_num=$(echo "$differ_result" | jq -r '.hits.hits[0]._source["http"]["request"]["status_text"] // "null"')
+      duration_num_opensearch=$(echo "$differ_result" | jq -r '.hits.hits[0]._source["http"]["request"]["duration"] // "null"')
+      duration_text_from_num=$(echo "$differ_result" | jq -r '.hits.hits[0]._source["http"]["request"]["duration_text"] // "null"')
+
+      if [[ "$status_num_opensearch" == "$status_num_value" ]]; then
+        echo "SUCCESS: differ log numeric http.request.status matches expected value '$status_num_value'."
+      else
+        echo "ERROR: differ log numeric http.request.status mismatch. Expected '$status_num_value', got '$status_num_opensearch' (bare integer status should route to the long field)."
+        errors=$((errors + 1))
+      fi
+
+      if [[ "$status_text_from_num" == "null" ]]; then
+        echo "SUCCESS: differ log numeric status did not leak into http.request.status_text."
+      else
+        echo "ERROR: differ log numeric status leaked into http.request.status_text ('$status_text_from_num'); integers must route to http.request.status."
+        errors=$((errors + 1))
+      fi
+
+      # jq renders a JSON double 0.12 as "0.12"; compare against the sent value.
+      if [[ "$duration_num_opensearch" == "$duration_num_value" ]]; then
+        echo "SUCCESS: differ log numeric http.request.duration matches expected value '$duration_num_value'."
+      else
+        echo "ERROR: differ log numeric http.request.duration mismatch. Expected '$duration_num_value', got '$duration_num_opensearch' (bare numeric duration should route to the double field)."
+        errors=$((errors + 1))
+      fi
+
+      if [[ "$duration_text_from_num" == "null" ]]; then
+        echo "SUCCESS: differ log numeric duration did not leak into http.request.duration_text."
+      else
+        echo "ERROR: differ log numeric duration leaked into http.request.duration_text ('$duration_text_from_num'); numeric durations must route to http.request.duration."
+        errors=$((errors + 1))
+      fi
+    else
+      echo "ERROR: could not find differ log containing: $DIFFER_SMOKE_ID"
       errors=$((errors + 1))
     fi
 

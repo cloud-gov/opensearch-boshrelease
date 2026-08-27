@@ -48,6 +48,18 @@ alert_destination_id = p('opensearch_config.alert_destination_id', '')
                   }
                 }
               ],
+              "must_not": [
+                {
+                  "match_phrase": {
+                    "@shipper.name": {
+                      "query": "upload_opensearch_config_syslog",
+                      "slop": 0,
+                      "zero_terms_query": "NONE",
+                      "boost": 1
+                    }
+                  }
+                }
+              ],
               "adjust_pure_negative": true,
               "boost": 1
             }
