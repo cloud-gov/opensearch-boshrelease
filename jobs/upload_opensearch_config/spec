@@ -62,11 +62,29 @@ properties:
       (box_type "warm") before deletion. When false, the warm-allocation
       state is skipped and indices transition straight to deletion.
     default: true
+  opensearch_config.app_shrink_num_shards:
+    description: |
+      Target primary shard count for the logs-app ISM Shrink_index stage.
+      Must be a divisor of the source index's shard count. Defaults to 1 so
+      the shrink is valid even for indices with fewer than 9 shards.
+    default: 1
   opensearch_config.metric_delete_index_age:
     description: how old a metric index has to be before deletion
     default: 90d
   opensearch_config.platform_delete_index_age:
     description: how old a platform index has to be before deletion
+    default: 183d
+  opensearch_config.platform_warm_conversion_enabled:
+    description: |
+      Whether the logs-platform ISM policy moves aged indices to warm storage
+      (box_type "warm") before deletion. When false, the warm-allocation
+      state is skipped and indices transition straight to deletion.
+    default: true
+  opensearch_config.platform_warm_index_age:
+    description: |
+      How old a platform index has to be before it is moved to warm storage.
+      Only used when platform_warm_conversion_enabled is true; the index is
+      later deleted at platform_delete_index_age.
     default: 90d
   opensearch_config.replica_shard_count:
     description: how many replicas will be on indices

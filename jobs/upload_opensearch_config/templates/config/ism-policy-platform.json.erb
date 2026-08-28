@@ -54,6 +54,42 @@
                 ],
                 "transitions": [
                     {
+<% if p('opensearch_config.platform_warm_conversion_enabled') %>
+                        "state_name": "Old_index",
+                        "conditions": {
+                            "min_index_age": "<%= p('opensearch_config.platform_warm_index_age')%>"
+                        }
+<% else %>
+                        "state_name": "Delete_index",
+                        "conditions": {
+                            "min_index_age": "<%= p('opensearch_config.platform_delete_index_age')%>"
+                        }
+<% end %>
+                    }
+                ]
+            },
+<% if p('opensearch_config.platform_warm_conversion_enabled') %>
+            {
+                "name": "Old_index",
+                "actions": [
+                    {
+                        "retry": {
+                            "count": 3,
+                            "backoff": "exponential",
+                            "delay": "1m"
+                        },
+                        "allocation": {
+                            "require": {
+                                "box_type": "warm"
+                            },
+                            "include": {},
+                            "exclude": {},
+                            "wait_for": false
+                        }
+                    }
+                ],
+                "transitions": [
+                    {
                         "state_name": "Delete_index",
                         "conditions": {
                             "min_index_age": "<%= p('opensearch_config.platform_delete_index_age')%>"
@@ -61,6 +97,7 @@
                     }
                 ]
             },
+<% end %>
             {
                 "name": "Delete_index",
                 "actions": [
