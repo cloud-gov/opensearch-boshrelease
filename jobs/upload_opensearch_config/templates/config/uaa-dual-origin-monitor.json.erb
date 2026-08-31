@@ -26,13 +26,20 @@ alert_destination_id = p('opensearch_config.alert_destination_id', '')
             "bool": {
               "filter": [
                 {
+                  "bool": {
+                    "should": [
+                      {
+                        "match_phrase": {
+                          "@raw": "PL/pgSQL function \"f_enforceCloudGovOrigin\"() line 3 at SQL statement"
+                        }
+                      }
+                    ],
+                    "minimum_should_match": 1
+                  }
+                },
+                {
                   "match_phrase": {
-                    "@raw": {
-                      "query": "PL/pgSQL function \"f_enforceCloudGovOrigin\"() line 3 at SQL statement",
-                      "slop": 0,
-                      "zero_terms_query": "NONE",
-                      "boost": 1
-                    }
+                    "@source.component": "uaa"
                   }
                 },
                 {
