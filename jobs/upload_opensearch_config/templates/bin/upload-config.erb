@@ -254,7 +254,7 @@ echo "--- Creating Platform Deployment Monitors"
     # Check if monitor already exists
     PLATFORM_MONITOR_RESPONSE=$(curl -s ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" -H 'Content-Type: application/json' \
       "${BASEURL}/_plugins/_alerting/monitors/_search" \
-      -d '{"query": {"term": {"monitor.name.keyword": "dual-origin"}}}')
+      -d '{"query": {"term": {"monitor.name.keyword": "uaa-dual-origin"}}}')
     
     EXISTING_PLATFORM_MONITOR_ID=$(echo "$PLATFORM_MONITOR_RESPONSE" | grep -o '"_id":"[^"]*"' | head -1 | sed 's/"_id":"//;s/"//')
     
