@@ -56,7 +56,8 @@ templates:
   dashboards-objects/app/search/app-rtr-long-response.json.erb: dashboards-objects/app/search/app-rtr-long-response.json
   dashboards-objects/app/search/audit-logs.json.erb: dashboards-objects/app/search/audit-logs.json
   dashboards-objects/app/search/falco-search.json.erb: dashboards-objects/app/search/falco-search.json
-
+  dashboards-objects/app/search/cloudwatch-rds-all.json.erb: dashboards-objects/app/search/cloudwatch-rds-all.json
+  dashboards-objects/app/search/cloudwatch-opensearch-all.json.erb: dashboards-objects/app/search/cloudwatch-opensearch-all.json
   ## Metric Search
   dashboards-objects/metric/search/app-container-metric.json.erb: dashboards-objects/metric/search/app-container-metric.json
   dashboards-objects/metric/search/app-container-metric-cpu.json.erb: dashboards-objects/metric/search/app-container-metric-cpu.json
@@ -81,6 +82,8 @@ templates:
   dashboards-objects/app/dashboard/App-Logs.json.erb: dashboards-objects/app/dashboard/App-Logs.json
   dashboards-objects/app/dashboard/App-Metrics.json.erb: dashboards-objects/app/dashboard/App-Metrics.json
   dashboards-objects/app/dashboard/App-Overview.json.erb: dashboards-objects/app/dashboard/App-Overview.json
+  dashboards-objects/app/dashboard/Service-Logs-RDS.json.erb: dashboards-objects/app/dashboard/Service-Logs-RDS.json
+  dashboards-objects/app/dashboard/Service-Logs-Elasticsearch-OpenSearch.json.erb: dashboards-objects/app/dashboard/Service-Logs-Elasticsearch-OpenSearch.json
   dashboards-objects/app/dashboard/App-Performance.json.erb: dashboards-objects/app/dashboard/App-Performance.json
   dashboards-objects/app/dashboard/Audit-Overview.json.erb: dashboards-objects/app/dashboard/Audit-Overview.json
   dashboards-objects/app/dashboard/Falco-Overview.json.erb: dashboards-objects/app/dashboard/Falco-Overview.json
@@ -109,6 +112,10 @@ templates:
   dashboards-objects/app/visualization/App-logs-by-source-type-(top-10).json.erb: dashboards-objects/app/visualization/App-logs-by-source-type-(top-10).json
   dashboards-objects/app/visualization/App-logs-count-by-source-type-(APP-or-cf-top-5-apps).json.erb: dashboards-objects/app/visualization/App-logs-count-by-source-type-(APP-or-cf-top-5-apps).json
   dashboards-objects/app/visualization/App-names.json.erb: dashboards-objects/app/visualization/App-names.json
+  dashboards-objects/app/visualization/CloudWatch-RDS-logs-by-stream-(top-10).json.erb: dashboards-objects/app/visualization/CloudWatch-RDS-logs-by-stream-(top-10).json
+  dashboards-objects/app/visualization/CloudWatch-OpenSearch-logs-by-stream-(top-10).json.erb: dashboards-objects/app/visualization/CloudWatch-OpenSearch-logs-by-stream-(top-10).json
+  dashboards-objects/app/visualization/CloudWatch-RDS-stream-names.json.erb: dashboards-objects/app/visualization/CloudWatch-RDS-stream-names.json
+  dashboards-objects/app/visualization/CloudWatch-OpenSearch-stream-names.json.erb: dashboards-objects/app/visualization/CloudWatch-OpenSearch-stream-names.json
   dashboards-objects/app/visualization/App-RTR-request-count-(top-10-apps).json.erb: dashboards-objects/app/visualization/App-RTR-request-count-(top-10-apps).json
   dashboards-objects/app/visualization/App-RTR-request-count-by-timezone-(top-5).json.erb: dashboards-objects/app/visualization/App-RTR-request-count-by-timezone-(top-5).json
   dashboards-objects/app/visualization/App-RTR-requests-map.json.erb: dashboards-objects/app/visualization/App-RTR-requests-map.json
@@ -209,7 +216,7 @@ properties:
     default: []
 
   cloudfoundry.event_types:
-    description: "Array of events you would like to get. Valid options are CounterEvent,Error,HttpStartStop,LogMessage,ValueMetric,ContainerMetric"
+    description: "Array of events you would like to get. Valid options are CounterEvent,Error,HttpStartStop,LogMessage,ValueMetric,ContainerMetric,Cloudwatch"
     default: ["LogMessage"]
   cloudfoundry.system_domain:
     description: The Cloud Foundry System Domain

@@ -1,0 +1,101 @@
+<% require 'json' %>
+<% if( p('cloudfoundry.event_types').include?('Cloudwatch') ) %>
+{
+  "attributes": {
+    "columns": [
+      "_source"
+    ],
+    "description": "",
+    "hits": 0,
+    "kibanaSavedObjectMeta": {
+      "searchSourceJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
+      {
+        "query": {
+          "query": "",
+          "language": "kuery"
+        },
+        "highlightAll": true,
+        "version": true,
+        "aggs": {
+          "2": {
+            "date_histogram": {
+              "field": "@timestamp",
+              "fixed_interval": "30s",
+              "time_zone": "America/New_York",
+              "min_doc_count": 1
+            }
+          }
+        },
+        "filter": [
+          {
+            "meta": {
+              "alias": null,
+              "negate": false,
+              "disabled": false,
+              "type": "exists",
+              "key": "cloudwatch_logs.log_group",
+              "value": "exists",
+              "indexRefName": "kibanaSavedObjectMeta.searchSourceJSON.filter[0].meta.index"
+            },
+            "exists": {
+              "field": "cloudwatch_logs.log_group"
+            },
+            "$state": {
+              "store": "appState"
+            }
+          },
+          {
+            "meta": {
+              "alias": null,
+              "negate": false,
+              "disabled": false,
+              "type": "phrase",
+              "key": "cloudwatch_logs.log_type",
+              "params": {
+                "query": "rds"
+              },
+              "indexRefName": "kibanaSavedObjectMeta.searchSourceJSON.filter[1].meta.index"
+            },
+            "query": {
+              "match_phrase": {
+                "cloudwatch_logs.log_type": "rds"
+              }
+            },
+            "$state": {
+              "store": "appState"
+            }
+          }
+        ],
+        "indexRefName": "kibanaSavedObjectMeta.searchSourceJSON.index"
+      }
+ENDOFFJSON
+  %>"
+    },
+    "sort": [],
+    "title": "Service logs - RDS",
+    "version": 1
+  },
+  "id": "cloudwatch-rds-all",
+  "migrationVersion": {
+    "search": "7.9.3"
+  },
+  "references": [
+    {
+      "id": "<%= p('opensearch_config.app_index_prefix') %>*",
+      "name": "kibanaSavedObjectMeta.searchSourceJSON.index",
+      "type": "index-pattern"
+    },
+    {
+      "id": "<%= p('opensearch_config.app_index_prefix') %>*",
+      "name": "kibanaSavedObjectMeta.searchSourceJSON.filter[0].meta.index",
+      "type": "index-pattern"
+    },
+    {
+      "id": "<%= p('opensearch_config.app_index_prefix') %>*",
+      "name": "kibanaSavedObjectMeta.searchSourceJSON.filter[1].meta.index",
+      "type": "index-pattern"
+    }
+  ],
+  "type": "search"
+}
+<% end %>
