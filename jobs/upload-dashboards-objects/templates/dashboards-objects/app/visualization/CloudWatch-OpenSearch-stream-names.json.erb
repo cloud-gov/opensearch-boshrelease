@@ -1,0 +1,62 @@
+<% require 'json' %>
+<% if( p('cloudfoundry.event_types').include?('Cloudwatch') ) %>
+{
+  "attributes": {
+    "title": "CloudWatch OpenSearch stream names",
+    "visState": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
+      {
+        "type": "table",
+        "params": {
+          "perPage": 25,
+          "showPartialRows": false,
+          "showMeticsAtAllLevels": false
+        },
+        "aggs": [
+          {
+            "id": "1",
+            "type": "count",
+            "schema": "metric",
+            "params": {}
+          },
+          {
+            "id": "2",
+            "type": "terms",
+            "schema": "bucket",
+            "params": {
+              "field": "cloudwatch_logs.log_stream",
+              "size": 100000,
+              "order": "desc",
+              "orderBy": "1"
+            }
+          }
+        ],
+        "listeners": {}
+      }
+ENDOFFJSON
+  %>",
+    "description": "",
+    "savedSearchRefName": "search_0",
+    "version": 1,
+    "kibanaSavedObjectMeta": {
+      "searchSourceJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
+      {
+        "filter": [
+
+        ]
+      }
+ENDOFFJSON
+  %>"
+    }
+  },
+  "title": "CloudWatch OpenSearch stream names",
+  "id": "CloudWatch-OpenSearch-stream-names",
+  "type": "visualization",
+  "references": [
+    {
+      "id": "cloudwatch-opensearch-all",
+      "name": "search_0",
+      "type": "search"
+    }
+  ]
+}
+<% end %>

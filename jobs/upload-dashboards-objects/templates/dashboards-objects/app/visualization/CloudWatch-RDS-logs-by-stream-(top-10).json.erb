@@ -1,0 +1,81 @@
+<% require 'json' %>
+<% if( p('cloudfoundry.event_types').include?('Cloudwatch') ) %>
+{
+  "attributes": {
+    "title": "CloudWatch RDS: logs by stream (top 10)",
+    "visState": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
+      {
+        "type": "histogram",
+        "params": {
+          "shareYAxis": true,
+          "addTooltip": true,
+          "addLegend": true,
+          "scale": "linear",
+          "mode": "stacked",
+          "times": [],
+          "addTimeMarker": false,
+          "defaultYExtents": false,
+          "setYExtents": false,
+          "yAxis": {}
+        },
+        "aggs": [
+          {
+            "id": "1",
+            "type": "count",
+            "schema": "metric",
+            "params": {}
+          },
+          {
+            "id": "2",
+            "type": "date_histogram",
+            "schema": "segment",
+            "params": {
+              "field": "@timestamp",
+              "interval": "auto",
+              "customInterval": "2h",
+              "min_doc_count": 1,
+              "extended_bounds": {}
+            }
+          },
+          {
+            "id": "3",
+            "type": "terms",
+            "schema": "group",
+            "params": {
+              "field": "cloudwatch_logs.log_stream",
+              "size": 10,
+              "order": "desc",
+              "orderBy": "1"
+            }
+          }
+        ],
+        "listeners": {}
+      }
+ENDOFFJSON
+  %>",
+    "description": "",
+    "savedSearchRefName": "search_0",
+    "version": 1,
+    "kibanaSavedObjectMeta": {
+      "searchSourceJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
+      {
+        "filter": [
+
+        ]
+      }
+ENDOFFJSON
+  %>"
+    }
+  },
+  "title": "CloudWatch RDS logs by stream (top-10)",
+  "id": "CloudWatch-RDS-logs-by-stream-(top-10)",
+  "type": "visualization",
+  "references": [
+    {
+      "id": "cloudwatch-rds-all",
+      "name": "search_0",
+      "type": "search"
+    }
+  ]
+}
+<% end %>
