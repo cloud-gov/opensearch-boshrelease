@@ -2,7 +2,7 @@
 <% if( p('cloudfoundry.event_types').include?('Cloudwatch') ) %>
 {
   "attributes": {
-    "title": "CloudWatch OpenSearch stream names",
+    "title": "Service Logs - OpenSearch/ElasticSearch stream names",
     "visState": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
       {
         "type": "table",

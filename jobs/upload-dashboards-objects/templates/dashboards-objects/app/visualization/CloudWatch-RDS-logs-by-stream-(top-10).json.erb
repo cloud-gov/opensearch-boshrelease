@@ -2,7 +2,7 @@
 <% if( p('cloudfoundry.event_types').include?('Cloudwatch') ) %>
 {
   "attributes": {
-    "title": "CloudWatch RDS: logs by stream (top 10)",
+    "title": "Service logs - RDS: logs by stream (top 10)",
     "visState": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
       {
         "type": "histogram",
