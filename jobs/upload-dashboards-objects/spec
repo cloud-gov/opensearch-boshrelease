@@ -82,8 +82,8 @@ templates:
   dashboards-objects/app/dashboard/App-Logs.json.erb: dashboards-objects/app/dashboard/App-Logs.json
   dashboards-objects/app/dashboard/App-Metrics.json.erb: dashboards-objects/app/dashboard/App-Metrics.json
   dashboards-objects/app/dashboard/App-Overview.json.erb: dashboards-objects/app/dashboard/App-Overview.json
-  dashboards-objects/app/dashboard/CloudWatch-RDS-Overview.json.erb: dashboards-objects/app/dashboard/CloudWatch-RDS-Overview.json
-  dashboards-objects/app/dashboard/CloudWatch-OpenSearch-Overview.json.erb: dashboards-objects/app/dashboard/CloudWatch-OpenSearch-Overview.json
+  dashboards-objects/app/dashboard/Service-Logs-RDS.json.erb: dashboards-objects/app/dashboard/Service-Logs-RDS.json
+  dashboards-objects/app/dashboard/Service-Logs-Elasticsearch-OpenSearch.json.erb: dashboards-objects/app/dashboard/Service-Logs-Elasticsearch-OpenSearch.json
   dashboards-objects/app/dashboard/App-Performance.json.erb: dashboards-objects/app/dashboard/App-Performance.json
   dashboards-objects/app/dashboard/Audit-Overview.json.erb: dashboards-objects/app/dashboard/Audit-Overview.json
   dashboards-objects/app/dashboard/Falco-Overview.json.erb: dashboards-objects/app/dashboard/Falco-Overview.json

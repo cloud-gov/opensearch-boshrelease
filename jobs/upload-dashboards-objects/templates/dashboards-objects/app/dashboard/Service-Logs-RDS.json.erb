@@ -2,7 +2,7 @@
 <% if( p('cloudfoundry.event_types').include?('Cloudwatch') ) %>
 {
   "attributes": {
-    "title": "CloudWatch RDS - Overview",
+    "title": "Service Logs - RDS",
     "hits": 0,
     "description": "",
     "panelsJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
@@ -82,7 +82,7 @@ ENDOFFJSON
     }
   },
   "type": "dashboard",
-  "title": "Service logs - RDS",
+  "title": "Service Logs - RDS",
   "id": "CloudWatch-RDS-Overview",
   "references": [
     {
