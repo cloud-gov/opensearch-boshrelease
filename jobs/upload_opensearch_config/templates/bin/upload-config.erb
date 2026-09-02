@@ -175,6 +175,53 @@ end
 %>
 
 #
+# Apply (create or update) an ISM policy, failing on error.
+#
+# Args: <policy_name> <policy_json_file>
+apply_ism_policy() {
+  local policy_name="$1"
+  local policy_file="$2"
+  local base_url="${BASEURL}/_plugins/_ism/policies/${policy_name}"
+  local response_file="${DATA_DIR}/ism-${policy_name}-response.json"
+  local attempt
+
+  for attempt in 1 2; do
+    local current seq term url http_code
+    current=$(curl -s ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" "${base_url}")
+    seq=$(echo "$current"  | grep -o '"_seq_no":[0-9]*'       | head -1 | sed 's/.*://')
+    term=$(echo "$current" | grep -o '"_primary_term":[0-9]*' | head -1 | sed 's/.*://')
+
+    if [[ -n "$seq" && -n "$term" ]]; then
+      url="${base_url}?if_seq_no=${seq}&if_primary_term=${term}"
+    else
+      # Policy does not exist yet: plain create.
+      url="${base_url}"
+    fi
+
+    http_code=$(curl -s -o "${response_file}" -w '%{http_code}' \
+      -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" \
+      -H 'Content-Type: application/json' "${url}" -d @"${policy_file}")
+
+    if [[ "$http_code" == "200" || "$http_code" == "201" ]]; then
+      echo "ISM policy ${policy_name} applied (HTTP ${http_code})"
+      cat "${response_file}"
+      return 0
+    fi
+
+    if [[ "$http_code" == "409" && "$attempt" -eq 1 ]]; then
+      echo "ISM policy ${policy_name} update hit version conflict (409); re-reading seq/term and retrying" >&2
+      continue
+    fi
+
+    echo "ERROR: ISM policy ${policy_name} update failed (HTTP ${http_code}):" >&2
+    cat "${response_file}" >&2
+    return 1
+  done
+
+  return 1
+}
+
+#
 # wait for opensearch availability
 #
 until curl -f ${KEY} ${CERT} ${CA} -H "${AUTH_HEADER}" "${URL}/_cluster/health?wait_for_status=yellow&timeout=10m"; do :; done
@@ -196,42 +243,21 @@ echo "--- License"
 echo "--- Creating ISM policy"
 <% if_link("opensearch") do |opensearch| %>
   <% if opensearch.p('opensearch.deployment_type').include?('app') %>
-    logs_app_rollover_policy=$(curl -XGET ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/_plugins/_ism/policies/logs-app-rollover_policy)
-    TERM=$(echo "$logs_app_rollover_policy" | grep -o '"_primary_term":[0-9]*' | sed 's/"_primary_term"://')
-    SEQ=$(echo "$logs_app_rollover_policy" | grep -o '"_seq_no":[0-9]*' | sed 's/"_seq_no"://')
-    if [[ -n "$TERM" ]]; then
-      curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" "${BASEURL}/_plugins/_ism/policies/logs-app-rollover_policy?if_seq_no=${SEQ}&if_primary_term=${TERM}" -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy.json
-    else
-      curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/_plugins/_ism/policies/logs-app-rollover_policy -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy.json
-    fi
+    apply_ism_policy "logs-app-rollover_policy" "${JOB_DIR}/config/ism-policy.json"
     HTTP_CODE=$(curl -s -o /dev/null -s -w "%{http_code}\n" -I ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/_alias/${ALIAS}/)
     if [ "$HTTP_CODE" -ge "201" ]; then
       curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/%3Clogs-app-%7Bnow%2Fd%7D-01%3E -H 'Content-Type: application/json' -d'{"aliases": {"'${ALIAS}'": {}}}'
     fi
   <% end %>
   <% if opensearch.p('opensearch.deployment_type').include?('metric') %>
-    logs_metric_rollover_policy=$(curl -XGET ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/_plugins/_ism/policies/logs-metric-rollover_policy)
-    TERM=$(echo "$logs_metric_rollover_policy" | grep -o '"_primary_term":[0-9]*' | sed 's/"_primary_term"://')
-    SEQ=$(echo "$logs_metric_rollover_policy" | grep -o '"_seq_no":[0-9]*' | sed 's/"_seq_no"://')
-    if [[ -n "$TERM" ]]; then
-      curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" "${BASEURL}/_plugins/_ism/policies/logs-metric-rollover_policy?if_seq_no=${SEQ}&if_primary_term=${TERM}" -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy-metrics.json
-    else
-      curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/_plugins/_ism/policies/logs-metric-rollover_policy -H 'Content-Type: application/json' -d @${JOB_DIR}/config/ism-policy-metrics.json
-    fi
+    apply_ism_policy "logs-metric-rollover_policy" "${JOB_DIR}/config/ism-policy-metrics.json"
     HTTP_CODE=$(curl -s -o /dev/null -s -w "%{http_code}\n" -I ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/_alias/${METRIC_ALIAS}/)
     if [ "$HTTP_CODE" -ge "201" ]; then
       curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/%3Clogs-metrics-%7Bnow%2Fd%7D-01%3E -H 'Content-Type: application/json' -d'{"aliases": {"'${METRIC_ALIAS}'": {}}}'
     fi
   <% end %>
   <% if opensearch.p('opensearch.deployment_type').include?('platform') %>
-    logs_platform_rollover_policy=$(curl -XGET ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/_plugins/_ism/policies/logs-platform-rollover_policy)
-    TERM=$(echo "$logs_platform_rollover_policy" | grep -o '"_primary_term":[0-9]*' | sed 's/"_primary_term"://')
-    SEQ=$(echo "$logs_platform_rollover_policy" | grep -o '"_seq_no":[0-9]*' | sed 's/"_seq_no"://')
-    if [[ -n "$TERM" ]]; then
-      curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" -H 'Content-Type: application/json' "${BASEURL}/_plugins/_ism/policies/logs-platform-rollover_policy?if_seq_no=${SEQ}&if_primary_term=${TERM}" -d @${JOB_DIR}/config/ism-policy-platform.json
-    else
-      curl -XPUT ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" -H 'Content-Type: application/json' ${BASEURL}/_plugins/_ism/policies/logs-platform-rollover_policy -d @${JOB_DIR}/config/ism-policy-platform.json
-    fi
+    apply_ism_policy "logs-platform-rollover_policy" "${JOB_DIR}/config/ism-policy-platform.json"
     HTTP_CODE=$(curl -s -o /dev/null -s -w "%{http_code}\n" -I ${CA} ${CERT} ${KEY} -H "${AUTH_HEADER}" ${BASEURL}/_alias/${PLATFORM_ALIAS}/)
     HTTP_CODE=$(echo "$HTTP_CODE" | grep -o '[0-9]\{3\}$')
     if [ "$HTTP_CODE" -ge "201" ]; then

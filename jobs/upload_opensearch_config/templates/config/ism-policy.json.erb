@@ -54,13 +54,21 @@
                 ],
                 "transitions": [
                     {
+<% if p('opensearch_config.app_warm_conversion_enabled') %>
                         "state_name": "Old_index",
                         "conditions": {
                             "min_index_age": "90d"
                         }
+<% else %>
+                        "state_name": "Delete_index",
+                        "conditions": {
+                            "min_index_age": "<%= p('opensearch_config.app_delete_index_age')%>"
+                        }
+<% end %>
                     }
                 ]
             },
+<% if p('opensearch_config.app_warm_conversion_enabled') %>
             {
                 "name": "Old_index",
                 "actions": [
@@ -73,7 +81,7 @@
                         "index_settings": {
                             "index.routing.allocation.total_shards_per_node": "3"
                         }
-                    }<% if p('opensearch_config.app_warm_conversion_enabled') %>,
+                    },
                     {
                         "retry": {
                             "count": 3,
@@ -88,7 +96,7 @@
                             "exclude": {},
                             "wait_for": false
                         }
-                    }<% end %>
+                    }
                 ],
                 "transitions": [
                     {
@@ -99,6 +107,7 @@
                     }
                 ]
             },
+<% end %>
             {
                 "name": "Delete_index",
                 "actions": [
