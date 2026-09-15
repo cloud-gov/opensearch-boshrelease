@@ -1,103 +1,125 @@
 <% require 'json' %>
 <% if(p('cloudfoundry.event_types').include? 'ContainerMetric') %>
+<%
+  metric_index = "#{p('opensearch_config.metric_index_prefix')}*"
+
+  # NOTE: TSVB (type "metrics") is used here instead of a classic "line" vis so that a
+  # "Total (all apps)" series can be overlaid on the per-space series. A classic vis
+  # cannot mix a split-by-terms series with an unsplit total on the same chart.
+  #
+  # The bucket interval is pinned to 30s rather than "auto" on purpose. Cloud Foundry
+  # emits one container metric per app instance every 30s, so a 30s bucket holds ~1
+  # sample per instance and sum(memory_bytes) is a true point-in-time total. With an
+  # "auto" interval a wide time range would put many samples per instance in one bucket
+  # and the sum would be inflated by the number of samples.
+  #
+  # TSVB supports only one terms split field, so the per-app + per-space grouping of the
+  # previous classic vis is reduced to a per-space grouping. TSVB also cannot consume a
+  # saved search, so the "memory_bytes exists" filter is declared inline on the panel.
+%>
 {
   "attributes": {
     "title": "App METRIC: memory usage",
-    "visState": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
+    "description": "Container memory usage per space, with the total summed across all reporting app instances. Buckets are pinned to the 30s Cloud Foundry container metric emit interval.",
+    "uiStateJSON": "{}",
+    "version": 1,
+    "visState": "<%= JSON.parse(<<ENDOFFJSON).to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
       {
-        "type": "line",
-        "params": {
-          "shareYAxis": true,
-          "addTooltip": true,
-          "addLegend": true,
-          "showCircles": true,
-          "smoothLines": false,
-          "interpolate": "linear",
-          "scale": "linear",
-          "drawLinesBetweenPoints": true,
-          "radiusRatio": 9,
-          "times": [
-
-          ],
-          "addTimeMarker": false,
-          "defaultYExtents": false,
-          "setYExtents": false,
-          "yAxis": {
-          }
-        },
+        "title": "App METRIC: memory usage",
+        "type": "metrics",
         "aggs": [
-          {
-            "id": "1",
-            "type": "max",
-            "schema": "metric",
-            "params": {
-              "field": "containermetric.memory_bytes"
-            }
-          },
-          {
-            "id": "2",
-            "type": "date_histogram",
-            "schema": "segment",
-            "params": {
-              "field": "@timestamp",
-              "interval": "auto",
-              "customInterval": "2h",
-              "min_doc_count": 1,
-              "extended_bounds": {
-              }
-            }
-          },
-          {
-            "id": "3",
-            "type": "terms",
-            "schema": "group",
-            "params": {
-              "field": "@cf.app",
-              "size": 25,
-              "order": "desc",
-              "orderBy": "1"
-            }
-          },
-          {
-            "id": "4",
-            "type": "terms",
-            "schema": "group",
-            "params": {
-              "field": "@cf.space",
-              "size": 25,
-              "order": "desc",
-              "orderBy": "_term"
-            }
-          }
+
         ],
-        "listeners": {
+        "params": {
+          "id": "app-metric-memory-usage-panel",
+          "type": "timeseries",
+          "index_pattern": "#{metric_index}",
+          "default_index_pattern": "#{metric_index}",
+          "time_field": "@timestamp",
+          "default_timefield": "@timestamp",
+          "interval": "30s",
+          "drop_last_bucket": 1,
+          "axis_position": "left",
+          "axis_formatter": "bytes",
+          "axis_scale": "normal",
+          "show_legend": 1,
+          "show_grid": 1,
+          "legend_position": "right",
+          "tooltip_mode": "show_all",
+          "filter": {
+            "language": "kuery",
+            "query": "containermetric.memory_bytes: *"
+          },
+          "series": [
+            {
+              "id": "app-metric-memory-by-space",
+              "label": "Memory by space",
+              "color": "#68BC00",
+              "split_mode": "terms",
+              "split_color_mode": "opensearchDashboards",
+              "terms_field": "@cf.space",
+              "terms_size": "25",
+              "terms_order_by": "app-metric-memory-by-space-sum",
+              "terms_direction": "desc",
+              "metrics": [
+                {
+                  "id": "app-metric-memory-by-space-sum",
+                  "type": "sum",
+                  "field": "containermetric.memory_bytes"
+                }
+              ],
+              "separate_axis": 0,
+              "axis_position": "right",
+              "axis_scale": "normal",
+              "formatter": "bytes",
+              "chart_type": "line",
+              "line_width": 1,
+              "point_size": 0,
+              "fill": 0,
+              "stacked": "none",
+              "hide_in_legend": 0
+            },
+            {
+              "id": "app-metric-memory-total",
+              "label": "Total (all apps)",
+              "color": "#E7664C",
+              "split_mode": "everything",
+              "split_color_mode": "opensearchDashboards",
+              "metrics": [
+                {
+                  "id": "app-metric-memory-total-sum",
+                  "type": "sum",
+                  "field": "containermetric.memory_bytes"
+                }
+              ],
+              "separate_axis": 0,
+              "axis_position": "right",
+              "axis_scale": "normal",
+              "formatter": "bytes",
+              "chart_type": "line",
+              "line_width": 3,
+              "point_size": 0,
+              "fill": 0,
+              "stacked": "none",
+              "hide_in_legend": 0
+            }
+          ]
         }
       }
 ENDOFFJSON
   %>",
-    "description": "",
-    "savedSearchRefName": "search_0",
-    "version": 1,
     "kibanaSavedObjectMeta": {
-      "searchSourceJSON": "<%= JSON.parse(<<'ENDOFFJSON').to_json.gsub(/\\/, '\\\\').gsub(/"/, '\"')
-      {
-        "filter": [
-
-        ]
-      }
-ENDOFFJSON
-  %>"
+      "searchSourceJSON": "{}"
     }
   },
   "title": "App METRIC memory usage",
   "id": "App-METRIC-memory-usage",
   "type": "visualization",
+  "migrationVersion": {
+    "visualization": "7.10.0"
+  },
   "references": [
-    {
-      "id": "app-container-metric-memory",
-      "name": "search_0",
-      "type": "search"
-    }
+
   ]
 }
 <% end %>
