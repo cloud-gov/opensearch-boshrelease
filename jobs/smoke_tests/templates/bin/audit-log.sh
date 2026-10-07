@@ -27,6 +27,8 @@ INDEX="<%= index %>*"
 S3_BUCKET="<%= p('smoke_tests.s3_audit.bucket') %>"
 S3_REGION="<%= p('smoke_tests.s3.region') %>"
 ENVIRONMENT="<%= p('smoke_tests.s3.environment') %>"
+ORG_GUID="<%= p('smoke_tests.org_guid') %>"
+SPACE_GUID="<%= p('smoke_tests.space_guid') %>"
 
 # Validate required properties
 if [ -z "$S3_BUCKET" ] || [ -z "$S3_REGION" ] || [ -z "$ENVIRONMENT" ]; then
@@ -34,28 +36,31 @@ if [ -z "$S3_BUCKET" ] || [ -z "$S3_REGION" ] || [ -z "$ENVIRONMENT" ]; then
     exit 1
 fi
 
+if [ -z "$ORG_GUID" ] || [ -z "$SPACE_GUID" ]; then
+    echo "ERROR: One or more required properties (ORG_GUID, SPACE_GUID) are not defined."
+    exit 1
+fi
+
 # =============================================================================
 # GENERATE IDENTIFIERS AND TIMESTAMPS
 # =============================================================================
 
-S3_PREFIX=$(date -u +"%Y/%m/%d/%H")
 SMOKE_ID=$(LC_ALL=C; cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 S3_LOG_FILE="smoke_test_log_${SMOKE_ID}.log"
-TIMESTAMP=$(date -u +"%Y%m%d-%H%M%S")
-S3_KEY="${S3_PREFIX}/${TIMESTAMP}-${SMOKE_ID}.gz"
 current_time=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+
+S3_PREFIX="orgs/${ORG_GUID}/${SPACE_GUID}"
+S3_KEY="${S3_PREFIX}/$(date -u +"%Y/%m/%d/%H/%M/%S")"
 
 # =============================================================================
 # CREATE AND UPLOAD LOG
 # =============================================================================
-org_value="c9b54579-7056-46c3-9870-334330e9be75"
-space_value="5db8fd06-ac53-4ed0-a224-b0bad2e463d2"
 # Construct the LOG JSON object (using jq for proper formatting)
 LOG=$(jq -nc \
     --arg timestamp "$current_time" \
     --arg smoke_id "$SMOKE_ID" \
-    --arg org_value "$org_value" \
-    --arg space_value "$space_value" \
+    --arg org_value "$ORG_GUID" \
+    --arg space_value "$SPACE_GUID" \
     '{
         "guid": "024d7b3a-1732-4ae4-9e2a-f36eaa2c741c",
         "created_at": $timestamp,
@@ -85,16 +90,14 @@ LOG=$(jq -nc \
     } ')
 
 # Save log to file and compress
-echo "$LOG" > temp_log.json
-gzip temp_log.json
-mv temp_log.json.gz "$S3_LOG_FILE"
+echo "$LOG" > "$S3_LOG_FILE"
 echo "Generated LOG: $LOG"
 
 # Upload log to S3
 echo "Uploading audit log to S3..."
 if command -v aws &> /dev/null; then
     if [ -f "$S3_LOG_FILE" ]; then
-        aws s3api put-object --bucket ${S3_BUCKET} --key ${S3_KEY} --body "$S3_LOG_FILE" --region "${S3_REGION}" --server-side-encryption AES256
+        aws s3api put-object --bucket ${S3_BUCKET} --key ${S3_KEY} --body "$S3_LOG_FILE" --region "${S3_REGION}" --content-type "text/plain" --server-side-encryption AES256
         if [ $? -eq 0 ]; then
             echo "Successfully uploaded audit log to s3://${S3_BUCKET}/${S3_KEY}"
             rm -f "$S3_LOG_FILE"
@@ -140,7 +143,7 @@ while [ $TRIES -gt 0 ]; do
         org_opensearch=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["org_id"]')
         space_opensearch=$(echo "$result" | jq -r '.hits.hits[0]._source["@cf"]["space_id"]')
         
-        if [[ "$org_opensearch" == "$org_value" && "$space_opensearch" == "$space_value" ]]; then
+        if [[ "$org_opensearch" == "$ORG_GUID" && "$space_opensearch" == "$SPACE_GUID" ]]; then
             echo "SUCCESS: Actor log contains 'org id' and 'space id' fields."
             
             # Parse and validate Actor fields
@@ -156,6 +159,8 @@ while [ $TRIES -gt 0 ]; do
             fi
         else
             echo "ERROR: Actor log does not contain both 'org id' and 'space id' fields."
+            echo "Expected org id '$ORG_GUID', found '$org_opensearch'."
+            echo "Expected space id '$SPACE_GUID', found '$space_opensearch'."
             exit 1
         fi
     else
