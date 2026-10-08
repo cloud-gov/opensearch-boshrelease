@@ -31,10 +31,17 @@ ORG_GUID="<%= org_guid %>"
 SPACE_GUID="<%= space_guid %>"
 RDS_INSTANCE="<%= rds_instance %>"
 LOG_GROUP="<%= log_group %>"
+S3_BUCKET="<%= p('smoke_tests.s3_cloudwatch.bucket') %>"
+S3_REGION="<%= p('smoke_tests.s3.region') %>"
 
 # Validate required properties
 if [ -z "$ORG_GUID" ] || [ -z "$RDS_INSTANCE" ] || [ -z "$SPACE_GUID" ]; then
     echo "ERROR: One or more required properties (RDS_INSTANCE, ORG_GUID, SPACE_GUID) are not defined."
+    exit 1
+fi
+
+if [ -z "$S3_BUCKET" ] || [ -z "$S3_REGION" ]; then
+    echo "ERROR: One or more required properties (S3_BUCKET, S3_REGION) are not defined."
     exit 1
 fi
 
@@ -81,57 +88,70 @@ fi
 SMOKE_ID=$(LC_ALL=C; cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 current_time_ms=$(date -u +%s%3N)
 
+S3_PREFIX="orgs/${ORG_GUID}/${SPACE_GUID}"
+S3_KEY="${S3_PREFIX}/$(date -u +"%Y/%m/%d/%H/%M")"
+
 
 # =============================================================================
-# UPLOAD SIMPLE LOG MESSAGE TO CLOUDWATCH LOGS
+# UPLOAD SIMPLE LOG MESSAGE TO THE CLOUDWATCH LOGS BUCKET
 # =============================================================================
 db_instance=$RDS_INSTANCE
 LOG_STREAM="${db_instance}.0"
 
 # Simple log message with smoke test ID
 LOG_MESSAGE="Smoke test ${SMOKE_ID}: This is a test of cloudwatch logs"
+S3_LOG_FILE="smoke_test_cloudwatch_${SMOKE_ID}.log"
 
 echo "Generated Smoke Test ID: $SMOKE_ID"
-echo "Uploading log message to CloudWatch Logs..."
 
-# Upload log to CloudWatch Logs
+# Build the record the way the delivery stream writes it. cf-tags.conf parses
+# the object body as JSON and cloudwatch.conf consumes timestamp/message/
+# logGroup/logStream, so those key names have to match exactly.
+LOG=$(jq -nc \
+    --argjson timestamp "$current_time_ms" \
+    --arg message "$LOG_MESSAGE" \
+    --arg log_group "$LOG_GROUP" \
+    --arg log_stream "$LOG_STREAM" \
+    --arg org_value "$ORG_GUID" \
+    --arg space_value "$SPACE_GUID" \
+    '{
+        "timestamp": $timestamp,
+        "message": $message,
+        "logGroup": $log_group,
+        "logStream": $log_stream,
+        "Tags": {
+            "Organization GUID": $org_value,
+            "Space GUID": $space_value
+        }
+    }')
+
+# Save the record to a file. The delivery stream writes newline delimited JSON
+# as text/plain and the key carries no .gz suffix, so this must stay
+# uncompressed or the ingestor will not parse it.
+echo "$LOG" > "$S3_LOG_FILE"
+echo "Generated LOG: $LOG"
+
+echo "Uploading cloudwatch log to S3..."
 if command -v aws &> /dev/null; then
-    # Get sequence token if needed
-    SEQUENCE_TOKEN=$(aws logs describe-log-streams \
-        --log-group-name "$LOG_GROUP" \
-        --log-stream-name "$LOG_STREAM" \
-        --query 'logStreams[0].uploadSequenceToken' \
-        --output text 2>/dev/null)
-
-    # Prepare the log event
-    LOG_EVENTS="[{\"timestamp\":$current_time_ms,\"message\":\"$LOG_MESSAGE\"}]"
-
-    # Put log events
-    if [ "$SEQUENCE_TOKEN" != "None" ] && [ "$SEQUENCE_TOKEN" != "" ] && [ "$SEQUENCE_TOKEN" != "null" ]; then
-        aws logs put-log-events \
-            --log-group-name "$LOG_GROUP" \
-            --log-stream-name "$LOG_STREAM" \
-            --log-events "$LOG_EVENTS" \
-            --sequence-token "$SEQUENCE_TOKEN"
+    if [ -f "$S3_LOG_FILE" ]; then
+        if aws s3api put-object --bucket "${S3_BUCKET}" --key "${S3_KEY}" --body "$S3_LOG_FILE" --region "${S3_REGION}" --content-type "text/plain" --server-side-encryption AES256; then
+            echo "Successfully uploaded cloudwatch log to s3://${S3_BUCKET}/${S3_KEY}"
+            echo "   Log Group: $LOG_GROUP"
+            echo "   Log Stream: $LOG_STREAM"
+            echo "   Smoke ID: $SMOKE_ID"
+            echo "   Message: $LOG_MESSAGE"
+            rm -f "$S3_LOG_FILE"
+        else
+            echo "ERROR: Failed to upload cloudwatch log to S3"
+            rm -f "$S3_LOG_FILE"
+            exit 1
+        fi
     else
-        aws logs put-log-events \
-            --log-group-name "$LOG_GROUP" \
-            --log-stream-name "$LOG_STREAM" \
-            --log-events "$LOG_EVENTS"
-    fi
-
-    if [ $? -eq 0 ]; then
-        echo "✅ Successfully uploaded smoke test log to CloudWatch"
-        echo "   Log Group: $LOG_GROUP"
-        echo "   Log Stream: $LOG_STREAM"
-        echo "   Smoke ID: $SMOKE_ID"
-        echo "   Message: $LOG_MESSAGE"
-    else
-        echo "❌ Failed to upload log to CloudWatch Logs"
+        echo "ERROR: Log file '$S3_LOG_FILE' not found. Cannot upload to S3."
         exit 1
     fi
 else
-    echo "❌ AWS CLI not found, cannot upload to CloudWatch Logs"
+    echo "ERROR: AWS CLI not found, cannot upload to S3"
     exit 1
 fi
 
