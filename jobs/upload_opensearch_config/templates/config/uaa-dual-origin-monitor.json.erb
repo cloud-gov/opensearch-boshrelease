@@ -26,23 +26,10 @@ alert_destination_id = p('opensearch_config.alert_destination_id', '')
             "bool": {
               "filter": [
                 {
-                  "bool": {
-                    "filter": [
-                      {
-                        "multi_match": {
-                          "type": "best_fields",
-                          "query": "f_enforceCloudGovOrigin",
-                          "lenient": true
-                        }
-                      },
-                      {
-                        "multi_match": {
-                          "type": "best_fields",
-                          "query": "duplicate",
-                          "lenient": true
-                        }
-                      }
-                    ]
+                  "multi_match": {
+                    "type": "phrase",
+                    "query": "duplicate key value violates unique constraint",
+                    "lenient": true
                   }
                 },
                 {
