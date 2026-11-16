@@ -8,7 +8,6 @@ packages:
 - logstash
 - base-logstash-filters
 - cf-logstash-filters
-- openjdk-21
 
 templates:
   bin/ingestor_s3: bin/ingestor_s3.sh
