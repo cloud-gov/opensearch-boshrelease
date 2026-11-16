@@ -138,6 +138,10 @@ jdk-21.0.11_linux-x64_bin.tar.gz:
   size: 198873794
   object_id: dc81aab2-ffef-477a-5896-bcdc4f287944
   sha: sha256:e1c25a83f9e2e374c93e0c29cc3d98a947621ae0fefa4a8d932951eb160c47c3
+jdk-25_linux-x64_bin.tar.gz:
+  size: 217100679
+  object_id: b3f7be11-dfb8-476e-59ec-b5a9f347541f
+  sha: sha256:6deafad80454d1f968105b1f582d89b8c2e88a5dfc98116a8226e0ec2fd5df8e
 jq-linux-amd64-1.8.1.tar.gz:
   size: 995911
   object_id: fa239437-7080-45f1-6e31-3fa88414b51d
@@ -186,6 +190,14 @@ openjdk-21/runtime.env:
   size: 79
   object_id: 8bbe6656-9842-4a9b-5831-4cecaa2867cb
   sha: sha256:4e7340040fc0bef1b1657e51221a6a45b1816f7594fface8c204cc0ce5400e6f
+openjdk-25/compile.env:
+  size: 79
+  object_id: b019539d-c3d5-4d5d-470a-a94c55e57560
+  sha: sha256:5c32572dea562ccbbac4163532a1cb17e88d15d2afe6d74798ee6af65dea6a3c
+openjdk-25/runtime.env:
+  size: 79
+  object_id: 22a509fc-5c9a-4083-79f5-184d7c59800e
+  sha: sha256:5c32572dea562ccbbac4163532a1cb17e88d15d2afe6d74798ee6af65dea6a3c
 opensearch-3.9.0-linux-x64.tar.gz:
   size: 1095236084
   object_id: ec55aac1-a384-4c7d-47fb-13b9e892ba16

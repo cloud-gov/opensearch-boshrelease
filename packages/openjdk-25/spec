@@ -1,0 +1,7 @@
+---
+name: openjdk-25
+dependencies: []
+files:
+- jdk-25_linux-x64_bin.tar.gz
+- openjdk-25/compile.env
+- openjdk-25/runtime.env

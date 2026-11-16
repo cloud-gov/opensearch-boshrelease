@@ -22,7 +22,7 @@ curl -X PUT \
 <% if_p("opensearch.node.ssl.private_key") do %>
   <% if p("opensearch.node.allow_data") %>
   export OPENSEARCH_HOME=/var/vcap/packages/opensearch
-  source /var/vcap/packages/openjdk-21/bosh/runtime.env
+  source /var/vcap/packages/openjdk-25/bosh/runtime.env
   # OpenSearch 3.9 (opensearch-project/security#6023) relocated the security
   # tools to ${OPENSEARCH_HOME}/bin/opensearch-security/ with the executable bit
   # preserved.
