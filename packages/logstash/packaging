@@ -4,6 +4,8 @@ set -e -u
 
 tar xzf logtash/logstash-9.5.6-linux-x86_64.tar.gz -C "${BOSH_INSTALL_TARGET}" --strip-components 1
 
+chmod -R u+rwX,go+rX "${BOSH_INSTALL_TARGET}"
+
 # Logstash 9.5.6 ships its own bundled JDK (Temurin) under <install>/jdk.
 # Use it for the plugin install step below instead of a separate openjdk
 # package dependency, since the logstash launcher itself will prefer this
