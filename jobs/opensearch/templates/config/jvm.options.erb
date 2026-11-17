@@ -67,15 +67,23 @@
 # JDK 9+ GC logging
 # 9-:-Xlog:gc*,gc+age=trace,safepoint:file=${loggc}:utctime,pid,tags:filecount=32,filesize=64m
 
-# Explicitly allow security manager (https://bugs.openjdk.java.net/browse/JDK-8270380)
-18-:-Djava.security.manager=allow
-
 # JDK 20+ Incubating Vector Module for SIMD optimizations;
 # disabling may reduce performance on vector optimized lucene
 20-:--add-modules=jdk.incubator.vector
 
+# See please https://bugs.openjdk.org/browse/JDK-8341127 (openjdk/jdk#21283)
+23:-XX:CompileCommand=dontinline,java/lang/invoke/MethodHandle.setAsTypeCache
+23:-XX:CompileCommand=dontinline,java/lang/invoke/MethodHandle.asTypeUncached
+
 21-:-javaagent:agent/opensearch-agent.jar
-21-:--add-opens=java.base/java.nio=org.apache.arrow.memory.core,ALL-UNNAMED
+21-:--add-opens=java.base/java.nio=ALL-UNNAMED
+
+# For cases with high memory-mapped file counts, a lower value can improve stability and
+# prevent issues like "leaked" maps or performance degradation. A value of 1 effectively
+# disables the shared Arena pooling and uses a confined Arena for each MMapDirectory
+-Dorg.apache.lucene.store.MMapDirectory.sharedArenaMaxPermits=1
+
+25-:-XX:+UseCompactObjectHeaders
 
 # BouncyCastle-FIPS loads a native probe library on JDK 21+ this triggers a "restricted method"
 # warning and will be blocked in a future release unless native access is

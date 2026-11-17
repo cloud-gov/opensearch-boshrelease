@@ -134,10 +134,10 @@ awscli-exe-linux-x86_64.zip:
   size: 62186639
   object_id: acf3ef43-9e8d-4749-4daf-7c6edf3a5297
   sha: sha256:fca9d80afb77f4cf5f2df6078b30ebb123b40e5b070ee7c1d5c3fba92d6b3755
-jdk-21.0.11_linux-x64_bin.tar.gz:
-  size: 198873794
-  object_id: dc81aab2-ffef-477a-5896-bcdc4f287944
-  sha: sha256:e1c25a83f9e2e374c93e0c29cc3d98a947621ae0fefa4a8d932951eb160c47c3
+jdk-25_linux-x64_bin.tar.gz:
+  size: 217100679
+  object_id: b3f7be11-dfb8-476e-59ec-b5a9f347541f
+  sha: sha256:6deafad80454d1f968105b1f582d89b8c2e88a5dfc98116a8226e0ec2fd5df8e
 jq-linux-amd64-1.8.1.tar.gz:
   size: 995911
   object_id: fa239437-7080-45f1-6e31-3fa88414b51d
@@ -174,6 +174,10 @@ logstash/logstash-output-syslog-3.0.5.zip:
   size: 41727
   object_id: 21474ee6-824a-4547-7f45-b236864358ab
   sha: sha256:80a2b08f2b58ae81c823cc0bb1dd7956fbc173037fc621bfa31af34140724e02
+logtash/logstash-9.5.6-linux-x86_64.tar.gz:
+  size: 487043727
+  object_id: 1c15fafc-ff6d-48a1-5d96-289660950ee5
+  sha: sha256:bff947d0a69ee8c74e13f07a7b4baa0b22bbc3e5c93da0b093a2eb94077c2cd9
 openjdk-21/compile.env:
   size: 79
   object_id: e554603d-863a-4f0d-44c9-8e8e6d7e5e54
@@ -182,6 +186,14 @@ openjdk-21/runtime.env:
   size: 79
   object_id: 8bbe6656-9842-4a9b-5831-4cecaa2867cb
   sha: sha256:4e7340040fc0bef1b1657e51221a6a45b1816f7594fface8c204cc0ce5400e6f
+openjdk-25/compile.env:
+  size: 79
+  object_id: b019539d-c3d5-4d5d-470a-a94c55e57560
+  sha: sha256:5c32572dea562ccbbac4163532a1cb17e88d15d2afe6d74798ee6af65dea6a3c
+openjdk-25/runtime.env:
+  size: 79
+  object_id: 22a509fc-5c9a-4083-79f5-184d7c59800e
+  sha: sha256:5c32572dea562ccbbac4163532a1cb17e88d15d2afe6d74798ee6af65dea6a3c
 opensearch-3.9.0-linux-x64.tar.gz:
   size: 1095236084
   object_id: ec55aac1-a384-4c7d-47fb-13b9e892ba16

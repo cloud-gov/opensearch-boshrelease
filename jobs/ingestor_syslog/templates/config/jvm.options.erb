@@ -1,6 +1,7 @@
 ################################################################
 # logstash base config
 # this is the stuff from Elastic. We should update this whenever we update logstash
+# (synced against logstash 9.5.6's stock config/jvm.options)
 ################################################################
 ## JVM configuration
 
@@ -20,11 +21,6 @@
 ##
 ################################################################
 
-## GC configuration
-8-13:-XX:+UseConcMarkSweepGC
-8-13:-XX:CMSInitiatingOccupancyFraction=75
-8-13:-XX:+UseCMSInitiatingOccupancyOnly
-
 ## Locale
 # Set the locale language
 #-Duser.language=en
@@ -38,7 +34,7 @@
 ## basic
 
 # set the I/O temp directory
-#-Djava.io.tmpdir=$HOME
+#-Djava.io.tmpdir=${HOME}
 
 # set to headless, just in case
 -Djava.awt.headless=true
@@ -48,13 +44,6 @@
 
 # use our provided JNA always versus the system one
 #-Djna.nosys=true
-
-# Turn on JRuby invokedynamic
--Djruby.compile.invokedynamic=true
-# Force Compilation
--Djruby.jit.threshold=0
-# Make sure joni regexp interruptability is enabled
--Djruby.regexp.interruptible=true
 
 ## heap dumps
 
@@ -67,25 +56,28 @@
 #-XX:HeapDumpPath=${LOGSTASH_HOME}/heapdump.hprof
 
 ## GC logging
-#-XX:+PrintGCDetails
-#-XX:+PrintGCTimeStamps
-#-XX:+PrintGCDateStamps
-#-XX:+PrintClassHistogram
-#-XX:+PrintTenuringDistribution
-#-XX:+PrintGCApplicationStoppedTime
-
-# log GC status to a file with time stamps
-# ensure the directory exists
-#-Xloggc:${LS_GC_LOG_FILE}
+#-Xlog:gc*,gc+age=trace,safepoint:file=${LS_GC_LOG_FILE}:utctime,pid,tags:filecount=32,filesize=64m
 
 # Entropy source for randomness
 -Djava.security.egd=file:/dev/urandom
 
-# Copy the logging context from parent threads to children
--Dlog4j2.isThreadContextMapInheritable=true
-
-17-:--add-opens java.base/sun.nio.ch=ALL-UNNAMED
-17-:--add-opens java.base/java.io=ALL-UNNAMED
+# FasterXML/jackson defaults
+#
+# Sets the maximum string length (in chars or bytes, depending on input context).
+# This limit is not exact and an exception will happen at sizes greater than this limit.
+# Some text values that are a little bigger than the limit may be treated as valid but no
+# text values with sizes less than or equal to this limit will be treated as invalid.
+# This value should be higher than `logstash.jackson.stream-read-constraints.max-number-length`.
+# The jackson library defaults to 20000000 or 20MB, whereas Logstash defaults to 200MB or 200000000 characters.
+#-Dlogstash.jackson.stream-read-constraints.max-string-length=200000000
+#
+# Sets the maximum number length (in chars or bytes, depending on input context).
+# The jackson library defaults to 1000, whereas Logstash defaults to 10000.
+#-Dlogstash.jackson.stream-read-constraints.max-number-length=10000
+#
+# Sets the maximum nesting depth. The depth is a count of objects and arrays that have not
+# been closed, `{` and `[` respectively.
+#-Dlogstash.jackson.stream-read-constraints.max-nesting-depth=1000
 ################################################################
 # end logstash base config. 
 # everything after this is our customizations

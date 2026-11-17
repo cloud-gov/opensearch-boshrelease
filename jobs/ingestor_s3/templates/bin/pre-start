@@ -1,5 +1,9 @@
 #!/bin/bash
-source /var/vcap/packages/openjdk-21/bosh/runtime.env
+# Use the JDK bundled with the logstash package itself (Temurin, shipped
+# inside the logstash tarball) rather than a separate JDK package.
+export JAVA_HOME=/var/vcap/packages/logstash/jdk
+export LS_JAVA_HOME=$JAVA_HOME
+export PATH=$JAVA_HOME/bin:$PATH
 
 export JOB_NAME=ingestor_s3
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME

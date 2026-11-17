@@ -9,7 +9,6 @@ packages:
   - logstash
   - base-logstash-filters
   - cf-logstash-filters
-  - openjdk-21
 
 templates:
   bin/ingestor_syslog: bin/ingestor_syslog.sh
