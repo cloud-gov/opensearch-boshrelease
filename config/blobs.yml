@@ -134,10 +134,10 @@ awscli-exe-linux-x86_64.zip:
   size: 62186639
   object_id: acf3ef43-9e8d-4749-4daf-7c6edf3a5297
   sha: sha256:fca9d80afb77f4cf5f2df6078b30ebb123b40e5b070ee7c1d5c3fba92d6b3755
-jdk-25_linux-x64_bin.tar.gz:
-  size: 217100679
-  object_id: b3f7be11-dfb8-476e-59ec-b5a9f347541f
-  sha: sha256:6deafad80454d1f968105b1f582d89b8c2e88a5dfc98116a8226e0ec2fd5df8e
+jdk-25.0.5.1_linux-x64_bin.tar.gz:
+  size: 217104716
+  object_id: 5f253963-8e54-41c5-4fa7-b60abf453177
+  sha: sha256:3d40d69461200594380ac84c17be6224539022028730cffe043ac70c41ffd1d5
 jq-linux-amd64-1.8.1.tar.gz:
   size: 995911
   object_id: fa239437-7080-45f1-6e31-3fa88414b51d
