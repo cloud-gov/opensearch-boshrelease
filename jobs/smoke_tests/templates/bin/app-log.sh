@@ -72,6 +72,8 @@ fi
 SMOKE_ID=$(LC_ALL=C; cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 # Separate smoke-id for the "differ log" document (numeric-status regression guard).
 DIFFER_SMOKE_ID=$(LC_ALL=C; cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+# Separate smoke-id for the "json msg log" document (nested-JSON-in-msg regression guard).
+JSON_MSG_SMOKE_ID=$(LC_ALL=C; cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 org_value="c9b54579-7056-46c3-9870-334330e9be75"
 space_value="5db8fd06-ac53-4ed0-a224-b0bad2e463d2"
 
@@ -111,6 +113,16 @@ duration_num_value="0.12"
 DIFFER_MSG="{\"smoke-id\":\"${DIFFER_SMOKE_ID}\",\"request\":{\"method\":\"${method_value}\",\"host\":\"${host_value}\",\"uri\":\"${uri_value}\"},\"status\":${status_num_value},\"duration\":${duration_num_value}}"
 DIFFER_LOG="1090 <14>1 $(date -u +'%Y-%m-%dT%H:%M:%SZ') 0.0.0.0 d20d2020-d200-d200-d200-d20d20d20d20 [SMOKE/TEST/ERRAND/0] - [tags@47450 app_id=\"8675309e-f567-4d58-9649-ba24fad5344c\" app_name=\"smoke_tests\" organization_id=\"${org_value}\" organization_name=\"smoke-tests\" job=\"smoke_tests\" space_id=\"${space_value}\" space_name=\"app\" source_type=\"APP/PROC/WEB\"] ${DIFFER_MSG}"
 
+# JSON MSG LOG: a third document whose [app][msg] field is itself a nested JSON
+# object rather than a plain string. Structured app loggers commonly emit "msg"
+# as an object; app-logmessage-app.conf stringifies [app][msg] into @message
+# (see the "if [app][msg]" branch), so this guards against that nested object
+# causing a mapping conflict / failed index when the document reaches OpenSearch.
+json_msg_nested_field_value="nested-value"
+json_msg_nested_number_value="42"
+JSON_MSG_MSG="{\"smoke-id\":\"${JSON_MSG_SMOKE_ID}\",\"msg\":{\"nested_field\":\"${json_msg_nested_field_value}\",\"nested_number\":${json_msg_nested_number_value}}}"
+JSON_MSG_LOG="1090 <14>1 $(date -u +'%Y-%m-%dT%H:%M:%SZ') 0.0.0.0 d20d2020-d200-d200-d200-d20d20d20d20 [SMOKE/TEST/ERRAND/0] - [tags@47450 app_id=\"8675309e-f567-4d58-9649-ba24fad5344c\" app_name=\"smoke_tests\" organization_id=\"${org_value}\" organization_name=\"smoke-tests\" job=\"smoke_tests\" space_id=\"${space_value}\" space_name=\"app\" source_type=\"APP/PROC/WEB\"] ${JSON_MSG_MSG}"
+
 <% if p('smoke_tests.tls.use_tls') %>
 INGEST="openssl s_client -cert $JOB_DIR/config/ssl/ingestor.crt -key $JOB_DIR/config/ssl/ingestor.key -CAfile ${JOB_DIR}/config/ssl/opensearch.ca -connect $INGESTOR_HOST:$INGESTOR_PORT"
 <% else %>
@@ -124,6 +136,10 @@ echo "$LOG" | $INGEST > /dev/null
 # Send the differ log at the same time.
 echo "SENDING DIFFER LOG :$DIFFER_LOG"
 echo "$DIFFER_LOG" | $INGEST > /dev/null
+
+# Send the json msg log at the same time.
+echo "SENDING JSON MSG LOG :$JSON_MSG_LOG"
+echo "$JSON_MSG_LOG" | $INGEST > /dev/null
 
 # Polling configuration
 TRIES=${1:-300}  # Default to 300 seconds if not specified
@@ -266,6 +282,27 @@ while [ $TRIES -gt 0 ]; do
       fi
     else
       echo "ERROR: could not find differ log containing: $DIFFER_SMOKE_ID"
+      errors=$((errors + 1))
+    fi
+
+    json_msg_result=$(curl --key ${JOB_DIR}/config/ssl/smoketest.key \
+      --cert ${JOB_DIR}/config/ssl/smoketest.crt  \
+      --cacert ${JOB_DIR}/config/ssl/opensearch.ca \
+      -s $MASTER_URL/_search?q=$JSON_MSG_SMOKE_ID)
+
+    if [[ $json_msg_result == *"$JSON_MSG_SMOKE_ID"* ]]; then
+      echo "SUCCESS: Found json msg log containing $JSON_MSG_SMOKE_ID (nested JSON in app.msg did not fail ingestion)."
+
+      json_msg_message_opensearch=$(echo "$json_msg_result" | jq -r '.hits.hits[0]._source["@message"] // "null"')
+
+      if [[ "$json_msg_message_opensearch" == *"$json_msg_nested_field_value"* && "$json_msg_message_opensearch" == *"$json_msg_nested_number_value"* ]]; then
+        echo "SUCCESS: json msg log @message contains stringified nested msg object."
+      else
+        echo "ERROR: json msg log @message did not contain expected nested msg content. Got '$json_msg_message_opensearch'."
+        errors=$((errors + 1))
+      fi
+    else
+      echo "ERROR: could not find json msg log containing: $JSON_MSG_SMOKE_ID (nested JSON in app.msg may have failed ingestion)."
       errors=$((errors + 1))
     fi
 
