@@ -1,0 +1,7 @@
+---
+name: openjdk-21
+dependencies: []
+files:
+- OpenJDK21U-jdk_x64_linux_hotspot_21.0.13.1_2.tar.gz
+- openjdk-21/compile.env
+- openjdk-21/runtime.env

@@ -10,9 +10,7 @@ JOB_NAME=archiver_syslog
 export LOG_DIR=/var/vcap/sys/log/$JOB_NAME
 export STORE_DIR=/var/vcap/store/$JOB_NAME
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
-# Use the JDK bundled with the logstash package itself (Temurin, shipped
-# inside the logstash tarball) rather than a separate JDK package.
-export JAVA_HOME=/var/vcap/packages/logstash/jdk
+export JAVA_HOME=/var/vcap/packages/openjdk-21
 export LS_JAVA_HOME=$JAVA_HOME
 export PATH=$JAVA_HOME/bin:$PATH
 
