@@ -6,11 +6,10 @@ tar xzf logtash/logstash-9.5.6-linux-x86_64.tar.gz -C "${BOSH_INSTALL_TARGET}" -
 
 chmod -R u+rwX,go+rX "${BOSH_INSTALL_TARGET}"
 
-# Logstash 9.5.6 ships its own bundled JDK (Temurin) under <install>/jdk.
-# Use it for the plugin install step below instead of a separate openjdk
-# package dependency, since the logstash launcher itself will prefer this
-# same bundled JDK at runtime.
-export JAVA_HOME="${BOSH_INSTALL_TARGET}/jdk"
+# Use the openjdk-21 package rather than the JDK bundled inside the
+# logstash tarball, so compile-time and runtime JAVA_HOME match what the
+# consuming jobs (ingestor_syslog, ingestor_s3, archiver_syslog) use.
+export JAVA_HOME=/var/vcap/packages/openjdk-21
 export PATH="${BOSH_INSTALL_TARGET}/bin:${JAVA_HOME}/bin:${PATH}"
 
 # Installs missing plugins

@@ -1,7 +1,5 @@
 #!/bin/bash
-# Use the JDK bundled with the logstash package itself (Temurin, shipped
-# inside the logstash tarball) rather than a separate JDK package.
-export JAVA_HOME=/var/vcap/packages/logstash/jdk
+export JAVA_HOME=/var/vcap/packages/openjdk-21
 export LS_JAVA_HOME=$JAVA_HOME
 export PATH=$JAVA_HOME/bin:$PATH
 
